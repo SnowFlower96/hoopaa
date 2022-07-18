@@ -26,16 +26,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User createUser(UserRegisterPostReq userRegisterInfo) {
 		User user = new User();
-		user.setUserId(userRegisterInfo.getId());
+		user.setEm(userRegisterInfo.getEm());
 		// 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
-		user.setPassword(passwordEncoder.encode(userRegisterInfo.getPassword()));
+		user.setPwd(passwordEncoder.encode(userRegisterInfo.getPwd()));
+		user.setNnm(userRegisterInfo.getNmn());
 		return userRepository.save(user);
 	}
 
 	@Override
-	public User getUserByUserId(String userId) {
+	public User getUserByEm(String em) {
 		// 디비에 유저 정보 조회 (userId 를 통한 조회).
-		User user = userRepositorySupport.findUserByUserId(userId).get();
+		User user = userRepositorySupport.findUserByEm(em).get();
 		return user;
 	}
 }
