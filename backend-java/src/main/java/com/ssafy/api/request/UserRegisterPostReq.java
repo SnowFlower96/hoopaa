@@ -12,8 +12,10 @@ import lombok.Setter;
 @Setter
 @ApiModel("UserRegisterPostRequest")
 public class UserRegisterPostReq {
-	@ApiModelProperty(name="유저 ID", example="ssafy_web")
-	String id;
+	@ApiModelProperty(name="유저 email", example="ssafy@ssafy.com")
+	String em;
 	@ApiModelProperty(name="유저 Password", example="your_password")
-	String password;
+	String pwd;
+	@ApiModelProperty(name="유저 닉네임", example="your_nickname")
+	String nmn;
 }
