@@ -15,12 +15,19 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 public class User extends BaseEntity{
-    String position;
-    String department;
-    String name;
-    String userId;
+    Long id;
+    String em;
 
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    String password;
+    String pwd;
+
+    String nmn;
+    int level;
+    boolean em_auth;
+    String join;
+    String refresh;
+    String access;
+    String modify;
+    String leave;
 }
