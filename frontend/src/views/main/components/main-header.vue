@@ -5,6 +5,18 @@
     :style="{ 'height': height }">
     <div class="hide-on-small">
       <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div>
+      <!-- 이부분 사이드바거에서 가져옴 -->
+      <div
+        :default-active="String(state.activeIndex)"
+        active-text-color="#ffd04b"
+        class="el-menu-vertical-demo"
+        @select="menuSelect">
+        <el-menu-item v-for="(item, index) in state.menuItems" :key="index" :index="index.toString()">
+          <i v-if="item.icon" :class="['ic', item.icon]"/>
+          <span>{{ item.title }}</span>
+        </el-menu-item>
+      </div>
+
       <div class="tool-wrapper">
         <div class="search-field">
           <el-input
