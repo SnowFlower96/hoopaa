@@ -6,7 +6,7 @@
     <div class="hide-on-small">
       <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div>
       <!-- 이부분 사이드바에서 가져왔음-->
-      <div
+      <el-menu
         :default-active="String(state.activeIndex)"
         active-text-color="#ffd04b"
         class="el-menu-vertical-demo"
@@ -15,7 +15,7 @@
           <i v-if="item.icon" :class="['ic', item.icon]"/>
           <span>{{ item.title }}</span>
         </el-menu-item>
-      </div>
+      </el-menu>
 
       <div class="tool-wrapper">
         <div class="search-field">

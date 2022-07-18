@@ -14,9 +14,6 @@
     <!-- </el-container> -->
     <main-footer :height="`110px`"/>
   </el-container>
-  <login-dialog
-    :open="loginDialogOpen"
-    @closeLoginDialog="onCloseLoginDialog"/>
 </template>
 <style>
   @import "https://unpkg.com/element-plus/lib/theme-chalk/index.css";
@@ -26,7 +23,6 @@
 
 </style>
 <script>
-import LoginDialog from './components/login-dialog'
 import MainHeader from './components/main-header'
 import MainSidebar from './components/main-sidebar'
 import MainFooter from './components/main-footer'
@@ -36,8 +32,7 @@ export default {
   components: {
     MainHeader,
     MainSidebar,
-    MainFooter,
-    LoginDialog
+    MainFooter
   },
   data () {
     return {
