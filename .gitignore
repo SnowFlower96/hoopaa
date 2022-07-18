@@ -1,0 +1,19 @@
+### backend-java ###
+backend/
+backend-java/.gradle
+backend-java/build
+backend-java/!gradle/wrapper/gradle-wrapper.jar
+backend-java/!**/src/main/**/build/
+backend-java/!**/src/test/**/build/
+
+# 백엔드 폴더 > IntelliJ 설정 제외
+backend-java/.idea
+backend-java/*.iws
+backend-java/*.iml
+backend-java/*.ipr
+backend-java/out/
+backend-java/!**/src/main/**/out/
+backend-java/!**/src/test/**/out/
+
+### frontend ###
+frontend/node_modules
