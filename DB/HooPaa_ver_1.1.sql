@@ -145,9 +145,9 @@ CREATE TABLE `room_info` (
   `is_sys` tinyint(1) DEFAULT '0',
   `thumb_url` varchar(50) COLLATE utf8mb4_bin DEFAULT NULL,
   `phase` int(11) DEFAULT '0',
-  `max` int(11) DEFAULT '1',
-  `cur` int(11) DEFAULT '1',
-  `start` datetime DEFAULT CURRENT_TIMESTAMP,
+  `max_num` int(11) DEFAULT '1',
+  `cur_num` int(11) DEFAULT '1',
+  `start_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `host_id` (`host_id`),
   CONSTRAINT `room_info_ibfk_1` FOREIGN KEY (`host_id`) REFERENCES `user` (`id`) ON DELETE SET NULL
@@ -208,7 +208,7 @@ CREATE TABLE `user_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `room_id` int(11) DEFAULT NULL,
-  `role` int(11) NOT NULL,
+  `is_host` tinyint(4) DEFAULT NULL,
   `is_king` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
@@ -266,4 +266,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-07-18 17:55:46
+-- Dump completed on 2022-07-19 10:30:58
