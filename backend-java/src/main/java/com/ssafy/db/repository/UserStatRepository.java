@@ -6,7 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * 유저 스탯 관련 디비 쿼리 생성을 위한 JPA Query Method 인터페이스 정의
+ */
 @Repository
-public interface UserStatRepository extends JpaRepository<UserStat, Long > {
-    Optional<UserStat> findById(Long id);
+public interface UserStatRepository extends JpaRepository<UserStat, Long> {
+    Optional<UserStat> findStatById(Long id);
 }
