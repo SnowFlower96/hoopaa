@@ -1,5 +1,8 @@
 package com.ssafy.api.service;
 
+import com.ssafy.db.entity.UserStat;
+import com.ssafy.db.repository.UserStatRepository;
+import com.ssafy.db.repository.UserStatRepositorySupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,9 +19,15 @@ import com.ssafy.db.repository.UserRepositorySupport;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	UserStatRepository userStatRepository;
 	
 	@Autowired
 	UserRepositorySupport userRepositorySupport;
+
+	@Autowired
+	UserStatRepositorySupport userStatRepositorySupport;
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -26,11 +35,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User createUser(UserRegisterPostReq userRegisterInfo) {
 		User user = new User();
+		UserStat userStat = new UserStat();
 		user.setEm(userRegisterInfo.getEm());
 		// 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
 		user.setPwd(passwordEncoder.encode(userRegisterInfo.getPwd()));
 		user.setNnm(userRegisterInfo.getNmn());
-		return userRepository.save(user);
+
+		userRepository.save(user); //user table에 삽입
+
+		user = getUserByEm(user.getEm()); //user의 id 받아오기
+
+		userStat.setId(user.getId());
+
+		userStatRepository.save(userStat);
+
+		return user;
 	}
 
 	@Override
