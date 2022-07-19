@@ -3,7 +3,9 @@
     class="main-header"
     :gutter="10">
     <div class="hide-on-small">
-      <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div>
+      <router-link to="/">
+        <div class="logo-wrapper"><div class="ic ic-logo"/></div>
+      </router-link>
 
         <el-menu
           :default-active="String(state.activeIndex)"
@@ -89,25 +91,11 @@ export default {
       console.log(keys[param])
     }
 
-    const clickLogo = () => {
-      store.commit('root/setHomeActive')
-      const MenuItems = store.getters['root/getHome']
-      let keys = Object.keys(MenuItems)
-      router.push({
-        name: keys[0]
-      })
-      console.log(keys[0])
-    }
-
-    const clickLogin = () => {
-      emit('openLoginDialog')
-    }
-
     const changeCollapse = () => {
       state.isCollapse = !state.isCollapse
     }
 
-    return { state, menuSelect, clickLogo, clickLogin, changeCollapse }
+    return { state, menuSelect, changeCollapse }
   }
 }
 </script>
