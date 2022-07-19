@@ -112,7 +112,7 @@ DROP TABLE IF EXISTS `room_history`;
 CREATE TABLE `room_history` (
   `id` int(11) NOT NULL,
   `log` varchar(100) COLLATE utf8mb4_bin DEFAULT NULL,
-  `end` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
   `winner` int(11) DEFAULT NULL,
   `agree` int(11) DEFAULT '0',
   `disagree` int(11) DEFAULT '0',
@@ -266,4 +266,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-07-19 10:30:58
+-- Dump completed on 2022-07-19 10:34:07
