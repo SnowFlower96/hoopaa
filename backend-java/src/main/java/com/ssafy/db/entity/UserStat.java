@@ -3,7 +3,6 @@ package com.ssafy.db.entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -12,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-public class UserStat extends BaseEntity{
+public class UserStat {
     @Id
     Long id;
 
