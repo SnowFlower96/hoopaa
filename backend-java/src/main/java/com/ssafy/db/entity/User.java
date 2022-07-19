@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * 유저 모델 정의.
@@ -14,10 +17,12 @@ import javax.persistence.Entity;
 @Entity
 @Getter
 @Setter
-public class User extends BaseEntity{
+public class User{
     String position;
     String department;
     String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     String userId;
 
     @JsonIgnore

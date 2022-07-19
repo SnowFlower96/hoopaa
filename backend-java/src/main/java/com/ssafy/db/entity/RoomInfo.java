@@ -1,17 +1,18 @@
 package com.ssafy.db.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoomInfo extends BaseEntity {
+public class RoomInfo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String pwd;
     private int host_id;
     private int is_sys;
@@ -22,7 +23,8 @@ public class RoomInfo extends BaseEntity {
     private Date start_time;
 
     @Builder
-    public RoomInfo(String pwd, int host_id, int is_sys, String thumb_url, int phase, int max_num, int cur_num, Date start_time) {
+    public RoomInfo(Long id,String pwd, int host_id, int is_sys, String thumb_url, int phase, int max_num, int cur_num, Date start_time) {
+        this.id=id;
         this.pwd = pwd;
         this.host_id = host_id;
         this.is_sys = is_sys;
