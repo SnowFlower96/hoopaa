@@ -1,0 +1,8 @@
+{
+    "home" : {
+        "name" : "home",
+        "hidden" : false,
+        "path" : "/",
+        "children" : []
+      }
+}
