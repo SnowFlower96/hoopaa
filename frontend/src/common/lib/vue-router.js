@@ -6,6 +6,7 @@ import SignUp from '@/views/main/components/sign-up'
 import Login from '@/views/main/components/login'
 import Start from '@/views/start/start'
 import Participate from '@/views/participate/participate'
+import mainPage from '@/views/main-page/main-page'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -45,6 +46,11 @@ function makeRoutesFromMenu () {
     path: '/',
     name: 'Home',
     component: Home
+  })
+  routes.push({
+    path: '/mainPage',
+    name: 'main-page',
+    component: mainPage
   })
   return routes
 }

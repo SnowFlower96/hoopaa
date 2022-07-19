@@ -1,28 +1,28 @@
 <template>
-  <el-row
-    class="main-header"
-    :gutter="10">
-    <div class="hide-on-small">
-      <router-link to="/">
-        <div class="logo-wrapper"><div class="ic ic-logo"/></div>
-      </router-link>
+  <el-row class="main-header" :gutter="10">
 
-        <el-menu
-          :default-active="String(state.activeIndex)"
-          active-text-color="#9747FF"
-          class="el-menu-vertical-demo"
-          @select="menuSelect">
+    <div class="hide-on-small">
+
+        <router-link to="/mainPage">
+          <div class="logo-wrapper"><div class="ic ic-logo"/></div>
+        </router-link>
+
+        <el-menu @select="menuSelect">
+          <router-link style=text-decoration:none; to="/">
+            <span class="el-menu-show-all">모든 토론보기</span>
+          </router-link>
           <el-menu-item v-for="(item, index) in state.menuItems" :key="index" :index="index.toString()">
             <span>{{ item.title }}</span>
           </el-menu-item>
         </el-menu>
 
         <div class="tool-wrapper">
-            <router-link to="/signUp"><el-button>회원가입</el-button></router-link>
-            <router-link to="/login"><el-button>로그인</el-button></router-link>
+            <router-link style=text-decoration:none; to="/login"><span class="tool-wrapper-span-login">Log in</span></router-link>
+            <router-link style=text-decoration:none; to="/signUp"><span class="tool-wrapper-span-signup">Sign up</span></router-link>
         </div>
 
-      </div>
+    </div>
+
     <div class="hide-on-big">
       <div class="menu-icon-wrapper" @click="changeCollapse"><i class="el-icon-menu"></i></div>
       <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div>
@@ -38,8 +38,10 @@
         <div class="mobile-sidebar-backdrop" @click="changeCollapse"></div>
       </div>
     </div>
+
   </el-row>
 </template>
+
 <script>
 import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
@@ -64,7 +66,6 @@ export default {
       menuItems: computed(() => {
         const MenuItems = store.getters['root/getMenus']
         let keys = Object.keys(MenuItems)
-        console.log(MenuItems, "웅")
         let menuArray = []
         for (let i = 0; i < keys.length; ++i) {
           let menuObject = {}
@@ -185,14 +186,10 @@ export default {
 
 
   /*Desktop - Need to add Class if Need*/
-    .main-header {
-      padding: 10px 20px;
-      display: flex;
-    }
   .main-header .hide-on-small {
-    cursor: pointer;
     display: flex;
-    justify-content: space-between;
+    padding: 5px 10px;
+    justify-content: space-evenly;
   }
   .main-header .hide-on-small .logo-wrapper .ic.ic-logo {
     width: 70px;
@@ -202,9 +199,65 @@ export default {
     background-image: url('../../../assets/images/favi6.png');
   }
 
-  .tool-wrapper .button-wrapper .el-button {
+  .el-menu {
+    margin-right: 550px;
+  }
+  
+  .el-menu-item > span {
+    outline: solid 1px #9747ff;
+    border-radius: 5px;
+    background-color: none;
+    color: #9747ff;
+    padding: 8px;
+    cursor: pointer;
+    /* font-weight: bold; */
+  }
+  .el-menu-show-all {
+    border-radius: 5px;
+    background-color: none;
+    color: #1bb061;
+    padding: 8px;
     cursor: pointer;
   }
+  .el-menu-show-all:hover, .tool-wrapper-span-login:hover {
+    font-weight: bold;
+  }
+  .el-menu-item > span:hover {
+    outline: solid 1px #9747ff;
+    border-radius: 5px;
+    background-color: #9747ff ;
+    color: white;
+    padding: 8px;
+  }
+  .tool-wrapper {
+    padding: 15px;
+    justify-content: end;
+  }
+  .tool-wrapper-span-signup {
+    outline: solid 1px #1bb061;
+    border-radius: 5px;
+    background-color: none;
+    color: #1bb061;
+    padding: 10px;
+    cursor: pointer;
+    margin: 5px;
+    font-weight: bold;
+  }
+  .tool-wrapper-span-signup:hover {
+    outline: solid 1px #1bb061;
+    border-radius: 5px;
+    background-color: #1bb061 ;
+    color: white;
+  }
+  .tool-wrapper-span-login {
+    border-radius: 5px;
+    background-color: none;
+    color: #1bb061;
+    padding: 10px;
+    cursor: pointer;
+    margin: 5px;
+  }
+
 
 
 </style>
