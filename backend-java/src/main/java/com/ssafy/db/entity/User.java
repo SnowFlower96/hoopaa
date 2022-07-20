@@ -47,7 +47,7 @@ public class User {
 
     String access_tk;
 
-    String modify_dt;
+    LocalDateTime modify_dt;
 
-    String leave_dt;
+    LocalDateTime leave_dt;
 }

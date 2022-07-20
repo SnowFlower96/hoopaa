@@ -13,6 +13,8 @@ import com.ssafy.db.repository.UserRepository;
 import com.ssafy.db.repository.UserRepositorySupport;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 /**
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
  */
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.save(user); //user table에 삽입
 
-		user = getUserByEm(user.getEm()); //user의 id 받아오기
+		user = getUserById(user.getId()); //user의 id 받아오기
 
 		userStat.setId(user.getId());
 
@@ -55,9 +57,36 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUserByEm(String em) {
+	public User getUserById(Long id) {
 		// 디비에 유저 정보 조회 (userId 를 통한 조회).
+		User user = userRepositorySupport.findUserById(id).get();
+		return user;
+	}
+
+	@Override
+	public User getUserByEm(String em) {
 		User user = userRepositorySupport.findUserByEm(em).get();
 		return user;
+	}
+
+	@Override
+	@Transactional
+	public User updateUser(UserRegisterPostReq userRegisterInfo) {
+		User user = new User();
+		// 비밀번호 암호화
+		user.setEm(userRegisterInfo.getEm());
+		user.setPwd(passwordEncoder.encode(userRegisterInfo.getPwd()));
+		user.setNnm(userRegisterInfo.getNmn());
+		// 회원 정보 수정일 설정
+
+		user.setModify_dt(LocalDateTime.now());
+
+		userRepository.save(user);
+		return user;
+	}
+
+	@Override
+	public void deleteUserById(Long id) {
+		userRepository.deleteById(id);
 	}
 }
