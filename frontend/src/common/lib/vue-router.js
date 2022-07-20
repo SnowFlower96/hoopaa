@@ -7,6 +7,7 @@ import Login from '@/views/main/components/login'
 import Start from '@/views/start/start'
 import Participate from '@/views/participate/participate'
 import mainPage from '@/views/main-page/main-page'
+import myPage from '@/views/main/components/mypage'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
