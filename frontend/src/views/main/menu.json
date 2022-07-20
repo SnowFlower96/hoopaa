@@ -1,8 +1,8 @@
 {
-  "start" : {
+  "make-room" : {
     "name" : "미팅 시작하기",
     "hidden" : false,
-    "path" : "/start",
+    "path" : "/make-room",
     "children" : []
   },
   "participate" : {

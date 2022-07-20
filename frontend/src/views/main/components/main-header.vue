@@ -202,7 +202,6 @@ export default {
   .el-menu {
     margin-right: 550px;
   }
-  
   .el-menu-item > span {
     outline: solid 1px #9747ff;
     border-radius: 5px;

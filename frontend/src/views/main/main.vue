@@ -1,8 +1,6 @@
 <template>
   <el-container class="main-wrapper">
-    <main-header
-      :height="`70px`"
-      @openLoginDialog="onOpenLoginDialog"/>
+    <main-header class="main-header-class"/>
       <el-main>
         <router-view></router-view>
       </el-main>
@@ -14,7 +12,10 @@
   @import './main.css';
   @import '../../common/css/common.css';
   @import '../../common/css/element-plus.css';
-
+  /* .main-header-class {
+  position: fixed;
+} */
+  .el-main::-webkit-scrollbar{width: 0px;} 
 </style>
 <script>
 import MainHeader from './components/main-header'
@@ -43,3 +44,4 @@ export default {
   }
 }
 </script>
+
