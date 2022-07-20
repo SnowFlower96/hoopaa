@@ -91,8 +91,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void resignUserById(Long id) {
 		User user = userRepository.findById(id).get();
-		System.out.println(id);
-		System.out.println(user);
+
 		// user의 leave_dt 변경
 		user.setLeave_dt(LocalDateTime.now());
 		userRepository.save(user);
