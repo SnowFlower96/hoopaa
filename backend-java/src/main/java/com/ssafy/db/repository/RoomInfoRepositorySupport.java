@@ -18,7 +18,8 @@ public class RoomInfoRepositorySupport {
 
     public List<RoomInfo> findAll(){
 
-        List<RoomInfo> roomInfo= jpaQueryFactory.selectFrom(qRoomInfo).fetch();
+        List<RoomInfo> roomInfo= jpaQueryFactory.selectFrom(qRoomInfo).where(qRoomInfo.phase.in(0,1))
+                .orderBy(qRoomInfo.cur_num.desc()).fetch();
        return roomInfo;
     }
 
