@@ -1,11 +1,11 @@
 package com.ssafy.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -17,15 +17,20 @@ public class RoomDescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int cate;
-    private int hash_1;
-    private int hash_2;
-    private int hash_3;
+    private Integer hash_1;
+    private Integer hash_2;
+    private Integer hash_3;
     private String title;
     private String subtitle;
 
-    @Builder
+    @OneToOne(mappedBy = "roomDescription")
+    @JoinColumn(name = "id")
+//    @JsonManagedReference
+    @JsonBackReference
+    private RoomInfo roomInfo;
 
-    public RoomDescription(Long id, int cate, int hash_1, int hash_2, int hash_3, String title, String subtitle) {
+    @Builder
+    public RoomDescription(Long id, int cate, Integer hash_1, Integer hash_2, Integer hash_3, String title, String subtitle, RoomInfo roomInfo) {
         this.id = id;
         this.cate = cate;
         this.hash_1 = hash_1;
@@ -33,5 +38,6 @@ public class RoomDescription {
         this.hash_3 = hash_3;
         this.title = title;
         this.subtitle = subtitle;
+        this.roomInfo = roomInfo;
     }
 }

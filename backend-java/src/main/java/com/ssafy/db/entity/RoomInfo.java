@@ -1,5 +1,8 @@
 package com.ssafy.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,9 +25,15 @@ public class RoomInfo {
     private int cur_num;
     private Date start_time;
 
+    @OneToOne
+    @JoinColumn(name = "id")
+    @JsonManagedReference
+//    @JsonBackReference
+    private RoomDescription roomDescription;
+
     @Builder
-    public RoomInfo(Long id,String pwd, int host_id, int is_sys, String thumb_url, int phase, int max_num, int cur_num, Date start_time) {
-        this.id=id;
+    public RoomInfo(Long id, String pwd, int host_id, int is_sys, String thumb_url, int phase, int max_num, int cur_num, Date start_time, RoomDescription roomDescription) {
+        this.id = id;
         this.pwd = pwd;
         this.host_id = host_id;
         this.is_sys = is_sys;
@@ -33,5 +42,6 @@ public class RoomInfo {
         this.max_num = max_num;
         this.cur_num = cur_num;
         this.start_time = start_time;
+        this.roomDescription = roomDescription;
     }
 }

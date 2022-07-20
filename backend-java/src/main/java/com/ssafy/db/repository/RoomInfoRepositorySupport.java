@@ -22,6 +22,4 @@ public class RoomInfoRepositorySupport {
                 .orderBy(qRoomInfo.cur_num.desc()).fetch();
        return roomInfo;
     }
-
-
 }
