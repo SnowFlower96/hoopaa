@@ -74,7 +74,6 @@ public class UserServiceImpl implements UserService {
 	public User updateUser(Long id, UserRegisterPostReq userRegisterInfo) {
 		User user = userRepository.findById(id).get();
 
-		System.out.println(id + " " + userRegisterInfo);
 		// 비밀번호 암호화
 		if (userRegisterInfo.getPwd() != null) {
 			user.setPwd(passwordEncoder.encode(userRegisterInfo.getPwd()));
