@@ -2,12 +2,16 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/home/home'
 import ConferencesDetail from '@/views/conferences/conference-detail'
 import History from '@/views/history/history'
-import SignUp from '@/views/main/components/sign-up'
-import Login from '@/views/main/components/login'
+import SignUp from '@/views/user/sign-up'
+import Login from '@/views/user/login'
 import Start from '@/views/start/start'
 import Participate from '@/views/participate/participate'
 import mainPage from '@/views/main-page/main-page'
-import myPage from '@/views/main/components/mypage'
+import myPage from '@/views/user/mypage'
+import tempKey from '@/views/user/tempKey'
+import checkPwd from '@/views/user/checkPwd'
+import { initCustomFormatter } from 'vue'
+
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -53,6 +57,32 @@ function makeRoutesFromMenu () {
     name: 'main-page',
     component: mainPage
   })
+  routes.push(
+    {
+      path: '/myPage',
+      name: 'myPage',
+      component : myPage
+    },
+
+    {
+    path : '/myPage/info',
+    name : 'myPage-info',
+    component : myPage-initCustomFormatter,
+    meta : {unauthrized : true, layout : 'MobileLayout'},
+    beforeEnter: (to, from, next) => {
+      if (to.query[tempKey]) {
+        next();
+      } else {
+        next('/checkPwd');
+      }
+    },
+  },
+  {
+    path : '/checkPwd',
+    name : 'checkPwd',
+    component : checkPwd,
+  }
+  )
   return routes
 }
 

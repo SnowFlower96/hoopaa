@@ -2,7 +2,7 @@
   <div class="mypage-top">
     <div>
       OOOO님의 마이페이지
-    <el-button>회원정보 수정</el-button>
+    <router-link to="/myPage/info"><el-button>회원정보 수정</el-button></router-link>
     </div>
     <el-card>
       <h1>토론 기록 상세 보기</h1>
@@ -11,6 +11,7 @@
         <div v-if="show">내 포지션 : 찬성 <br> 결과 : 총 100명중 찬성 51명 반대 48명 무효 1명</div>
       </ul>
     </el-card>
+    <dialog></dialog>
   </div>
 </template>
 
@@ -19,13 +20,13 @@
 export default {
  data () {
   return {
-    show : false
+    show : false,
   }
  },
  methods : {
   toggleOn() {
     this.show = !this.show;
-  }
+  },
  }
 
 }
