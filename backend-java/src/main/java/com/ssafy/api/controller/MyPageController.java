@@ -64,7 +64,7 @@ public class MyPageController {
         return ResponseEntity.status(200).body(UserRes.of(user));
     }
 
-    @PostMapping("/info")
+    @PutMapping("/info")
     @ApiOperation(value = "회원 정보 수정", notes = "비밀번호, 닉네임 수정. ")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -72,8 +72,11 @@ public class MyPageController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> modifyUser(@RequestBody @ApiParam(value = "수정할 회원 정보", required = true) UserRegisterPostReq userRegisterInfo) {
-        User user = userService.updateUser(userRegisterInfo);
+    public ResponseEntity<? extends BaseResponseBody> modifyUser(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "수정할 회원 정보", required = true) UserRegisterPostReq userRegisterInfo) {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userId = userDetails.getUsername();
+
+        User user = userService.updateUser(Long.parseLong(userId), userRegisterInfo);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
@@ -89,7 +92,7 @@ public class MyPageController {
     public ResponseEntity<? extends BaseResponseBody> resignUser(@ApiIgnore Authentication authentication) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String id = userDetails.getUsername();
-        userService.deleteUserById(Long.parseLong(id));
+        userService.resignUserById(Long.parseLong(id));
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }

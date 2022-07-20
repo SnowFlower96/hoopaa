@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 		user.setEm(userRegisterInfo.getEm());
 		// 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
 		user.setPwd(passwordEncoder.encode(userRegisterInfo.getPwd()));
-		user.setNnm(userRegisterInfo.getNmn());
+		user.setNnm(userRegisterInfo.getNnm());
 
 		userRepository.save(user); //user table에 삽입
 
@@ -71,14 +71,18 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public User updateUser(UserRegisterPostReq userRegisterInfo) {
-		User user = new User();
-		// 비밀번호 암호화
-		user.setEm(userRegisterInfo.getEm());
-		user.setPwd(passwordEncoder.encode(userRegisterInfo.getPwd()));
-		user.setNnm(userRegisterInfo.getNmn());
-		// 회원 정보 수정일 설정
+	public User updateUser(Long id, UserRegisterPostReq userRegisterInfo) {
+		User user = userRepository.findById(id).get();
 
+		System.out.println(id + " " + userRegisterInfo);
+		// 비밀번호 암호화
+		if (userRegisterInfo.getPwd() != null) {
+			user.setPwd(passwordEncoder.encode(userRegisterInfo.getPwd()));
+		}
+		if (userRegisterInfo.getNnm() != null) {
+			user.setNnm(userRegisterInfo.getNnm());
+		}
+		// 회원 정보 수정일 설정
 		user.setModify_dt(LocalDateTime.now());
 
 		userRepository.save(user);
@@ -86,7 +90,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteUserById(Long id) {
-		userRepository.deleteById(id);
+	public void resignUserById(Long id) {
+		User user = userRepository.findById(id).get();
+		System.out.println(id);
+		System.out.println(user);
+		// user의 leave_dt 변경
+		user.setLeave_dt(LocalDateTime.now());
+		userRepository.save(user);
 	}
 }

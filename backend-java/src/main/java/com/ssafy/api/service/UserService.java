@@ -13,7 +13,7 @@ public interface UserService {
 	User getUserById(Long id);
 	User getUserByEm(String em);  // 로그인 단계에서만 사용
 	// Update
-	User updateUser(UserRegisterPostReq userRegisterInfo);
+	User updateUser(Long id, UserRegisterPostReq userRegisterInfo);
 	// Delete
-	void deleteUserById(Long id);
+	void resignUserById(Long id);
 }

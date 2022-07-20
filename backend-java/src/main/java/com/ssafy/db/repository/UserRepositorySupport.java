@@ -27,6 +27,7 @@ public class UserRepositorySupport {
 
     public Optional<User> findUserByEm(String em) {
         User user = jpaQueryFactory.select(qUser).from(qUser).where(qUser.em.eq(em)).fetchOne();
+        System.out.println(user);
         if (user == null) return Optional.empty();
         return Optional.ofNullable(user);
     }
