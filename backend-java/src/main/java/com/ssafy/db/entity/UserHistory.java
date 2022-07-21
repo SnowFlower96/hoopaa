@@ -17,17 +17,15 @@ public class UserHistory {
     Long id;
 
     Long user_id;
+    @Column(insertable = false, updatable = false)
     Long room_id;
     boolean is_host;
     boolean is_king;
     boolean user_pos;
 
-    @OneToOne
-    @JoinTable(
-            name = "room_info",
-            joinColumns = @JoinColumn
-    )
-    RoomHistory roomHistory;
+    @ManyToOne
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
+    RoomInfo roomInfo;
 
     @Builder
     public UserHistory(Long id, Long user_id, Long room_id, boolean is_host, boolean is_king, boolean user_pos) {
