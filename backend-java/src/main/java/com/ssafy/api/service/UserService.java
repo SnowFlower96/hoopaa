@@ -16,4 +16,5 @@ public interface UserService {
 	User updateUser(Long id, UserRegisterPostReq userRegisterInfo);
 	// Delete
 	void resignUserById(Long id);
+	void getUserStat(Long id);
 }

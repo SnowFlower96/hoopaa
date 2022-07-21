@@ -13,13 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.api.request.UserLoginPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.UserLoginPostRes;
-import com.ssafy.api.response.UserRes;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.User;
-import com.ssafy.db.repository.UserRepositorySupport;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -103,6 +101,21 @@ public class UserController {
 		}
 		// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
 		return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
+	}
+
+	@GetMapping("/history")
+	@ApiOperation(value = "유저 전적 및 스탯 조회", notes = "유저의 전적 및 스탯을 조회한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+			@ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<? extends BaseResponseBody> getUserHistory() {
+//		SsafyUserDetails ssafyUserDetails = (SsafyUserDetails)authentication.getDetails();
+//		String id = ssafyUserDetails.getUsername();
+		userService.getUserStat(Long.parseLong("4"));
+		return ResponseEntity.ok(BaseResponseBody.of(200, "success"));
 	}
 
 }
