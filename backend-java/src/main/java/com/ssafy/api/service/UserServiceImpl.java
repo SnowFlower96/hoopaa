@@ -89,6 +89,21 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public User setRefresh(Long id, String refreshToken) {
+		User user = userRepository.findById(id).get();
+
+		user.setRefresh_tk(refreshToken);
+
+		userRepository.save(user);
+		return null;
+	}
+
+	@Override
+	public String getRefresh(Long id) {
+		return getUserById(id).getRefresh_tk();
+	}
+
+	@Override
 	public void resignUserById(Long id) {
 		User user = userRepository.findById(id).get();
 		System.out.println(id);
