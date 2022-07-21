@@ -1,5 +1,7 @@
 package com.ssafy.api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.api.response.UserRes;
 import com.ssafy.db.entity.UserHistory;
 import com.ssafy.db.entity.UserStat;
@@ -39,7 +41,9 @@ public class UserController {
 	UserService userService;
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+	@Autowired
+	ObjectMapper mapper;
+
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.") 
     @ApiResponses({
@@ -157,20 +161,38 @@ public class UserController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
-	@GetMapping("/history")
-	@ApiOperation(value = "유저 전적 및 스탯 조회", notes = "유저의 전적 및 스탯을 조회한다.")
+	@GetMapping("/stat")
+	@ApiOperation(value = "유저 스탯 조회", notes = "토큰 정보에 있는 유저의 스탯을 조회한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
 			@ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
 			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
 			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
 	})
-	public ResponseEntity<? extends BaseResponseBody> getUserHistory(@ApiIgnore Authentication authentication) {
+	public ResponseEntity<? extends BaseResponseBody> getUserStat(@ApiIgnore Authentication authentication) throws JsonProcessingException {
 		SsafyUserDetails ssafyUserDetails = (SsafyUserDetails)authentication.getDetails();
 		String id = ssafyUserDetails.getUsername();
 
 		UserStat userStat = userService.getUserStatById(Long.parseLong(id));
+		String userStatString = mapper.writeValueAsString(userStat);
+
+		return ResponseEntity.ok(BaseResponseBody.of(200, "success"));
+	}
+
+	@GetMapping("/history")
+	@ApiOperation(value = "유저 전적 조회", notes = "토큰에 있는 유저의 전적을 조회한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+			@ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<? extends BaseResponseBody> getUserHistory(@ApiIgnore Authentication authentication) throws JsonProcessingException {
+		SsafyUserDetails ssafyUserDetails = (SsafyUserDetails)authentication.getDetails();
+		String id = ssafyUserDetails.getUsername();
+
 		List<UserHistory> userHistoryList = userService.getUserHistoryById(Long.parseLong(id));
+		String userHistoryString = mapper.writeValueAsString(userHistoryList);
 
 		return ResponseEntity.ok(BaseResponseBody.of(200, "success"));
 	}
