@@ -18,6 +18,10 @@ public interface UserService {
 	User getUserByEm(String em);  // 로그인 단계에서만 사용
 	// Update
 	User updateUser(Long id, UserRegisterPostReq userRegisterInfo);
+
+	User setRefresh(Long id, String refreshToken);
+
+	String getRefresh(Long id);
 	// Delete
 	void resignUserById(Long id);
 	UserStat getUserStatById(Long id);
