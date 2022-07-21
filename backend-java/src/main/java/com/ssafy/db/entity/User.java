@@ -50,14 +50,6 @@ public class User {
 
     LocalDateTime leave_dt;
 
-    @OneToOne
-    @JoinTable(
-            name = "user_stat",
-            joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "id")
-    )
-    UserStat userStat;
-
     @Builder
     public User(Long id, String em, String pwd, String nnm, int level, boolean em_auth, LocalDateTime join_dt, String refresh_tk, String access_tk, LocalDateTime modify_dt, LocalDateTime leave_dt) {
         this.id = id;
