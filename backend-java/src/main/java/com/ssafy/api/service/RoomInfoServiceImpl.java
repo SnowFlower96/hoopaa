@@ -20,8 +20,8 @@ public class RoomInfoServiceImpl implements RoomInfoService{
     RoomInfoRepositorySupport roomInfoRepositorySupport;
 
     @Override
-    public Page<RoomInfo> findAll(int page, int size) {
-        Page<RoomInfo> roomInfo= (Page<RoomInfo>) roomInfoRepositorySupport.findAll(PageRequest.of(page,size));
+    public List<RoomInfo> findAll() {
+        List<RoomInfo> roomInfo= roomInfoRepositorySupport.findAll();
         return roomInfo;
     }
 

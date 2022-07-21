@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +21,8 @@ public class RoomInfoController {
 
     @GetMapping("/all")
     @ApiOperation(value = "전체 토론방 조회")
-    public Page<RoomInfo> findAll(@RequestParam("page") int page){
-        Page<RoomInfo> findAll=roomInfoService.findAll(page,3);
-        return findAll;
+    public List<RoomInfo> findAll(){
+        return roomInfoService.findAll();
     }
     @GetMapping("/search/{keyword}")
     @ApiOperation(value="토론방 검색")
