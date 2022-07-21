@@ -1,14 +1,12 @@
 package com.ssafy.db.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserHistory {
 
@@ -16,24 +14,24 @@ public class UserHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    Long user_id;
+    Long userId;
     @Column(insertable = false, updatable = false)
-    Long room_id;
-    boolean is_host;
-    boolean is_king;
-    boolean user_pos;
+    Long roomId;
+    boolean isHost;
+    boolean isKing;
+    boolean userPos;
 
-    @ManyToOne
-    @JoinColumn(name = "room_id", referencedColumnName = "id")
-    RoomInfo roomInfo;
+//    @ManyToOne
+//    @JoinColumn(name = "roomId", referencedColumnName = "id")
+//    RoomInfo roomInfo;
 
     @Builder
-    public UserHistory(Long id, Long user_id, Long room_id, boolean is_host, boolean is_king, boolean user_pos) {
+    public UserHistory(Long id, Long userId, Long roomId, boolean isHost, boolean is_king, boolean userPos) {
         this.id = id;
-        this.user_id = user_id;
-        this.room_id = room_id;
-        this.is_host = is_host;
-        this.is_king = is_king;
-        this.user_pos = user_pos;
+        this.userId = userId;
+        this.roomId = roomId;
+        this.isHost = isHost;
+        this.isKing = is_king;
+        this.userPos = userPos;
     }
 }

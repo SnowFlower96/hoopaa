@@ -29,10 +29,6 @@ public class UserStat {
 
     int king;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    List<UserHistory> userHistoryList;
-
     @Builder
     public UserStat(Long id, int exp, int total, int win, int lose, int draw, int penalty, int king) {
         this.id = id;

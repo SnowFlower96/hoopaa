@@ -1,6 +1,8 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.response.UserRes;
+import com.ssafy.db.entity.UserHistory;
+import com.ssafy.db.entity.UserStat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -161,10 +165,13 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
 			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
 	})
-	public ResponseEntity<? extends BaseResponseBody> getUserHistory() {
-//		SsafyUserDetails ssafyUserDetails = (SsafyUserDetails)authentication.getDetails();
-//		String id = ssafyUserDetails.getUsername();
-		userService.getUserStat(Long.parseLong("4"));
+	public ResponseEntity<? extends BaseResponseBody> getUserHistory(@ApiIgnore Authentication authentication) {
+		SsafyUserDetails ssafyUserDetails = (SsafyUserDetails)authentication.getDetails();
+		String id = ssafyUserDetails.getUsername();
+
+		UserStat userStat = userService.getUserStatById(Long.parseLong(id));
+		List<UserHistory> userHistoryList = userService.getUserHistoryById(Long.parseLong(id));
+
 		return ResponseEntity.ok(BaseResponseBody.of(200, "success"));
 	}
 

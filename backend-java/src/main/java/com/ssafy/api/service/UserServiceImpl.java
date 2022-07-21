@@ -25,8 +25,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserStatRepository userStatRepository;
 
-//    @Autowired
-//    UserHistoryRepository userHistoryRepository;
+    @Autowired
+    UserHistoryRepository userHistoryRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -91,13 +91,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void getUserStat(Long id) {
-        System.out.println("-----------");
-//        List<UserHistory> user = userHistoryRepository.findUserHistoryByuser_id(id).get();
-//        for(UserHistory u : user) System.out.println(u);
+    public UserStat getUserStatById(Long id) {
         UserStat userStat = userStatRepository.findStatById(id).get();
-        System.out.println(userStat);
-        for(UserHistory u : userStat.getUserHistoryList()) System.out.println(u);
         System.out.println("-----------");
+        System.out.println(userStat);
+        System.out.println("-----------");
+        return userStat;
+    }
+
+    @Override
+    public List<UserHistory> getUserHistoryById(Long id) {
+        List<UserHistory> userHistoryList = userHistoryRepository.findUserHistoryByUserId(id).get();
+        System.out.println("-----------");
+        for(UserHistory u : userHistoryList) System.out.println(u);
+        System.out.println("-----------");
+        return userHistoryList;
     }
 }

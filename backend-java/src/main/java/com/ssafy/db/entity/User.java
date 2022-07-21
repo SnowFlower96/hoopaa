@@ -41,17 +41,15 @@ public class User {
 
     @Generated(GenerationTime.INSERT)
     LocalDateTime join_dt;
-
-    String refresh_tk;
-
-    String access_tk;
-
     LocalDateTime modify_dt;
 
     LocalDateTime leave_dt;
 
+    String refresh_tk;
+
     @Builder
-    public User(Long id, String em, String pwd, String nnm, int level, boolean em_auth, LocalDateTime join_dt, String refresh_tk, String access_tk, LocalDateTime modify_dt, LocalDateTime leave_dt) {
+
+    public User(Long id, String em, String pwd, String nnm, int level, boolean em_auth, LocalDateTime join_dt, LocalDateTime modify_dt, LocalDateTime leave_dt, String refresh_tk) {
         this.id = id;
         this.em = em;
         this.pwd = pwd;
@@ -59,9 +57,8 @@ public class User {
         this.level = level;
         this.em_auth = em_auth;
         this.join_dt = join_dt;
-        this.refresh_tk = refresh_tk;
-        this.access_tk = access_tk;
         this.modify_dt = modify_dt;
         this.leave_dt = leave_dt;
+        this.refresh_tk = refresh_tk;
     }
 }
