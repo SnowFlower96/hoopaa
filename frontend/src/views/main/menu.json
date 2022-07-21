@@ -1,8 +1,15 @@
 {
+<<<<<<< HEAD
   "All" : {
     "name" : "All",
     "hidden" : false,
     "path" : "/list",
+=======
+  "make-room" : {
+    "name" : "미팅 시작하기",
+    "hidden" : false,
+    "path" : "/make-room",
+>>>>>>> hyunjukim
     "children" : []
   },
   "유머" : {

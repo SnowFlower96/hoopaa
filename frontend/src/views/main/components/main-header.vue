@@ -14,7 +14,7 @@
           <span class="el-menu-show-all">미칭 시작하기</span>
           <span class="el-menu-show-all">미팅 참여하기</span>
         </el-menu>
-
+        
         <div class="tool-wrapper">
             <router-link style=text-decoration:none; to="/login"><span class="tool-wrapper-span-login">Log in</span></router-link>
             <router-link style=text-decoration:none; to="/signUp"><span class="tool-wrapper-span-signup">Sign up</span></router-link>
@@ -100,7 +100,7 @@ export default {
 }
 </script>
 <style>
-
+  
   /*Mobile, Tablet*/
   .menu-icon-wrapper {
     display: inline-block;
@@ -201,7 +201,10 @@ export default {
   .el-menu {
     margin-right: 550px;
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> hyunjukim
   .el-menu-item > span {
     outline: solid 1px #9747ff;
     border-radius: 5px;
