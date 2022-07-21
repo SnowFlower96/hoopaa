@@ -14,7 +14,7 @@ public class RoomInfoRepositorySupport {
     @Autowired
     private JPAQueryFactory jpaQueryFactory;
 
-    QRoomInfo qRoomInfo=QRoomInfo.roomInfo;
+    QRoomInfo qRoomInfo = QRoomInfo.roomInfo;
 
     public List<RoomInfo> findAll(){
 
