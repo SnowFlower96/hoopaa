@@ -1,20 +1,12 @@
 <template>
   <el-container class="main-wrapper">
-<<<<<<< HEAD
-    <main-header
-      :height="`70px`"
-     />
+    <main-header v-if="visible" class="main-header-class" />
       <el-container class="main-container">
 
       <el-main>
         <router-view></router-view>
       </el-main>
     </el-container>
-
-=======
-    <main-header v-if="visible" class="main-header-class" />
-    <router-view></router-view>
->>>>>>> hyunjukim
     <main-footer :height="`110px`"/>
   </el-container>
 </template>
@@ -27,7 +19,7 @@
   position: fixed;
   color: white;
 }
-  .el-main::-webkit-scrollbar{width: 0px;} 
+  .el-main::-webkit-scrollbar{width: 0px;}
 </style>
 <script>
 import MainHeader from './components/main-header'
@@ -43,24 +35,12 @@ export default {
   },
   data () {
     return {
-<<<<<<< HEAD
 
-    }
-  },
-  methods: {
-   
-=======
-      loginDialogOpen: false,
       visible: true
     }
   },
   methods: {
-    onOpenLoginDialog () {
-      this.loginDialogOpen = true
-    },
-    onCloseLoginDialog () {
-      this.loginDialogOpen = false
-    },
+
     zeroLocation() {
       const topPosition = window.scrollY || document.documentElement.scrollTop;
       // console.log(topPosition, 'top')
@@ -79,7 +59,6 @@ export default {
     const mainpageRouterName = this.$router.currentRoute['_rawValue'].fullPath
     console.log(this.$store.state.headerVisible)
 
->>>>>>> hyunjukim
   }
 }
 </script>

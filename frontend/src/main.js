@@ -12,10 +12,10 @@ import router from './common/lib/vue-router'
 import 'element-plus/packages/theme-chalk/src/base.scss'
 
 // 스크롤 효과 익스텐션 추가
-import AOS from 'aos'
-import 'aos/dist/aos.css'
+// import AOS from 'aos'
+// import 'aos/dist/aos.css'
 
-AOS.init()
+// AOS.init()
 
 // Element UI Components [시작]
 import {

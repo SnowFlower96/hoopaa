@@ -2,16 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/home/home'
 import ConferencesDetail from '@/views/conferences/conference-detail'
 import History from '@/views/history/history'
-<<<<<<< HEAD
 import SignUp from '@/views/user/sign-up'
 import Login from '@/views/user/login'
-import Start from '@/views/start/start'
-import Participate from '@/views/participate/participate'
-=======
-import SignUp from '@/views/main/components/sign-up'
-import Login from '@/views/main/components/login'
 
->>>>>>> hyunjukim
+
 import mainPage from '@/views/main-page/main-page'
 import Participate from '@/views/participate/participating-code'
 import participatingPage from '@/views/participate/participating-page'
@@ -50,68 +44,60 @@ function makeRoutesFromMenu () {
     path: '/conferences/:conferenceId',
     name: 'conference-detail',
     component: ConferencesDetail
-  })
-  routes.push(
-    {path: '/signUp',
-    name: 'sign-up',
-    component: SignUp}
-  )
-  routes.push({
+  },
+  {path: '/signUp',
+  name: 'sign-up',
+  component: SignUp},
+  {
     path: '/login',
     name: 'Login',
     component: Login
-  }
-  )
-  routes.push({
+  },
+  {
     path: '/',
     name: 'Home',
     component: Home
-  })
-  routes.push({
+  },
+  {
     path: '/mainPage',
     name: 'main-page',
     component: mainPage
-  })
-<<<<<<< HEAD
-  routes.push(
-    {
-      path: '/myPage',
-      name: 'myPage',
-      component : myPage
-    },
-
-    {
-    path : '/myPage/info',
-    name : 'myPage-info',
-    component : myPageInfo,
-    beforeEnter: (to, from, next) => {
-      if (to.query[tempKey]) {
-        next();
-      } else {
-        next('/checkPwd');
-      }
-    },
   },
   {
-    path : '/checkPwd',
-    name : 'checkPwd',
-    component : checkPwd,
+    path: '/myPage',
+    name: 'myPage',
+    component : myPage
   },
 
+  {
+  path : '/myPage/info',
+  name : 'myPage-info',
+  component : myPageInfo,
+  beforeEnter: (to, from, next) => {
+    if (to.query[tempKey]) {
+      next();
+    } else {
+      next('/checkPwd');
+    }
+  },
+},
+{
+  path : '/checkPwd',
+  name : 'checkPwd',
+  component : checkPwd,
+},
+{
+  path: '/participatingPage',
+  name: 'participating-page',
+  component: participatingPage
+},
+{
+  path: '/waitingPage',
+  name: 'waiting-page',
+  component: waitingPage
+}
   )
 
-=======
-  routes.push({
-    path: '/participatingPage',
-    name: 'participating-page',
-    component: participatingPage
-  })
-  routes.push({
-    path: '/waitingPage',
-    name: 'waiting-page',
-    component: waitingPage
-  })
->>>>>>> hyunjukim
   return routes
 }
 
