@@ -107,4 +107,28 @@ public class UserServiceImpl implements UserService {
         System.out.println("-----------");
         return userHistoryList;
     }
+	@Override
+	public User setRefresh(Long id, String refreshToken) {
+		User user = userRepository.findById(id).get();
+
+		user.setRefresh_tk(refreshToken);
+
+		userRepository.save(user);
+		return null;
+	}
+
+	@Override
+	public String getRefresh(Long id) {
+		return getUserById(id).getRefresh_tk();
+	}
+
+	@Override
+	public void resignUserById(Long id) {
+		User user = userRepository.findById(id).get();
+		System.out.println(id);
+		System.out.println(user);
+		// user의 leave_dt 변경
+		user.setLeave_dt(LocalDateTime.now());
+		userRepository.save(user);
+	}
 }
