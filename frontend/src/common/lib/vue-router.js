@@ -80,8 +80,9 @@ const router = createRouter({
   routes
 })
 
-router.afterEach((to) => {
-  console.log(to)
-})
+// router.afterEach((to) => {
+//   console.log('이거냐?', to.fullPath, $state.headerVisible)
+
+// })
 
 export default router

@@ -15,7 +15,7 @@
             <span>{{ item.title }}</span>
           </el-menu-item>
         </el-menu>
-
+        
         <div class="tool-wrapper">
             <router-link style=text-decoration:none; to="/login"><span class="tool-wrapper-span-login">Log in</span></router-link>
             <router-link style=text-decoration:none; to="/signUp"><span class="tool-wrapper-span-signup">Sign up</span></router-link>
@@ -101,7 +101,7 @@ export default {
 }
 </script>
 <style>
-
+  
   /*Mobile, Tablet*/
   .menu-icon-wrapper {
     display: inline-block;
