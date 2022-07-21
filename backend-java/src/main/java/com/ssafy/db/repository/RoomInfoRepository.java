@@ -8,4 +8,6 @@ import java.util.List;
 public interface RoomInfoRepository extends JpaRepository<RoomInfo,Long> {
 
     List<RoomInfo> findAll();
+    List<RoomInfo> searchBy();
+    List<RoomInfo> findByCate(int cate);
 }
