@@ -7,11 +7,11 @@ import Login from '@/views/user/login'
 import Start from '@/views/start/start'
 import Participate from '@/views/participate/participate'
 import mainPage from '@/views/main-page/main-page'
+
 import myPage from '@/views/user/mypage'
 import tempKey from '@/views/user/tempKey'
 import checkPwd from '@/views/user/checkPwd'
 import myPageInfo from '@/views/user/mypage-info'
-
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -83,6 +83,7 @@ function makeRoutesFromMenu () {
   },
 
   )
+
   return routes
 }
 
