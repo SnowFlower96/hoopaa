@@ -1,3 +1,4 @@
+
 ### 사용자 권한에 따라 서비스 이용에 제한을 두는 방법
 ```java
 http.csrf().disable(); //csrf비활성화
@@ -37,13 +38,3 @@ SecurityConfig extends **WebSecurityConfigurerAdapter** 클래스를 사용해�
     String encPassword = bCryptPasswordEncoder.encode(rawPassword); //암호화한 비밀번호
 ```
 - db에는 암호화한 비밀번호를 집어 넣는다. 
-
-## 권한 처리
-
-- 권한 처리 시 SecurityConfig에서 url에 따라 인증이 필요한 작업인지 분류 필요
-- access 토큰 만료시 **access 토큰 만료 됐음을 알려주기**
-- access 토큰 만료 되어서 access 토큰과 refresh 토큰이 같이 왔을 경우
-    - access 토큰이 문제가 없는 지 일단 확인
-    - 가져온 refresh토큰과 db의 refresh토큰 비교 확인
-    - 맞다면 새로운 access 토큰 발행 
-- access 토큰은 만들 수 있는데 refresh 토큰은 어떻게 만들지 고민 필요!
