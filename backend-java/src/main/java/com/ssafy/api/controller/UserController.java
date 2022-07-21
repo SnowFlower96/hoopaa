@@ -1,14 +1,11 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.response.UserRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.api.request.UserLoginPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
@@ -101,6 +98,59 @@ public class UserController {
 		}
 		// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
 		return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
+	}
+
+	/**
+	 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
+	 * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
+	 */
+	@GetMapping("/info")
+	@ApiOperation(value = "개인정보 조회", notes = "개인정보 수정을 위한 계정 정보를 응답한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<UserRes> getUserInfo(@ApiIgnore Authentication authentication) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String id = userDetails.getUsername();
+		User user = userService.getUserById(Long.parseLong(id));
+
+		return ResponseEntity.status(200).body(UserRes.of(user));
+	}
+
+	@PutMapping("/info")
+	@ApiOperation(value = "회원 정보 수정", notes = "비밀번호, 닉네임 수정. ")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> modifyUser(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "수정할 회원 정보", required = true) UserRegisterPostReq userRegisterInfo) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userId = userDetails.getUsername();
+
+		User user = userService.updateUser(Long.parseLong(userId), userRegisterInfo);
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	@DeleteMapping("/resign")
+	@ApiOperation(value = "회원 탈퇴", notes = "현재 로그인 되어있는 사용자 탈퇴")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> resignUser(@ApiIgnore Authentication authentication) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String id = userDetails.getUsername();
+		userService.resignUserById(Long.parseLong(id));
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
 	@GetMapping("/history")
