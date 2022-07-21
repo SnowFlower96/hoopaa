@@ -2,10 +2,14 @@
   <el-container class="main-wrapper">
     <main-header
       :height="`70px`"
-      @openLoginDialog="onOpenLoginDialog"/>
+     />
+      <el-container class="main-container">
+
       <el-main>
         <router-view></router-view>
       </el-main>
+    </el-container>
+
     <main-footer :height="`110px`"/>
   </el-container>
 </template>
@@ -30,16 +34,11 @@ export default {
   },
   data () {
     return {
-      loginDialogOpen: false
+
     }
   },
   methods: {
-    onOpenLoginDialog () {
-      this.loginDialogOpen = true
-    },
-    onCloseLoginDialog () {
-      this.loginDialogOpen = false
-    }
+   
   }
 }
 </script>

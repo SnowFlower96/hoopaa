@@ -1,44 +1,41 @@
 <template>
-<modal v-model="isAuth" :disabled="true" width="420" height="150">
-        <div class="check">
-            <input class="check__text" v-model="checkPwd" placeholder="본인 확인을 위해 비밀번호를 입력해 주세요" />
-            <button class="check__button" type="button" @click="clickPwd">확인</button>
-        </div>
-    </modal>
+<div>
+<div class="check">
+  <input placeholder="비밀번호 입력" v-model="checkPwd" />
+  <button @click="clickPwd">확인</button>
+
+</div>
+
+
+</div>
 </template>
 
 <script>
-import Modal from '@/views/common/Modal.vue';
-import tempKey from '@/views/user/tempKey';
-import { ref } from 'vue';
-
+import {ref} from 'vue'
+import tempKey from './tempKey';
+import { useRouter } from 'vue-router'
 export default {
-name: 'checkPwd',
-    components: {
-      Modal
-    },
+  name: 'checkPwd',
     setup(_, { root }) {
-        const isAuth = ref(true);
+      const router = useRouter()
         const checkPwd = ref('');
         const clickPwd = () => {
             if (checkPwd.value === tempKey) {
-                root.$router.push({
+                router.push({
                     path: '/myPage/info',
                     query: {
-                        [tempKey]: true,
+                        [tempKey] : true,
                     },
                 })
             }
         };
         return {
-            isAuth,
             checkPwd,
             clickPwd,
         };
-    },
-}
+    },}
 </script>
 
 <style>
 
-</style>vue
+</style>

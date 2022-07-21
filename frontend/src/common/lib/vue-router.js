@@ -10,7 +10,7 @@ import mainPage from '@/views/main-page/main-page'
 import myPage from '@/views/user/mypage'
 import tempKey from '@/views/user/tempKey'
 import checkPwd from '@/views/user/checkPwd'
-import { initCustomFormatter } from 'vue'
+import myPageInfo from '@/views/user/mypage-info'
 
 
 const fullMenu = require('@/views/main/menu.json')
@@ -67,8 +67,7 @@ function makeRoutesFromMenu () {
     {
     path : '/myPage/info',
     name : 'myPage-info',
-    component : myPage-initCustomFormatter,
-    meta : {unauthrized : true, layout : 'MobileLayout'},
+    component : myPageInfo,
     beforeEnter: (to, from, next) => {
       if (to.query[tempKey]) {
         next();
@@ -81,7 +80,8 @@ function makeRoutesFromMenu () {
     path : '/checkPwd',
     name : 'checkPwd',
     component : checkPwd,
-  }
+  },
+
   )
   return routes
 }
