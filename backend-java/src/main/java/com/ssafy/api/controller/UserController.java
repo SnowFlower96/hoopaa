@@ -2,6 +2,7 @@ package com.ssafy.api.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.api.response.JsonRes;
 import com.ssafy.api.response.UserRes;
 import com.ssafy.db.entity.UserHistory;
 import com.ssafy.db.entity.UserStat;
@@ -176,7 +177,7 @@ public class UserController {
 		UserStat userStat = userService.getUserStatById(Long.parseLong(id));
 		String userStatString = mapper.writeValueAsString(userStat);
 
-		return ResponseEntity.ok(BaseResponseBody.of(200, "success"));
+		return ResponseEntity.ok(JsonRes.of(200, "success", userStatString));
 	}
 
 	@GetMapping("/history")
@@ -194,7 +195,7 @@ public class UserController {
 		List<UserHistory> userHistoryList = userService.getUserHistoryById(Long.parseLong(id));
 		String userHistoryString = mapper.writeValueAsString(userHistoryList);
 
-		return ResponseEntity.ok(BaseResponseBody.of(200, "success"));
+		return ResponseEntity.ok(JsonRes.of(200, "success", userHistoryString));
 	}
 
 }
