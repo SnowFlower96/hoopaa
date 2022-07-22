@@ -8,7 +8,6 @@ import com.ssafy.api.response.JsonRes;
 import com.ssafy.api.response.UserRes;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserStatDto;
-import com.ssafy.db.entity.UserStat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
