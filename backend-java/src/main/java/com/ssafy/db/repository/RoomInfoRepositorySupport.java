@@ -29,7 +29,7 @@ public class RoomInfoRepositorySupport {
         List<RoomInfo> searchBy = jpaQueryFactory.selectFrom(qRoomInfo)
                 .where((qRoomInfo.subtitle.like("%"+keyword+"%").or(qRoomInfo.title.like("%"+keyword+"%")))
                         .and(qRoomInfo.phase.in(0,1)))
-                .orderBy(qRoomInfo.cur_num.desc()).offset(now+1).limit(60).fetch();
+                .orderBy(qRoomInfo.cur_num.desc()).offset(now).limit(60).fetch();
         return searchBy;
     }
 
