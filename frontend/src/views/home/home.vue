@@ -80,6 +80,7 @@ import Conference from './components/conference'
 import side from '@/views/main/components/main-sidebar'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { mapState } from "vuex";
 
 export default {
   name: 'Home',
@@ -89,7 +90,12 @@ export default {
     search,
     side
   },
-
+  computed : {
+    ...mapState(["roomList"])
+  },
+  created() {
+    this.$store.dispatch("getRoomInfo");
+  },
   setup () {
     const router = useRouter()
 
