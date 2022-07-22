@@ -20,14 +20,14 @@ public class UserRepositorySupport {
 
     public Optional<User> findUserById(Long id) {
         User user = jpaQueryFactory.select(qUser).from(qUser)
-                .where(qUser.id.eq(id)).fetchOne();
+                .where(qUser.id.eq(id)).where(qUser.leave_dt.isNull()).fetchOne();
         if(user == null) return Optional.empty();
         return Optional.ofNullable(user);
     }
 
     public Optional<User> findUserByEm(String em) {
-        User user = jpaQueryFactory.select(qUser).from(qUser).where(qUser.em.eq(em)).fetchOne();
-        System.out.println(user);
+        User user = jpaQueryFactory.select(qUser).from(qUser)
+                .where(qUser.em.eq(em)).where(qUser.leave_dt.isNull()).fetchOne();
         if (user == null) return Optional.empty();
         return Optional.ofNullable(user);
     }

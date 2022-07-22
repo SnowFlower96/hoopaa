@@ -1,7 +1,12 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.UserRegisterPostReq;
+import com.ssafy.db.dto.UserHistoryDto;
+import com.ssafy.db.dto.UserStatDto;
 import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.UserStat;
+
+import java.util.List;
 
 /**
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 인터페이스 정의.
@@ -20,4 +25,6 @@ public interface UserService {
 	String getRefresh(Long id);
 	// Delete
 	void resignUserById(Long id);
+	UserStatDto getUserStatById(Long id);
+	List<UserHistoryDto> getUserHistoryById(Long id);
 }

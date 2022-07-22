@@ -1,8 +1,6 @@
 package com.ssafy.db.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,22 +9,34 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserStat {
     @Id
     Long id;
 
-    long exp;
+    int exp;
 
-    long total;
+    int total;
 
-    long win;
+    int win;
 
-    long lose;
+    int lose;
 
-    long draw;
+    int draw;
 
-    long penalty;
+    int panelty;
 
-    long king;
+    int king;
 
+    @Builder
+    public UserStat(Long id, int exp, int total, int win, int lose, int draw, int panelty, int king) {
+        this.id = id;
+        this.exp = exp;
+        this.total = total;
+        this.win = win;
+        this.lose = lose;
+        this.draw = draw;
+        this.panelty = panelty;
+        this.king = king;
+    }
 }

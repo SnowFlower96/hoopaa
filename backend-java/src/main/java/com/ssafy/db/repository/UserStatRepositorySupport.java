@@ -19,7 +19,7 @@ public class UserStatRepositorySupport {
     public Optional<UserStat> findUserStatById(Long id){
         UserStat userStat = jpaQueryFactory.select(qUserStat).from(qUserStat)
                 .where(qUserStat.id.eq(id)).fetchOne();
-        if(userStat==null) return Optional.empty();
+        if(userStat ==null) return Optional.empty();
         return Optional.ofNullable(userStat);
     }
 }

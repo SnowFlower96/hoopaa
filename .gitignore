@@ -14,6 +14,8 @@ backend-java/*.ipr
 backend-java/out/
 backend-java/!**/src/main/**/out/
 backend-java/!**/src/test/**/out/
+backend-java/*.log
+backend-java/*.gz
 
 ### frontend ###
 frontend/node_modules
