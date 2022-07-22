@@ -6,7 +6,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.api.response.JsonRes;
 import com.ssafy.api.response.UserRes;
-import com.ssafy.db.entity.UserHistory;
+import com.ssafy.db.dto.UserHistoryDto;
+import com.ssafy.db.dto.UserStatDto;
 import com.ssafy.db.entity.UserStat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -218,8 +219,8 @@ public class UserController {
 		SsafyUserDetails ssafyUserDetails = (SsafyUserDetails)authentication.getDetails();
 		String id = ssafyUserDetails.getUsername();
 
-		UserStat userStat = userService.getUserStatById(Long.parseLong(id));
-		String userStatString = mapper.writeValueAsString(userStat);
+		UserStatDto userStatDto = userService.getUserStatById(Long.parseLong(id));
+		String userStatString = mapper.writeValueAsString(userStatDto);
 
 		return ResponseEntity.ok(JsonRes.of(200, "success", userStatString));
 	}
@@ -236,8 +237,8 @@ public class UserController {
 		SsafyUserDetails ssafyUserDetails = (SsafyUserDetails)authentication.getDetails();
 		String id = ssafyUserDetails.getUsername();
 
-		List<UserHistory> userHistoryList = userService.getUserHistoryById(Long.parseLong(id));
-		String userHistoryString = mapper.writeValueAsString(userHistoryList);
+		List<UserHistoryDto> userHistoryDtoList = userService.getUserHistoryById(Long.parseLong(id));
+		String userHistoryString = mapper.writeValueAsString(userHistoryDtoList);
 
 		return ResponseEntity.ok(JsonRes.of(200, "success", userHistoryString));
 	}

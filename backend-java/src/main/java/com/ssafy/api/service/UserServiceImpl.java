@@ -1,5 +1,7 @@
 package com.ssafy.api.service;
 
+import com.ssafy.db.dto.UserHistoryDto;
+import com.ssafy.db.dto.UserStatDto;
 import com.ssafy.db.entity.UserHistory;
 import com.ssafy.db.entity.UserStat;
 import com.ssafy.db.repository.*;
@@ -12,6 +14,7 @@ import com.ssafy.db.entity.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -106,20 +109,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserStat getUserStatById(Long id) {
-        UserStat userStat = userStatRepository.findStatById(id).get();
+    public UserStatDto getUserStatById(Long id) {
+        UserStatDto userStatDto = new UserStatDto(userStatRepository.findStatById(id).get());
         System.out.println("-----------");
-        System.out.println(userStat);
+        System.out.println(userStatDto);
         System.out.println("-----------");
-        return userStat;
+        return userStatDto;
     }
 
     @Override
-    public List<UserHistory> getUserHistoryById(Long id) {
+    public List<UserHistoryDto> getUserHistoryById(Long id) {
         List<UserHistory> userHistoryList = userHistoryRepository.findUserHistoryByUserId(id).get();
         System.out.println("-----------");
-        for(UserHistory u : userHistoryList) System.out.println(u);
+        List<UserHistoryDto> userHistoryDtoList = new ArrayList<>();
+        for(UserHistory u : userHistoryList) {
+            userHistoryDtoList.add(new UserHistoryDto(u));
+        }
+        for (UserHistoryDto dto : userHistoryDtoList) System.out.println(dto);
         System.out.println("-----------");
-        return userHistoryList;
+        return userHistoryDtoList;
     }
 }

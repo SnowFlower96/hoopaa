@@ -1,8 +1,9 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.UserRegisterPostReq;
+import com.ssafy.db.dto.UserHistoryDto;
+import com.ssafy.db.dto.UserStatDto;
 import com.ssafy.db.entity.User;
-import com.ssafy.db.entity.UserHistory;
 import com.ssafy.db.entity.UserStat;
 
 import java.util.List;
@@ -24,6 +25,6 @@ public interface UserService {
 	String getRefresh(Long id);
 	// Delete
 	void resignUserById(Long id);
-	UserStat getUserStatById(Long id);
-	List<UserHistory> getUserHistoryById(Long id);
+	UserStatDto getUserStatById(Long id);
+	List<UserHistoryDto> getUserHistoryById(Long id);
 }
