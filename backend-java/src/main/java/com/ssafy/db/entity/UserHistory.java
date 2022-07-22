@@ -19,14 +19,14 @@ public class UserHistory {
     Long roomId;
     boolean isHost;
     boolean isKing;
-    boolean userPos;
+    int userPos;
 
-//    @ManyToOne
-//    @JoinColumn(name = "roomId", referencedColumnName = "id")
-//    RoomInfo roomInfo;
+    @ManyToOne
+    @JoinColumn(name = "roomId", referencedColumnName = "id")
+    RoomInfo roomInfo;
 
     @Builder
-    public UserHistory(Long id, Long userId, Long roomId, boolean isHost, boolean is_king, boolean userPos) {
+    public UserHistory(Long id, Long userId, Long roomId, boolean isHost, boolean is_king, int userPos) {
         this.id = id;
         this.userId = userId;
         this.roomId = roomId;

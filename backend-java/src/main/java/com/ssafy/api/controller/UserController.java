@@ -1,11 +1,13 @@
 package com.ssafy.api.controller;
 
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.api.response.JsonRes;
 import com.ssafy.api.response.UserRes;
-import com.ssafy.db.entity.UserHistory;
-import com.ssafy.db.entity.UserStat;
+import com.ssafy.db.dto.UserHistoryDto;
+import com.ssafy.db.dto.UserStatDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,6 +31,7 @@ import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -76,13 +79,19 @@ public class UserController {
 
 		User user = userService.getUserByEm(userEm);
 
+		// 탈퇴된 회원이면 로그인 실패
+		if (user.getLeave_dt() != null) ResponseEntity.status(401).body(UserLoginPostRes.of(404, "Resigned User", null, null));
+		
 		// 로그인 요청한 유저로부터 입력된 패스워드 와 디비에 저장된 유저의 암호화된 패스워드가 같은지 확인.(유효한 패스워드인지 여부 확인)
 		if(passwordEncoder.matches(password, user.getPwd())) {
-			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-			return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(String.valueOf(user.getId()))));
+			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰, 리프레쉬 토큰을 포함하여 응답값 전달)
+			String accessToken = JwtTokenUtil.getAccessToken(String.valueOf(user.getId()));
+			String refreshToken = JwtTokenUtil.getRefreshToken(String.valueOf(user.getId()));
+			userService.setRefresh(user.getId(),refreshToken);
+			return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", accessToken, refreshToken));
 		}
 		// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
-		return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
+		return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null, null));
 	}
 
 	@PostMapping("/verify")
@@ -102,11 +111,49 @@ public class UserController {
 
 		// 로그인 요청한 유저로부터 입력된 패스워드 와 디비에 저장된 유저의 암호화된 패스워드가 같은지 확인.(유효한 패스워드인지 여부 확인)
 		if(passwordEncoder.matches(pwd, user.getPwd())) {
-			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-			return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(String.valueOf(user.getId()))));
+
+			String accessToken = JwtTokenUtil.getAccessToken(String.valueOf(user.getId()));
+			String refreshToken = JwtTokenUtil.getRefreshToken(String.valueOf(user.getId()));
+
+			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰, 리프레시 토큰을 포함하여 응답값 전달)
+			return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", accessToken, refreshToken));
 		}
 		// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
-		return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
+		return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null, null));
+	}
+
+	@PostMapping("/refresh")
+	@ApiOperation(value = "access토큰 재발급 요청", notes = "refresh token으로 <strong>access token</strong>을 요청한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+			@ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<UserLoginPostRes> refresToken(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value="리프레시 토큰", required = true) Map<String ,String > tokens) {
+
+		String accessToken = tokens.get("accessToken");
+		String refreshToken = tokens.get("refreshToken");
+		if (refreshToken != null) {
+			// parse the token and validate it (decode)
+			JWTVerifier verifier = JwtTokenUtil.getRefreshVerifier();
+
+			try {
+				DecodedJWT decodedJWT = verifier.verify(refreshToken);
+				String id = decodedJWT.getSubject();
+				String localRefreshToken = userService.getRefresh(Long.parseLong(id));
+
+				if (refreshToken.equals(localRefreshToken)) {
+					accessToken = JwtTokenUtil.getAccessToken(String.valueOf(id));
+					return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", accessToken, refreshToken));
+				}
+			}catch (Exception e){
+				return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "invalid refresh token", null, null));
+			}
+
+
+		}
+		return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "invalid refresh token", null, null));
 	}
 
 	/**
@@ -174,8 +221,8 @@ public class UserController {
 		SsafyUserDetails ssafyUserDetails = (SsafyUserDetails)authentication.getDetails();
 		String id = ssafyUserDetails.getUsername();
 
-		UserStat userStat = userService.getUserStatById(Long.parseLong(id));
-		String userStatString = mapper.writeValueAsString(userStat);
+		UserStatDto userStatDto = userService.getUserStatById(Long.parseLong(id));
+		String userStatString = mapper.writeValueAsString(userStatDto);
 
 		return ResponseEntity.ok(JsonRes.of(200, "success", userStatString));
 	}
@@ -192,8 +239,8 @@ public class UserController {
 		SsafyUserDetails ssafyUserDetails = (SsafyUserDetails)authentication.getDetails();
 		String id = ssafyUserDetails.getUsername();
 
-		List<UserHistory> userHistoryList = userService.getUserHistoryById(Long.parseLong(id));
-		String userHistoryString = mapper.writeValueAsString(userHistoryList);
+		List<UserHistoryDto> userHistoryDtoList = userService.getUserHistoryById(Long.parseLong(id));
+		String userHistoryString = mapper.writeValueAsString(userHistoryDtoList);
 
 		return ResponseEntity.ok(JsonRes.of(200, "success", userHistoryString));
 	}
