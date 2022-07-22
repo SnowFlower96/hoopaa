@@ -1,13 +1,10 @@
 <template>
   <el-container class="main-wrapper">
     <main-header v-if="visible" class="main-header-class" />
-      <el-container class="main-container">
-
-      <el-main>
-        <router-view></router-view>
-      </el-main>
-    </el-container>
-    <main-footer :height="`110px`"/>
+    <div>
+      <router-view></router-view>
+    </div>
+    <main-footer class="main-footer-class"/>
   </el-container>
 </template>
 <style>
@@ -18,8 +15,12 @@
   .main-header-class {
   position: fixed;
   color: white;
+  background-color: white;
 }
   .el-main::-webkit-scrollbar{width: 0px;}
+  .main-footer-class {
+    background-color: white;
+  }
 </style>
 <script>
 import MainHeader from './components/main-header'
@@ -35,30 +36,40 @@ export default {
   },
   data () {
     return {
-
-      visible: true
+      tired: null,
+      visible: true,
+      location: null
     }
   },
   methods: {
-
     zeroLocation() {
-      const topPosition = window.scrollY || document.documentElement.scrollTop;
-      // console.log(topPosition, 'top')
-      if (topPosition < 790) {
-        this.visible = false
-      } else {
-        this.visible = true
+      if (this.location == 'main-page') {
+        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+        const percentageOfPageScroll = scrollPosition/document.body.scrollHeight *100
+        console.log('돌아가는중',this.visible, this.location)
+        if (percentageOfPageScroll < 15) {
+          this.visible = false
+        } else {
+          this.visible = true
+        }
       }
 
     }
   },
+  watch: {
+    '$route' (to, from) {
+      if (to.name === 'main-page' || to.name === 'Login' || to.name === 'sign-up' ) {
+        this.location = to.name
+        this.visible = false
+        document.addEventListener('scroll', this.zeroLocation)
+        }
+      else {
+        this.location = to.name
+        this.visible = true
+      }
+    }
+  },
   mounted() {
-    this.visible = false
-    document.addEventListener('scroll', this.zeroLocation);
-    // console.log('dlrjsi?', this.$router.currentRoute['_rawValue'].fullPath)
-    const mainpageRouterName = this.$router.currentRoute['_rawValue'].fullPath
-    console.log(this.$store.state.headerVisible)
-
   }
 }
 </script>

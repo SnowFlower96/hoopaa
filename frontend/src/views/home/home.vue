@@ -1,35 +1,41 @@
 <template>
-  <search></search>
-  <hr/>
-   <el-container class="main-container">
+  <!-- <div> -->
+    <div class="black-space"></div>
+    <search></search>
+    <hr/>
+    <el-container class="main-container">
 
-
-   <el-aside class="category" width="240px" height="400px">
-        <side
-          :width="`240px`"/>
+      <el-aside class="category" width="240px" height="400px">
+        <side :width="`240px`"/>
       </el-aside>
-<div class="list">
-  <div>
-  <span>카테고리</span>
-  <button>정렬조건</button>
-  <el-checkbox>모집중만 보기</el-checkbox>
-  </div>
-  <ul class="infinite-list"  style="overflow:auto">
-    <li v-for="i in state.count" @click="clickConference(i)" class="infinite-list-item" :key="i" >
-      <conference />
-    </li>
-  </ul>
-  <hr/>
-  <ul class="infinite-list"  style="overflow:auto">
-    <li v-for="i in state.count" @click="clickConference(i)" class="infinite-list-item" :key="i" >
-      <conference />
-    </li>
-  </ul>
-</div>
 
-  </el-container>
+      <div class="list">
+        <div>
+          <span>카테고리</span>
+          <button>정렬조건</button>
+          <el-checkbox>모집중만 보기</el-checkbox>
+        </div>
+        
+        <ul class="infinite-list"  style="overflow:auto">
+          <li v-for="i in state.count" @click="clickConference(i)" class="infinite-list-item" :key="i" >
+            <conference />
+          </li>
+        </ul>
+
+        <hr/>
+
+        <ul class="infinite-list"  style="overflow:auto">
+          <li v-for="i in state.count" @click="clickConference(i)" class="infinite-list-item" :key="i" >
+            <conference />
+          </li>
+        </ul>
+      </div>
+    </el-container>
+  <!-- </div> -->
 </template>
-<style scopped>
+
+<style>
+.black-space
 ul {
   display: flex;
   flex-direction: column;

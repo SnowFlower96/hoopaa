@@ -7,13 +7,17 @@
           <div class="logo-wrapper"><div class="ic ic-logo"/></div>
         </router-link>
 
-        <el-menu @select="menuSelect">
-          <router-link style=text-decoration:none; to="/">
-            <span class="el-menu-show-all">모든 토론보기</span>
+        <div class="el-menu">
+          <router-link class="tool-wrapper-span-login" style=text-decoration:none; to="/">
+            <span>모든 토론보기</span>
           </router-link>
-          <span class="el-menu-show-all">미칭 시작하기</span>
-          <span class="el-menu-show-all">미팅 참여하기</span>
-        </el-menu>
+          <router-link class="el-menu-item button-purple" style=text-decoration:none; to="/makeRoomPage">
+            <span>미팅 시작하기</span>
+          </router-link>
+          <router-link class="el-menu-item button-green" style=text-decoration:none; to="/participatingPage">
+            <span>미팅 참여하기</span>
+          </router-link>
+        </div>
 
         <div class="tool-wrapper">
             <router-link style=text-decoration:none; to="/login"><span class="tool-wrapper-span-login">Log in</span></router-link>
@@ -23,26 +27,14 @@
     </div>
 
     <div class="hide-on-big">
-      <div class="menu-icon-wrapper" @click="changeCollapse"><i class="el-icon-menu"></i></div>
-      <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div>
-      <div class="menu-icon-wrapper"><i class="el-icon-search"></i></div>
-      <div class="mobile-sidebar-wrapper" v-if="!state.isCollapse">
-        <div class="mobile-sidebar">
-          <div class="mobile-sidebar-tool-wrapper">
-            <div class="logo-wrapper"><div class="ic ic-logo"/></div>
-            <el-button type="primary" class="mobile-sidebar-btn login-btn" @click="clickLogin">로그인</el-button>
-            <el-button class="mobile-sidebar-btn register-btn">회원가입</el-button>
-          </div>
-        </div>
-        <div class="mobile-sidebar-backdrop" @click="changeCollapse"></div>
-      </div>
+      <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div> <!-- 로고 있는 부분 -->
     </div>
 
   </el-row>
 </template>
 
 <script>
-import { reactive, computed } from 'vue'
+import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
@@ -62,40 +54,12 @@ export default {
     const state = reactive({
       searchValue: null,
       isCollapse: true,
-      menuItems: computed(() => {
-        const MenuItems = store.getters['root/getMenus']
-        let keys = Object.keys(MenuItems)
-        let menuArray = []
-        for (let i = 0; i < keys.length; ++i) {
-          let menuObject = {}
-          menuObject.title = MenuItems[keys[i]].name
-          menuArray.push(menuObject)
-        }
-        return menuArray
-      }),
-      activeIndex: computed(() => store.getters['root/getActiveMenuIndex'])
     })
-
-    if (state.activeIndex === -1) {
-      state.activeIndex = 0
-      store.commit('root/setMenuActive', 0)
-    }
-
-    const menuSelect = function (param) {
-      store.commit('root/setMenuActive', param)
-      const MenuItems = store.getters['root/getMenus']
-      let keys = Object.keys(MenuItems)
-      router.push({
-        name: keys[param]
-      })
-      console.log(keys[param])
-    }
-
     const changeCollapse = () => {
       state.isCollapse = !state.isCollapse
     }
 
-    return { state, menuSelect, changeCollapse }
+    return { state, changeCollapse }
   }
 }
 </script>
@@ -120,69 +84,6 @@ export default {
     background-repeat: no-repeat;
     background-image: url('../../../assets/images/favi6.png');
   }
-  .mobile-sidebar-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar {
-    width: 240px; height: calc(100vh - 1px);
-    display: inline-block;
-    background-color: white;
-    padding: 0 10px;
-    vertical-align: top;
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-tool-wrapper {
-    padding-bottom: 20px;
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-btn {
-    display: block;
-    margin: 0 auto;
-    margin-top: 25px;
-    height: 30px;
-    width: 100%;
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-btn.login-btn {
-    color: white;
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar .logo-wrapper {
-    display: block
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar .logo-wrapper .ic.ic-logo {
-    width: 70px;
-    height: 50px;
-    margin: 0 auto;
-    margin-top: 30px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url('../../../assets/images/favi6.png');
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar-backdrop {
-    width: calc(100% - 260px); height: calc(100vh - 1px);
-    background-color: black;
-    display: inline-block;
-    opacity: 0.3;
-  }
-  .mobile-sidebar-wrapper{
-    margin-top: 0;
-    padding-left: 0;
-    height: calc(100% - 235px);
-  }
-  .mobile-sidebar-wrapper .el-menu .el-menu-item {
-    cursor: pointer;
-  }
-  .mobile-sidebar-wrapper .el-menu .el-menu-item .ic {
-    margin-right: 5px;
-  }
-  .el-menu {
-    list-style : none;
-    padding: 0px;
-    display: flex;
-  }
-
-
 
   /*Desktop - Need to add Class if Need*/
   .main-header .hide-on-small {
@@ -199,16 +100,8 @@ export default {
   }
 
   .el-menu {
-    margin-right: 550px;
-  }
-  .el-menu-item > span {
-    outline: solid 1px #9747ff;
-    border-radius: 5px;
-    background-color: none;
-    color: #9747ff;
-    padding: 8px;
-    cursor: pointer;
-    /* font-weight: bold; */
+    margin-right: 500px;
+    margin-top: 15px;
   }
   .el-menu-show-all {
     border-radius: 5px;
@@ -220,13 +113,33 @@ export default {
   .el-menu-show-all:hover, .tool-wrapper-span-login:hover {
     font-weight: bold;
   }
-  .el-menu-item > span:hover {
-    outline: solid 1px #9747ff;
+  .el-menu-item {
     border-radius: 5px;
-    background-color: #9747ff ;
+    background-color: none;
+    padding: 8px;
+    cursor: pointer;
+    margin: 10px;
+  }
+  .el-menu-item:hover {
+    border-radius: 5px;
     color: white;
     padding: 8px;
   }
+  .button-purple {
+    outline: solid 1px #9747ff;
+    color: #9747ff;
+  }
+  .button-purple:hover {
+    background-color: #9747ff ;
+  }
+  .button-green {
+    outline: solid 1px #1bb061;
+    color: #1bb061;
+  }
+  .button-green:hover {
+    background-color: #1bb061 ;
+  }
+
   .tool-wrapper {
     padding: 15px;
     justify-content: end;

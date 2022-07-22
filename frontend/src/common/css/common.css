@@ -13,6 +13,7 @@ body {
 @media (max-width: 1269px) {
   .hide-on-small {
     display: none !important;
+    /* display: block; */
   }
   .hide-on-big {
     display: block;
@@ -34,9 +35,9 @@ body {
 .v-application {
   font-family: 'Cafe24', sans-serif !important;
 }
-@font-face {
+/* @font-face {
   font-family: 'Cafe24';
   font-weight: 400;
   src: url('../../assets/fonts/Cafe24Ssurround.ttf') format('truetype');
-}
+} */
 
