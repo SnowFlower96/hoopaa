@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface UserService {
 	// Create
-	User createUser(UserRegisterPostReq userRegisterInfo);
+	UserEmNnmDto createUser(UserRegisterPostReq userRegisterInfo);
 	// Read
 	User getUserById(Long id);
 	User getUserByEm(String em);  // 로그인 단계에서만 사용
