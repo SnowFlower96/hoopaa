@@ -5,7 +5,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.api.response.JsonRes;
+import com.ssafy.api.response.StringRes;
 import com.ssafy.api.response.UserRes;
+import com.ssafy.db.dto.UserEmNnmDto;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserStatDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -259,7 +261,7 @@ public class UserController {
 		SsafyUserDetails ssafyUserDetails = (SsafyUserDetails)authentication.getDetails();
 		String id = ssafyUserDetails.getUsername();
 		User user = userService.getUserById(Long.parseLong(id));
-		System.out.println(user.getId());
+
 		try {
 			userService.sendAuthMail(user);
 		} catch (Exception e) {
@@ -284,6 +286,34 @@ public class UserController {
 		userService.updateEmailAuth(id);
 
 		return ResponseEntity.status(200).body(UserRes.of(user));
+	}
+
+	@PostMapping("/check/email")
+	@ApiOperation(value = "이메일 중복 체크", notes = "이메일 중복 체크")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> checkEmDupl(@RequestBody @ApiParam(value = "중복 체크할 이메일 정보", required = true) UserEmNnmDto userEmNnmDto) {
+		Boolean result = userService.checkDupl(userEmNnmDto);
+		if (result == null) return ResponseEntity.status(401).body(BaseResponseBody.of(401, "fail"));
+		return ResponseEntity.ok(StringRes.of(200, "success", result ? "1" : "0"));
+	}
+
+	@PostMapping("/check/nickname")
+	@ApiOperation(value = "닉네임 중복 체크", notes = "닉네임 중복 체크")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> checkNnmDupl(@RequestBody @ApiParam(value = "중복 체크할 닉네임 정보", required = true) UserEmNnmDto userEmNnmDto) {
+		Boolean result = userService.checkDupl(userEmNnmDto);
+		if (result == null) return ResponseEntity.status(401).body(BaseResponseBody.of(401, "fail"));
+		return ResponseEntity.ok(StringRes.of(200, "success", result ? "1" : "0"));
 	}
 
 }

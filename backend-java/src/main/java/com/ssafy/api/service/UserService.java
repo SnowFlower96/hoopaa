@@ -1,13 +1,11 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.UserRegisterPostReq;
+import com.ssafy.db.dto.UserEmNnmDto;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserStatDto;
 import com.ssafy.db.entity.User;
-import com.ssafy.db.entity.UserStat;
 
-import javax.mail.MessagingException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -32,4 +30,6 @@ public interface UserService {
 	void updateEmailAuth(Long id);
 
 	void sendAuthMail(User user) throws Exception;
+
+	Boolean checkDupl(UserEmNnmDto userEmNnmDto);
 }
