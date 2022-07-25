@@ -1,42 +1,44 @@
 package com.ssafy.api.service;
 
+import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.entity.RoomInfo;
-import com.ssafy.db.repository.RoomInfoRepository;
 import com.ssafy.db.repository.RoomInfoRepositorySupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service("RoomInfoService")
 public class RoomInfoServiceImpl implements RoomInfoService{
 
-//    @Autowired
-//    RoomInfoRepository roomInfoRepository;
-
     @Autowired
     RoomInfoRepositorySupport roomInfoRepositorySupport;
 
     @Override
-    public List<RoomInfo> findAll(long now) {
-        System.out.println("service");
-        List<RoomInfo> roomInfo= roomInfoRepositorySupport.findAll(now);
+    public List<RoomInfoDto> findAll(long now) {
+        List<RoomInfoDto> roomInfo= new LinkedList<>();
+        List<RoomInfo> room=roomInfoRepositorySupport.findAll(now);
+        for(RoomInfo r:room)
+            roomInfo.add(new RoomInfoDto(r));
         return roomInfo;
     }
 
     @Override
-    public List<RoomInfo> searchBy(String keyword,long now) {
-        List<RoomInfo> searchBy=roomInfoRepositorySupport.searchBy(keyword,now);
+    public List<RoomInfoDto> searchBy(String keyword,long now) {
+        List<RoomInfoDto> searchBy=new LinkedList<>();
+        List<RoomInfo> room = roomInfoRepositorySupport.searchBy(keyword,now);
+        for(RoomInfo r:room)
+            searchBy.add(new RoomInfoDto(r));
         return searchBy;
     }
 
     @Override
-    public List<RoomInfo> findByCate(int cate,long now) {
-        List<RoomInfo> findByCate=roomInfoRepositorySupport.findByCate(cate,now);
+    public List<RoomInfoDto> findByCate(int cate,long now) {
+        List<RoomInfoDto> findByCate=new LinkedList<>();
+        List<RoomInfo> room = roomInfoRepositorySupport.findByCate(cate,now);
+        for(RoomInfo r:room)
+            findByCate.add(new RoomInfoDto(r));
         return findByCate;
     }
 }

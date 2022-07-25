@@ -19,9 +19,8 @@ public class RoomInfoRepositorySupport {
     QRoomInfo qRoomInfo = QRoomInfo.roomInfo;
 
     public List<RoomInfo> findAll(long now){
-        System.out.println("repo");
         List<RoomInfo> roomInfo= jpaQueryFactory.selectFrom(qRoomInfo).where(qRoomInfo.phase.in(0,1))
-                .orderBy(qRoomInfo.cur_num.desc()).offset(now+1).limit(60).fetch();
+                .orderBy(qRoomInfo.cur_num.desc()).offset(now).limit(60).fetch();
        return roomInfo;
     }
 
@@ -36,7 +35,7 @@ public class RoomInfoRepositorySupport {
     public List<RoomInfo> findByCate(int cate,long now){
         List<RoomInfo> findByCate=jpaQueryFactory.selectFrom(qRoomInfo)
                 .where(qRoomInfo.cate.eq(cate).and(qRoomInfo.phase.in(0,1)))
-                .orderBy(qRoomInfo.cur_num.desc()).offset(now+1).limit(60).fetch();
+                .orderBy(qRoomInfo.cur_num.desc()).offset(now).limit(60).fetch();
         return findByCate;
     }
 }

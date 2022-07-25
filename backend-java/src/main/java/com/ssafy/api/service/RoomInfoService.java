@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.entity.RoomInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public interface RoomInfoService {
 
-    List<RoomInfo> findAll(long now);
-    List<RoomInfo> searchBy(String keyword,long now);
-    List<RoomInfo> findByCate(int cate,long now);
+    List<RoomInfoDto> findAll(long now);
+    List<RoomInfoDto> searchBy(String keyword,long now);
+    List<RoomInfoDto> findByCate(int cate,long now);
 }
