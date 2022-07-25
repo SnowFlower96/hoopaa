@@ -67,10 +67,12 @@ public class UserController {
 		UserEmNnmDto userEmNnmDto = userService.createUser(registerInfo);
 
 		// 이미 존재하는 회원(이메일, 닉네임)일 경우 400 에러
-		if (userEmNnmDto.isEmDuple()) {
-			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "이메일 중복입니다"));
-		} else if (userEmNnmDto.isNnmDuple()) {
-			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "닉네임 중복입니다"));
+		if (userEmNnmDto != null) {
+			if (userEmNnmDto.isEmDuple()) {
+				return ResponseEntity.status(400).body(BaseResponseBody.of(400, "이메일 중복입니다"));
+			} else if (userEmNnmDto.isNnmDuple()) {
+				return ResponseEntity.status(400).body(BaseResponseBody.of(400, "닉네임 중복입니다"));
+			}
 		}
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
