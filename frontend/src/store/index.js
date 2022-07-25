@@ -24,7 +24,7 @@ export default new Vuex.Store({
   actions : {
     getRoomInfo({commit}) {
       api({
-        url: `/api/v1/list/all`,
+        url: `/api/v1/list/all?now=0`,
         method: "GET",
       }).then((res) => {
         commit("GET_ROOM_LIST", res.data);

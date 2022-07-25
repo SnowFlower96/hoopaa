@@ -1,5 +1,6 @@
 <template>
   <!-- <div> -->
+    <div>
     <div class="black-space"></div>
     <search></search>
     <hr/>
@@ -15,7 +16,7 @@
           <button>정렬조건</button>
           <el-checkbox>모집중만 보기</el-checkbox>
         </div>
-        
+
         <ul class="infinite-list"  style="overflow:auto">
           <li v-for="i in state.count" @click="clickConference(i)" class="infinite-list-item" :key="i" >
             <conference />
@@ -32,6 +33,7 @@
       </div>
     </el-container>
   <!-- </div> -->
+  </div>
 </template>
 
 <style>
