@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/views/home/home'
+import list from '@/views/home/home'
 import ConferencesDetail from '@/views/conferences/conference-detail'
 import History from '@/views/history/history'
 import SignUp from '@/views/user/sign-up'
@@ -10,7 +10,7 @@ import mainPage from '@/views/main-page/main-page'
 import Participate from '@/views/participate/participating-code'
 import participatingPage from '@/views/participate/participating-page'
 import waitingPage from '@/views/participate/waiting-page'
-
+import signUpEmail from '@/views/user/email'
 import gameSetPage from '@/views/debate-hosting/game-set-page'
 import makeRoom from '@/views/debate-hosting/make-room'
 
@@ -46,18 +46,18 @@ function makeRoutesFromMenu () {
   component: SignUp},
   {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: Login
   },
   {
     path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/mainPage',
     name: 'main-page',
     component: mainPage
+  },
+  {
+    path: '/list',
+    name: 'list',
+    component: list
   },
   {
     path: '/myPage',
@@ -96,6 +96,11 @@ function makeRoutesFromMenu () {
   path : '/makeRoomPage',
   name: 'make-room',
   component: makeRoom
+},
+{
+  path : '/email/:userEmail',
+  name : 'email',
+  component : signUpEmail,
 }
   )
 

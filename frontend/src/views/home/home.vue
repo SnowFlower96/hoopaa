@@ -6,9 +6,7 @@
     <hr/>
     <el-container class="main-container">
 
-      <el-aside class="category" width="240px" height="400px">
-        <side :width="`240px`"/>
-      </el-aside>
+
 
       <div class="list">
         <div>
@@ -17,19 +15,7 @@
           <el-checkbox>모집중만 보기</el-checkbox>
         </div>
 
-        <ul class="infinite-list"  style="overflow:auto">
-          <li v-for="i in state.count" @click="clickConference(i)" class="infinite-list-item" :key="i" >
-            <conference />
-          </li>
-        </ul>
 
-        <hr/>
-
-        <ul class="infinite-list"  style="overflow:auto">
-          <li v-for="i in state.count" @click="clickConference(i)" class="infinite-list-item" :key="i" >
-            <conference />
-          </li>
-        </ul>
       </div>
     </el-container>
   <!-- </div> -->
@@ -79,7 +65,7 @@ ul {
 <script>
 import search from '@/views/common/search'
 import Conference from './components/conference'
-import side from '@/views/main/components/main-sidebar'
+
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { mapState } from "vuex";
@@ -90,7 +76,6 @@ export default {
   components: {
     Conference,
     search,
-    side
   },
   computed : {
     ...mapState(["roomList"])
