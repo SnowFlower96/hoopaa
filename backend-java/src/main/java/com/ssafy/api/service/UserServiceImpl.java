@@ -1,11 +1,13 @@
 package com.ssafy.api.service;
 
+import com.ssafy.common.util.MailUtil;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserStatDto;
 import com.ssafy.db.entity.UserHistory;
 import com.ssafy.db.entity.UserStat;
 import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.db.entity.User;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    JavaMailSender mailSender;
 
     @Override
     @Transactional
@@ -128,5 +135,29 @@ public class UserServiceImpl implements UserService {
         for (UserHistoryDto dto : userHistoryDtoList) System.out.println(dto);
         System.out.println("-----------");
         return userHistoryDtoList;
+    }
+
+    @Override
+    public void updateEmailAuth(Long id) {
+        User user = userRepository.findById(id).get();
+
+        user.setEm_auth(true);
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public void sendAuthMail(User user) throws Exception{
+        MailUtil sendMail = new MailUtil(mailSender);
+
+        sendMail.setSubject("[HooPaa 회원가입 서비스 이메일 인증 입니다.]");
+        sendMail.setText(new StringBuffer().append("<h1>HooPaa 가입 메일인증 입니다</h1>")
+                .append("<a href='http://localhost:8080/api/v1/users/certification/success/")
+                .append(user.getId())//.append("&key=").append(key)
+                .append("' target='_blenk'>가입 완료를 위해 이메일 이곳을 눌러주세요</a>").toString());
+        sendMail.setFrom("wonjaechoi5295@gmail.com", "HooPaa");
+        sendMail.setTo(user.getEm());
+        sendMail.send();
+
     }
 }

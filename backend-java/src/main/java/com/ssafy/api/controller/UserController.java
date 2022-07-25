@@ -9,6 +9,7 @@ import com.ssafy.api.response.UserRes;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserStatDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -243,6 +244,46 @@ public class UserController {
 		String userHistoryString = mapper.writeValueAsString(userHistoryDtoList);
 
 		return ResponseEntity.ok(JsonRes.of(200, "success", userHistoryString));
+	}
+
+
+	@PostMapping("/certification")
+	@ApiOperation(value = "이메일 인증", notes = "이메일로 인증 링크를 보낸다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+			@ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<? extends BaseResponseBody> sendCertificateMail(@ApiIgnore Authentication authentication)  {
+		SsafyUserDetails ssafyUserDetails = (SsafyUserDetails)authentication.getDetails();
+		String id = ssafyUserDetails.getUsername();
+		User user = userService.getUserById(Long.parseLong(id));
+		System.out.println(user.getId());
+		try {
+			userService.sendAuthMail(user);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		return ResponseEntity.ok(JsonRes.of(200, "success"));
+	}
+
+	@GetMapping("/certification/success/{id}")
+	@ApiOperation(value = "이메일 인증", notes = "로그인 필요 서비스 사용을 위한 이메일 인증")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<UserRes> authEmail(@PathVariable("id") long id) {
+
+		System.out.println(id);
+		User user = userService.getUserById(id);
+		userService.updateEmailAuth(id);
+
+		return ResponseEntity.status(200).body(UserRes.of(user));
 	}
 
 }
