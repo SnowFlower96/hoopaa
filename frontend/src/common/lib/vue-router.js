@@ -98,7 +98,7 @@ function makeRoutesFromMenu () {
   component: makeRoom
 },
 {
-  path : '/email/:userEmail',
+  path : '/email',
   name : 'email',
   component : signUpEmail,
 }

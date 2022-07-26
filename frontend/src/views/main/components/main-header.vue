@@ -20,7 +20,8 @@
         </div>
 
         <div class="tool-wrapper">
-            <router-link style=text-decoration:none; to="/login"><span class="tool-wrapper-span-login">Log in</span></router-link>
+            <router-link style=text-decoration:none; to="/login" v-if="!isLogin"><span class="tool-wrapper-span-login">Log in</span></router-link>
+            <router-link style=text-decoration:none; to="/logout" v-if="isLogin" @click="logout"><span class="tool-wrapper-span-login">Log out</span></router-link>
             <router-link style=text-decoration:none; to="/signUp"><span class="tool-wrapper-span-signup">Sign up</span></router-link>
         </div>
 
@@ -37,9 +38,14 @@
 import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { mapState , mapMutations} from "vuex";
 
 export default {
   name: 'main-header',
+
+  computed : {
+    ...mapState(["isLogin"]),
+  },
 
   props: {
     height: {
@@ -60,6 +66,13 @@ export default {
     }
 
     return { state, changeCollapse }
+  },
+  methods : {
+    ...mapMutations(["USER_LOGOUT"]),
+   logout() {
+      this.USER_LOGOUT();
+      this.$router.push({name : 'main-page'});
+    },
   }
 }
 </script>

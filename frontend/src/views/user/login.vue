@@ -6,7 +6,7 @@
       <div class="login-item"><input type="text" placeholder="e-mail 입력" v-model="em"></div>
       <div class="login-item"><input type="password" placeholder="비밀번호 입력" v-model="pwd"></div>
       <div class="login-item"><el-checkbox-button>로그인 유지</el-checkbox-button></div>
-      <div class="login-item"><router-link to="/myPage"><button class="login-button" @click="login">로그인</button></router-link></div>
+      <div class="login-item"><button class="login-button" @click="login">로그인</button></div>
       <div class="login-item">회원이 아니신가요? <router-link to="/signUp">회원가입</router-link></div>
     </div>
   </div>
@@ -14,9 +14,21 @@
 
 <script>
 export default {
-  data : {
-    em : '',
-    pwd : ''
+  data () {
+    return {
+      em : '',
+      pwd : ''
+    }
+  },
+  methods : {
+    login () {
+      var data = {
+        em : this.em,
+        pwd : this.pwd
+      }
+      console.log(data);
+      this.$store.dispatch("login",data);
+    }
   }
 }
 </script>

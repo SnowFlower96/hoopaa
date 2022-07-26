@@ -24,9 +24,15 @@ export default new Vuex.Store({
     },
     USER_LOGIN(state, token) {
       state.isLogin = true;
-      sessionStorage.setItem("access-token", token);
-      api.defaults.headers["access-token"] = token;
-    }
+      sessionStorage.setItem("access-Token", token);
+      api.defaults.headers["access-Token"] = token;
+    },
+    USER_LOGOUT(state) {
+      state.isLogin = false;
+      sessionStorage.removeItem("access-token");
+      api.defaults.headers["access-token"] = "";
+      alert("로그아웃 됐습니다.");
+    },
   },
 
   actions : {
@@ -41,61 +47,67 @@ export default new Vuex.Store({
     },
     // 이메일 중복검사
     checkEmail({commit},email) {
-      api({
-        url : `/api/v1/users/check/email`,
-        method: "POST",
-        data : email
-      }).then((res) => {
-        if(res.data.response == 0 ) {
-          alert("사용 가능한 이메일 입니다.")
-        } else {
-          alert("중복된 이메일 입니다.")
-        }
+      return new Promise ((resolve, reject) => {
+        api({
+          url : `/api/v1/users/check/email`,
+          method: "POST",
+          data : email
+        }).then((res) => {
+          resolve(res);
+          commit();
+        }).catch(error => {
+          reject(error)
+        })
       })
 
     },
     // 닉네임 중복검사
     checkNickName({commit},nickname) {
-      api({
-        url : `/api/v1/users/check/nickname`,
-        method: "POST",
-        data : nickname
-      }).then((res) => {
-        if(res.data.response == 0) {
-          alert("사용 가능한 닉네임 입니다.")
-        } else {
-          alert("중복된 닉네임 입니다.")
-        }
+      return new Promise ((resolve, reject) => {
+        api({
+          url : `/api/v1/users/check/nickname`,
+          method: "POST",
+          data : nickname
+        }).then((res) => {
+          resolve(res);
+          commit();
+        }).catch(error => {
+          reject(error)
+        })
       })
 
     },
     // 회원가입
     signUp({commit},data) {
-              api({
-                url : `/api/v1/users`,
-                method: "POST",
-                data : data
-              }).then((res) => {
-                console.log(res);
-                if(res.status == 400) {
-                  alert("")
-                }
-              })
-    },
+          api({
+            url : `/api/v1/users`,
+            method: "POST",
+            data : data
+          }).then((res) => {
+            console.log(res);
+            router.push('/email?'+data.em)
+            commit();
+          })
 
+    },
+    // 로그인
     login({commit},data) {
+      
       api({
-        url : `/api/v1/login`,
+        url : `/api/v1/users/login`,
         method : "POST",
         data : data
       }).then((res) => {
-        if (data["access-token"] === undefined) {
-          alert("비밀번호가 잘못되었습니다.")
+        console.log(res.data)
+        if (res.data.statusCode == 401) {
+          alert("이메일 , 비밀번호를 확인하세요")
           router.push({ name: "login" });
         } else {
-          commit("USER_LOGIN", data["access-token"]);
+          commit("USER_LOGIN", res.data.accessToken);
+          router.push({ name: "main-page"})
         }
       })
-    }
+    },
+
   }
 })
