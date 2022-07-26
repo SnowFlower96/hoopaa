@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class= 'mypage-info'>
     <form>
 
@@ -10,6 +11,7 @@
     </form>
   </div>
     <div><button>회원탈퇴</button></div>
+  </div>
 </template>
 
 <script>

@@ -3,12 +3,12 @@
 
     <div class="hide-on-small">
 
-        <router-link to="/mainPage">
+        <router-link to="/">
           <div class="logo-wrapper"><div class="ic ic-logo"/></div>
         </router-link>
 
         <div class="el-menu">
-          <router-link class="tool-wrapper-span-login" style=text-decoration:none; to="/">
+          <router-link class="tool-wrapper-span-login" style=text-decoration:none; to="/list">
             <span>모든 토론보기</span>
           </router-link>
           <router-link class="el-menu-item button-purple" style=text-decoration:none; to="/makeRoomPage">
