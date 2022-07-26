@@ -8,7 +8,7 @@
           <label for="email">이메일</label>
           <input type="text" placeholder="e-mail 입력" v-model="em"  @blur="checkEmail" >
           <span class="badge badge-danger mt-1" v-if="!availableEmail">이미 사용중인 이메일입니다.</span>
-	<span class="badge badge-danger mt-1" v-if="!availableEmailForm">이메일 형식이 다릅니다.</span>
+	        <span class="badge badge-danger mt-1" v-if="!availableEmailForm">이메일 형식이 다릅니다.</span>
         </div>
         <div class="signup-item">
           <label for="email">비밀번호</label>
@@ -17,6 +17,7 @@
         <div class="signup-item">
           <label for="email">비밀번호</label>
           <input type="password" placeholder="비밀번호 확인" v-model="pwd2" @blur="checkPwd">
+          <div>{{displayPwStatus}}</div>
           <span class="badge badge-danger mt-1" v-if="!samePwd">비밀번호가 서로 다릅니다.</span>
         </div>
         <div class="signup-item">
@@ -45,6 +46,8 @@ export default {
       availableEmail : true,
       availableEmailForm : true,
       availableNickName : true,
+      displayPwStatus: '비밀번호를 입력하세요',
+      
     }
   },
   methods : {
@@ -108,6 +111,22 @@ export default {
         alert("메시지를 확인해 주세요")
       }
     }
+  },
+  watch: {
+    pwd2: function(pwd2) {
+      if (this.pwd1 === pwd2) {
+        this.displayPwStatus = '비밀번호를 동일하게 작성하셨습니다'
+      } else {
+        this.displayPwStatus = '비밀번호가 다릅니다'
+      }
+    },
+    pwd1: function(pwd1) {
+      if (this.pwd2 === pwd1) {
+        this.displayPwStatus = '비밀번호를 동일하게 작성하셨습니다'
+      } else {
+        this.displayPwStatus = '비밀번호가 다릅니다'
+      }
+    },
   }
 }
 </script>
