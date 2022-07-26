@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.common.util.MailUtil;
+import com.ssafy.db.dto.UserEmNnmDto;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserStatDto;
 import com.ssafy.db.entity.UserHistory;
@@ -43,7 +44,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User createUser(UserRegisterPostReq userRegisterInfo) {
+    public UserEmNnmDto createUser(UserRegisterPostReq userRegisterInfo) {
+        boolean isEmDupl = userRepository.findUserByEm(userRegisterInfo.getEm()).isPresent();
+        boolean isNnmDupl = userRepository.findUserByNnm(userRegisterInfo.getNnm()).isPresent();
+        UserEmNnmDto userEmNnmDto = UserEmNnmDto.builder().emDuple(isEmDupl).nnmDuple(isNnmDupl).build();
+        if (userEmNnmDto.isNnmDuple() || userEmNnmDto.isEmDuple()) return userEmNnmDto;
+
         User user = User.builder()
                 .em(userRegisterInfo.getEm())
                 .pwd(passwordEncoder.encode(userRegisterInfo.getPwd()))
@@ -56,7 +62,7 @@ public class UserServiceImpl implements UserService {
         UserStat userStat = UserStat.builder().id(user.getId()).build();
         userStatRepository.save(userStat);
 
-        return user;
+        return null;
     }
 
     @Override
@@ -160,4 +166,15 @@ public class UserServiceImpl implements UserService {
         sendMail.send();
 
     }
+
+    @Override
+    public Boolean checkDupl(UserEmNnmDto userEmNnmDto) {
+        String em = userEmNnmDto.getEm();
+        String nnm = userEmNnmDto.getNnm();
+
+        if (em != null) return userRepository.findUserByEm(em).isPresent();
+        if (nnm != null) return userRepository.findUserByNnm(nnm).isPresent();
+        return null;
+    }
+
 }
