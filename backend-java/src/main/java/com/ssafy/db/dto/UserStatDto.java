@@ -13,7 +13,7 @@ public class UserStatDto {
     int win;
     int lose;
     int draw;
-    int panelty;
+    int penalty;
     int king;
 
     public UserStatDto(UserStat userStat) {
@@ -22,7 +22,7 @@ public class UserStatDto {
         this.win = userStat.getWin();
         this.lose = userStat.getLose();
         this.draw = userStat.getDraw();
-        this.panelty = userStat.getPanelty();
+        this.penalty = userStat.getPanelty();
         this.king = userStat.getKing();
     }
 }
