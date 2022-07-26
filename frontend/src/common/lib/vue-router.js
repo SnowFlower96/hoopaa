@@ -5,7 +5,6 @@ import History from '@/views/history/history'
 import SignUp from '@/views/user/sign-up'
 import Login from '@/views/user/login'
 
-
 import mainPage from '@/views/main-page/main-page'
 import Participate from '@/views/participate/participating-code'
 import participatingPage from '@/views/participate/participating-page'
@@ -13,7 +12,7 @@ import waitingPage from '@/views/participate/waiting-page'
 import signUpEmail from '@/views/user/email'
 import gameSetPage from '@/views/debate-hosting/game-set-page'
 import makeRoom from '@/views/debate-hosting/make-room'
-
+import store from '@/store'
 // const routerComponent = require('@/views/main/router-components.json')
 
 import myPage from '@/views/user/mypage'
@@ -22,6 +21,21 @@ import checkPwd from '@/views/user/checkPwd'
 import myPageInfo from '@/views/user/mypage-info'
 
 const fullMenu = require('@/views/main/menu.json')
+
+const checkLogin = () => (from, to, next) => {
+  if (store.state.isLogin) {
+    next();
+  } else {
+    if (
+      confirm(
+        "로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?"
+      )
+    ) {
+      next(`/login?call=${from.fullPath}`);
+    }
+  }
+};
+
 function makeRoutesFromMenu () {
   let routes = Object.keys(fullMenu).map((key) => {
     if (key === 'home') {
@@ -62,7 +76,9 @@ function makeRoutesFromMenu () {
   {
     path: '/myPage',
     name: 'myPage',
-    component : myPage
+    component : myPage,
+    beforeEnter: checkLogin(),
+
   },
 
   {
@@ -85,7 +101,8 @@ function makeRoutesFromMenu () {
 {
   path: '/participatingPage',
   name: 'participating-page',
-  component: participatingPage
+  component: participatingPage,
+  beforeEnter: checkLogin(),
 },
 {
   path: '/waitingPage',
@@ -95,13 +112,15 @@ function makeRoutesFromMenu () {
 {
   path : '/makeRoomPage',
   name: 'make-room',
-  component: makeRoom
+  component: makeRoom,
+  beforeEnter: checkLogin(),
 },
 {
   path : '/email',
   name : 'email',
   component : signUpEmail,
-}
+},
+
   )
 
   return routes

@@ -1,7 +1,7 @@
 <template>
   <div class="login-container-outer">
     <div class="login-container">
-      <router-link class="el-menu-item" to="/mainPage"><div class="login-item"><img class="favi-img" :src="require(`@/assets/images/favi6.png`)" alt="home-favi"></div></router-link>
+      <router-link class="el-menu-item" to="/"><div class="login-item"><img class="favi-img" :src="require(`@/assets/images/favi6.png`)" alt="home-favi"></div></router-link>
       <div class="login-item">Login to Hoopa</div>
       <div class="login-item"><input type="text" placeholder="e-mail 입력" v-model="em"></div>
       <div class="login-item"><input type="password" placeholder="비밀번호 입력" v-model="pwd"></div>
@@ -17,9 +17,21 @@ export default {
   data () {
     return {
       em : '',
-      pwd : ''
+      pwd : '',
+      loginNew : '',
     }
   },
+  created () {
+    let query = window.location.search;
+    let param = new URLSearchParams(query);
+    let loginNew = param.get('em');
+    this.loginNew = loginNew;
+    console.log(this.loginNew)
+    // if(!this.loginNew) {
+    //   this.$store.dispatch("emailAuth",loginNew)
+    // }
+  },
+
   methods : {
     login () {
       var data = {

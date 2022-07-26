@@ -21,8 +21,9 @@
 
         <div class="tool-wrapper">
             <router-link style=text-decoration:none; to="/login" v-if="!isLogin"><span class="tool-wrapper-span-login">Log in</span></router-link>
-            <router-link style=text-decoration:none; to="/logout" v-if="isLogin" @click="logout"><span class="tool-wrapper-span-login">Log out</span></router-link>
-            <router-link style=text-decoration:none; to="/signUp"><span class="tool-wrapper-span-signup">Sign up</span></router-link>
+            <a @click="mypage" v-if="isLogin" ><span class="tool-wrapper-span-login" v-if="isLogin"  >Mypage</span></a>
+            <router-link style=text-decoration:none; to="/signUp" v-if="!isLogin"><span class="tool-wrapper-span-signup">Sign up</span></router-link>
+            <a @click="logout" v-if="isLogin" ><span class="tool-wrapper-span-login" v-if="isLogin"  >Log out</span></a>
         </div>
 
     </div>
@@ -71,8 +72,11 @@ export default {
     ...mapMutations(["USER_LOGOUT"]),
    logout() {
       this.USER_LOGOUT();
-      this.$router.push({name : 'main-page'});
+      this.$router.push('/');
     },
+    mypage() {
+      this.$router.push('/myPage')
+    }
   }
 }
 </script>

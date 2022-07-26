@@ -13,6 +13,9 @@ export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     isLogin: false,
+    user : {
+      email : '',
+    },
     roomList : [],
     menus: menuData,
     headerVisible: true
@@ -85,29 +88,47 @@ export default new Vuex.Store({
             data : data
           }).then((res) => {
             console.log(res);
-            router.push('/email?'+data.em)
+            router.push('/email?em='+data.em)
             commit();
           })
 
     },
     // 로그인
     login({commit},data) {
-      
+      return new Promise((reject) => {
       api({
         url : `/api/v1/users/login`,
         method : "POST",
         data : data
       }).then((res) => {
-        console.log(res.data)
-        if (res.data.statusCode == 401) {
-          alert("이메일 , 비밀번호를 확인하세요")
-          router.push({ name: "login" });
-        } else {
           commit("USER_LOGIN", res.data.accessToken);
-          router.push({ name: "main-page"})
-        }
+          router.push('/')
+      }).catch(error => {
+        reject(error)
+        alert("이메일 , 비밀번호를 확인하세요")
+        router.push('/login');
+      })
+    })
+    },
+    // 인증 이메일 발송
+    sendEmail({commit},email) {
+      api({
+        url : `/api/v1/users/certification`,
+        method : "POST",
+        data : email
+      }).then(() => {
+        commit();
       })
     },
-
+    // DB 이메일 인증 auth 수정
+    emailAuth({commit}, email) {
+      api({
+        url : `/api/v1/users/certification/success`,
+        method : "POST",
+        data : email
+      }).then(() => {
+        commit();
+      })
+    }
   }
 })
