@@ -88,6 +88,11 @@ function makeRoutesFromMenu () {
   component: participatingPage
 },
 {
+  path: '/startWithCode',
+  name: 'Participate',
+  component: Participate
+},
+{
   path: '/waitingPage',
   name: 'waiting-page',
   component: waitingPage

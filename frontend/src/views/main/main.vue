@@ -1,9 +1,7 @@
 <template>
   <el-container class="main-wrapper">
     <main-header v-if="visible" class="main-header-class" />
-    <div>
       <router-view></router-view>
-    </div>
     <main-footer class="main-footer-class"/>
   </el-container>
 </template>

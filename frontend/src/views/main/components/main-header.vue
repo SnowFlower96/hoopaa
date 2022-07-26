@@ -14,7 +14,7 @@
           <router-link class="el-menu-item button-purple" style=text-decoration:none; to="/makeRoomPage">
             <span>미팅 시작하기</span>
           </router-link>
-          <router-link class="el-menu-item button-green" style=text-decoration:none; to="/participatingPage">
+          <router-link class="el-menu-item button-green" style=text-decoration:none; to="/startWithCode">
             <span>미팅 참여하기</span>
           </router-link>
         </div>

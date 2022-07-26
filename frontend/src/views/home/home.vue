@@ -1,12 +1,9 @@
 <template>
   <!-- <div> -->
-    <div>
-    <div class="black-space"></div>
+    <div class="list-page-black-space"></div>
     <search></search>
     <hr/>
     <el-container class="main-container">
-
-
 
       <div class="list">
         <div>
@@ -14,16 +11,17 @@
           <button>정렬조건</button>
           <el-checkbox>모집중만 보기</el-checkbox>
         </div>
-
-
       </div>
+      
     </el-container>
   <!-- </div> -->
-  </div>
 </template>
 
 <style>
-.black-space
+
+.list-page-black-space {
+  height: 100px;
+}
 ul {
   display: flex;
   flex-direction: column;

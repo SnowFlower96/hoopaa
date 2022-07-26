@@ -1,13 +1,13 @@
 <template>
   <div class="login-container-outer">
     <div class="login-container">
-      <router-link class="el-menu-item" to="/"><div class="login-item"><img class="favi-img" :src="require(`@/assets/images/favi6.png`)" alt="home-favi"></div></router-link>
+      <div class="login-item"><router-link class="el-menu-item" to="/"><img class="login-favi-img" :src="require(`@/assets/images/favi6.png`)" alt="home-favi"></router-link></div>
       <div class="login-item">Login to Hoopa</div>
       <div class="login-item"><input type="text" placeholder="e-mail 입력" v-model="em"></div>
       <div class="login-item"><input type="password" placeholder="비밀번호 입력" v-model="pwd"></div>
-      <div class="login-item"><el-checkbox-button>로그인 유지</el-checkbox-button></div>
+      <div class="login-item"><label class="login-item-input"><input type="checkbox" v-model="checked"> 로그인 유지</label></div>
       <div class="login-item"><button class="login-button" @click="login">로그인</button></div>
-      <div class="login-item">회원이 아니신가요? <router-link to="/signUp">회원가입</router-link></div>
+      <div class="login-item"><p class="login-to-signup">회원이 아니신가요? <router-link style=text-decoration:none; to="/signUp">회원가입</router-link></p></div>
     </div>
   </div>
 </template>
@@ -34,6 +34,10 @@ export default {
 </script>
 
 <style>
+.login-item-input {
+  font-size: 15px;
+  margin-right: 150px;
+}
 .login-container-outer {
   height: 90vh;
 }
@@ -44,8 +48,15 @@ export default {
   padding: 8px;
   border-radius: 5px;
   width: 250px;
+  border: none;
+  outline: solid 1px #ABB2BF;
 }
-.favi-img {
+.login-item > input:focus {
+  outline: solid 4px #E0E4EB;
+  border: solid 1px black;
+}
+.login-favi-img {
+  margin-top: 100px;
   width: 70px;
 }
 .logo-img {
@@ -58,10 +69,17 @@ export default {
 .login-button {
   padding: 8px;
   width: 250px;
+  border-radius: 5px;
+  border: none;
+  background-color: #E0C8FF;
+  margin: 20px;
 }
 .login-button:hover {
-  background-color: beige;
-  padding: 8px;
+  outline: solid 4px #CBA3FF;
   width: 250px;
+}
+.login-to-signup {
+  font-size: 13px;
+  font-weight: bold;
 }
 </style>
