@@ -46,7 +46,7 @@ export default {
       if (this.location == 'main-page') {
         const scrollPosition = window.scrollY || document.documentElement.scrollTop;
         const percentageOfPageScroll = scrollPosition/document.body.scrollHeight *100
-        console.log('돌아가는중',this.visible, this.location)
+        // console.log('돌아가는중',this.visible, this.location)
         if (percentageOfPageScroll < 15) {
           this.visible = false
         } else {
@@ -58,7 +58,8 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      if (to.name === 'main-page' || to.name === 'Login' || to.name === 'sign-up' ) {
+      console.log(to.name)
+      if (to.name === 'main-page' || to.name === 'login' || to.name === 'sign-up' ) {
         this.location = to.name
         this.visible = false
         document.addEventListener('scroll', this.zeroLocation)

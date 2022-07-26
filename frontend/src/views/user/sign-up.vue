@@ -23,6 +23,7 @@
         <div class="signup-item">
           <label for="email">닉네임</label>
           <input type="text" placeholder="닉네임 입력" v-model="nnm" @blur="checkNickName">
+          <div>{{displayNickNameStatus}}</div>
           <span class="badge badge-danger mt-1" v-if="!availableNickName">이미 사용중인 닉네임 입니다.</span>
         </div>
         <div class="signup-item"><button class="signup-button" type="submit" @click="submitForm">회원가입</button></div>
@@ -33,8 +34,6 @@
 </template>
 
 <script>
-import router from '../../common/lib/vue-router';
-
 export default {
   data: function() {
     return {
@@ -86,7 +85,7 @@ export default {
       }
     },
 
-    checkNickName() {
+    checkNickName(nnm) {
       var nickname = {
         nnm : this.nnm
       }
@@ -117,16 +116,19 @@ export default {
       if (this.pwd1 === pwd2) {
         this.displayPwStatus = '비밀번호를 동일하게 작성하셨습니다'
       } else {
-        this.displayPwStatus = '비밀번호가 다릅니다'
+        this.displayPwStatus = '비밀번호가 서로 다릅니다.'
       }
     },
     pwd1: function(pwd1) {
       if (this.pwd2 === pwd1) {
         this.displayPwStatus = '비밀번호를 동일하게 작성하셨습니다'
       } else {
-        this.displayPwStatus = '비밀번호가 다릅니다'
+        this.displayPwStatus = '비밀번호가 서로 다릅니다.'
       }
     },
+    nnm: function(nnm) {
+      checkNickName(nnm)
+    }
   }
 }
 </script>

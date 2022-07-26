@@ -27,8 +27,19 @@
 
     </div>
 
-    <div class="hide-on-big">
-      <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div> <!-- 로고 있는 부분 -->
+    <div class="hide-on-big icons-wrapper">
+      <div class="logo-wrapper" @click="clickLogo">
+        <div>
+          <router-link to="/"><img class="header-logo-img" :src="require(`@/assets/images/favi6.png`)"></router-link>
+        </div>
+        <img @click="showDropDown" class="header-small-bar" :src="require(`@/assets/icons/bar.png`)">
+      </div> <!-- 로고 있는 부분 -->
+      <!-- bar는 더 좋은 아이콘을 찾아봐야됨 -->
+      <div v-if="dropDownMenu" class="small-size-menu-wrap">
+        <router-link style=text-decoration:none; to="/login"><p class="small-size-menu-wrap-p">login</p></router-link>
+        <router-link style=text-decoration:none; to="/signUp"><p class="small-size-menu-wrap-p">sign up</p></router-link>
+      </div>
+    
     </div>
 
   </el-row>
@@ -46,7 +57,11 @@ export default {
   computed : {
     ...mapState(["isLogin"]),
   },
-
+  data() {
+    return {
+      dropDownMenu: false
+    }
+  },
   props: {
     height: {
       type: String,
@@ -73,12 +88,44 @@ export default {
       this.USER_LOGOUT();
       this.$router.push({name : 'main-page'});
     },
+    showDropDown() {
+      this.dropDownMenu = !this.dropDownMenu
+    },
   }
 }
 </script>
 <style>
 
   /*Mobile, Tablet*/
+  .small-size-menu-wrap {
+    color: black;
+    text-align: center;
+  }
+  .small-size-menu-wrap-p {
+    color: black;
+  }
+
+  .header-small-bar {
+    width: 20px;
+    height: 20px;
+    align-items: center;
+    padding: 10px;
+  }
+  .header-small-bar:hover {
+    cursor: pointer;
+  }
+  .icons-wrapper{
+    display: flex;
+  }
+
+  .main-header .hide-on-small .logo-wrapper .ic.ic-logo {
+    width: 70px;
+    height: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('../../../assets/images/favi6.png');
+  }
+
   .menu-icon-wrapper {
     display: inline-block;
     vertical-align: top;
@@ -86,16 +133,14 @@ export default {
     top: 14px;
   }
 
-  .main-header .hide-on-big .logo-wrapper {
-    display: inline-block;
-    margin: 0 calc(50% - 51px)
+  .logo-wrapper {
+    display: flex;
+    justify-content: end;
   }
-  .main-header .hide-on-big .logo-wrapper .ic.ic-logo {
-    width: 70px;
-    height: 50px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url('../../../assets/images/favi6.png');
+
+  .header-logo-img {
+    width: 50px;
+    padding: 5px;
   }
 
   /*Desktop - Need to add Class if Need*/
@@ -103,13 +148,6 @@ export default {
     display: flex;
     padding: 5px 10px;
     justify-content: space-evenly;
-  }
-  .main-header .hide-on-small .logo-wrapper .ic.ic-logo {
-    width: 70px;
-    height: 50px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url('../../../assets/images/favi6.png');
   }
 
   .el-menu {
