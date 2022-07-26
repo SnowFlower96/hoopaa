@@ -20,7 +20,7 @@
         </div>
         <div :class="{'signup-item-false': nickNameTheme === false, 'signup-item-true': nickNameTheme === true }">
           <input type="text" placeholder="닉네임 입력" v-model="nnm" @blur="checkNickName">
-          <p>닉네임을 입력하세요</p>
+          <p v-if="availableNickName">닉네임을 입력하세요</p>
           <p class="alert-message" v-if="!availableNickName">이미 사용중인 닉네임 입니다.</p>
         </div>
         <div class="signup-item"><button class="signup-button" type="submit" @click="submitForm">회원가입</button></div>
