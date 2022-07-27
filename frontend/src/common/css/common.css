@@ -35,9 +35,9 @@ body {
 .v-application {
   font-family: 'Cafe24', sans-serif !important;
 }
-/* @font-face {
+@font-face {
   font-family: 'Cafe24';
   font-weight: 400;
   src: url('../../assets/fonts/Cafe24Ssurround.ttf') format('truetype');
-} */
+}
 

@@ -14,7 +14,6 @@
     </div>
     </div>
 </template>
-
 <script>
 import {ref} from 'vue'
 import tempKey from './tempKey';

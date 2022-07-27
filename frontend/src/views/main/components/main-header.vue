@@ -70,19 +70,6 @@ export default {
     }
   },
 
-  setup(props, { emit }) {
-    const store = useStore()
-    const router = useRouter()
-    const state = reactive({
-      searchValue: null,
-      isCollapse: true,
-    })
-    const changeCollapse = () => {
-      state.isCollapse = !state.isCollapse
-    }
-
-    return { state, changeCollapse }
-  },
   methods : {
     ...mapMutations(["USER_LOGOUT"]),
    logout() {
@@ -98,7 +85,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 
   /*Mobile, Tablet*/
   .small-size-menu-wrap {
