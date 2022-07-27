@@ -14,6 +14,7 @@ import signUpEmail from '@/views/user/email'
 import gameSetPage from '@/views/debate-hosting/game-set-page'
 import makeRoom from '@/views/debate-hosting/make-room'
 
+
 // const routerComponent = require('@/views/main/router-components.json')
 
 import myPage from '@/views/user/mypage'
@@ -106,6 +107,11 @@ function makeRoutesFromMenu () {
   path : '/email',
   name : 'email',
   component : signUpEmail,
+},
+{
+  path : '/testmyPage',
+  name: 'testmyPage',
+  component: myPageInfo
 }
   )
 

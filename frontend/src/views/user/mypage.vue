@@ -1,5 +1,6 @@
 <template>
   <div class="mypage-top">
+    <div class="mypage-black-space"></div>
     <div>
       OOOO님의 마이페이지
     <router-link to="/myPage/info"><el-button>회원정보 수정</el-button></router-link>
@@ -39,4 +40,7 @@ export default {
     display: none;
     padding-bottom: 30px;
   }
+.mypage-black-space {
+    height: 100px;
+}
 </style>

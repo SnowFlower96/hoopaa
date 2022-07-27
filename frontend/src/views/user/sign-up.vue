@@ -92,8 +92,10 @@ export default {
       this.$store.dispatch("checkNickName",nickname).then(response => {
        if (response.data.response == 1) {
          this.availableNickName = false;
+         this.nickNameTheme = true
        } else {
          this.availableNickName = true;
+         this.nickNameTheme = false
        }
      });
     },
