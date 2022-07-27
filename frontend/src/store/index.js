@@ -45,7 +45,7 @@ export default new Vuex.Store({
     //ALL 리스트 받아오기
     getRoomInfo({commit}) {
       api({
-        url: `/api/v1/list/all`,
+        url: `/list/all`,
         method: "GET",
       }).then((res) => {
         commit("GET_ROOM_LIST", res.data);
@@ -55,7 +55,7 @@ export default new Vuex.Store({
     checkEmail({commit},email) {
       return new Promise ((resolve, reject) => {
         api({
-          url : `/api/v1/users/check/email`,
+          url : `/users/check/email`,
           method: "POST",
           data : email
         }).then((res) => {
@@ -71,7 +71,7 @@ export default new Vuex.Store({
     checkNickName({commit},nickname) {
       return new Promise ((resolve, reject) => {
         api({
-          url : `/api/v1/users/check/nickname`,
+          url : `/users/check/nickname`,
           method: "POST",
           data : nickname
         }).then((res) => {
@@ -86,7 +86,7 @@ export default new Vuex.Store({
     // 회원가입
     signUp({commit},data) {
           api({
-            url : `/api/v1/users`,
+            url : `/users`,
             method: "POST",
             data : data
           }).then((res) => {
@@ -100,7 +100,7 @@ export default new Vuex.Store({
     login({commit},data) {
       return new Promise((reject) => {
       api({
-        url : `/api/v1/users/login`,
+        url : `/users/login`,
         method : "POST",
         data : data
       }).then((res) => {
@@ -117,7 +117,7 @@ export default new Vuex.Store({
     // DB 이메일 인증 auth 수정
     emailAuth({commit}, email) {
       api({
-        url : `/api/v1/users/certification/success`,
+        url : `/users/certification/success`,
         method : "POST",
         data : email
       }).then(() => {
