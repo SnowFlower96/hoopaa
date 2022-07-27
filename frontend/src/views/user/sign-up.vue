@@ -131,9 +131,6 @@ export default {
         this.displayPwStatus = '비밀번호가 서로 다릅니다.'
         this.pwTheme = true
       }
-    },
-    nnm: function(nnm) {
-      checkNickName(nnm)
     }
   }
 }

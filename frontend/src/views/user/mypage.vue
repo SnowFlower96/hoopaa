@@ -1,9 +1,10 @@
 <template>
   <div class="mypage-top">
-    <div class="mypage-black-space"></div>
+    <div class="mypage-blank-space"></div>
     <div>
       OOOO님의 마이페이지
     <router-link to="/myPage/info"><el-button>회원정보 수정</el-button></router-link>
+    <!-- <router-link to="/checkPwd"><el-button>회원정보 수정</el-button></router-link> -->
     </div>
     <el-card>
       <h1>토론 기록 상세 보기</h1>
@@ -40,7 +41,7 @@ export default {
     display: none;
     padding-bottom: 30px;
   }
-.mypage-black-space {
-    height: 100px;
-}
+.mypage-blank-space {
+      height: 100px;
+  }
 </style>

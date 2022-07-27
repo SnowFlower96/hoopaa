@@ -55,7 +55,7 @@ export default {
   watch: {
     '$route' (to, from) {
       console.log(to.name)
-      if (to.name === 'main-page' || to.name === 'login' || to.name === 'sign-up' ) {
+      if (to.name === 'main-page' || to.name === 'login' || to.name === 'sign-up' || to.name === 'checkPwd') {
         this.location = to.name
         this.visible = false
         document.addEventListener('scroll', this.zeroLocation)
