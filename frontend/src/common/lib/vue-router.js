@@ -105,6 +105,11 @@ function makeRoutesFromMenu () {
   beforeEnter: checkLogin(),
 },
 {
+  path: '/startWithCode',
+  name: 'Participate',
+  component: Participate
+},
+{
   path: '/waitingPage',
   name: 'waiting-page',
   component: waitingPage
@@ -120,7 +125,11 @@ function makeRoutesFromMenu () {
   name : 'email',
   component : signUpEmail,
 },
-
+{
+  path : '/testmyPage',
+  name: 'testmyPage',
+  component: myPageInfo
+}
   )
 
   return routes

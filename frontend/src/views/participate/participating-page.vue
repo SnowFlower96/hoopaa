@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div class="participating-page-black-space"></div>
         <h1>
             토론 입장
         </h1>
@@ -8,3 +9,9 @@
         
     </div>
 </template>
+
+<style>
+.participating-page-black-space {
+    height: 100px;
+}
+</style>

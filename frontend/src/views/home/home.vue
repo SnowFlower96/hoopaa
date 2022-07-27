@@ -1,6 +1,10 @@
 <template>
   <!-- <div> -->
     <div>
+    <div class="list-page-black-space"></div>
+    <search></search>
+    <hr/>
+
       <div class="left">
         <ul>
           <li id="logo">
@@ -9,36 +13,37 @@
           <li v-for="(item, index) in menus" :key="index">{{item.name}}</li>
         </ul>
       </div>
-    <div class="main-container">
-      <div>dd</div>
-      <div>d</div>
-      <div>d</div>
-      <div>d</div>
-      <div>d</div>
-      <div>d</div>
-      <search/>
 
+    <div class="main-container">
       <hr/>
 
-
-
       <div class="list">
-        
+        <div>여기는 핫 한 영상</div>
 
         <div>
           <span>카테고리</span>
           <button>정렬조건</button>
           <el-checkbox>모집중만 보기</el-checkbox>
         </div>
-
-
+        <div>여기가 기본 all</div>
       </div>
     </div>
-  <!-- </div> -->
   </div>
+  <!-- </div> -->
 </template>
 
-<style scoped>
+<style>
+
+.list-page-black-space {
+  height: 100px;
+}
+ul {
+  display: flex;
+  flex-direction: column;
+}
+.el-main {
+  width: 100%;
+}
 .left {
   position: fixed;
   top: 0px;
