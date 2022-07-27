@@ -17,9 +17,24 @@ export default {
   data () {
     return {
       em : '',
-      pwd : ''
+      pwd : '',
+      loginNew : '',
     }
   },
+  created () {
+    let query = window.location.search;
+    let param = new URLSearchParams(query);
+    let loginNew = param.get('em');
+    this.loginNew = loginNew;
+    console.log(this.loginNew)
+     var data = {
+        em : this.loginNew
+      }
+    if(this.loginNew) {
+      this.$store.dispatch("emailAuth",data)
+    }
+  },
+
   methods : {
     login () {
       var data = {

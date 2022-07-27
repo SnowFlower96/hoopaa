@@ -87,11 +87,14 @@ export default {
     ...mapMutations(["USER_LOGOUT"]),
    logout() {
       this.USER_LOGOUT();
-      this.$router.push({name : 'main-page'});
+      this.$router.push('/');
     },
     showDropDown() {
       this.dropDownMenu = !this.dropDownMenu
     },
+    mypage() {
+      this.$router.push('/myPage')
+    }
   }
 }
 </script>
