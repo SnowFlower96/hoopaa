@@ -110,16 +110,7 @@ export default new Vuex.Store({
       })
     })
     },
-    // 인증 이메일 발송
-    sendEmail({commit},email) {
-      api({
-        url : `/api/v1/users/certification`,
-        method : "POST",
-        data : email
-      }).then(() => {
-        commit();
-      })
-    },
+
     // DB 이메일 인증 auth 수정
     emailAuth({commit}, email) {
       api({

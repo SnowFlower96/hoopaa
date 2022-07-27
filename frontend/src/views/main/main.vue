@@ -24,14 +24,12 @@
 </style>
 <script>
 import MainHeader from './components/main-header'
-import MainSidebar from './components/main-sidebar'
 import MainFooter from './components/main-footer'
 
 export default {
   name: 'Main',
   components: {
     MainHeader,
-    MainSidebar,
     MainFooter
   },
   data () {

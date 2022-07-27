@@ -27,9 +27,12 @@ export default {
     let loginNew = param.get('em');
     this.loginNew = loginNew;
     console.log(this.loginNew)
-    // if(!this.loginNew) {
-    //   this.$store.dispatch("emailAuth",loginNew)
-    // }
+     var data = {
+        em : this.loginNew
+      }
+    if(this.loginNew) {
+      this.$store.dispatch("emailAuth",data)
+    }
   },
 
   methods : {
