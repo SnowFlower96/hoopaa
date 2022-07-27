@@ -1,14 +1,30 @@
 <template>
   <!-- <div> -->
     <div>
-    <div class="black-space"></div>
-    <search></search>
-    <hr/>
-    <el-container class="main-container">
+      <div class="left">
+        <ul>
+          <li id="logo">
+            <div>카테고리</div>
+          </li>
+          <li v-for="(item, index) in menus" :key="index">{{item.name}}</li>
+        </ul>
+      </div>
+    <div class="main-container">
+      <div>dd</div>
+      <div>d</div>
+      <div>d</div>
+      <div>d</div>
+      <div>d</div>
+      <div>d</div>
+      <search/>
+
+      <hr/>
 
 
 
       <div class="list">
+        
+
         <div>
           <span>카테고리</span>
           <button>정렬조건</button>
@@ -17,53 +33,37 @@
 
 
       </div>
-    </el-container>
+    </div>
   <!-- </div> -->
   </div>
 </template>
 
-<style>
-.black-space
-ul {
-  display: flex;
-  flex-direction: column;
+<style scoped>
+.left {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 250px;
+  height: 900px;
+  background: rgba(255, 98,124,0.6);
+  padding: 40px 0;
+  overflow: hidden;
+  text-align: center;
 }
-.el-main {
-  width: 100%;
-}
+.left ul {padding: 0 30px}
+  .left ul li { font-size:25px;  height:75px; list-style: none;}
+  .left ul li#logo {font-family: 'Cafe24', cursive; font-size:50px; height: 130px;}
+  .left ul li#logo div {line-height: 0.8}
+
 .main-container {
   display: flex;
-  flex-direction: row;
-  height: 100%;
-}
-.infinite-list {
-  display: flex;
-  flex-direction: row;
-  padding-left: 0;
-  max-height: calc(100% - 35px);
+  flex-direction: column;
+  text-align: center;
 }
 
-@media (min-width: 701px) and (max-width: 1069px) {
-  .infinite-list {
-    min-width: 700px;
-  }
-}
-
-@media (min-width: 1270px) {
-  .infinite-list {
-    min-width: 1021px;
-  }
-}
-
-.infinite-list .infinite-list-item {
-  min-width: 335px;
-  max-width: 25%;
-  display: inline-block;
-  cursor: pointer;
-}
 </style>
 <script>
-import search from '@/views/common/search'
+import Search from '@/views/common/search'
 import Conference from './components/conference'
 
 import { reactive } from 'vue'
@@ -75,35 +75,39 @@ export default {
 
   components: {
     Conference,
-    search,
+    Search,
   },
   computed : {
-    ...mapState(["roomList"])
+    ...mapState(["roomList", "menus"])
   },
   created() {
     this.$store.dispatch("getRoomInfo");
   },
-  setup () {
-    const router = useRouter()
+   methods: {
 
-    const state = reactive({
-      count: 5
-    })
+  },
+  // setup () {
+  //   const router = useRouter()
 
-    const load = function () {
-      state.count += 4
-    }
+  //   const state = reactive({
+  //     count: 5
+  //   })
 
-    const clickConference = function (id) {
-      router.push({
-        name: 'conference-detail',
-        params: {
-          conferenceId: id
-        }
-      })
-    }
+  //   const load = function () {
+  //     state.count += 4
+  //   }
 
-    return { state, load, clickConference }
-  }
+  //   const clickConference = function (id) {
+  //     router.push({
+  //       name: 'conference-detail',
+  //       params: {
+  //         conferenceId: id
+  //       }
+  //     })
+  //   }
+
+  //   return { state, load, clickConference }
+  // },
+
 }
 </script>

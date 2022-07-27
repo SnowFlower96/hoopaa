@@ -22,14 +22,17 @@ export default new Vuex.Store({
   },
 
   mutations : {
+    // 방 리스트 불러오기
     GET_ROOM_LIST(state, data) {
       state.roomList = data;
     },
+    // 로그인 토큰, 상태
     USER_LOGIN(state, token) {
       state.isLogin = true;
       sessionStorage.setItem("access-Token", token);
       api.defaults.headers["access-Token"] = token;
     },
+    // 로그아웃
     USER_LOGOUT(state) {
       state.isLogin = false;
       sessionStorage.removeItem("access-token");
@@ -42,7 +45,7 @@ export default new Vuex.Store({
     //ALL 리스트 받아오기
     getRoomInfo({commit}) {
       api({
-        url: `/api/v1/list/all?now=0`,
+        url: `/api/v1/list/all`,
         method: "GET",
       }).then((res) => {
         commit("GET_ROOM_LIST", res.data);

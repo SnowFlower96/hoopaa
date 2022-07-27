@@ -7,7 +7,7 @@
     <main-footer class="main-footer-class"/>
   </el-container>
 </template>
-<style>
+<style scoped>
   @import "https://unpkg.com/element-plus/lib/theme-chalk/index.css";
   @import './main.css';
   @import '../../common/css/common.css';
