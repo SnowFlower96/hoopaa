@@ -41,7 +41,7 @@
       </template>
     </el-dropdown>
       </div>
-              <el-checkbox>모집중만 보기</el-checkbox>
+              <el-checkbox v-model="checkbox" @change="viewJoin">모집중만 보기</el-checkbox>
             </div>
             <div class="list">여기가 기본 all</div>
             <ul class="room-ul">
@@ -150,7 +150,7 @@ import 'vue3-carousel/dist/carousel.css';
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { removeComments } from '@babel/types';
+import { assertDeclareExportDeclaration, removeComments } from '@babel/types';
 import { mapState , mapMutations} from "vuex";
 
 export default {
@@ -164,6 +164,8 @@ export default {
     return {
       phase : {0:"모집중", 1:"진행중", 3:"투표중", 4:"종료"},
       menus : '',
+      checkbox : 'false',
+      data : '',
     }
   },
   computed : {
@@ -177,26 +179,48 @@ export default {
    methods: {
     ...mapMutations(["GET_ROOM_LIST"]),
     goCate(index)  {
-      console.log(index)
+      this.checkbox = false;
       this.$store.dispatch("getRoomInfoCate", index);
     },
     sortRecent () {
       const orderedDate = this.$store.state.roomList.sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
-      this.GET_ROOM_LIST(orderedDate);
+      this.GET_ROOM_LIST(JSON.stringify(orderedDate));
+      this.data = orderedDate;
       this.$router.replace;
     },
     sortCur () {
       const sortdata = this.$store.state.roomList.sort((a,b) => b.cur_num - a.cur_num);
-      this.GET_ROOM_LIST(sortdata);
+      this.GET_ROOM_LIST(JSON.stringify(sortdata));
+      this.data= sortdata;
       this.$router.replace;
     },
     sortOld () {
       const orderedDate = this.$store.state.roomList.sort((a, b) => new Date(a.start_time) - new Date(b.start_time))
-      this.GET_ROOM_LIST(orderedDate);
+      this.GET_ROOM_LIST(JSON.stringify(orderedDate));
+      this.data = orderedDate;
       this.$router.replace;
     },
     sortRank () {
 
+    },
+    viewJoin () {
+      const sortdata = this.$store.state.roomList;
+      const data = [];
+      if (this.checkbox) {
+        this.data = sortdata;
+      for (let i=0 ; i < sortdata.length; i++) {
+          if (sortdata[i].phase == 0 ) {
+            data.push(JSON.parse(JSON.stringify(sortdata[i])));
+          }
+        }
+
+    this.GET_ROOM_LIST(JSON.stringify(data));
+    this.$router.replace;
+    } else {
+      this.data = JSON.stringify(this.data)
+      this.GET_ROOM_LIST(this.data);
+      this.$router.replace;
+    }
     }
   },
   // setup () {
