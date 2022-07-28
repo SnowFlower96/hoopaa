@@ -17,20 +17,24 @@
 
         <div class="main-container">
           <hr/>
-          <div class="list">
-            <div>여기는 핫 한 영상</div>
             <el-carousel :interval="4000" type="card" height="200px">
     <el-carousel-item v-for="item in 6" :key="item">
       <h3 text="2xl" justify="center">{{ item }}</h3>
     </el-carousel-item>
-  </el-carousel>
+            </el-carousel>
+          <div class="list">
+            <div>여기는 핫 한 영상</div>
             <div>
               <span>카테고리</span>
               <button>정렬조건</button>
               <el-checkbox>모집중만 보기</el-checkbox>
             </div>
-            <div>여기가 기본 all</div>
-
+            <div class="list">여기가 기본 all</div>
+            <ul class="room-ul">
+              <li v-for="(room, index) in roomList.json" :key="index">
+              <el-card class="room-card"><img :src="require(`@/assets/images/room.jpg`)" alt=""/></el-card>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -90,6 +94,19 @@ ul {
 
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
+}
+
+.room-card {
+  max-width: 400px;
+  max-height: 300px;
+}
+.room-ul {
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+}
+.list {
+  max-width: 100%;
 }
 </style>
 <script>
