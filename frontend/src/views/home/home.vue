@@ -3,32 +3,34 @@
     <div>
     <div class="list-page-black-space"></div>
     <search></search>
-    <hr/>
+    <!-- <hr/> -->
+    <div class="left-main-wrap">
 
-      <div class="left">
-        <ul>
-          <li id="logo">
-            <div>카테고리</div>
-          </li>
-          <li v-for="(item, index) in menus" :key="index">{{item.name}}</li>
-        </ul>
-      </div>
+          <div class="left">
+            <ul>
+              <li id="logo">
+                <div>카테고리</div>
+              </li>
+              <li v-for="(item, index) in menus" :key="index">{{item.name}}</li>
+            </ul>
+          </div>
 
-    <div class="main-container">
-      <hr/>
+        <div class="main-container">
+          <hr/>
+          <div class="list">
+            <div>여기는 핫 한 영상</div>
 
-      <div class="list">
-        <div>여기는 핫 한 영상</div>
+            <div>
+              <span>카테고리</span>
+              <button>정렬조건</button>
+              <el-checkbox>모집중만 보기</el-checkbox>
+            </div>
+            <div>여기가 기본 all</div>
 
-        <div>
-          <span>카테고리</span>
-          <button>정렬조건</button>
-          <el-checkbox>모집중만 보기</el-checkbox>
+          </div>
         </div>
-        <div>여기가 기본 all</div>
       </div>
     </div>
-  </div>
   <!-- </div> -->
 </template>
 
@@ -44,16 +46,21 @@ ul {
 .el-main {
   width: 100%;
 }
+.left-main-wrap {
+  display: flex;
+}
 .left {
-  position: fixed;
-  top: 0px;
-  left: 0px;
+  /* position: fixed; */
+  /* top: 0px;
+  left: 0px; */
   width: 250px;
   height: 900px;
-  background: rgba(255, 98,124,0.6);
-  padding: 40px 0;
-  overflow: hidden;
+  /* background: rgba(255, 98,124,0.6); */
+  /* padding: 40px 0; */
+  /* overflow: hidden; */
   text-align: center;
+  border-right: solid 1px black;
+  padding: 30px;
 }
 .left ul {padding: 0 30px}
   .left ul li { font-size:25px;  height:75px; list-style: none;}
@@ -64,6 +71,7 @@ ul {
   display: flex;
   flex-direction: column;
   text-align: center;
+  padding: 10px;
 }
 
 </style>

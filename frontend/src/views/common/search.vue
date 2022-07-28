@@ -15,5 +15,8 @@ export default {
 .search-head {
   height: 45px;
   text-align: center;
+  /* background-color: bisque; */
+  height: 10vh;
+  border-bottom: solid 1px black;
 }
 </style>

@@ -10,6 +10,10 @@
               <router-link class="el-menu-item" to="/participatingPage"><img :src="require(`@/assets/images/main-page-button02.png`)" alt=""></router-link>
               <router-link class="el-menu-item" to="/"><img :src="require(`@/assets/images/main-page-button03.png`)" alt=""></router-link>
             </div>
+            <div class="main-first-img"  v-if="!resizeWidthVisible">
+              <p>여기에 나중에 영상이나 gif 넣기</p>
+              <img :src="require(`@/assets/images/0727_mokup_01.png`)" alt="">
+            </div>
           </div>
 
           <div class="main-img-wrapp-child main-introduce" style="background-color: #fff8e0; color: #ffdb65"><img v-if="show1" class="fadein" :src="require(`@/assets/images/0727_mokup_01.png`)" alt=""><div><p>팀을 구성하세요</p></div></div>
@@ -65,6 +69,14 @@ export default {
 </script>
 
 <style>
+.main-first-img > img {
+  width: 50%;
+}
+
+.main-first-img > p {
+  font-size: 5px;
+}
+
 .fadein{
   overflow: hidden;
   animation: fadein 1s ease-in-out;
