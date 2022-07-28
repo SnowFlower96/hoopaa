@@ -19,7 +19,16 @@
           <hr/>
           <div class="list">
             <div>여기는 핫 한 영상</div>
+            <carousel :items-to-show="1.5">
+    <slide v-for="slide in 10" :key="slide">
+      {{ roomList.json }}
+    </slide>
 
+    <template #addons>
+      <navigation />
+      <pagination />
+    </template>
+  </carousel>
             <div>
               <span>카테고리</span>
               <button>정렬조건</button>
@@ -78,7 +87,8 @@ ul {
 <script>
 import Search from '@/views/common/search'
 import Conference from './components/conference'
-
+import 'vue3-carousel/dist/carousel.css';
+import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { mapState } from "vuex";
