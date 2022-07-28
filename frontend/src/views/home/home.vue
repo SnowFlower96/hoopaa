@@ -26,7 +26,21 @@
             </el-carousel> -->
             <div>
               <span>카테고리</span>
-              <button>정렬조건</button>
+              <div class="flex flex-wrap items-center">
+    <el-dropdown>
+      <el-button type="primary">
+        정렬조건<el-icon class="el-icon--right"><arrow-down /></el-icon>
+      </el-button>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item @click="sortRecent">최신순</el-dropdown-item>
+          <el-dropdown-item @click="sortCur">참여자순</el-dropdown-item>
+          <el-dropdown-item @click="sortOld">오래된순</el-dropdown-item>
+          <el-dropdown-item @click="sortRank">랭킹순</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+      </div>
               <el-checkbox>모집중만 보기</el-checkbox>
             </div>
             <div class="list">여기가 기본 all</div>
@@ -119,16 +133,25 @@ ul {
   width: 300px;
   height: 200px;
 }
+.example-showcase .el-dropdown + .el-dropdown {
+  margin-left: 15px;
+}
+.example-showcase .el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
+}
 </style>
-<script>
+<script >
 import Search from '@/views/common/search'
 import Conference from './components/conference'
 import 'vue3-carousel/dist/carousel.css';
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { mapState } from "vuex";
-
+import { removeComments } from '@babel/types';
+import { mapState , mapMutations} from "vuex";
 
 export default {
   name: 'Home',
@@ -152,9 +175,28 @@ export default {
     this.menus = menuData;
   },
    methods: {
+    ...mapMutations(["GET_ROOM_LIST"]),
     goCate(index)  {
       console.log(index)
       this.$store.dispatch("getRoomInfoCate", index);
+    },
+    sortRecent () {
+      const orderedDate = this.$store.state.roomList.sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
+      this.GET_ROOM_LIST(orderedDate);
+      this.$router.replace;
+    },
+    sortCur () {
+      const sortdata = this.$store.state.roomList.sort((a,b) => b.cur_num - a.cur_num);
+      this.GET_ROOM_LIST(sortdata);
+      this.$router.replace;
+    },
+    sortOld () {
+      const orderedDate = this.$store.state.roomList.sort((a, b) => new Date(a.start_time) - new Date(b.start_time))
+      this.GET_ROOM_LIST(orderedDate);
+      this.$router.replace;
+    },
+    sortRank () {
+
     }
   },
   // setup () {
