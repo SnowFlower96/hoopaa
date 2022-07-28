@@ -157,6 +157,8 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.20")
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    // OpenVidu
+    implementation("io.openvidu:openvidu-java-client:2.2.0")
 }
 
 test {
