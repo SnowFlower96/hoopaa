@@ -1,56 +1,73 @@
 <template>
   <el-container class="main-wrapper">
-    <main-header
-      :height="`70px`"
-      @openLoginDialog="onOpenLoginDialog"/>
-    <el-container class="main-container">
-      <el-aside class="hide-on-small" width="240px">
-        <main-sidebar
-          :width="`240px`"/>
-      </el-aside>
-      <el-main>
-        <router-view></router-view>
-      </el-main>
-    </el-container>
-    <main-footer :height="`110px`"/>
+    <main-header v-if="visible" class="main-header-class" />
+      <router-view></router-view>
+    <main-footer class="main-footer-class"/>
   </el-container>
-  <login-dialog
-    :open="loginDialogOpen"
-    @closeLoginDialog="onCloseLoginDialog"/>
 </template>
-<style>
+<style scoped>
   @import "https://unpkg.com/element-plus/lib/theme-chalk/index.css";
   @import './main.css';
   @import '../../common/css/common.css';
   @import '../../common/css/element-plus.css';
-
+  .main-header-class {
+  position: fixed;
+  color: white;
+  background-color: white;
+}
+  .el-main::-webkit-scrollbar{width: 0px;}
+  .main-footer-class {
+    background-color: white;
+  }
 </style>
 <script>
-import LoginDialog from './components/login-dialog'
 import MainHeader from './components/main-header'
-import MainSidebar from './components/main-sidebar'
 import MainFooter from './components/main-footer'
 
 export default {
   name: 'Main',
   components: {
     MainHeader,
-    MainSidebar,
-    MainFooter,
-    LoginDialog
+    MainFooter
   },
   data () {
     return {
-      loginDialogOpen: false
+      tired: null,
+      visible: true,
+      location: null
     }
   },
   methods: {
-    onOpenLoginDialog () {
-      this.loginDialogOpen = true
-    },
-    onCloseLoginDialog () {
-      this.loginDialogOpen = false
+    zeroLocation() {
+      if (this.location == 'main-page') {
+        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+        const percentageOfPageScroll = scrollPosition/document.body.scrollHeight *100
+        // console.log('돌아가는중',this.visible, this.location)
+        if (percentageOfPageScroll < 15) {
+          this.visible = false
+        } else {
+          this.visible = true
+        }
+      }
+
     }
+  },
+  watch: {
+    '$route' (to, from) {
+      console.log(to.name)
+      if (to.name === 'main-page' || to.name === 'login' || to.name === 'sign-up' || to.name === 'checkPwd') {
+        this.location = to.name
+        this.visible = false
+        document.addEventListener('scroll', this.zeroLocation)
+        }
+      else {
+        this.location = to.name
+        this.visible = true
+      }
+    }
+  },
+  mounted() {
   }
 }
 </script>
+
