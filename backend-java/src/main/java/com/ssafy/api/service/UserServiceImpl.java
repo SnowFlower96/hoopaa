@@ -124,22 +124,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserStatDto getUserStatById(Long id) {
         UserStatDto userStatDto = new UserStatDto(userStatRepository.findStatById(id).get());
-        System.out.println("-----------");
-        System.out.println(userStatDto);
-        System.out.println("-----------");
+
         return userStatDto;
     }
 
     @Override
     public List<UserHistoryDto> getUserHistoryById(Long id) {
         List<UserHistory> userHistoryList = userHistoryRepository.findUserHistoryByUserId(id).get();
-        System.out.println("-----------");
         List<UserHistoryDto> userHistoryDtoList = new ArrayList<>();
         for(UserHistory u : userHistoryList) {
             userHistoryDtoList.add(new UserHistoryDto(u));
         }
-        for (UserHistoryDto dto : userHistoryDtoList) System.out.println(dto);
-        System.out.println("-----------");
         return userHistoryDtoList;
     }
 
@@ -158,13 +153,12 @@ public class UserServiceImpl implements UserService {
 
         sendMail.setSubject("[HooPaa 회원가입 서비스 이메일 인증 입니다.]");
         sendMail.setText(new StringBuffer().append("<h1>HooPaa 가입 메일인증 입니다</h1>")
-                .append("<a href='http://localhost:8083/login?em=")
+                .append("<a href='http://3.38.181.187/login?em=")
                 .append(user.getEm())//.append("&key=").append(key)
                 .append("' target='_blenk'>가입 완료를 위해 이곳을 눌러주세요</a>").toString());
         sendMail.setFrom("wonjaechoi5295@gmail.com", "HooPaa");
         sendMail.setTo(user.getEm());
         sendMail.send();
-
     }
 
     @Override
