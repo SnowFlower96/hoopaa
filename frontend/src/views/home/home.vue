@@ -11,19 +11,19 @@
               <li id="logo">
                 <div>카테고리</div>
               </li>
-              <li v-for="(item, index) in menus" :key="index">{{item.name}}</li>
+              <li v-for="(item, index) in menus" :key="index" @click="goCate(item.path)">{{item.name}}</li>
             </ul>
           </div>
 
         <div class="main-container">
           <hr/>
-            <el-carousel :interval="4000" type="card" height="200px">
+          <div class="list">
+            <div>여기는 핫 한 영상</div>
+            <!-- <el-carousel :interval="4000" type="card" height="200px">
     <el-carousel-item v-for="item in 6" :key="item">
       <h3 text="2xl" justify="center">{{ item }}</h3>
     </el-carousel-item>
-            </el-carousel>
-          <div class="list">
-            <div>여기는 핫 한 영상</div>
+            </el-carousel> -->
             <div>
               <span>카테고리</span>
               <button>정렬조건</button>
@@ -31,8 +31,12 @@
             </div>
             <div class="list">여기가 기본 all</div>
             <ul class="room-ul">
-              <li v-for="(room, index) in roomList.json" :key="index">
-              <el-card class="room-card"><img :src="require(`@/assets/images/room.jpg`)" alt=""/></el-card>
+              <li v-for="(room, index) in roomList" :key="index">
+              <span>{{phase[room.phase]}}</span>
+              <el-card class="room-card"><img :src="require(`@/assets/images/room.jpg`)" alt="" class="room-info"/>
+              <span>{{room.title}} <br></span>
+              <span>{{room.subtitle}}</span>
+              </el-card>
               </li>
             </ul>
           </div>
@@ -77,9 +81,11 @@ ul {
 
 .main-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   text-align: center;
   padding: 10px;
+  max-width: 100%;
+  flex-wrap: wrap;
 }
 .el-carousel__item h3 {
   color: #475669;
@@ -98,15 +104,20 @@ ul {
 
 .room-card {
   max-width: 400px;
-  max-height: 300px;
+  height: 400px;
 }
 .room-ul {
   display: flex;
   flex-direction: row;
   overflow: auto;
+  list-style: none;
 }
 .list {
-  max-width: 100%;
+  max-width: inherit;
+}
+.room-info {
+  width: 300px;
+  height: 200px;
 }
 </style>
 <script>
@@ -118,6 +129,7 @@ import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { mapState } from "vuex";
 
+
 export default {
   name: 'Home',
 
@@ -125,14 +137,25 @@ export default {
     Conference,
     Search,
   },
+  data () {
+    return {
+      phase : {0:"모집중", 1:"진행중", 3:"투표중", 4:"종료"},
+      menus : '',
+    }
+  },
   computed : {
-    ...mapState(["roomList", "menus"])
+    ...mapState(["roomList"])
   },
   created() {
     this.$store.dispatch("getRoomInfo");
+    const menuData = require('@/views/main/menu.json')
+    this.menus = menuData;
   },
    methods: {
-
+    goCate(index)  {
+      console.log(index)
+      this.$store.dispatch("getRoomInfoCate", index);
+    }
   },
   // setup () {
   //   const router = useRouter()
