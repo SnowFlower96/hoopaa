@@ -1,54 +1,52 @@
 <template>
-  <el-row
-    class="main-footer"
-    :gutter="10">
-    <div class="contents">
-      Copyright © SAMSUNG All Rights Reserved.
+  <el-row class="main-footer">
+    <div class="footer-contents">
+      Copyright © <img :src="require(`@/assets/images/071414.png`)" alt=""> All Rights Reserved.
     </div>
   </el-row>
 </template>
-<style>
-@media (max-width: 700px) {
-  .main-footer {
-    height: 190px;
-  }
-  .main-footer .contents {
-    line-height: 190px;
-    text-align: center;
-    margin: 0 auto;
-  }
-}
 
-@media (min-width: 701px) {
-  .main-footer {
-    height: 110px;
+<style>
+/* 반응형 - 모바일 화면 */
+@media (max-width: 700px) {
+  .footer-contents > img {
+    width: 70px;
   }
-  .main-footer .contents {
-    line-height: 110px;
+
+  .footer-contents {
+    line-height: 50px;
     text-align: center;
-    margin: 0 auto;
+    font-size: small;
   }
 }
+/* 반응형 - 모바일 화면 */
+
+/* 반응형 - 큰 화면 */
+@media (min-width: 701px) {
+  .footer-contents > img {
+    width: 100px;
+  }
+
+  .footer-contents {
+    line-height: 50px;
+    text-align: center;
+  }
+
+}
+/* 반응형 - 큰 화면 */
 </style>
 <script>
 import { reactive } from 'vue'
-import { useStore } from 'vuex'
 
 export default {
   name: 'main-footer',
-
-  props: {
-    height: {
-      type: String,
-      default: '110px'
-    }
-  },
 
   setup() {
     const state = reactive({})
 
     return { state }
   }
+  
 }
 </script>
 <style>
