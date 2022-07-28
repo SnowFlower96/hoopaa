@@ -19,16 +19,11 @@
           <hr/>
           <div class="list">
             <div>여기는 핫 한 영상</div>
-            <carousel :items-to-show="1.5">
-    <slide v-for="slide in 10" :key="slide">
-      {{ roomList.json }}
-    </slide>
-
-    <template #addons>
-      <navigation />
-      <pagination />
-    </template>
-  </carousel>
+            <el-carousel :interval="4000" type="card" height="200px">
+    <el-carousel-item v-for="item in 6" :key="item">
+      <h3 text="2xl" justify="center">{{ item }}</h3>
+    </el-carousel-item>
+  </el-carousel>
             <div>
               <span>카테고리</span>
               <button>정렬조건</button>
@@ -43,7 +38,7 @@
   <!-- </div> -->
 </template>
 
-<style>
+<style scoped>
 
 .list-page-black-space {
   height: 100px;
@@ -82,7 +77,20 @@ ul {
   text-align: center;
   padding: 10px;
 }
+.el-carousel__item h3 {
+  color: #475669;
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+  text-align: center;
+}
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
 
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
+}
 </style>
 <script>
 import Search from '@/views/common/search'
