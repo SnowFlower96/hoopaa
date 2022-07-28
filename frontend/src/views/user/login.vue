@@ -4,9 +4,9 @@
       <div class="login-item"><router-link class="el-menu-item" to="/"><img class="login-favi-img" :src="require(`@/assets/images/favi6.png`)" alt="home-favi"></router-link></div>
       <div class="login-item">Login to Hoopa</div>
       <div class="login-item"><input type="text" placeholder="e-mail 입력" v-model="em"></div>
-      <div class="login-item"><input type="password" placeholder="비밀번호 입력" v-model="pwd"></div>
+      <div class="login-item"><input type="password" placeholder="비밀번호 입력" v-model="pwd" @keyup.enter="login"></div>
       <div class="login-item"><label class="login-item-input"><input type="checkbox" v-model="checked"> 로그인 유지</label></div>
-      <div class="login-item"><button class="login-button" @click="login">로그인</button></div>
+      <div class="login-item"><button class="login-button" @click="login" >로그인</button></div>
       <div class="login-item"><p class="login-to-signup">회원이 아니신가요? <router-link style=text-decoration:none; to="/signUp">회원가입</router-link></p></div>
     </div>
   </div>
