@@ -1,8 +1,8 @@
 {
   "All" : {
-    "name" : "All",
+    "name" : "all",
     "hidden" : false,
-    "path" : "/list",
+    "path" : "/list/all",
     "children" : []
   },
   "유머" : {

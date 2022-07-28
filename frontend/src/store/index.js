@@ -6,7 +6,6 @@ import createPersistedState from "vuex-persistedstate";
 //Vue.use(Vuex);
 
 const api = createApi();
-const menuData = require('@/views/main/menu.json')
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
@@ -16,14 +15,14 @@ export default new Vuex.Store({
       email : '',
     },
     roomList : [],
-    menus: menuData,
     headerVisible: true
   },
 
   mutations : {
     // 방 리스트 불러오기
     GET_ROOM_LIST(state, data) {
-      state.roomList = data;
+
+      state.roomList = JSON.parse(data.json);
     },
     // 로그인 토큰, 상태
     USER_LOGIN(state, token) {
@@ -41,15 +40,7 @@ export default new Vuex.Store({
   },
 
   actions : {
-    //ALL 리스트 받아오기
-    getRoomInfo({commit}) {
-      api({
-        url: `/list/all`,
-        method: "GET",
-      }).then((res) => {
-        commit("GET_ROOM_LIST", res.data);
-      })
-    },
+
     // 이메일 중복검사
     checkEmail({commit},email) {
       return new Promise ((resolve, reject) => {
@@ -132,6 +123,27 @@ export default new Vuex.Store({
         data : email
       }).then(() => {
         commit();
+      })
+    },
+
+    //ALL 리스트 받아오기
+    getRoomInfo({commit}) {
+      api({
+        url: `/list/all`,
+        method: "GET",
+      }).then((res) => {
+        commit("GET_ROOM_LIST", res.data);
+      })
+    },
+
+    //Cate별 리스트 받아오기
+    getRoomInfoCate({commit},index) {
+      api({
+        url: index,
+        method : "GET",
+      }).then((res) => {
+        commit("GET_ROOM_LIST", res.data);
+        router.push("/list?"+index);
       })
     }
   }
