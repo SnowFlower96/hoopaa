@@ -12,9 +12,9 @@
             </div>
           </div>
 
-          <div class="main-img-wrapp-child main-introduce" style="background-color: #fff8e0; color: #ffdb65"><img v-if="show1" class="fadein" :src="require(`@/assets/images/mainPage01.png`)" alt=""><div><p>팀을 구성하세요</p></div></div>
-          <div class="main-img-wrapp-child main-introduce" style="background-color: #debcb5; color: #f24822"><div><p>친구들과 재밌게 의견을 나눠보세요</p></div><img v-if="show2" class="fadein" :src="require(`@/assets/images/mainPage02.png`)" alt=""></div>
-          <div class="main-img-wrapp-child main-introduce" style="background-color: #e1b5d4; color: #ff24bd"><img v-if="show3" class="fadein" :src="require(`@/assets/images/mainPage03.png`)" alt=""><div><p>배틀에서 승리하세요</p></div></div>
+          <div class="main-img-wrapp-child main-introduce" style="background-color: #fff8e0; color: #ffdb65"><img v-if="show1" class="fadein" :src="require(`@/assets/images/0727_mokup_01.png`)" alt=""><div><p>팀을 구성하세요</p></div></div>
+          <div class="main-img-wrapp-child main-introduce" style="background-color: #debcb5; color: #f24822"><div><p>친구들과 재밌게 의견을 나눠보세요</p></div><img v-if="show2" class="fadein" :src="require(`@/assets/images/0727_mokup_04.png`)" alt=""></div>
+          <div class="main-img-wrapp-child main-introduce" style="background-color: #e1b5d4; color: #ff24bd"><img v-if="show3" class="fadein" :src="require(`@/assets/images/0727_mokup_03.png`)" alt=""><div><p>배틀에서 승리하세요</p></div></div>
           <div class="main-img-wrapp-child main-introduce" style="background-color: #e0c8ff; color: #9747ff"><div><p>재미있는 효과들과 함께 하세요</p></div><img v-if="show4" class="fadein" :src="require(`@/assets/images/mainPage04.png`)" alt=""></div>
           <div class="main-img-wrapp-child main-introduce" style="background-color: #b3d1c1; color: #1bb061"><img v-if="show5" class="fadein" :src="require(`@/assets/images/mainPage05.png`)" alt=""><div><p>방청객이 되어서 배틀을 관전할 수도 있습니다</p></div></div>
         </div>
@@ -50,7 +50,7 @@ export default {
         else {}
       },
       handleResize() {
-          if (window.innerWidth < 700) {
+          if (window.innerWidth < 1200) {
             this.resizeWidthVisible = false
           } else {
             this.resizeWidthVisible = true
