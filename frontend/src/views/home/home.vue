@@ -32,7 +32,7 @@
             <div>
               <span>카테고리</span>
               <button>정렬조건</button>
-              <el-checkbo~x>모집중만 보기</el-checkbox>
+              <el-checkbox>모집중만 보기</el-checkbox>
             </div>
             <div>여기가 기본 all</div>
 
