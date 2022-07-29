@@ -10,7 +10,7 @@ import lombok.ToString;
 public class UserStatDto {
 
     String em;
-    String nm;
+    String nnm;
     int exp;
     int total;
     int win;
@@ -21,7 +21,7 @@ public class UserStatDto {
 
     public UserStatDto(UserStat userStat, User user) {
         this.em = user.getEm();
-        this.nm = user.getNnm();
+        this.nnm = user.getNnm();
         this.exp = userStat.getExp();
         this.total = userStat.getTotal();
         this.win = userStat.getWin();
