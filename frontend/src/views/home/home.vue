@@ -1,72 +1,62 @@
 <template>
   <!-- <div> -->
     <div>
-    <div class="list-page-black-space"></div>
-    <search></search>
-    <!-- <hr/> -->
-    <div class="left-main-wrap">
+      <div class="list-page-black-space"></div>
+      <search></search>
+      <div class="left-main-wrap">
 
           <div class="left">
             <ul>
-              <li id="logo">
-                <div>카테고리</div>
+              <div id="logo">카테고리</div>
+              <li v-for="(item, index) in menus" :key="index" @click="goCate(item.path)">
+                <div>{{item.name}}</div>
               </li>
-              <li v-for="(item, index) in menus" :key="index" @click="goCate(item.path)">{{item.name}}</li>
             </ul>
-          </div>
+          </div> <!--left-->
 
-        <div class="main-container">
-          <hr/>
-          <div class="list">
-            <div>지금 이 토론이 제일 핫해요</div>
-            <div class="carousel-wrapper">
-              <ul class="carousel">
-                <li v-for="(room, index) in roomList" :key="index">
-                <span>{{phase[room.phase]}}</span>
-                <el-card class="room-card"><img :src="require(`@/assets/images/room.jpg`)" alt="" class="room-info"/>
-                <span>{{room.title}} <br></span>
-                <span>{{room.subtitle}}</span>
-                </el-card>
-                </li>
-              </ul>
-            </div>
+            <div class="main-container">
+              <div class="main-inner-container">
+                <div>지금 이 토론이 제일 핫해요</div>
+
+
+                <div class="carousel-wrapper">
+                  <ul class="carousel-ul">
+                    <li v-for="(room, index) in roomList" :key="index">
+                    <span>{{phase[room.phase]}}</span>
+                    <div class="carosel-room-card">
+                      <img :src="require(`@/assets/images/room.jpg`)" alt="" class="room-info-carosel"/>
+                      <span>{{room.title}} <br></span>
+                      <span>{{room.subtitle}}</span>
+                    </div>
+                    </li>
+                  </ul>
+                </div>
                 <button class="prev" type="button" @click="prev">prev</button>
                 <button class="next" type="button" @click="next">next</button>
 
-            <div>
-              <span>카테고리</span>
-              <div class="flex flex-wrap items-center">
-                <el-dropdown>
-                  <el-button type="primary">
-                    정렬조건<el-icon class="el-icon--right"><arrow-down /></el-icon>
-                  </el-button>
-                  <template #dropdown>
-                    <el-dropdown-menu>
-                      <el-dropdown-item @click="sortRecent">최신순</el-dropdown-item>
-                      <el-dropdown-item @click="sortCur">참여자순</el-dropdown-item>
-                      <el-dropdown-item @click="sortOld">오래된순</el-dropdown-item>
-                      <el-dropdown-item @click="sortRank">랭킹순</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-                </el-dropdown>
-              </div>
-              <el-checkbox v-model="checkbox" @change="viewJoin">모집중만 보기</el-checkbox>
-            </div>
-            <div class="list">여기가 기본 all, 총 방 갯수 : {{roomList.length}}</div>
-                <!-- 프정현 코드 -->
-                <!-- <ul class="room-ul">
-                  <li v-for="(room, index) in roomList" :key="index">
-                      <div class="room-card">
-                        <span>{{phase[room.phase]}} {{room.id}}</span>
-                        <img :src="require(`@/assets/images/room.jpg`)" alt="" class="room-info"/>
-                        <span>{{room.title}} <br></span>
-                        <span>{{room.subtitle}}</span>
-                      </div>
-                  </li>
-                </ul> -->
-                <!-- 프정현 코드 -->
 
-                <!-- 새로운 로직 -->
+                <div>
+                  <span>카테고리</span>
+                  <div class="flex flex-wrap items-center">
+                    <el-dropdown>
+                      <el-button type="primary">
+                        정렬조건<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                      </el-button>
+                      <template #dropdown>
+                        <el-dropdown-menu>
+                          <el-dropdown-item @click="sortRecent">최신순</el-dropdown-item>
+                          <el-dropdown-item @click="sortCur">참여자순</el-dropdown-item>
+                          <el-dropdown-item @click="sortOld">오래된순</el-dropdown-item>
+                          <el-dropdown-item @click="sortRank">랭킹순</el-dropdown-item>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
+                  </div>
+                  <el-checkbox v-model="checkbox" @change="viewJoin">모집중만 보기</el-checkbox>
+                </div>
+
+
+                <div class="list">여기가 기본 all, 총 방 갯수 : {{roomList.length}}</div>
                 <ul class="room-ul">
                   <li v-for="(indexOut) in (roomList.length/4-1)" :key="indexOut"><ul class="card-container-ul">
                     <li v-for="(indexIn) in 4" :key="indexIn">
@@ -78,77 +68,38 @@
                     </li>
                   </ul></li>
                 </ul>
-                <!-- 새코드 -->
-
-          </div>
-        </div>
-      </div>
+              </div> <!-- main-inner-container -->
+            </div> <!--main-container-->
+      </div> <!--left-main-wrap-->
     </div>
   <!-- </div> -->
 </template>
 
 <style>
-/*  */
-.carousel-wrapper {
-  width: 100%;
-  height: 300px;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  background-color: aqua;
-}
-
-.carousel {
-  display: flex;
-  flex-direction: row;
-  /* overflow: auto; */
-  list-style: none;
-}
-
-.carousel-wrapper > .carousel {
-  display: flex;
-  transform: translate3d(0, 0, 0);
-  transition: transform 0.2s;
-}
-
-.carousel-wrapper > .carousel > img {
-  width: 500px;
-  height: 300px;
-}
-
 .list-page-black-space {
   height: 100px;
-}
-ul {
-  display: flex;
-  flex-direction: column;
-}
-.el-main {
-  width: 100%;
 }
 .left-main-wrap {
   display: flex;
 }
+
+
+/* 카테고리 style */
+ul {
+  display: flex;
+  flex-direction: column;
+}
 .left {
-  /* position: fixed; */
-  /* top: 0px;
-  left: 0px; */
-  width: 250px;
-  height: 900px;
-  /* background: rgba(255, 98,124,0.6); */
-  /* padding: 40px 0; */
-  /* overflow: hidden; */
+  width: 15%;
   text-align: center;
-  border-right: solid 1px black;
-  padding: 30px;
+  border-right: solid 1px rgba(212, 212, 212, 0.505);
 }
-.card-container-ul {
-  flex-direction: row;
-  list-style: none;
-}
-.left ul {padding: 0 30px}
-  .left ul li { font-size:25px;  height:75px; list-style: none;}
-  .left ul li#logo {font-family: 'Cafe24', cursive; font-size:50px; height: 130px;}
-  .left ul li#logo div {line-height: 0.8}
+.left ul {padding: 0px}
+.left ul li { font-size:25px;  height:75px; list-style: none;}
+.left ul li#logo {font-family: 'Cafe24', cursive; font-size:30px; height: 130px;}
+.left ul li#logo div {line-height: 0.8}
+/* 카테고리 style */
+
 
 .main-container {
   display: flex;
@@ -157,40 +108,71 @@ ul {
   padding: 10px;
   max-width: 100%;
   flex-wrap: wrap;
+  width: 80%;
 }
-.room-hot-wrap {
-  display: flex;
-}
-.room-card {
-  max-width: 100%;
-  height: 280px;
-  background-color: beige;
-}
-.room-info {
-  width: 300px;
-  height: 200px;
-}
-.room-ul {
-  display: flex;
-  /* flex-direction: row; */
-  overflow: visible;
-  list-style: none;
-  width: 100%
-  00px;
-  background-color: rgb(197, 197, 255);
-}
-.list {
+
+.main-inner-container {
   max-width: inherit;
 }
-.example-showcase .el-dropdown + .el-dropdown {
+
+/* 메인 뷰 - carousel */
+.carousel-wrapper {
+  height: 300px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-color: aqua;
+}
+.carousel-ul {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.2s;
+  padding: 0px;
+}
+.carosel-room-card {
+  background-color: beige;
+  margin: 10px;
+}
+.room-info-carosel {
+  max-width: 200px;
+  height: auto;
+  display: block;
+}
+/* 메인 뷰 - carousel */
+
+
+.el-dropdown {
   margin-left: 15px;
 }
-.example-showcase .el-dropdown-link {
-  cursor: pointer;
-  color: var(--el-color-primary);
+
+/* room-list */
+.room-ul {
   display: flex;
-  align-items: center;
+  overflow: visible;
+  list-style: none;
+  background-color: rgb(197, 197, 255);
 }
+.card-container-ul {
+  flex-direction: row;
+  list-style: none;
+}
+.room-card {
+  height: 280px;
+  background-color: beige;
+  margin: 10px;
+}
+.room-info {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.card-container-ul, .room-ul {
+  padding: 0px;
+}
+/* room-list */
+
 </style>
 <script >
 import Search from '@/views/common/search'
@@ -273,14 +255,14 @@ export default {
     },
 
     prev() {
-      const carousel = document.querySelector('.carousel');
+      const carousel = document.querySelector('.carousel-ul');
       if (this.c_index === 0) return;
       this.c_index -= 1;
 
       carousel.style.transform = `translate3d(-${500 * this.c_index}px, 0, 0)`;
     },
     next() {
-        const carousel = document.querySelector('.carousel');
+        const carousel = document.querySelector('.carousel-ul');
         if (this.c_index === 2) return;
         this.c_index += 1;
         carousel.style.transform = `translate3d(-${500 * this.c_index}px, 0, 0)`;

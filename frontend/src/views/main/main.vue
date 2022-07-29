@@ -14,6 +14,7 @@
   position: fixed;
   color: white;
   background-color: white;
+  z-index: 10;
 }
   .el-main::-webkit-scrollbar{width: 0px;}
   .main-footer-class {

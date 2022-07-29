@@ -17,6 +17,6 @@ export default {
   text-align: center;
   /* background-color: bisque; */
   height: 10vh;
-  border-bottom: solid 1px black;
+  border-bottom: solid 1px rgba(212, 212, 212, 0.505);
 }
 </style>
