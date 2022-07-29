@@ -14,7 +14,7 @@ services:
     volumes:
       - ./DB/HooPaa.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - back_network
+      - my_network
   backend:
     build:
       context: backend-java
@@ -24,12 +24,11 @@ services:
       - "8080"
     environment:
       TZ: "Asia/Seoul"
-      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/debate?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://localhost:3306/debate?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true"
     depends_on:
       - db
     networks:
-      - back_network
-      - front_network
+      - my_network
   frontend:
     build: frontend
     container_name: frontend
@@ -37,10 +36,8 @@ services:
     expose:
       - "80"
     networks:
-      - front_network
+      - my_network
 
 networks:
-  back_network:
-    driver: bridge
-  front_network:
+  my_network:
     driver: bridge
