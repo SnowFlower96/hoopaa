@@ -10,10 +10,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ssafy
       TZ: "Asia/Seoul"
-    privileged: true
-    command: --init-file /data/application/init.sql
     volumes:
-      - DB/HooPaa.sql:/data/application/init.sql
+      - ./DB/HooPaa.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - my_network
   backend:
