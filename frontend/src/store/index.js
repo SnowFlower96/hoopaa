@@ -22,7 +22,7 @@ export default new Vuex.Store({
     // 방 리스트 불러오기
     GET_ROOM_LIST(state, data) {
 
-      state.roomList = JSON.parse(data.json);
+      state.roomList = JSON.parse(data);
     },
     // 로그인 토큰, 상태
     USER_LOGIN(state, token) {
@@ -132,7 +132,7 @@ export default new Vuex.Store({
         url: `/list/all`,
         method: "GET",
       }).then((res) => {
-        commit("GET_ROOM_LIST", res.data);
+        commit("GET_ROOM_LIST", res.data.json);
       })
     },
 
@@ -142,7 +142,7 @@ export default new Vuex.Store({
         url: index,
         method : "GET",
       }).then((res) => {
-        commit("GET_ROOM_LIST", res.data);
+        commit("GET_ROOM_LIST", res.data.json);
         router.push("/list?"+index);
       })
     }
