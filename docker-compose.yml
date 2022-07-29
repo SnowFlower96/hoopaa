@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:5.7.35
+    container_name: db
+    restart: always
+    expose:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ssafy
+      TZ: "Asia/Seoul"
+    privileged: true
+    volumes:
+      - ./DB/HooPaa.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - back_network
+  backend:
+    build:
+      context: backend
+    container_name: backend
+    restart: always
+    expose:
+      - "8080"
+    environment:
+      TZ: "Asia/Seoul"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://localhost:3306/debate?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true"
+    depends_on:
+      - db
+    networks:
+      - back_network
+      - front_network
+  frontend:
+    build: frontend
+    container_name: frontend
+    restart: always
+    expose:
+      - "80"
+    networks:
+      - front_network
+
+networks:
+  back_network:
+    driver: bridge
+  front_network:
+    driver: bridge
