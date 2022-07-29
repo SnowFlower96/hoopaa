@@ -1,60 +1,68 @@
 <template>
-  <el-row
-    class="main-header"
-    :gutter="10"
-    :style="{ 'height': height }">
+  <el-row class="main-header" :gutter="10">
+
     <div class="hide-on-small">
-      <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div>
-      <div class="tool-wrapper">
-        <div class="search-field">
-          <el-input
-            placeholder="검색"
-            prefix-icon="el-icon-search"
-            v-model="state.searchValue">
-          </el-input>
+
+        <router-link to="/">
+          <div class="logo-wrapper"><div class="ic ic-logo"/></div>
+        </router-link>
+
+        <div class="el-menu">
+          <router-link class="tool-wrapper-span-login" style=text-decoration:none; to="/list">
+            <span>모든 토론보기</span>
+          </router-link>
+          <router-link class="el-menu-item button-purple" style=text-decoration:none; to="/makeRoomPage">
+            <span>미팅 시작하기</span>
+          </router-link>
+          <router-link class="el-menu-item button-green" style=text-decoration:none; to="/startWithCode">
+            <span>미팅 참여하기</span>
+          </router-link>
         </div>
-        <div class="button-wrapper">
-          <el-button>회원가입</el-button>
-          <el-button type="primary" @click="clickLogin">로그인</el-button>
+
+        <div class="tool-wrapper">
+            <router-link style=text-decoration:none; to="/login" v-if="!isLogin"><span class="tool-wrapper-span-login">Log in</span></router-link>
+            <router-link style=text-decoration:none; to="/logout" v-if="isLogin" @click="logout"><span class="tool-wrapper-span-login">Log out</span></router-link>
+            <router-link style=text-decoration:none; to="/signUp" v-if="!isLogin"><span class="tool-wrapper-span-signup">Sign up</span></router-link>
+            <router-link style=text-decoration:none; to="/myPage" v-if="isLogin"><span class="tool-wrapper-span-signup">My Page</span></router-link>
         </div>
-      </div>
 
     </div>
-    <div class="hide-on-big">
-      <div class="menu-icon-wrapper" @click="changeCollapse"><i class="el-icon-menu"></i></div>
-      <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div>
-      <div class="menu-icon-wrapper"><i class="el-icon-search"></i></div>
-      <div class="mobile-sidebar-wrapper" v-if="!state.isCollapse">
-        <div class="mobile-sidebar">
-          <div class="mobile-sidebar-tool-wrapper">
-            <div class="logo-wrapper"><div class="ic ic-logo"/></div>
-            <el-button type="primary" class="mobile-sidebar-btn login-btn" @click="clickLogin">로그인</el-button>
-            <el-button class="mobile-sidebar-btn register-btn">회원가입</el-button>
-          </div>
-          <el-menu
-            :default-active="String(state.activeIndex)"
-            active-text-color="#ffd04b"
-            class="el-menu-vertical-demo"
-            @select="menuSelect">
-            <el-menu-item v-for="(item, index) in state.menuItems" :key="index" :index="index.toString()">
-              <i v-if="item.icon" :class="['ic', item.icon]"/>
-              <span>{{ item.title }}</span>
-            </el-menu-item>
-          </el-menu>
+
+    <div class="hide-on-big icons-wrapper">
+      <div class="logo-wrapper" @click="clickLogo">
+        <div>
+          <router-link to="/"><img class="header-logo-img" :src="require(`@/assets/images/favi6.png`)"></router-link>
         </div>
-        <div class="mobile-sidebar-backdrop" @click="changeCollapse"></div>
+        <img @click="showDropDown" class="header-small-bar" :src="require(`@/assets/icons/bar.png`)">
+      </div> <!-- 로고 있는 부분 -->
+      <!-- bar는 더 좋은 아이콘을 찾아봐야됨 -->
+      <div v-if="dropDownMenu" class="small-size-menu-wrap">
+        <router-link style=text-decoration:none; to="/login"><p class="small-size-menu-wrap-p">login</p></router-link>
+        <router-link style=text-decoration:none; to="/signUp"><p class="small-size-menu-wrap-p">sign up</p></router-link>
       </div>
+    
     </div>
+
   </el-row>
 </template>
+
 <script>
-import { reactive, computed } from 'vue'
+import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { mapState , mapMutations} from "vuex";
 
 export default {
   name: 'main-header',
 
+  computed : {
+    ...mapState(["isLogin"]),
+  },
+  data() {
+    return {
+      dropDownMenu: false
+    }
+  },
   props: {
     height: {
       type: String,
@@ -62,187 +70,147 @@ export default {
     }
   },
 
-  setup(props, { emit }) {
-    const store = useStore()
-    const router = useRouter()
-    const state = reactive({
-      searchValue: null,
-      isCollapse: true,
-      menuItems: computed(() => {
-        const MenuItems = store.getters['root/getMenus']
-        let keys = Object.keys(MenuItems)
-        let menuArray = []
-        for (let i = 0; i < keys.length; ++i) {
-          let menuObject = {}
-          menuObject.icon = MenuItems[keys[i]].icon
-          menuObject.title = MenuItems[keys[i]].name
-          menuArray.push(menuObject)
-        }
-        return menuArray
-      }),
-      activeIndex: computed(() => store.getters['root/getActiveMenuIndex'])
-    })
-
-    if (state.activeIndex === -1) {
-      state.activeIndex = 0
-      store.commit('root/setMenuActive', 0)
+  methods : {
+    ...mapMutations(["USER_LOGOUT"]),
+   logout() {
+      this.USER_LOGOUT();
+      this.$router.push('/');
+    },
+    showDropDown() {
+      this.dropDownMenu = !this.dropDownMenu
+    },
+    mypage() {
+      this.$router.push('/myPage')
     }
-
-    const menuSelect = function (param) {
-      store.commit('root/setMenuActive', param)
-      const MenuItems = store.getters['root/getMenus']
-      let keys = Object.keys(MenuItems)
-      router.push({
-        name: keys[param]
-      })
-    }
-
-    const clickLogo = () => {
-      store.commit('root/setMenuActive', 0)
-      const MenuItems = store.getters['root/getMenus']
-      let keys = Object.keys(MenuItems)
-      router.push({
-        name: keys[0]
-      })
-    }
-
-    const clickLogin = () => {
-      emit('openLoginDialog')
-    }
-
-    const changeCollapse = () => {
-      state.isCollapse = !state.isCollapse
-    }
-
-    return { state, menuSelect, clickLogo, clickLogin, changeCollapse }
   }
 }
 </script>
-<style>
-  .main-header {
-    padding: 10px 20px;
-  }
+<style scoped>
+
   /*Mobile, Tablet*/
+  .small-size-menu-wrap {
+    color: black;
+    text-align: center;
+  }
+  .small-size-menu-wrap-p {
+    color: black;
+  }
+
+  .header-small-bar {
+    width: 20px;
+    height: 20px;
+    align-items: center;
+    padding: 10px;
+  }
+  .header-small-bar:hover {
+    cursor: pointer;
+  }
+  .icons-wrapper{
+    display: flex;
+  }
+
+  .main-header .hide-on-small .logo-wrapper .ic.ic-logo {
+    width: 70px;
+    height: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('../../../assets/images/favi6.png');
+  }
+
   .menu-icon-wrapper {
     display: inline-block;
     vertical-align: top;
     position: relative;
     top: 14px;
   }
-  
-  .main-header .hide-on-big .logo-wrapper {
-    display: inline-block;
-    margin: 0 calc(50% - 51px)
+
+  .logo-wrapper {
+    display: flex;
+    justify-content: end;
   }
-  .main-header .hide-on-big .logo-wrapper .ic.ic-logo {
-    width: 70px;
-    height: 50px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url('../../../assets/images/ssafy-logo.png');
-  }
-  .mobile-sidebar-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar {
-    width: 240px; height: calc(100vh - 1px);
-    display: inline-block;
-    background-color: white;
-    padding: 0 10px;
-    vertical-align: top;
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-tool-wrapper {
-    padding-bottom: 20px;
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-btn {
-    display: block;
-    margin: 0 auto;
-    margin-top: 25px;
-    height: 30px;
-    width: 100%;
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-btn.login-btn {
-    color: white;
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar .logo-wrapper {
-    display: block
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar .logo-wrapper .ic.ic-logo {
-    width: 70px;
-    height: 50px;
-    margin: 0 auto;
-    margin-top: 30px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url('../../../assets/images/ssafy-logo.png');
-  }
-  .mobile-sidebar-wrapper .mobile-sidebar-backdrop {
-    width: calc(100% - 260px); height: calc(100vh - 1px);
-    background-color: black;
-    display: inline-block;
-    opacity: 0.3;
-  }
-  .mobile-sidebar-wrapper .el-menu{
-    margin-top: 0;
-    padding-left: 0;
-    height: calc(100% - 235px);
-  }
-  .mobile-sidebar-wrapper .el-menu .el-menu-item {
-    cursor: pointer;
-  }
-  .mobile-sidebar-wrapper .el-menu .el-menu-item .ic {
-    margin-right: 5px;
+
+  .header-logo-img {
+    width: 50px;
+    padding: 5px;
   }
 
   /*Desktop - Need to add Class if Need*/
-  .main-header .hide-on-small .logo-wrapper {
+  .main-header .hide-on-small {
+    display: flex;
+    padding: 5px 10px;
+    justify-content: space-evenly;
+  }
+
+  .el-menu {
+    margin-right: 500px;
+    margin-top: 15px;
+  }
+  .el-menu-show-all {
+    border-radius: 5px;
+    background-color: none;
+    color: #1bb061;
+    padding: 8px;
     cursor: pointer;
-    display: inline-block;
   }
-  .main-header .hide-on-small .logo-wrapper .ic.ic-logo {
-    width: 70px;
-    height: 50px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url('../../../assets/images/ssafy-logo.png');
+  .el-menu-show-all:hover, .tool-wrapper-span-login:hover {
+    font-weight: bold;
   }
-  .main-header .hide-on-small .tool-wrapper {
-    width: 50%;
-    float: right;
-  }
-  .main-header .hide-on-small .tool-wrapper .button-wrapper {
-    width: 45%;
-    float: right;
-  }
-  .main-header .hide-on-small .tool-wrapper .button-wrapper .el-button {
-    width: 45%;
-    height: 50px;
+  .el-menu-item {
+    border-radius: 5px;
+    background-color: none;
+    padding: 8px;
     cursor: pointer;
-    margin-right: 1%;
+    margin: 10px;
   }
-  .main-header .hide-on-small .tool-wrapper .search-field {
-    width: 50%;
-    height: 50px;
-    max-width: 400px;
-    margin-right: 2%;
-    display: inline-block;
-    background-color: white;
+  .el-menu-item:hover {
+    border-radius: 5px;
+    color: white;
+    padding: 8px;
   }
-  .main-header .hide-on-small .tool-wrapper .search-field .el-input {
-    width: 100%;
-    height: 100%;
+  .button-purple {
+    outline: solid 1px #9747ff;
+    color: #9747ff;
   }
-  .main-header .hide-on-small .tool-wrapper .search-field .el-input .el-input__inner {
-    width: 88%;
-    height: 50px;
-    margin-right: 1%;
+  .button-purple:hover {
+    background-color: #9747ff ;
   }
-  .main-header .hide-on-small .tool-wrapper .search-field .el-input .el-input__prefix {
-    top: 5px;
+  .button-green {
+    outline: solid 1px #1bb061;
+    color: #1bb061;
   }
+  .button-green:hover {
+    background-color: #1bb061 ;
+  }
+
+  .tool-wrapper {
+    padding: 15px;
+    justify-content: end;
+  }
+  .tool-wrapper-span-signup {
+    outline: solid 1px #1bb061;
+    border-radius: 5px;
+    background-color: none;
+    color: #1bb061;
+    padding: 10px;
+    cursor: pointer;
+    margin: 5px;
+    font-weight: bold;
+  }
+  .tool-wrapper-span-signup:hover {
+    outline: solid 1px #1bb061;
+    border-radius: 5px;
+    background-color: #1bb061 ;
+    color: white;
+  }
+  .tool-wrapper-span-login {
+    border-radius: 5px;
+    background-color: none;
+    color: #1bb061;
+    padding: 10px;
+    cursor: pointer;
+    margin: 5px;
+  }
+
+
 
 </style>

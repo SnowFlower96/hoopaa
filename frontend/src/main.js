@@ -1,7 +1,7 @@
 
 // 기본 플러그인 Import
 import { createApp, h } from 'vue'
-import store from './common/lib/store'
+import store from './store'
 import ElementPlus from './common/lib/element-plus'
 import App from './App.vue'
 import VueAxios from './common/lib/axios'
@@ -10,6 +10,12 @@ import i18n from './common/lib/i18n'
 import router from './common/lib/vue-router'
 
 import 'element-plus/packages/theme-chalk/src/base.scss'
+
+// 스크롤 효과 익스텐션 추가
+// import AOS from 'aos'
+// import 'aos/dist/aos.css'
+
+// AOS.init()
 
 // Element UI Components [시작]
 import {
@@ -193,7 +199,7 @@ const plugins = [
 // Element UI Components [끝]
 
 const app = createApp({
-  render: ()=>h(App)
+  render: ()=>h(App),
 })
 app.use(ElementPlus)
 app.use(VueAxios, axios)
