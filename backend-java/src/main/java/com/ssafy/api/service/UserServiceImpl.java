@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserStatDto getUserStatById(Long id) {
-        UserStatDto userStatDto = new UserStatDto(userStatRepository.findStatById(id).get());
+        UserStatDto userStatDto = new UserStatDto(userStatRepository.findStatById(id).get(), userRepository.findUserById(id).get());
 
         return userStatDto;
     }
