@@ -24,7 +24,7 @@ services:
       - "8080"
     environment:
       TZ: "Asia/Seoul"
-      SPRING_DATASOURCE_URL: "jdbc:mysql://localhost:3306/debate?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true"
+      # SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/debate?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true"
     depends_on:
       - db
     networks:
