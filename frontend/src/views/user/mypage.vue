@@ -36,7 +36,7 @@ export default {
  },
  created () {
   this.$store.dispatch("getUserHistory");
-
+  this.$store.dispatch("getUserStat")
  }
 
 }

@@ -1,4 +1,4 @@
-import { createApi } from "@/api";
+import { createApi, createTokenApi } from "@/api";
 import Vuex from "vuex";
 import router from "@/common/lib/vue-router";
 import createPersistedState from "vuex-persistedstate";
@@ -6,14 +6,15 @@ import createPersistedState from "vuex-persistedstate";
 //Vue.use(Vuex);
 
 const api = createApi();
+const tapi = createTokenApi();
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     isLogin: false,
-    userHistory : [],
-    userStat : [],
-    userInfo : [],
+    userHistory : '',
+    userStat : '',
+    userInfo : '',
     roomList : [],
     headerVisible: true
   },
@@ -38,13 +39,13 @@ export default new Vuex.Store({
       alert("로그아웃 됐습니다.");
     },
     USER_HISTORY(state, data) {
-      state.userHistory = data;
+      state.userHistory = JSON.parse(data);
     },
     USER_STAT(state, data) {
-      state.userStat = data;
+      state.userStat = JSON.parse(data);
     },
     USER_INFO(state, data) {
-      state.userInfo = data;
+      state.userInfo = JSON.parse(data);
     },
   },
 
@@ -116,26 +117,27 @@ export default new Vuex.Store({
 
      // User 정보
      getUserHistory({commit}) {
-      api({
-        url : `users/history`,
+      tapi({
+        url : `/users/history`,
         method : "GET"
       }).then((res) => {
-        commit("USER_HISTORY",res.data);
+        console.log(res.data.json)
+        commit("USER_HISTORY",res.data.json);
       })
      },
      // User Stat
      getUserStat({commit}) {
-      api({
-        url : `users/stat`,
+      tapi({
+        url : `/users/stat`,
         method : "GET"
       }).then((res) => {
-        commit("USER_STAT",res.data);
+        commit("USER_STAT",res.data.json);
       })
      },
      // User Info
      getUserInfo({commit}) {
-      api({
-        url : `users/info`,
+      tapi({
+        url : `/users/info`,
         method : "GET"
       }).then((res) => {
         commit("USER_INFO",res.data);
@@ -144,8 +146,8 @@ export default new Vuex.Store({
 
      // User Info 수정
       putUserStat({commit},data) {
-      api({
-        url : `users/stat`,
+      tapi({
+        url : `/users/stat`,
         method : "PUT",
         data : data,
       }).then((res) => {
