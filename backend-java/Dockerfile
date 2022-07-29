@@ -14,7 +14,6 @@ FROM openjdk:8-jdk-alpine
 
 WORKDIR /backend
 COPY --from=build-stage build/libs/*.jar app.jar
-ARG JAR_FILE=./*.jar
-COPY ${JAR_FILE} app.jar
+
 EXPOSE 8080
 ENTRYPOINT [ "java", "-jar", "/backend/app.jar" ]
