@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db:
-    image: mysql:5.7.35
+    build: DB
     container_name: db
     restart: always
     expose:
@@ -10,8 +10,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ssafy
       TZ: "Asia/Seoul"
-    volumes:
-      - ./DB/HooPaa.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - my_network
   backend:
