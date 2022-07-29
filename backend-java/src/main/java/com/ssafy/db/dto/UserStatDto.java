@@ -1,5 +1,6 @@
 package com.ssafy.db.dto;
 
+import com.ssafy.db.entity.User;
 import com.ssafy.db.entity.UserStat;
 import lombok.Data;
 import lombok.ToString;
@@ -8,6 +9,8 @@ import lombok.ToString;
 @ToString
 public class UserStatDto {
 
+    String em;
+    String nnm;
     int exp;
     int total;
     int win;
@@ -16,7 +19,9 @@ public class UserStatDto {
     int penalty;
     int king;
 
-    public UserStatDto(UserStat userStat) {
+    public UserStatDto(UserStat userStat, User user) {
+        this.em = user.getEm();
+        this.nnm = user.getNnm();
         this.exp = userStat.getExp();
         this.total = userStat.getTotal();
         this.win = userStat.getWin();

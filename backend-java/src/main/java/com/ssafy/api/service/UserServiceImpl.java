@@ -16,8 +16,6 @@ import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.db.entity.User;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,29 +121,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserStatDto getUserStatById(Long id) {
-        UserStatDto userStatDto = new UserStatDto(userStatRepository.findStatById(id).get());
-        System.out.println("-----------");
-        System.out.println(userStatDto);
-        System.out.println("-----------");
+        UserStatDto userStatDto = new UserStatDto(userStatRepository.findStatById(id).get(), userRepository.findUserById(id).get());
+
         return userStatDto;
     }
 
     @Override
     public List<UserHistoryDto> getUserHistoryById(Long id) {
         List<UserHistory> userHistoryList = userHistoryRepository.findUserHistoryByUserId(id).get();
-        System.out.println("-----------");
         List<UserHistoryDto> userHistoryDtoList = new ArrayList<>();
         for(UserHistory u : userHistoryList) {
             userHistoryDtoList.add(new UserHistoryDto(u));
         }
-        for (UserHistoryDto dto : userHistoryDtoList) System.out.println(dto);
-        System.out.println("-----------");
         return userHistoryDtoList;
     }
 
     @Override
-    public void updateEmailAuth(Long id) {
-        User user = userRepository.findById(id).get();
+    public void updateEmailAuth(String em) {
+        User user = userRepository.findUserByEm(em).get();
 
         user.setEm_auth(true);
 
@@ -154,17 +147,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void sendAuthMail(User user) throws Exception{
-        MailUtil sendMail = new MailUtil(mailSender);
 
+        MailUtil sendMail = new MailUtil(mailSender);
         sendMail.setSubject("[HooPaa 회원가입 서비스 이메일 인증 입니다.]");
         sendMail.setText(new StringBuffer().append("<h1>HooPaa 가입 메일인증 입니다</h1>")
-                .append("<a href='http://localhost:8080/api/v1/users/certification/success/")
-                .append(user.getId())//.append("&key=").append(key)
-                .append("' target='_blenk'>가입 완료를 위해 이메일 이곳을 눌러주세요</a>").toString());
+                        .append("<p> <img src='cid:logo2' style='width:300px'; ></p>")
+                .append("<a href='http://3.38.181.187/login?em=")
+                .append(user.getEm())//.append("&key=").append(key)
+                .append("' target='_blenk'>가입 완료를 위해 이곳을 눌러주세요</a>").toString());
+        sendMail.addInline("logo2", "static/logo2.png");
         sendMail.setFrom("wonjaechoi5295@gmail.com", "HooPaa");
         sendMail.setTo(user.getEm());
         sendMail.send();
-
     }
 
     @Override
