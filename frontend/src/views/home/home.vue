@@ -53,7 +53,7 @@
               <el-checkbox v-model="checkbox" @change="viewJoin">모집중만 보기</el-checkbox>
             </div>
             <div class="list">여기가 기본 all, 총 방 갯수 : {{roomList.length}}</div>
-                <!-- 원래 display -->
+                <!-- 프정현 코드 -->
                 <!-- <ul class="room-ul">
                   <li v-for="(room, index) in roomList" :key="index">
                       <div class="room-card">
@@ -64,24 +64,21 @@
                       </div>
                   </li>
                 </ul> -->
-                <!-- 원래 display -->
+                <!-- 프정현 코드 -->
 
                 <!-- 새로운 로직 -->
                 <ul class="room-ul">
-                  <li v-for="(indexOut) in (roomList.length/4)" :key="indexOut"><ul class="card-container-ul">
+                  <li v-for="(indexOut) in (roomList.length/4-1)" :key="indexOut"><ul class="card-container-ul">
                     <li v-for="(indexIn) in 4" :key="indexIn">
                       <div class="room-card">
-                        <!-- <span>{{phase[roomList[(4 * indexOut) + indexIn].phase]}} {{roomList[(4 * indexOut) + indexIn].id}}</span> -->
+                        <span>{{phase[roomList[(4 * (indexOut-1)) + indexIn-1].phase]}} {{roomList[(4 * (indexOut-1)) + indexIn-1].id}}</span>
                         <img :src="require(`@/assets/images/room.jpg`)" alt="" class="room-info"/>
-                        <span>{{typeof(roomList[(4 * (indexOut-1)) + indexIn])}} <br></span>
-                        <!-- <span>{{roomList[(4 * indexOut) + indexIn].subtitle}}</span> -->
+                        <p>{{roomList[(4 * (indexOut-1)) + indexIn-1].id}} : <span>{{roomList[(4 * (indexOut-1)) + indexIn-1].subtitle}}</span></p>
                       </div>
-                      <!-- {{roomList[(4 * indexOut) + indexIn]}} -->
                     </li>
                   </ul></li>
                 </ul>
-                <!-- 새로운 로직 -->
-
+                <!-- 새코드 -->
 
           </div>
         </div>
@@ -214,11 +211,14 @@ export default {
       menus : '',
       checkbox : 'false',
       data : '',
-      c_index : 0,
+      c_index : 0
     }
   },
   computed : {
     ...mapState(["roomList"])
+  },
+  mount() {
+
   },
   created() {
     this.$store.dispatch("getRoomInfo");
