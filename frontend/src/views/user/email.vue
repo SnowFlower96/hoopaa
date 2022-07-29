@@ -11,7 +11,7 @@ export default {
 
   data () {
     return {
-      email : '',
+      em : '',
     }
   },
   created () {
@@ -19,7 +19,11 @@ export default {
     let param = new URLSearchParams(query);
     let em = param.get('em');
     this.em = em;
-  }
+    var data = {
+      em : em
+    }
+    this.$store.dispatch("sendEmail",data);
+    },
 }
 </script>
 

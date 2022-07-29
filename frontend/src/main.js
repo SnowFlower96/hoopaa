@@ -1,7 +1,6 @@
 
 // 기본 플러그인 Import
 import { createApp, h } from 'vue'
-import Vue from 'vue'
 import store from './store'
 import ElementPlus from './common/lib/element-plus'
 import App from './App.vue'

@@ -1,5 +1,4 @@
 import { createApi } from "@/api";
-import Vue from 'vue';
 import Vuex from "vuex";
 import router from "@/common/lib/vue-router";
 import createPersistedState from "vuex-persistedstate";
@@ -118,6 +117,17 @@ export default new Vuex.Store({
     emailAuth({commit}, email) {
       api({
         url : `/users/certification/success`,
+        method : "POST",
+        data : email
+      }).then(() => {
+        commit();
+      })
+    },
+
+    // 가입인증 이메일 발송
+    sendEmail({commit}, email) {
+      api({
+        url : `/users/certification`,
         method : "POST",
         data : email
       }).then(() => {
