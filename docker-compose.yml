@@ -33,7 +33,7 @@ services:
     build: frontend
     container_name: frontend
     restart: always
-    port:
+    ports:
       - "80:80"
     networks:
       - my_network
