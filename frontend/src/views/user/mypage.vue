@@ -2,7 +2,7 @@
   <div class="mypage-top">
     <div class="mypage-blank-space"></div>
     <div>
-      OOOO님의 마이페이지
+      {{userStat.nnm}}님의 마이페이지
     <router-link to="/myPage/info"><el-button>회원정보 수정</el-button></router-link>
     <!-- <router-link to="/checkPwd"><el-button>회원정보 수정</el-button></router-link> -->
     </div>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 
 export default {
  data () {
@@ -25,10 +26,17 @@ export default {
     show : false,
   }
  },
+ computed : {
+    ...mapState(["userHistory", "userStat"])
+  },
  methods : {
   toggleOn() {
     this.show = !this.show;
   },
+ },
+ created () {
+  this.$store.dispatch("getUserHistory");
+  this.$store.dispatch("getUserStat")
  }
 
 }
