@@ -92,6 +92,9 @@ public class UserController {
 
 		User user = userService.getUserByEm(userEm);
 
+		// 이메일 인증 안된 회원이면 로그인 실패
+		if (!user.isEm_auth()) ResponseEntity.status(401).body(UserLoginPostRes.of(404, "Unauthorized User", null, null));
+
 		// 탈퇴된 회원이면 로그인 실패
 		if (user.getLeave_dt() != null) ResponseEntity.status(401).body(UserLoginPostRes.of(404, "Resigned User", null, null));
 		
