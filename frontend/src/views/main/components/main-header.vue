@@ -20,6 +20,7 @@
         </div>
 
         <div class="tool-wrapper">
+          <router-link style=text-decoration:none; to="/test"><span>session</span></router-link>
             <router-link style=text-decoration:none; to="/login" v-if="!isLogin"><span class="tool-wrapper-span-login">Log in</span></router-link>
             <router-link style=text-decoration:none; to="/logout" v-if="isLogin" @click="logout"><span class="tool-wrapper-span-login">Log out</span></router-link>
             <router-link style=text-decoration:none; to="/signUp" v-if="!isLogin"><span class="tool-wrapper-span-signup">Sign up</span></router-link>
@@ -40,7 +41,7 @@
         <router-link style=text-decoration:none; to="/login"><p class="small-size-menu-wrap-p">login</p></router-link>
         <router-link style=text-decoration:none; to="/signUp"><p class="small-size-menu-wrap-p">sign up</p></router-link>
       </div>
-    
+
     </div>
 
   </el-row>
