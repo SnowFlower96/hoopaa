@@ -4,12 +4,13 @@
       <div class="list-page-black-space"></div>
       <search></search>
       <div class="left-main-wrap">
+        
 
           <div class="left">
             <ul>
               <div id="logo">카테고리</div>
               <li v-for="(item, index) in menus" :key="index" @click="goCate(item.path)">
-                <div>{{item.name}}</div>
+                <div class="cate-li-div-container">{{item.name}}</div>
               </li>
             </ul>
           </div> <!--left-->
@@ -19,19 +20,22 @@
                 <div>지금 이 토론이 제일 핫해요</div> {{testSecound}}
 
 
+                <button v-if="caoselWrapperOverTF" class="prev" type="button" @click="prev">prev</button>
+                <button v-if="caoselWrapperOverTF" class="next" type="button" @click="next">next</button>
+                <!-- <div class="carousel-wrapper" @mouseover="caoselWrapperOver" @mouseout="caoselWrapperOut"> -->
                 <div class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
                     <div class="carosel-room-card">
-                    <span>{{phase[room.phase]}}</span>
-                      <img :style="customCaroselStyle" :src="require(`@/assets/images/room.jpg`)" alt="" class="room-info-carosel"/>
-                      <span>{{room.id}} <br></span>
+                      <img class="room-info-carosel" :style="customCaroselStyle" :src="require(`@/assets/images/room.jpg`)"/>
+                      <div class="carosel-tips-wrap">
+                        <span class="room-title-tip">{{room.title}}</span>
+                        <span class="room-phase-tip">{{phase[room.phase]}}</span>
+                      </div>
                     </div>
                     </li>
                   </ul>
                 </div>
-                <button class="prev" type="button" @click="prev">prev</button>
-                <button class="next" type="button" @click="next">next</button>
 
 
                 <div>
@@ -57,15 +61,19 @@
 
                 <div class="list">여기가 기본 all, 총 방 갯수 : {{roomList.length}}</div>
                 <ul class="room-ul">
-                  <li v-for="(indexOut) in (roomList.length/4-1)" :key="indexOut"><ul class="card-container-ul">
-                    <li v-for="(indexIn) in 4" :key="indexIn">
+                  <li v-for="(indexOut) in (roomList.length/4-1)" :key="indexOut">
+                    <ul class="card-container-ul">
+                      <li v-for="(indexIn) in 4" :key="indexIn">
                       <div class="room-card">
-                        <span>{{phase[roomList[(4 * (indexOut-1)) + indexIn-1].phase]}} {{roomList[(4 * (indexOut-1)) + indexIn-1].id}}</span>
-                        <img :src="require(`@/assets/images/room.jpg`)" alt="" class="room-info"/>
-                        <p>{{roomList[(4 * (indexOut-1)) + indexIn-1].id}} : <span>{{roomList[(4 * (indexOut-1)) + indexIn-1].subtitle}}</span></p>
+                        <img class="room-info" :src="require(`@/assets/images/room.jpg`)"/>
+                        <div class="carosel-tips-wrap">
+                          <span class="room-title-tip">{{roomList[(4 * (indexOut-1)) + indexIn-1].subtitle}}</span>
+                          <span class="room-phase-tip">{{phase[roomList[(4 * (indexOut-1)) + indexIn-1].phase]}}</span>
+                        </div>
                       </div>
-                    </li>
-                  </ul></li>
+                      </li>
+                    </ul>
+                  </li>
                 </ul>
               </div> <!-- main-inner-container -->
             </div> <!--main-container-->
@@ -77,12 +85,19 @@
 <style>
 
 .list-page-black-space {
-  height: 100px;
+  height: 61px;
 }
 .left-main-wrap {
   display: flex;
 }
-
+.room-phase-tip {
+  background-color: rgba(54, 167, 54, 0.322);
+  font-size: 15px;
+  padding: 3px;
+  z-index: 3;
+  border-radius: 3px;
+  /* margin-left: var(--room-phase-tip-margin-left); */
+}
 
 /* 카테고리 style */
 ul {
@@ -98,6 +113,10 @@ ul {
 .left ul li { font-size:25px;  height:75px; list-style: none;}
 .left ul li#logo {font-family: 'Cafe24', cursive; font-size:30px; height: 130px;}
 .left ul li#logo div {line-height: 0.8}
+.cate-li-div-container:hover {
+  background-color: beige;
+  cursor: pointer;
+}
 /* 카테고리 style */
 
 
@@ -116,12 +135,23 @@ ul {
 }
 
 /* 메인 뷰 - carousel */
+.carosel-tips-wrap {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 10px;
+}
+.carousel-wrapper > button:hover {
+  cursor: pointer;
+}
 .carousel-wrapper {
   width: 100%;
   overflow-x: hidden;
   overflow-y: hidden;
   /* background-color: aqua; */
 }
+/* .carousel-wrapper:hover {
+  background-color: aqua;
+} */
 .carousel-ul {
   flex-direction: row;
   list-style: none;
@@ -131,10 +161,17 @@ ul {
 .carousel-ul > li {
   margin: 10px;
 }
+.room-title-tip {
+  background-color: white;
+  display: flex;
+  justify-content: center;
 
+}
 .carosel-room-card {
   /* background-color: beige; */
   width: 100%;
+  outline: solid rgba(180, 180, 180, 0.505) 1px;
+  border-radius: 10px;
 }
 .room-info-carosel {
   height: auto;
@@ -159,9 +196,10 @@ ul {
   list-style: none;
 }
 .room-card {
-  height: 280px;
   /* background-color: beige; */
   margin: 10px;
+  outline: solid rgba(180, 180, 180, 0.505) 1px;
+  border-radius: 10px;
 }
 .room-info {
   max-width: 100%;
@@ -196,23 +234,29 @@ export default {
       data : '',
       c_index : 0,
       clickCaroselNext: null,
-      caroselWidth: ''
+      caroselWidth: '',
+      caoselWrapperOverTF: false
     }
   },
   computed : {
     ...mapState(["roomList"]),
     customCaroselStyle() {
       return {
-        "--carosel-item-width": this.caroselWidth
+        "--carosel-item-width": this.caroselWidth,
+        // "--room-phase-tip-margin-left": `${this.caroselWidth}-200px`
       }
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      console.log(to.fullPath)
     }
   },
   mounted() {
     this.clickCaroselNext = setInterval(this.next, 3000)
     const value = document.body.scrollWidth*0.8*0.25
     this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
-    window.addEventListener('resize', this.handleResizeHome);
-    console.log(value-20)
+    window.addEventListener('resize', this.handleResizeHome);    
   },
   beforeRouteLeave() {
     clearInterval(this.clickCaroselNext)
@@ -227,6 +271,12 @@ export default {
     goCate(index)  {
       this.checkbox = false;
       this.$store.dispatch("getRoomInfoCate", index);
+    },
+    caoselWrapperOver() {
+      this.caoselWrapperOverTF = true
+    },
+    caoselWrapperOut() {
+      this.caoselWrapperOverTF = false
     },
     handleResizeHome() {
       const value = document.body.scrollWidth*0.8*0.25
@@ -290,7 +340,6 @@ export default {
           this.c_index += 1;
           const value = document.body.scrollWidth*0.8*0.25
           carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
-          console.log(this.c_index)
         }
     }
   }
