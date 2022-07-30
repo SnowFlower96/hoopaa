@@ -16,17 +16,16 @@
 
             <div class="main-container">
               <div class="main-inner-container">
-                <div>지금 이 토론이 제일 핫해요</div>
+                <div>지금 이 토론이 제일 핫해요</div> {{testSecound}}
 
 
                 <div class="carousel-wrapper">
                   <ul class="carousel-ul">
-                    <li v-for="(room, index) in roomList" :key="index">
-                    <span>{{phase[room.phase]}}</span>
+                    <li  v-for="(room, index) in roomList" :key="index">
                     <div class="carosel-room-card">
-                      <img :src="require(`@/assets/images/room.jpg`)" alt="" class="room-info-carosel"/>
-                      <span>{{room.title}} <br></span>
-                      <span>{{room.subtitle}}</span>
+                    <span>{{phase[room.phase]}}</span>
+                      <img :style="customCaroselStyle" :src="require(`@/assets/images/room.jpg`)" alt="" class="room-info-carosel"/>
+                      <span>{{room.id}} <br></span>
                     </div>
                     </li>
                   </ul>
@@ -76,6 +75,7 @@
 </template>
 
 <style>
+
 .list-page-black-space {
   height: 100px;
 }
@@ -117,27 +117,28 @@ ul {
 
 /* 메인 뷰 - carousel */
 .carousel-wrapper {
-  height: 300px;
+  width: 100%;
   overflow-x: hidden;
   overflow-y: hidden;
-  background-color: aqua;
+  /* background-color: aqua; */
 }
 .carousel-ul {
-  display: flex;
   flex-direction: row;
   list-style: none;
-  transform: translate3d(0, 0, 0);
   transition: transform 0.2s;
   padding: 0px;
 }
-.carosel-room-card {
-  background-color: beige;
+.carousel-ul > li {
   margin: 10px;
 }
+
+.carosel-room-card {
+  /* background-color: beige; */
+  width: 100%;
+}
 .room-info-carosel {
-  max-width: 200px;
   height: auto;
-  display: block;
+  width: var(--carosel-item-width);
 }
 /* 메인 뷰 - carousel */
 
@@ -151,7 +152,7 @@ ul {
   display: flex;
   overflow: visible;
   list-style: none;
-  background-color: rgb(197, 197, 255);
+  /* background-color: rgb(197, 197, 255); */
 }
 .card-container-ul {
   flex-direction: row;
@@ -159,7 +160,7 @@ ul {
 }
 .room-card {
   height: 280px;
-  background-color: beige;
+  /* background-color: beige; */
   margin: 10px;
 }
 .room-info {
@@ -193,14 +194,28 @@ export default {
       menus : '',
       checkbox : 'false',
       data : '',
-      c_index : 0
+      c_index : 0,
+      clickCaroselNext: null,
+      caroselWidth: ''
     }
   },
   computed : {
-    ...mapState(["roomList"])
+    ...mapState(["roomList"]),
+    customCaroselStyle() {
+      return {
+        "--carosel-item-width": this.caroselWidth
+      }
+    }
   },
-  mount() {
-
+  mounted() {
+    this.clickCaroselNext = setInterval(this.next, 3000)
+    const value = document.body.scrollWidth*0.8*0.25
+    this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
+    window.addEventListener('resize', this.handleResizeHome);
+    console.log(value-20)
+  },
+  beforeRouteLeave() {
+    clearInterval(this.clickCaroselNext)
   },
   created() {
     this.$store.dispatch("getRoomInfo");
@@ -212,6 +227,11 @@ export default {
     goCate(index)  {
       this.checkbox = false;
       this.$store.dispatch("getRoomInfoCate", index);
+    },
+    handleResizeHome() {
+      const value = document.body.scrollWidth*0.8*0.25
+      this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
+      carouselRoomCard.style.width = `${value}px`;
     },
     sortRecent () {
       const orderedDate = this.$store.state.roomList.sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
@@ -258,14 +278,20 @@ export default {
       const carousel = document.querySelector('.carousel-ul');
       if (this.c_index === 0) return;
       this.c_index -= 1;
-
-      carousel.style.transform = `translate3d(-${500 * this.c_index}px, 0, 0)`;
+      const value = document.body.scrollWidth*0.8*0.25
+      carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
     },
     next() {
         const carousel = document.querySelector('.carousel-ul');
-        if (this.c_index === 2) return;
-        this.c_index += 1;
-        carousel.style.transform = `translate3d(-${500 * this.c_index}px, 0, 0)`;
+        if (this.c_index === 10) {
+          carousel.style.transform = `translate3d(0, 0, 0)`;
+          this.c_index = 0
+        } else {
+          this.c_index += 1;
+          const value = document.body.scrollWidth*0.8*0.25
+          carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
+          console.log(this.c_index)
+        }
     }
   }
   // setup () {
