@@ -17,17 +17,15 @@
 
             <div class="main-container">
               <div class="main-inner-container">
-                <div>지금 이 토론이 제일 핫해요</div> {{testSecound}}
-
-
-                <button v-if="caoselWrapperOverTF" class="prev" type="button" @click="prev">prev</button>
-                <button v-if="caoselWrapperOverTF" class="next" type="button" @click="next">next</button>
+                <h1>실시간 인기 토론</h1>
+                <!-- <button v-if="caoselWrapperOverTF" class="prev" type="button" @click="prev">prev</button>
+                <button v-if="caoselWrapperOverTF" class="next" type="button" @click="next">next</button> -->
                 <!-- <div class="carousel-wrapper" @mouseover="caoselWrapperOver" @mouseout="caoselWrapperOut"> -->
                 <div class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
                     <div class="carosel-room-card">
-                      <img class="room-info-carosel" :style="customCaroselStyle" :src="require(`@/assets/images/room.jpg`)"/>
+                      <img class="room-info-carosel" :style="customCaroselStyle" src="https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg"/>
                       <div class="carosel-tips-wrap">
                         <span class="room-title-tip">{{room.title}}</span>
                         <span class="room-phase-tip">{{phase[room.phase]}}</span>
@@ -39,27 +37,31 @@
 
 
                 <div>
-                  <span>카테고리</span>
-                  <div class="flex flex-wrap items-center">
-                    <el-dropdown>
-                      <el-button type="primary">
-                        정렬조건<el-icon class="el-icon--right"><arrow-down /></el-icon>
-                      </el-button>
-                      <template #dropdown>
-                        <el-dropdown-menu>
-                          <el-dropdown-item @click="sortRecent">최신순</el-dropdown-item>
-                          <el-dropdown-item @click="sortCur">참여자순</el-dropdown-item>
-                          <el-dropdown-item @click="sortOld">오래된순</el-dropdown-item>
-                          <el-dropdown-item @click="sortRank">랭킹순</el-dropdown-item>
-                        </el-dropdown-menu>
-                      </template>
-                    </el-dropdown>
+                  <h1>전체 카테고리</h1>
+                  <div class="cate-items-wrap">
+                    <div class="cate-item">
+                      <el-dropdown>
+                        <el-button type="primary">
+                          정렬조건<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                        </el-button>
+                        <template #dropdown>
+                          <el-dropdown-menu>
+                            <el-dropdown-item @click="sortRecent">최신순</el-dropdown-item>
+                            <el-dropdown-item @click="sortCur">참여자순</el-dropdown-item>
+                            <el-dropdown-item @click="sortOld">오래된순</el-dropdown-item>
+                            <el-dropdown-item @click="sortRank">랭킹순</el-dropdown-item>
+                          </el-dropdown-menu>
+                        </template>
+                      </el-dropdown>
+                    </div>
+                    <div class="cate-item">
+                      <el-checkbox v-model="checkbox" @change="viewJoin">모집중만 보기</el-checkbox>
+                    </div>
                   </div>
-                  <el-checkbox v-model="checkbox" @change="viewJoin">모집중만 보기</el-checkbox>
                 </div>
 
 
-                <div class="list">여기가 기본 all, 총 방 갯수 : {{roomList.length}}</div>
+                <!-- <div class="list">여기가 기본 all, 총 방 갯수 : {{roomList.length}}</div> -->
                 <ul class="room-ul">
                   <li v-for="(indexOut) in (roomList.length/4-1)" :key="indexOut">
                     <ul class="card-container-ul">
@@ -119,7 +121,13 @@ ul {
 }
 /* 카테고리 style */
 
-
+.cate-items-wrap {
+  display: flex;
+  justify-content: start;
+}
+.cate-item {
+  margin:5px;
+}
 .main-container {
   display: flex;
   flex-direction: row;
@@ -249,11 +257,11 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      console.log(to.fullPath)
+      console.log(to)
     }
   },
   mounted() {
-    this.clickCaroselNext = setInterval(this.next, 3000)
+    this.clickCaroselNext = setInterval(this.next, 5000)
     const value = document.body.scrollWidth*0.8*0.25
     this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
     window.addEventListener('resize', this.handleResizeHome);    
