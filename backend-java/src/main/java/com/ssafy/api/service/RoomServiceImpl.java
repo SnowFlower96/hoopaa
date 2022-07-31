@@ -7,6 +7,7 @@ import com.ssafy.db.repository.HashtagRepository;
 import com.ssafy.db.repository.RoomInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -35,13 +36,20 @@ public class RoomServiceImpl implements RoomService{
                 .max_num(roomOpenInfo.getMax_num())
                 .cur_num(roomOpenInfo.getCur_num())
                 .cate(roomOpenInfo.getCate())
-                .hash_1(roomService.findHashtagId(roomOpenInfo.getHash_1()))
-                .hash_2(roomService.findHashtagId(roomOpenInfo.getHash_2()))
-                .hash_3(roomService.findHashtagId(roomOpenInfo.getHash_3()))
                 .title(roomOpenInfo.getTitle())
                 .subtitle(roomOpenInfo.getSubtitle())
                 .build();
-
+        if(roomOpenInfo.getHash_1()!=null&&!roomOpenInfo.getHash_1().equals("")){
+            roomInfo.setHash_1(roomService.findHashtagId(roomOpenInfo.getHash_1()));
+        }
+        if(roomOpenInfo.getHash_2()!=null&&!roomOpenInfo.getHash_2().equals("")){
+            roomInfo.setHash_2(roomService.findHashtagId(roomOpenInfo.getHash_2()));
+        }
+        if(roomOpenInfo.getHash_3()!=null&&!roomOpenInfo.getHash_3().equals("")){
+            System.out.println(roomOpenInfo.getHash_3());
+            roomInfo.setHash_3(roomService.findHashtagId(roomOpenInfo.getHash_3()));
+        }
+        System.out.println(roomInfo.getHash_1());
         roomInfoRepository.save(roomInfo);
     }
 
@@ -56,17 +64,19 @@ public class RoomServiceImpl implements RoomService{
         hashtagRepository.findHashtagByNm(nm);
 
         Optional<Hashtag> hash = hashtagRepository.findHashtagByNm(nm);
-
-        if(hash.isPresent()){
+        if(hash.isPresent()){ //이미 존재 한다면
             Hashtag hashtag = hash.get();
+            hashtag.setCnt(hashtag.getCnt()+1);
+            hashtagRepository.save(hashtag);
             return hashtag.getId();
 
         }
+        //존재하지 않던 해시태그라면
         Hashtag hashtag = Hashtag.builder()
                 .nm(nm)
-                .cnt(1L)
+                .cnt(0L)
                 .build();
-       hashtagRepository.save(hashtag);
+        hashtagRepository.save(hashtag);
 
         return findHashtagId(hashtag.getNm());
     }
