@@ -18,17 +18,13 @@
             <div class="main-container">
               <div class="main-inner-container">
                 <h1>실시간 인기 토론</h1>
-                <!-- <button v-if="caoselWrapperOverTF" class="prev" type="button" @click="prev">prev</button>
-                <button v-if="caoselWrapperOverTF" class="next" type="button" @click="next">next</button> -->
-                <!-- <div class="carousel-wrapper" @mouseover="caoselWrapperOver" @mouseout="caoselWrapperOut"> -->
                 <div class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
                     <div class="carosel-room-card">
-                      <img class="room-info-carosel" :style="customCaroselStyle" src="https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg"/>
-                      <div class="carosel-tips-wrap">
-                        <span class="room-title-tip">{{room.title}}</span>
-                        <span class="room-phase-tip">{{phase[room.phase]}}</span>
+                      <div class="room-info-carosel" :style="customCaroselStyle">
+                        <p class="room-phase-tip">{{phase[room.phase]}}</p>
+                        <p id="title-carosel">{{room.title}}</p>
                       </div>
                     </div>
                     </li>
@@ -67,10 +63,9 @@
                     <ul class="card-container-ul">
                       <li v-for="(indexIn) in 4" :key="indexIn">
                       <div class="room-card">
-                        <img class="room-info" :src="require(`@/assets/images/room.jpg`)"/>
-                        <div class="carosel-tips-wrap">
-                          <span class="room-title-tip">{{roomList[(4 * (indexOut-1)) + indexIn-1].subtitle}}</span>
-                          <span class="room-phase-tip">{{phase[roomList[(4 * (indexOut-1)) + indexIn-1].phase]}}</span>
+                        <div class="room-info">
+                          <p class="room-phase-tip">{{phase[roomList[(4 * (indexOut-1)) + indexIn-1].phase]}}</p>
+                          <p id="title-room">{{roomList[(4 * (indexOut-1)) + indexIn-1].subtitle}}</p>
                         </div>
                       </div>
                       </li>
@@ -93,7 +88,9 @@
   display: flex;
 }
 .room-phase-tip {
-  background-color: rgba(54, 167, 54, 0.322);
+  width: 45px;
+  text-align: end;
+  background-color: rgb(167, 234, 255);
   font-size: 15px;
   padding: 3px;
   z-index: 3;
@@ -116,7 +113,7 @@ ul {
 .left ul li#logo {font-family: 'Cafe24', cursive; font-size:30px; height: 130px;}
 .left ul li#logo div {line-height: 0.8}
 .cate-li-div-container:hover {
-  background-color: beige;
+  color: #667799;
   cursor: pointer;
 }
 /* 카테고리 style */
@@ -169,22 +166,30 @@ ul {
 .carousel-ul > li {
   margin: 10px;
 }
-.room-title-tip {
-  background-color: white;
-  display: flex;
-  justify-content: center;
-
-}
-.carosel-room-card {
-  /* background-color: beige; */
-  width: 100%;
-  outline: solid rgba(180, 180, 180, 0.505) 1px;
+.room-info-carosel {
+  background-image: url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+  height: var(--carosel-item-height);
+  background-size:100% 100%;
+  width: var(--carosel-item-width);
+  /* filter: brightness(80%); */
   border-radius: 10px;
 }
-.room-info-carosel {
-  height: auto;
-  width: var(--carosel-item-width);
+.room-info-carosel:hover {
+  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+  /* filter: brightness(80%);
+  transition: filter .3s; */
 }
+.room-info-carosel:hover #title-carosel {
+  opacity: 100%;
+  color: white;
+}
+#title-carosel {
+  opacity: 0%;
+  z-index: 3;
+  font-size: 60px;
+  text-align: end;
+}
+
 /* 메인 뷰 - carousel */
 
 
@@ -210,11 +215,25 @@ ul {
   border-radius: 10px;
 }
 .room-info {
-  max-width: 100%;
-  height: auto;
+  width: 285px;
+  height: 160px;
   display: block;
+  background-image: url('../../assets/images/room.jpg');
+  background-size:100% 100%;
 }
-
+.room-info:hover {
+  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('../../assets/images/room.jpg');
+}
+.room-info:hover #title-room {
+  opacity: 100%;
+  color: white;
+}
+#title-room {
+  opacity: 0%;
+  z-index: 3;
+  font-size: 60px;
+  text-align: end;
+}
 .card-container-ul, .room-ul {
   padding: 0px;
 }
@@ -243,6 +262,7 @@ export default {
       c_index : 0,
       clickCaroselNext: null,
       caroselWidth: '',
+      caroselHeight: '',
       caoselWrapperOverTF: false
     }
   },
@@ -251,6 +271,7 @@ export default {
     customCaroselStyle() {
       return {
         "--carosel-item-width": this.caroselWidth,
+        "--carosel-item-height": this.caroselHeight,
         // "--room-phase-tip-margin-left": `${this.caroselWidth}-200px`
       }
     }
@@ -264,6 +285,7 @@ export default {
     this.clickCaroselNext = setInterval(this.next, 5000)
     const value = document.body.scrollWidth*0.8*0.25
     this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
+    this.caroselHeight = `${(value-20)*0.62}px`
     window.addEventListener('resize', this.handleResizeHome);    
   },
   beforeRouteLeave() {

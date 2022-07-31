@@ -1,10 +1,10 @@
 <template>
   <div class="search-out-container">
     <div class="search-head">
-      <span class="search-item">검색조건</span>
+      <!-- <span class="search-item">검색조건</span> -->
       <div class="search-item search-item-wrap">
         <input placeholder="검색어를 입력하세요">
-        <button>검/</button>
+        <button>검색</button>
       </div>
     </div>
   </div>
@@ -32,7 +32,8 @@ export default {
 
 
 .search-item-wrap {
-  height: 30px;
+  /* height: 30px; */
+  padding: 4px;
   border-radius: 20px;
   width: 40%;
   max-width: 500px;
@@ -54,6 +55,8 @@ export default {
   border: none;
   padding: 6px;
   background-color: rgba(197, 196, 196, 0.505);
+  position: relative;
+  left: 15px;
 }
 .search-item-wrap > button:hover {
   background-color: rgba(163, 162, 162, 0.505);
