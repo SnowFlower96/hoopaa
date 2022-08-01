@@ -18,8 +18,8 @@ function createTokenApi() {
     baseURL: process.env.VUE_APP_API_SERVER,
     headers: {
       // json 형태로 날릴거야
-      "Content-Type": "application/json",
-      "Authorization" : `Bearer ${sessionStorage.getItem("accessToken")}`
+      "Content-Type" : "application/json",
+      Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`
     },
   });
 }

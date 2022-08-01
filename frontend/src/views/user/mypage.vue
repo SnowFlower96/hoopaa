@@ -3,7 +3,7 @@
     <div class="mypage-blank-space"></div>
     <div>
       {{userStat.nnm}}님의 마이페이지
-    <router-link to="/myPage/info"><el-button>회원정보 수정</el-button></router-link>
+    <router-link to="/checkPwd?loc=info"><el-button>회원정보 수정</el-button></router-link>
     <!-- <router-link to="/checkPwd"><el-button>회원정보 수정</el-button></router-link> -->
     </div>
     <el-card>

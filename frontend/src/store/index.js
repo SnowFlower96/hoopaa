@@ -199,6 +199,37 @@ export default new Vuex.Store({
       })
     },
 
+    // 유저 비밀번호 확인
+    checkPwd(data) {
+      return new Promise((reject) => {
+      tapi({
+        url : `/users/verify`,
+        method : "POST",
+        data : data,
+      }).then((res) => {
+        console.log(res)
+        let query = window.location.search;
+        let param = new URLSearchParams(query);
+        let loc = param.get('loc');
+        if (loc == 'info') {
+          router.push('/myPage/info')
+        } else {
+          router.push('/myPage/reSign')
+        }
+      }).catch(error => {
+        reject(error)
+        alert("비밀번호를 확인하세요")
+        let query = window.location.search;
+        let param = new URLSearchParams(query);
+        let loc = param.get('loc');
+        if (loc == 'info') {
+          router.push('/checkPwd?loc=info')
+        } else {
+          router.push('/checkPwd?loc=reSign')
+        }
+      })
+    })
+  },
 
-  }
-})
+
+}})
