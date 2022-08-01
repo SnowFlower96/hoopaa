@@ -17,6 +17,10 @@
 						<label>Session</label>
 						<input v-model="mySessionId" class="form-control" type="text" required>
 					</p>
+          <p>
+						<label>host</label>
+						<input v-model="host" class="form-control" type="text" required>
+					</p>
 					<p class="text-center">
 						<button class="btn btn-lg btn-success" @click="joinSession()">패널로 참여하기</button>
 					</p>
@@ -31,8 +35,16 @@
 				<input class="btn btn-large btn" type="button" id="" @click="DetailSession" value="Detail session">
 			</div>
 			<div id="video-container">
-				<user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/>
-				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click.native="updateMainVideoStreamManager(sub)"/>
+        <div>{{myUserName}} & {{host}}</div>
+        <div v-if="myUserName === host"><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
+        <!-- <div v-else></div> -->
+        <div v-for="s in subscribers" :key="s.stream.connection.connectionId">{{s.stream.connection.data[clientData]}}&{{s.stream.connection.connectionId}}
+          <div v-if="s.stream.connection.connectionId==='con_HC9qcAEc9j'">
+            <user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+          </div>
+        </div>
+				<!-- <user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/> -->
+				<!-- <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click.native="updateMainVideoStreamManager(sub)"/> -->
 			</div>
 		</div>
 	</div>
@@ -62,6 +74,7 @@ export default {
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
+      host:'',
 
 			mySessionId: 'SessionA',
 			myUserName: 'Participant' + Math.floor(Math.random() * 100),
@@ -132,7 +145,9 @@ export default {
 					});
 			});
 
-			window.addEventListener('beforeunload', this.leaveSession)
+
+      console.log(this.subscribers)
+      window.addEventListener('beforeunload', this.leaveSession)
 		},
 
 		leaveSession () {
