@@ -7,7 +7,6 @@ import com.ssafy.db.repository.HashtagRepository;
 import com.ssafy.db.repository.RoomInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -26,7 +25,7 @@ public class RoomServiceImpl implements RoomService{
 
 
     @Override
-    public void openRoom(RoomOpenReq roomOpenInfo) {
+    public RoomInfo openRoom(RoomOpenReq roomOpenInfo) {
         RoomInfo roomInfo = RoomInfo.builder()
                 .pwd(roomOpenInfo.getPwd())
                 .host_id(roomOpenInfo.getHost_id())
@@ -49,8 +48,7 @@ public class RoomServiceImpl implements RoomService{
             System.out.println(roomOpenInfo.getHash_3());
             roomInfo.setHash_3(roomService.findHashtagId(roomOpenInfo.getHash_3()));
         }
-        System.out.println(roomInfo.getHash_1());
-        roomInfoRepository.save(roomInfo);
+        return roomInfoRepository.save(roomInfo);
     }
 
     @Override
@@ -69,7 +67,6 @@ public class RoomServiceImpl implements RoomService{
             hashtag.setCnt(hashtag.getCnt()+1);
             hashtagRepository.save(hashtag);
             return hashtag.getId();
-
         }
         //존재하지 않던 해시태그라면
         Hashtag hashtag = Hashtag.builder()

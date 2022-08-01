@@ -2,10 +2,11 @@ package com.ssafy.api.service;
 
 
 import com.ssafy.api.request.RoomOpenReq;
+import com.ssafy.db.entity.RoomInfo;
 
 public interface RoomService {
 
-    public void openRoom(RoomOpenReq roomOpenInfo);
+    public RoomInfo openRoom(RoomOpenReq roomOpenInfo);
 
     public void closeRoomByRoomId(int id);
 
