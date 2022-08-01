@@ -1,6 +1,8 @@
 package com.ssafy.db.entity;
 
 import lombok.*;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.Generated;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -22,6 +24,7 @@ public class Hashtag {
 
     Long cnt;
 
+    @Generated(GenerationTime.ALWAYS)
     LocalDateTime recent;
 
     @Builder
