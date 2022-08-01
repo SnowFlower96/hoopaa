@@ -1,5 +1,5 @@
 <template>
-    <div class="debate-room-wrap">
+    <div class="debate-room-wrap"> 넹
     </div>
 </template>
 
