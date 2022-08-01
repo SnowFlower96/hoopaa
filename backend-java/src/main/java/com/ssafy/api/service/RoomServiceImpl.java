@@ -1,15 +1,20 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.RoomCloseReq;
 import com.ssafy.api.request.RoomOpenReq;
+import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.entity.Hashtag;
+import com.ssafy.db.entity.RoomHistory;
 import com.ssafy.db.entity.RoomInfo;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.HashtagRepository;
 import com.ssafy.db.repository.RoomInfoRepository;
 import com.ssafy.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service("roomService")
@@ -28,11 +33,14 @@ public class RoomServiceImpl implements RoomService{
     UserRepository userRepository;
 
 
+    /*@Autowired
+    PasswordEncoder passwordEncoder;*/
+
 
     @Override
-    public RoomInfo openRoom(RoomOpenReq roomOpenInfo) {
+    public RoomInfoDto openRoom(RoomOpenReq roomOpenInfo) {
         RoomInfo roomInfo = RoomInfo.builder()
-                .pwd(roomOpenInfo.getPwd())
+                .pwd(/*passwordEncoder.encode(*/roomOpenInfo.getPwd())
                 .is_sys(roomOpenInfo.getIs_sys())
                 .thumb_url(roomOpenInfo.getThumb_url())
                 .phase(roomOpenInfo.getPhase())
@@ -55,19 +63,41 @@ public class RoomServiceImpl implements RoomService{
             System.out.println(roomOpenInfo.getHash_3());
             roomInfo.setHash_3(roomService.findHashtagId(roomOpenInfo.getHash_3()));
         }
-        return roomInfoRepository.save(roomInfo);
+        return new RoomInfoDto(roomInfoRepository.save(roomInfo));
     }
 
     @Override
-    public void updateRoomByRoomId(Long id, int phase) {
+    public RoomInfoDto updateRoomByRoomId(Long id, int phase) {
         RoomInfo roomInfo = roomInfoRepository.findById(id).get();
+        if(phase == 1){
+            if(roomInfo.getPhase()>=1){
+                return null;
+            }
+        }else if(phase==2){
+            if(roomInfo.getPhase()>=2){
+                return null;
+            }
+        }
         roomInfo.setPhase(phase);
-        roomInfoRepository.save(roomInfo);
+        return new RoomInfoDto(roomInfoRepository.save(roomInfo));
     }
 
     @Override
-    public void closeRoomByRoomId(Long id) {
-        roomInfoRepository.findById(id);
+    public void closeRoom(RoomCloseReq roomCloseReq) {
+        RoomInfo roomInfo = roomInfoRepository.findById(roomCloseReq.getId()).get();
+        RoomHistory roomHistory = RoomHistory.builder()
+                .id(roomCloseReq.getId())
+                .log(roomCloseReq.getLog())
+                .end_time(LocalDateTime.now())
+                .winner(roomCloseReq.getWinner())
+                .agree(roomCloseReq.getAgree())
+                .disagree(roomCloseReq.getDisagree())
+                .invalid(roomCloseReq.getInvalid()).build();
+        roomInfo.setPhase(3);
+        System.out.println("roomInfo id = " + roomInfo.getId());
+        System.out.println("roomHistoy id = "+ roomHistory.getId());
+        roomInfo.setRoomHistory(roomHistory);
+        roomInfoRepository.save(roomInfo);
     }
 
     @Override
