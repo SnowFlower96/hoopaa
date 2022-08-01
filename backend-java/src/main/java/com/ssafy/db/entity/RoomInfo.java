@@ -34,7 +34,7 @@ public class RoomInfo {
     private String title;
     private String subtitle;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
     RoomHistory roomHistory;
 
