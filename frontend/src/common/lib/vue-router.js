@@ -8,7 +8,7 @@ import Login from '@/views/user/login'
 import mainPage from '@/views/main-page/main-page'
 import Participate from '@/views/participate/participating-code'
 import participatingPage from '@/views/participate/participating-page'
-import waitingPage from '@/views/participate/waiting-page'
+import debateRoom from '@/views/participate/debateRoom'
 import signUpEmail from '@/views/user/email'
 import gameSetPage from '@/views/debate-hosting/game-set-page'
 import makeRoom from '@/views/debate-hosting/make-room'
@@ -110,9 +110,9 @@ function makeRoutesFromMenu () {
   component: Participate
 },
 {
-  path: '/waitingPage',
-  name: 'waiting-page',
-  component: waitingPage
+  path: '/debateRoom',
+  name: 'debateRoom',
+  component: debateRoom
 },
 {
   path : '/makeRoomPage',
