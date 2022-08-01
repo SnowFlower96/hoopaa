@@ -1,4 +1,4 @@
-import { createApi } from "@/api";
+import { createApi, createTokenApi } from "@/api";
 import Vuex from "vuex";
 import router from "@/common/lib/vue-router";
 import createPersistedState from "vuex-persistedstate";
@@ -6,14 +6,15 @@ import createPersistedState from "vuex-persistedstate";
 //Vue.use(Vuex);
 
 const api = createApi();
+const tapi = createTokenApi();
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     isLogin: false,
-    user : {
-      email : '',
-    },
+    userHistory : '',
+    userStat : '',
+    userInfo : '',
     roomList : [],
     headerVisible: true
   },
@@ -27,15 +28,24 @@ export default new Vuex.Store({
     // 로그인 토큰, 상태
     USER_LOGIN(state, token) {
       state.isLogin = true;
-      sessionStorage.setItem("access-Token", token);
-      api.defaults.headers["access-Token"] = token;
+      sessionStorage.setItem("accessToken", token);
+      api.defaults.headers["accessToken"] = token;
     },
     // 로그아웃
     USER_LOGOUT(state) {
       state.isLogin = false;
-      sessionStorage.removeItem("access-token");
-      api.defaults.headers["access-token"] = "";
+      sessionStorage.removeItem("accessToken");
+      api.defaults.headers["accessToken"] = "";
       alert("로그아웃 됐습니다.");
+    },
+    USER_HISTORY(state, data) {
+      state.userHistory = JSON.parse(data);
+    },
+    USER_STAT(state, data) {
+      state.userStat = JSON.parse(data);
+    },
+    USER_INFO(state, data) {
+      state.userInfo = JSON.parse(data);
     },
   },
 
@@ -96,6 +106,7 @@ export default new Vuex.Store({
       }).then((res) => {
           commit("USER_LOGIN", res.data.accessToken);
           router.push('/')
+
       }).catch(error => {
         reject(error)
         alert("이메일 , 비밀번호를 확인하세요")
@@ -103,6 +114,47 @@ export default new Vuex.Store({
       })
     })
     },
+
+     // User 정보
+     getUserHistory({commit}) {
+      tapi({
+        url : `/users/history`,
+        method : "GET"
+      }).then((res) => {
+        console.log(res.data.json)
+        commit("USER_HISTORY",res.data.json);
+      })
+     },
+     // User Stat
+     getUserStat({commit}) {
+      tapi({
+        url : `/users/stat`,
+        method : "GET"
+      }).then((res) => {
+        commit("USER_STAT",res.data.json);
+      })
+     },
+     // User Info
+     getUserInfo({commit}) {
+      tapi({
+        url : `/users/info`,
+        method : "GET"
+      }).then((res) => {
+        commit("USER_INFO",res.data);
+      })
+     },
+
+     // User Info 수정
+      putUserStat({commit},data) {
+      tapi({
+        url : `/users/stat`,
+        method : "PUT",
+        data : data,
+      }).then((res) => {
+        commit("USER_INFO",res.data);
+      })
+     },
+
 
     // DB 이메일 인증 auth 수정
     emailAuth({commit}, email) {
@@ -145,6 +197,39 @@ export default new Vuex.Store({
         commit("GET_ROOM_LIST", res.data.json);
         router.push("/list?"+index);
       })
-    }
-  }
-})
+    },
+
+    // 유저 비밀번호 확인
+    checkPwd(data) {
+      return new Promise((reject) => {
+      tapi({
+        url : `/users/verify`,
+        method : "POST",
+        data : data,
+      }).then((res) => {
+        console.log(res)
+        let query = window.location.search;
+        let param = new URLSearchParams(query);
+        let loc = param.get('loc');
+        if (loc == 'info') {
+          router.push('/myPage/info')
+        } else {
+          router.push('/myPage/reSign')
+        }
+      }).catch(error => {
+        reject(error)
+        alert("비밀번호를 확인하세요")
+        let query = window.location.search;
+        let param = new URLSearchParams(query);
+        let loc = param.get('loc');
+        if (loc == 'info') {
+          router.push('/checkPwd?loc=info')
+        } else {
+          router.push('/checkPwd?loc=reSign')
+        }
+      })
+    })
+  },
+
+
+}})

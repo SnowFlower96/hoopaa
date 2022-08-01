@@ -8,9 +8,20 @@ function createApi() {
     headers: {
       // json 형태로 날릴거야
       "Content-Type": "application/json",
-      "access-Token" : sessionStorage.getItem("access-Token")
+      // "Authorization" : `Bearer ${sessionStorage.getItem("accessToken")}`
+    },
+  });
+}
+function createTokenApi() {
+  return axios.create({
+    // 설정하는 정보가 여러개라서 객체로 지정
+    baseURL: process.env.VUE_APP_API_SERVER,
+    headers: {
+      // json 형태로 날릴거야
+      "Content-Type" : "application/json",
+      Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`
     },
   });
 }
 
-export { createApi }
+export { createApi , createTokenApi}

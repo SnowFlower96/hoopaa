@@ -4,7 +4,7 @@
       <div class="list-page-black-space"></div>
       <search></search>
       <div class="left-main-wrap">
-        
+
 
           <div class="left">
             <ul>
@@ -263,6 +263,7 @@ import Conference from './components/conference'
 import 'vue3-carousel/dist/carousel.css';
 import { mapState , mapMutations} from "vuex";
 
+
 export default {
   name: 'Home',
 
@@ -304,7 +305,7 @@ export default {
     const value = document.body.clientWidth*0.8*0.25
     this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
     this.caroselHeight = `${(value-20)*0.62}px`
-    window.addEventListener('resize', this.handleResizeHome);    
+    window.addEventListener('resize', this.handleResizeHome);
   },
   beforeRouteLeave() {
     clearInterval(this.clickCaroselNext)

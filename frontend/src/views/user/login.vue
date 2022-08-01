@@ -19,6 +19,7 @@ export default {
       em : '',
       pwd : '',
       loginNew : '',
+      checked : false,
     }
   },
   created () {
