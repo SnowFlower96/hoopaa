@@ -3,8 +3,10 @@ package com.ssafy.api.service;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.db.entity.Hashtag;
 import com.ssafy.db.entity.RoomInfo;
+import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.HashtagRepository;
 import com.ssafy.db.repository.RoomInfoRepository;
+import com.ssafy.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +24,15 @@ public class RoomServiceImpl implements RoomService{
     @Autowired
     RoomService roomService;
 
+    @Autowired
+    UserRepository userRepository;
+
 
 
     @Override
     public RoomInfo openRoom(RoomOpenReq roomOpenInfo) {
         RoomInfo roomInfo = RoomInfo.builder()
                 .pwd(roomOpenInfo.getPwd())
-                .host_id(roomOpenInfo.getHost_id())
                 .is_sys(roomOpenInfo.getIs_sys())
                 .thumb_url(roomOpenInfo.getThumb_url())
                 .phase(roomOpenInfo.getPhase())
@@ -38,6 +42,9 @@ public class RoomServiceImpl implements RoomService{
                 .title(roomOpenInfo.getTitle())
                 .subtitle(roomOpenInfo.getSubtitle())
                 .build();
+        System.out.println("host id : " + roomOpenInfo.getHost_id());
+        User user = userRepository.findUserById(roomOpenInfo.getHost_id()).get();
+        roomInfo.setUser(user);
         if(roomOpenInfo.getHash_1()!=null&&!roomOpenInfo.getHash_1().equals("")){
             roomInfo.setHash_1(roomService.findHashtagId(roomOpenInfo.getHash_1()));
         }
@@ -52,8 +59,15 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public void closeRoomByRoomId(int id) {
+    public void updateRoomByRoomId(Long id, int phase) {
+        RoomInfo roomInfo = roomInfoRepository.findById(id).get();
+        roomInfo.setPhase(phase);
+        roomInfoRepository.save(roomInfo);
+    }
 
+    @Override
+    public void closeRoomByRoomId(Long id) {
+        roomInfoRepository.findById(id);
     }
 
     @Override
