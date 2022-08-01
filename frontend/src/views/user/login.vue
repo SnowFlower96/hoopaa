@@ -72,11 +72,7 @@ export default {
 }
 .login-favi-img {
   margin-top: 100px;
-  width: 70px;
-}
-.logo-img {
-  width: 30%;
-  margin-bottom: 3%;
+  width: 70px !important;
 }
 .login-item {
   margin: 10px;

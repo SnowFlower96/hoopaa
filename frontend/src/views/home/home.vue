@@ -36,22 +36,20 @@
                   <h1>전체 카테고리</h1>
                   <div class="cate-items-wrap">
                     <div class="cate-item">
-                      <el-dropdown>
-                        <el-button type="primary">
-                          정렬조건<el-icon class="el-icon--right"><arrow-down /></el-icon>
-                        </el-button>
-                        <template #dropdown>
-                          <el-dropdown-menu>
-                            <el-dropdown-item @click="sortRecent">최신순</el-dropdown-item>
-                            <el-dropdown-item @click="sortCur">참여자순</el-dropdown-item>
-                            <el-dropdown-item @click="sortOld">오래된순</el-dropdown-item>
-                            <el-dropdown-item @click="sortRank">랭킹순</el-dropdown-item>
-                          </el-dropdown-menu>
-                        </template>
-                      </el-dropdown>
+                      <div>
+                        <div class="dropdown-sort-wrap">
+                          <button class="dropdown-sort-btn" @click="dropdownSortBtnTF">정렬조건</button>
+                          <div id="dropdown-sort" v-if="dropdownSortTF">
+                            <div @click="sortRecent">최신순</div>
+                            <div @click="sortCur">참여자순</div>
+                            <div @click="sortOld">오래된순</div>
+                            <div @click="sortRank">랭킹순</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div class="cate-item">
-                      <el-checkbox v-model="checkbox" @change="viewJoin">모집중만 보기</el-checkbox>
+                      <el-checkbox v-model="checkbox" @change="viewJoin"><span style="font-size : 10px">모집중만 보기</span></el-checkbox>
                     </div>
                   </div>
                 </div>
@@ -63,7 +61,7 @@
                     <ul class="card-container-ul">
                       <li v-for="(indexIn) in 4" :key="indexIn">
                       <div class="room-card">
-                        <div class="room-info">
+                        <div class="room-info" :style="customCaroselStyle">
                           <p class="room-phase-tip">{{phase[roomList[(4 * (indexOut-1)) + indexIn-1].phase]}}</p>
                           <p id="title-room">{{roomList[(4 * (indexOut-1)) + indexIn-1].subtitle}}</p>
                         </div>
@@ -193,8 +191,27 @@ ul {
 /* 메인 뷰 - carousel */
 
 
-.el-dropdown {
-  margin-left: 15px;
+#dropdown-sort {
+  position: absolute;
+  background-color: white;
+  border: solid 1px rgba(180, 180, 180, 0.505);
+}
+#dropdown-sort > div {
+  padding: 10px;
+}
+#dropdown-sort > div:hover {
+  cursor: pointer;
+  color: #667799;
+}
+.dropdown-sort-btn {
+  border: none;
+  border-radius: 5px;
+  background-color: #667799;
+  color: white;
+}
+.dropdown-sort-btn:hover {
+  cursor: pointer;
+  outline: solid 2px #667799c1;
 }
 
 /* room-list */
@@ -202,14 +219,12 @@ ul {
   display: flex;
   overflow: visible;
   list-style: none;
-  /* background-color: rgb(197, 197, 255); */
 }
 .card-container-ul {
   flex-direction: row;
   list-style: none;
 }
 .room-card {
-  /* background-color: beige; */
   margin: 10px;
   outline: solid rgba(180, 180, 180, 0.505) 1px;
   border-radius: 10px;
@@ -220,6 +235,8 @@ ul {
   display: block;
   background-image: url('../../assets/images/room.jpg');
   background-size:100% 100%;
+  height: var(--carosel-item-height);
+  width: var(--carosel-item-width);
 }
 .room-info:hover {
   background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('../../assets/images/room.jpg');
@@ -263,7 +280,8 @@ export default {
       clickCaroselNext: null,
       caroselWidth: '',
       caroselHeight: '',
-      caoselWrapperOverTF: false
+      caoselWrapperOverTF: false,
+      dropdownSortTF: false
     }
   },
   computed : {
@@ -283,7 +301,7 @@ export default {
   },
   mounted() {
     this.clickCaroselNext = setInterval(this.next, 5000)
-    const value = document.body.scrollWidth*0.8*0.25
+    const value = document.body.clientWidth*0.8*0.25
     this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
     this.caroselHeight = `${(value-20)*0.62}px`
     window.addEventListener('resize', this.handleResizeHome);    
@@ -302,6 +320,9 @@ export default {
       this.checkbox = false;
       this.$store.dispatch("getRoomInfoCate", index);
     },
+    dropdownSortBtnTF() {
+      this.dropdownSortTF = !this.dropdownSortTF
+    },
     caoselWrapperOver() {
       this.caoselWrapperOverTF = true
     },
@@ -309,9 +330,9 @@ export default {
       this.caoselWrapperOverTF = false
     },
     handleResizeHome() {
-      const value = document.body.scrollWidth*0.8*0.25
+      const value = document.body.clientWidth*0.8*0.25
       this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
-      carouselRoomCard.style.width = `${value}px`;
+      this.caroselHeight = `${(value-20)*0.62}px`
     },
     sortRecent () {
       const orderedDate = this.$store.state.roomList.sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
@@ -358,7 +379,7 @@ export default {
       const carousel = document.querySelector('.carousel-ul');
       if (this.c_index === 0) return;
       this.c_index -= 1;
-      const value = document.body.scrollWidth*0.8*0.25
+      const value = document.body.clientWidth*0.8*0.25
       carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
     },
     next() {
@@ -368,7 +389,7 @@ export default {
           this.c_index = 0
         } else {
           this.c_index += 1;
-          const value = document.body.scrollWidth*0.8*0.25
+          const value = document.body.clientWidth*0.8*0.25
           carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
         }
     }
