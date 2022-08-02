@@ -199,6 +199,22 @@ export default new Vuex.Store({
       })
     },
 
+    // 비밀번호 검사
+    verify({commit}, data) {
+      return new Promise((reject) => {
+      tapi({
+        url: `/users/verify`,
+        method : "POST",
+        data : data
+      }).then(() => {
+        commit();
+      }).catch(error => {
+        reject(error)
+        alert("비밀번호를 확인하세요")
+        router.go();
+      })
+    })
+  },
 
-  }
+}
 })

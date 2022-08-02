@@ -211,8 +211,4 @@ components.forEach(component => {
   app.component(component.name, component)
 })
 
-plugins.forEach(plugin => {
-  app.use(plugin)
-})
-
 app.mount('#app')

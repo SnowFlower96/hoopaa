@@ -18,36 +18,28 @@
 import {ref} from 'vue'
 import tempKey from './tempKey';
 import { useRouter } from 'vue-router'
+import { mapState } from 'vuex';
 export default {
   name: 'checkPwd',
-    setup(_, { root }) {
-      const router = useRouter()
-        const checkPwd = ref('');
-        const clickPwd = () => {
-            if (checkPwd.value === tempKey) {
-                router.push({
-                    path: '/myPage/info',
-                    query: {
-                        [tempKey] : true,
-                    },
-                })
-            }
-        };
-  //  - - - - - - 곧 지울거 - - - - - -  //
-        const testPwd = () => {
-            if (checkPwd.value === '1234') {
-              console.log('맞아')
-              router.push({
-                          path: '/testmyPage',
-                      })}};
-  //  - - - - - - 곧 지울거 - - - - - -  //
-        return {
-            checkPwd,
-            clickPwd,
-            testPwd
-        };
+    data () {
+      return {
+        checkPwd : '',
+      }
+    },
+    computed : {
+      ...mapState(["userStat"])
     },
   methods: {
+    testPwd () {
+       var data = {
+        em : this.$store.state.userStat.em,
+        pwd : this.checkPwd
+      }
+      console.log(data);
+      this.$store.dispatch("verify",data).then(
+        router.push('/myPage/info')
+      );
+    }
   }
   }
 </script>

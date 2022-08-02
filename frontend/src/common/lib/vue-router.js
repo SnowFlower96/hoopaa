@@ -85,13 +85,6 @@ function makeRoutesFromMenu () {
   path : '/myPage/info',
   name : 'myPage-info',
   component : myPageInfo,
-  beforeEnter: (to, from, next) => {
-    if (to.query[tempKey]) {
-      next();
-    } else {
-      next('/checkPwd');
-    }
-  },
 },
 {
   path : '/checkPwd',
