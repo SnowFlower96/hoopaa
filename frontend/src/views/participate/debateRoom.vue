@@ -1,5 +1,8 @@
 <template>
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
+<div class="startImg">
+    <animation-view></animation-view>
+</div>
     <div class="debate-backcolor">
         <div class="video-chatt-wrap">
             <div class="debate-background" :style="customCaroselStyle">
@@ -32,12 +35,14 @@
 <script>
 import debateRoomSideComponent from './debateRoomSideComponent'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
+import animationView from './animation-view.vue'
 
 export default {
     name: 'debateRoom',
     components: {
         debateRoomSideComponent,
-        debateRoomCenterComponent
+        debateRoomCenterComponent,
+        animationView
     },
     computed : {
         customCaroselStyle() {
@@ -179,10 +184,10 @@ export default {
 
 <style>
 .startImg {
-    display: flex;
     position: absolute;
     top: 20%;
-    justify-content: center;
+    color: aliceblue;
+    background-color: rgb(93, 93, 53);
 }
 .debate-backcolor {
     background-color: black;
