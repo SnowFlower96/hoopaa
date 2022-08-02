@@ -27,7 +27,7 @@ public class UserStatDto {
         this.win = userStat.getWin();
         this.lose = userStat.getLose();
         this.draw = userStat.getDraw();
-        this.penalty = userStat.getPanelty();
+        this.penalty = userStat.getPenalty();
         this.king = userStat.getKing();
     }
 }
