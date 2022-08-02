@@ -9,7 +9,7 @@
             <div class="main-img-wrapp-button" v-if="resizeWidthVisible">
               <router-link class="el-menu-item" to="/makeRoomPage"><div class="img-container-mainbtn01"></div></router-link>
               <router-link class="el-menu-item" to="/participatingPage"><div class="img-container-mainbtn02"></div></router-link>
-              <router-link class="el-menu-item" to="/"><div class="img-container-mainbtn03"></div></router-link>
+              <router-link class="el-menu-item" to="/list"><div class="img-container-mainbtn03"></div></router-link>
             </div>
             <div class="main-first-img"  v-if="!resizeWidthVisible">
               <p>여기에 나중에 영상이나 gif 넣기</p>
@@ -37,14 +37,14 @@ export default {
         show4: false,
         show5: false,
         resizeWidthVisible: true,
-        
+
       }
     },
     methods: {
       updateScroll(){
         const scrollPosition = window.scrollY || document.documentElement.scrollTop;
         const percentageOfPageScroll = scrollPosition/document.body.scrollHeight *100
-        if (15 < percentageOfPageScroll ) {this.show1 = true} 
+        if (15 < percentageOfPageScroll ) {this.show1 = true}
         else {this.show1 = false}
         if (33 < percentageOfPageScroll ) {this.show2 = true}
         else {this.show2 = false}
@@ -147,7 +147,7 @@ export default {
 }
 .mainpage-maincontainer {
   display: flex;
-  
+
 }
 .main-img-wrapp {
   display: felx;

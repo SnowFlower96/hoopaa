@@ -20,6 +20,7 @@
         </div>
 
         <div class="tool-wrapper">
+          <router-link style=text-decoration:none; to="/test"><span>session</span></router-link>
             <router-link style=text-decoration:none; to="/login" v-if="!isLogin"><span class="tool-wrapper-span-login">Log in</span></router-link>
             <router-link style=text-decoration:none; to="" v-if="isLogin" @click="logout"><span class="tool-wrapper-span-login">Log out</span></router-link>
             <router-link style=text-decoration:none; to="/signUp" v-if="!isLogin"><span class="tool-wrapper-span-signup">Sign up</span></router-link>
