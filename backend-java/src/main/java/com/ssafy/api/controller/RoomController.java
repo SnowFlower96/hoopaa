@@ -1,6 +1,7 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.request.RoomCloseReq;
+import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.api.response.RoomRes;
 import com.ssafy.api.service.RoomService;
@@ -15,14 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @RequestMapping("/api/v1/room")
 @RestController
 public class RoomController {
 
     @Autowired
     RoomService roomService;
-
-
 
     @PostMapping()
     @ApiOperation(value = "토론 방 오픈", notes = "토론 방을 세팅하고 모집 중 상태로 만든다.")
@@ -32,7 +33,7 @@ public class RoomController {
     })
     public ResponseEntity<? extends BaseResponseBody> openRoom(@RequestBody RoomOpenReq openInfo){
 
-        RoomInfoDto roomInfoDto = roomService.openRoom(openInfo);
+        RoomInfoDto roomInfoDto = roomService.createRoom(openInfo);
 
         return ResponseEntity.status(200).body(RoomRes.of(200, "Success",roomInfoDto));
     }
@@ -46,11 +47,35 @@ public class RoomController {
     })
     public ResponseEntity<? extends BaseResponseBody> startRoom(@RequestParam Long room_id){
 
-        RoomInfoDto roomInfoDto = roomService.updateRoomByRoomId(room_id, 1);
+        RoomInfoDto roomInfoDto = roomService.updatePhaseByRoomId(room_id, 1);
         if(roomInfoDto == null){
             return ResponseEntity.status(200).body(RoomRes.of(411, "already started or finished"));
         }
         return ResponseEntity.status(200).body(RoomRes.of(200, "debate start", roomInfoDto));
+    }
+
+
+    @PostMapping("/enter")
+    @ApiOperation(value = "방 입장", notes = "토론 방 입장")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "비밀번호 오류"),
+            @ApiResponse(code=404, message = "없는 토론 방"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> enterRoom(@RequestBody RoomEnterReq roomEnterReq) {
+        try {
+            RoomInfoDto roomInfoDto = roomService.enterDebate(roomEnterReq);
+            if(roomInfoDto==null){
+                return ResponseEntity.status(400).body(RoomRes.of(400, "비밀번호 오류"));
+            }
+            if(roomInfoDto.getPhase()==3){
+                return ResponseEntity.status(404).body(RoomRes.of(404, "이미 종료된 토론방"));
+            }
+            return ResponseEntity.status(200).body(RoomRes.of(200,"success", roomInfoDto));
+        }catch (NoSuchElementException e){
+            return ResponseEntity.status(404).body(RoomRes.of(404, "존재하지 않는 토론 방"));
+        }
     }
 
     @PutMapping("/vote/{room_id}")
@@ -62,7 +87,7 @@ public class RoomController {
     })
     public ResponseEntity<? extends BaseResponseBody> voteStart(@RequestParam Long room_id){
 
-        RoomInfoDto roomInfoDto = roomService.updateRoomByRoomId(room_id, 2);
+        RoomInfoDto roomInfoDto = roomService.updatePhaseByRoomId(room_id, 2);
         if(roomInfoDto == null){
             return ResponseEntity.status(200).body(RoomRes.of(411, "Voting has already started or ended"));
         }
@@ -79,10 +104,11 @@ public class RoomController {
     })
     public ResponseEntity<? extends BaseResponseBody> closeRoom(@RequestBody RoomCloseReq roomCloseReq){
 
-        roomService.closeRoom(roomCloseReq);
+        roomService.finishRoom(roomCloseReq);
 
-        return ResponseEntity.status(200).body(RoomRes.of(200, "vote start"));
+        return ResponseEntity.status(200).body(RoomRes.of(200, "room finished"));
 
     }
+
 
 }
