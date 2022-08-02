@@ -3,12 +3,8 @@
 <h1>session</h1>
 <h1>session</h1>
 	<div id="main-container" class="container">
-		<div id="join" v-if="!session">
+		<div id="join">
 			<div id="join-dialog" class="jumbotron vertical-center">
-				<h1>토론 방 들어왔을 때 (참가자 있는 화면)</h1>
-        <input type="radio" name="" id="">찬성
-        <input type="radio" name="" id="">반대
-				<div class="form-group">
 					<p>
 						<label>Participant</label>
 						<input v-model="myUserName" class="form-control" type="text" required>
@@ -17,10 +13,15 @@
 						<label>Session</label>
 						<input v-model="mySessionId" class="form-control" type="text" required>
 					</p>
-          <p>
+          			<p>
 						<label>host</label>
 						<input v-model="host" class="form-control" type="text" required>
 					</p>
+
+					<h1>토론 방 들어왔을 때 (참가자 있는 화면)</h1>
+					<button @click='role=1'>찬성</button>
+					<button @click='role=2'>반대</button>
+
 					<p class="text-center">
 						<button class="btn btn-lg btn-success" @click="joinSession()">패널로 참여하기</button>
 					</p>
@@ -29,20 +30,40 @@
 		</div>
 
 		<div id="session" v-if="session">
+
+			<div class="form-group">
+
 			<div id="session-header">
 				<h1 id="session-title">{{ mySessionId }}</h1>
+				<h1>myrole:{{role}}</h1>
 				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
 				<input class="btn btn-large btn" type="button" id="" @click="DetailSession" value="Detail session">
 			</div>
 			<div id="video-container">
-        <div>{{myUserName}} & {{host}}</div>
-        <div v-if="myUserName === host"><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
-        <!-- <div v-else></div> -->
-        <div v-for="s in subscribers" :key="s.stream.connection.connectionId">{{s.stream.connection.data[clientData]}}&{{s.stream.connection.connectionId}}
-          <div v-if="s.stream.connection.connectionId==='con_HC9qcAEc9j'">
-            <user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+		<div id="host"><h1>HOST</h1>
+        <!-- <div>{{myUserName}} & {{host}}</div> -->
+        <div v-if="myUserName === host"><button @click='role=0'>사회자</button>
+		<user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
+        <div v-else>
+          <div v-for="s in subscribers" :key="s.stream.connection.connectionId">
+            <div v-if="s.stream.connection.dataObject.clientData==host"><user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/></div>
           </div>
-        </div>
+        </div></div>
+
+		<div v-if="myUserName != host">
+		<h1>agree</h1>
+		<div v-if="role===1"><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/>
+
+		</div>
+
+		<h1>disagree</h1>
+		<div v-if="role===2"><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/>
+		</div></div>
+
+		<div><button @click="screenShare()">화면공유</button></div>
+        <!-- <div v-for="s in subscribers" :key="s.stream.connection.connectionId">{{s.stream.connection.dataObject.clientData}}&{{s.stream.connection.connectionId}}
+            <user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+        </div> -->
 				<!-- <user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/> -->
 				<!-- <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click.native="updateMainVideoStreamManager(sub)"/> -->
 			</div>
@@ -74,7 +95,9 @@ export default {
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
-      host:'',
+
+			role:3,
+      		host:'',
 
 			mySessionId: 'SessionA',
 			myUserName: 'Participant' + Math.floor(Math.random() * 100),
@@ -95,6 +118,8 @@ export default {
 			// On every new Stream received...
 			this.session.on('streamCreated', ({ stream }) => {
 				const subscriber = this.session.subscribe(stream);
+        subscriber.stream.connection.dataObject=JSON.parse(subscriber.stream.connection.data)
+        subscriber.stream.connection.role=this.role
 				this.subscribers.push(subscriber);
 			});
 
@@ -146,7 +171,7 @@ export default {
 			});
 
 
-      console.log(this.subscribers)
+      console.log("!!!!"+this.role)
       window.addEventListener('beforeunload', this.leaveSession)
 		},
 
