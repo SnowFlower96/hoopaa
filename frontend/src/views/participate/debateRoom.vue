@@ -1,4 +1,5 @@
 <template>
+<img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt="">
     <div class="debate-backcolor">
         <div class="video-chatt-wrap">
             <div class="debate-background">
@@ -62,7 +63,8 @@ export default {
             debateSideBoxHeight: '',
             videoBox: '',
             chattBox: '',
-            chattTF: true
+            chattTF: true,
+            imgTF:true,
         }
     },
     mounted() {
@@ -102,6 +104,12 @@ export default {
 </script>
 
 <style>
+.startImg {
+    display: flex;
+    position: absolute;
+    top: 20%;
+    justify-content: center;
+}
 .debate-backcolor {
     background-color: black;
     height: 100vh;
@@ -130,8 +138,8 @@ export default {
     /* 여기 조절해야됨 */
     height: 95vh;
     /* position: fixed;
-    top: 0; */
-    /* right: 0; */
+    top: 0;
+    right: 0; */
 }
 .videobox-side {
   height: var(--debate-box-side-height);
