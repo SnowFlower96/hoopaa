@@ -197,13 +197,13 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(96, 255, 112, 0.766);
+    /* background-color: rgba(96, 255, 112, 0.766); */
     width: var(--db-bg);
 }
 .debate-room-footer-class {
     width: var(--footer-width);
     height: 7vh;
-    outline: 10px #669977 solid;
+    /* outline: 10px #669977 solid; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -223,14 +223,14 @@ export default {
     height: var(--debate-box-side-height);
     width: var(--debate-box-side-width);
     color: black;
-    background-color: rgb(61, 255, 94);
+    /* background-color: rgb(61, 255, 94); */
     /* outline: 10px #667799 solid; */
 }
 .videobox-center {
   height: var(--debate-box-center-height);
   width: var(--debate-box-center-width);
   color: black;
-  background-color: rgba(121, 193, 255, 0.621);
+  /* background-color: rgba(121, 193, 255, 0.621); */
   /* outline: 10px #667799 solid; */
 }
 

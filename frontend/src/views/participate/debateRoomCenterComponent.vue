@@ -86,7 +86,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    outline: aqua solid 3px;
+    /* outline: aqua solid 3px; */
 }
 .debate-moderator-inner{
     background-color: white;
@@ -97,10 +97,10 @@ export default {
 
 .debate-guague {
     height: var(--db-gg);
-    background-color: rgb(255, 255, 24);
+    /* background-color: rgb(255, 255, 24); */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
 }
 .debate-guague-inner {
     height: var(--db-gg-in-h);
@@ -111,7 +111,7 @@ export default {
 
 .debate-content {
     height: var(--db-ct);
-    background-color: rgb(23, 139, 32);
+    /* background-color: rgb(23, 139, 32); */
     display: flex;
     justify-content: center;
     align-items: center;

@@ -63,12 +63,12 @@ export default {
 }
 .blank-space-video {
     height: var(--blank-space-video);
-    background-color: blue;
+    /* background-color: blue; */
 }
 .panel-video {
     width: var(--side-video-width);
     height: var(--side-video-height-inner);
-    background-color: rgb(100, 232, 255);
+    /* background-color: rgb(100, 232, 255); */
     display: flex;
     align-items: center;
 }
