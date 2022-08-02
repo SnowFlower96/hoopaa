@@ -55,22 +55,26 @@ export default {
         }
     },
     mounted() {
-    const value = document.body.clientWidth
-    this.debateCenterBoxWidth = `${value*0.4}px` // margin buffer 10px 고려한 계산
-    this.debateSideBoxWidth = `${value*0.3}px` // margin buffer 10px 고려한 계산
-    this.debateBoxWidth = `${value}px` // margin buffer 10px 고려한 계산
-    // this.debateCenterBoxHeight = `${value}px`
-    // this.debateSideBoxHeight = `100vh`
+    const wValue = document.body.clientWidth
+    const hValue = document.body.clientHeight
+    this.debateCenterBoxWidth = `${wValue*0.35}px` // margin buffer 10px 고려한 계산
+    this.debateSideBoxWidth = `${wValue*0.25}px` // margin buffer 10px 고려한 계산
+    this.debateBoxWidth = `${wValue}px` // margin buffer 10px 고려한 계산
+
+    this.debateCenterBoxHeight = `${hValue*0.7}px` // margin buffer 10px 고려한 계산
+    this.debateSideBoxHeight = `${hValue*0.7}px` // margin buffer 10px 고려한 계산
     window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
         handleResizeHome() {
-        const value = document.body.clientWidth
-        this.debateCenterBoxWidth = `${value*0.4}px` // margin buffer 10px 고려한 계산
-        this.debateSideBoxWidth = `${value*0.3}px` // margin buffer 10px 고려한 계산
-        this.debateBoxWidth = `${value}px` // margin buffer 10px 고려한 계산
-        // this.debateCenterBoxHeight = `${value}px`
-        // this.debateSideBoxHeight = `100vh`
+        const wValue = document.body.clientWidth
+        const hValue = document.body.clientHeight
+        this.debateCenterBoxWidth = `${wValue*0.35}px` // margin buffer 10px 고려한 계산
+        this.debateSideBoxWidth = `${wValue*0.25}px` // margin buffer 10px 고려한 계산
+        this.debateBoxWidth = `${wValue}px` // margin buffer 10px 고려한 계산
+        
+        this.debateCenterBoxHeight = `${hValue*0.7}px` // margin buffer 10px 고려한 계산
+        this.debateSideBoxHeight = `${hValue*0.7}px` // margin buffer 10px 고려한 계산
         },
     }
 }
@@ -80,22 +84,23 @@ export default {
 .debate-background {
     background-color: black;
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.debate-room-outer {
-    padding: 5%;
-}
+
 .debate-room-wrap {
     display: flex;
 }
 .videobox-side {
-  height: auto;
+  height: var(--debate-box-side-height);
   width: var(--debate-box-side-width);
   color: black;
   background-color: aliceblue;
   outline: 10px #667799 solid;
 }
 .videobox-center {
-  height: auto;
+  height: var(--debate-box-center-height);
   width: var(--debate-box-center-width);
   color: black;
   background-color: aliceblue;
