@@ -85,8 +85,8 @@ export default {
         this.footerWidth = `${wVideoValue}px`
         
 
-        this.debateCenterBoxWidth = `${debateBackground*0.4-20}px`
-        this.debateSideBoxWidth = `${debateBackground*0.3-20}px`
+        this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
+        this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
 
         this.debateCenterBoxHeight = `${hValue*0.8}px`
         this.debateSideBoxHeight = `${hValue*0.8}px`
@@ -108,8 +108,8 @@ export default {
                 this.footerWidth = `${wVideoValue}px`
                 
 
-                this.debateCenterBoxWidth = `${debateBackground*0.4-20}px`
-                this.debateSideBoxWidth = `${debateBackground*0.3-20}px`
+                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
+                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
                 
                 this.debateCenterBoxHeight = `${hValue*0.8}px`
                 this.debateSideBoxHeight = `${hValue*0.8}px`
@@ -126,8 +126,8 @@ export default {
                 this.footerWidth = `${wVideoValue}px`
                 
 
-                this.debateCenterBoxWidth = `${debateBackground*0.4-20}px`
-                this.debateSideBoxWidth = `${debateBackground*0.3-20}px`
+                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
+                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
                 
                 this.debateCenterBoxHeight = `${hValue*0.8}px`
                 this.debateSideBoxHeight = `${hValue*0.8}px`
@@ -147,8 +147,8 @@ export default {
                 this.footerWidth = `${wVideoValue}px`
                 
 
-                this.debateCenterBoxWidth = `${debateBackground*0.4-20}px`
-                this.debateSideBoxWidth = `${debateBackground*0.3-20}px`
+                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
+                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
                 
                 this.debateCenterBoxHeight = `${hValue*0.8}px`
                 this.debateSideBoxHeight = `${hValue*0.8}px`
@@ -165,8 +165,8 @@ export default {
                 this.footerWidth = `${wVideoValue}px`
                 
 
-                this.debateCenterBoxWidth = `${debateBackground*0.4-20}px`
-                this.debateSideBoxWidth = `${debateBackground*0.3-20}px`
+                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
+                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
                 
                 this.debateCenterBoxHeight = `${hValue*0.8}px`
                 this.debateSideBoxHeight = `${hValue*0.8}px`
@@ -187,7 +187,7 @@ export default {
 .debate-backcolor {
     background-color: black;
     height: 100vh;
-    text-align: center;
+    /* text-align: center; */
 }
 .video-chatt-wrap {
     display: flex;
@@ -204,6 +204,9 @@ export default {
     width: var(--footer-width);
     height: 7vh;
     outline: 10px #669977 solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .chatting-box {
     background-color: pink;
@@ -217,11 +220,11 @@ export default {
 .videobox-side {
     display: flex;
     justify-content: center;
-  height: var(--debate-box-side-height);
-  width: var(--debate-box-side-width);
-  color: black;
-  background-color: rgb(61, 255, 94);
-  /* outline: 10px #667799 solid; */
+    height: var(--debate-box-side-height);
+    width: var(--debate-box-side-width);
+    color: black;
+    background-color: rgb(61, 255, 94);
+    /* outline: 10px #667799 solid; */
 }
 .videobox-center {
   height: var(--debate-box-center-height);
