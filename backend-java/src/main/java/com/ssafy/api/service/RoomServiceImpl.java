@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.RoomCloseReq;
+import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.entity.Hashtag;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service("roomService")
@@ -38,7 +40,7 @@ public class RoomServiceImpl implements RoomService{
 
 
     @Override
-    public RoomInfoDto openRoom(RoomOpenReq roomOpenInfo) {
+    public RoomInfoDto createRoom(RoomOpenReq roomOpenInfo) {
         RoomInfo roomInfo = RoomInfo.builder()
                 .pwd(/*passwordEncoder.encode(*/roomOpenInfo.getPwd())
                 .is_sys(roomOpenInfo.getIs_sys())
@@ -67,7 +69,7 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public RoomInfoDto updateRoomByRoomId(Long id, int phase) {
+    public RoomInfoDto updatePhaseByRoomId(Long id, int phase) {
         RoomInfo roomInfo = roomInfoRepository.findById(id).get();
         if(phase == 1){
             if(roomInfo.getPhase()>=1){
@@ -83,7 +85,7 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public void closeRoom(RoomCloseReq roomCloseReq) {
+    public void finishRoom(RoomCloseReq roomCloseReq) {
         RoomInfo roomInfo = roomInfoRepository.findById(roomCloseReq.getId()).get();
         RoomHistory roomHistory = RoomHistory.builder()
                 .id(roomCloseReq.getId())
@@ -98,6 +100,28 @@ public class RoomServiceImpl implements RoomService{
         System.out.println("roomHistoy id = "+ roomHistory.getId());
         roomInfo.setRoomHistory(roomHistory);
         roomInfoRepository.save(roomInfo);
+    }
+
+
+
+    @Override
+    public RoomInfoDto enterDebate(RoomEnterReq roomEnterReq) throws NoSuchElementException{
+        RoomInfo roomInfo = roomInfoRepository.findById(roomEnterReq.getId()).get();
+
+        System.out.println(roomInfo.getPwd()+" : "+roomEnterReq.getPwd());
+        //비밀번호 체크
+        if(!roomInfo.getPwd().equals(roomEnterReq.getPwd())){
+            return null;
+        }
+
+        //방 인원 수 한명 증가
+        roomInfo.setCur_num(roomInfo.getCur_num()+1);
+        roomInfoRepository.save(roomInfo);
+
+        RoomInfoDto roomInfoDto = new RoomInfoDto(roomInfo);
+        return roomInfoDto;
+
+
     }
 
     @Override
