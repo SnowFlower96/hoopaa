@@ -5,10 +5,11 @@
             <div class="main-img-wrap-child-buffer"></div>
             <img class="fadein" :src="require(`@/assets/images/071414.png`)" alt="">
             <p>토론을 위한 화상 미팅 서비스</p>
+            <!-- background-image: url('../../../assets/images/favi6.png'); -->
             <div class="main-img-wrapp-button" v-if="resizeWidthVisible">
-              <router-link class="el-menu-item" to="/makeRoomPage"><img :src="require(`@/assets/images/main-page-button01.png`)" alt=""></router-link>
-              <router-link class="el-menu-item" to="/participatingPage"><img :src="require(`@/assets/images/main-page-button02.png`)" alt=""></router-link>
-              <router-link class="el-menu-item" to="/"><img :src="require(`@/assets/images/main-page-button03.png`)" alt=""></router-link>
+              <router-link class="el-menu-item" to="/makeRoomPage"><div class="img-container-mainbtn01"></div></router-link>
+              <router-link class="el-menu-item" to="/participatingPage"><div class="img-container-mainbtn02"></div></router-link>
+              <router-link class="el-menu-item" to="/"><div class="img-container-mainbtn03"></div></router-link>
             </div>
             <div class="main-first-img"  v-if="!resizeWidthVisible">
               <p>여기에 나중에 영상이나 gif 넣기</p>
@@ -17,10 +18,10 @@
           </div>
 
           <div class="main-img-wrapp-child main-introduce" style="background-color: #fff8e0; color: #ffdb65"><img v-if="show1" class="fadein" :src="require(`@/assets/images/0727_mokup_01.png`)" alt=""><div><p>팀을 구성하세요</p></div></div>
-          <div class="main-img-wrapp-child main-introduce" style="background-color: #debcb5; color: #f24822"><div><p>친구들과 재밌게 의견을 나눠보세요</p></div><img v-if="show2" class="fadein" :src="require(`@/assets/images/0727_mokup_04.png`)" alt=""></div>
+          <div class="main-img-wrapp-child main-introduce" style="background-color: #debcb5; color: #f24822"><div><p>친구들과 재밌게 의견을 나눠보세요</p></div><img v-if="show2" class="fadein" :src="require(`@/assets/images/0727_mokup_05.png`)" alt=""></div>
           <div class="main-img-wrapp-child main-introduce" style="background-color: #e1b5d4; color: #ff24bd"><img v-if="show3" class="fadein" :src="require(`@/assets/images/0727_mokup_03.png`)" alt=""><div><p>배틀에서 승리하세요</p></div></div>
           <div class="main-img-wrapp-child main-introduce" style="background-color: #e0c8ff; color: #9747ff"><div><p>재미있는 효과들과 함께 하세요</p></div><img v-if="show4" class="fadein" :src="require(`@/assets/images/mainPage04.png`)" alt=""></div>
-          <div class="main-img-wrapp-child main-introduce" style="background-color: #b3d1c1; color: #1bb061"><img v-if="show5" class="fadein" :src="require(`@/assets/images/mainPage05.png`)" alt=""><div><p>방청객이 되어서 배틀을 관전할 수도 있습니다</p></div></div>
+          <div class="main-img-wrapp-child main-introduce" style="background-color: #b3d1c1; color: #1bb061"><img v-if="show5" class="fadein" :src="require(`@/assets/images/0727_mokup_04.png`)" alt=""><div><p>방청객이 되어서 배틀을 관전할 수도 있습니다</p></div></div>
         </div>
     </div>
 </template>
@@ -35,7 +36,8 @@ export default {
         show3: false,
         show4: false,
         show5: false,
-        resizeWidthVisible: true
+        resizeWidthVisible: true,
+        
       }
     },
     methods: {
@@ -59,7 +61,7 @@ export default {
           } else {
             this.resizeWidthVisible = true
           }
-      }
+      },
     },
     mounted(){
       document.addEventListener('scroll', this.updateScroll);
@@ -69,6 +71,43 @@ export default {
 </script>
 
 <style>
+.img-container-mainbtn01 {
+  width: 300px;
+  /* background-color: aqua; */
+  height: 170px;
+  background-image: url('../../assets/images/mainPageBtn0101.png');
+  background-size:100% 100%;
+}
+.img-container-mainbtn01:hover {
+  background-image: url('../../assets/images/mainPageBtn0102.png');
+  background-size:100% 100%;
+}
+.img-container-mainbtn02 {
+  width: 300px;
+  /* background-color: aqua; */
+  height: 170px;
+  background-image: url('../../assets/images/mainPageBtn0201.png');
+  background-size:100% 100%;
+}
+.img-container-mainbtn02:hover {
+  background-image: url('../../assets/images/mainPageBtn0202.png');
+  background-size:100% 100%;
+}
+.img-container-mainbtn03 {
+  width: 300px;
+  /* background-color: aqua; */
+  height: 170px;
+  background-image: url('../../assets/images/mainPageBtn0301.png');
+  background-size:100% 100%;
+}
+.img-container-mainbtn03:hover {
+  background-image: url('../../assets/images/mainPageBtn0302.png');
+  background-size:100% 100%;
+}
+
+.el-menu-item > img{
+  width: 300px;
+}
 .main-first-img > img {
   width: 50%;
 }

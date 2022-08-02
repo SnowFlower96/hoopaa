@@ -15,32 +15,23 @@
     </div>
 </template>
 <script>
-import {ref} from 'vue'
-import tempKey from './tempKey';
 import { useRouter } from 'vue-router'
 import { mapState } from 'vuex';
 export default {
   name: 'checkPwd',
-    data () {
-      return {
-        checkPwd : '',
-      }
-    },
-    computed : {
-      ...mapState(["userStat"])
-    },
-  methods: {
-    testPwd () {
-       var data = {
-        em : this.$store.state.userStat.em,
-        pwd : this.checkPwd
-      }
-      console.log(data);
-      this.$store.dispatch("verify",data).then(
-        router.push('/myPage/info')
-      );
+   data () {
+    return {
+      checkPwd : '',
     }
-  }
+   },
+   methods : {
+    testPwd () {
+      var data = {
+        pwd : this.checkPwd,
+      }
+      this.$store.dispatch("checkPwd", data)
+    }
+   }
   }
 </script>
 
