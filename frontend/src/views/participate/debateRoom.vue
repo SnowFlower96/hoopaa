@@ -78,7 +78,7 @@ export default {
             debateBackground: '',
 
             chattTF: true,
-            imgTF:false,
+            imgTF:true,
         }
     },
     mounted() {
