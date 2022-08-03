@@ -86,7 +86,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* outline: aqua solid 3px; */
+    outline: aqua solid 3px;
 }
 .debate-moderator-inner{
     background-color: white;
