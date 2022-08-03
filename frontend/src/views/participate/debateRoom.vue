@@ -1,5 +1,8 @@
 <template>
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
+<div v-if="imgTF" class="startImg">
+    <animation-view></animation-view>
+</div>
     <div class="debate-backcolor">
         <div class="video-chatt-wrap">
             <div class="debate-background" :style="customCaroselStyle">
@@ -18,7 +21,7 @@
                 </div>
             </div>
             <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
-                <div>여기는 채팅창</div>
+                <chatting-all></chatting-all>
             </div>
         </div>
         <div class="debate-room-footer-class">
@@ -32,12 +35,16 @@
 <script>
 import debateRoomSideComponent from './debateRoomSideComponent'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
+// import animationView from './animation-view.vue'
+import chattingAll from './ChattingComponents/chatting-all'
 
 export default {
     name: 'debateRoom',
     components: {
         debateRoomSideComponent,
-        debateRoomCenterComponent
+        debateRoomCenterComponent,
+        // animationView,
+        chattingAll
     },
     computed : {
         customCaroselStyle() {
@@ -71,7 +78,7 @@ export default {
             debateBackground: '',
 
             chattTF: true,
-            imgTF:true,
+            imgTF:false,
         }
     },
     mounted() {
@@ -179,10 +186,10 @@ export default {
 
 <style>
 .startImg {
-    display: flex;
     position: absolute;
     top: 20%;
-    justify-content: center;
+    color: aliceblue;
+    background-color: rgb(93, 93, 53);
 }
 .debate-backcolor {
     background-color: black;
@@ -209,9 +216,10 @@ export default {
     align-items: center;
 }
 .chatting-box {
-    background-color: pink;
+    background-color: whitesmoke;
     width: var(--chatt-box);
     height: 93vh;
+    border-radius: 10px;
 }
 .debate-room-wrap {
     display: flex;
@@ -223,8 +231,8 @@ export default {
     height: var(--debate-box-side-height);
     width: var(--debate-box-side-width);
     color: black;
-    /* background-color: rgb(61, 255, 94); */
-    /* outline: 10px #667799 solid; */
+    /* background-color: rgb(61, 255, 94);
+    outline: 10px #667799 solid; */
 }
 .videobox-center {
   height: var(--debate-box-center-height);
