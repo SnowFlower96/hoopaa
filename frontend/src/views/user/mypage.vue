@@ -30,11 +30,7 @@ export default {
 
   }
  },
-   created () {
-    this.$store.dispatch("getUserHistory");
-
-    this.$store.dispatch("getUserStat")
-   },
+   
  computed : {
     ...mapState(["userHistory", "userStat"])
   },

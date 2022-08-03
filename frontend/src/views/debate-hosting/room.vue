@@ -5,26 +5,25 @@
 	<div id="main-container" class="container">
 		<div id="join">
 			<div id="join-dialog" class="jumbotron vertical-center">
-					<p>
-						<label>Participant</label>
-						<input v-model="myUserName" class="form-control" type="text" required>
-					</p>
-					<p>
-						<label>Session</label>
-						<input v-model="mySessionId" class="form-control" type="text" required>
-					</p>
+
+
           			<p>
 						<label>host</label>
 						<input v-model="host" class="form-control" type="text" required>
 					</p>
-
+          <div><input v-model="roomName" type="text" placeholder="방 이름"/></div>
+          <div><input type="checkbox"><input v-model="roomPwd" type="password" placeholder="비밀번호"></div>
+          <div><input v-model="roomTitle" type="text" placeholder="주제"></div>
+          <div class="dropdown-sort-wrap">
+                          <button class="dropdown-sort-btn" @click="dropdownSortBtnTF">카테고리</button>
+                          <div id="dropdown-sort" v-if="dropdownSortTF">
+                            <div v-for="(item, index) in munus" :key="index">{{item.name}}</div>
+                          </div>
+                        </div>
+          <router-link to="/"><button>뒤로가기</button></router-link> <button @click="makeRoom">토론방 생성</button>
 					<h1>토론 방 들어왔을 때 (참가자 있는 화면)</h1>
 					<button @click='role=1'>찬성</button>
 					<button @click='role=2'>반대</button>
-
-					<p class="text-center">
-						<button class="btn btn-lg btn-success" @click="joinSession()">패널로 참여하기</button>
-					</p>
 				</div>
 			</div>
 		</div>
@@ -74,15 +73,15 @@
 <script>
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
-import UserVideo from './openvidu/UserVideo.vue';
-
+import UserVideo from '@/views/openvidu/UserVideo.vue';
+import { mapState } from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+const OPENVIDU_SERVER_URL = "https://3.38.181.187:8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
 export default {
-	name: 'App',
+	name: 'Room',
 
 	components: {
 		UserVideo,
@@ -97,17 +96,27 @@ export default {
 			subscribers: [],
 
 			role:3,
-      		host:'',
+      host: this.$store.state.userStat.em,
 
 			mySessionId: 'SessionA',
-			myUserName: 'Participant' + Math.floor(Math.random() * 100),
+			myUserName: this.$store.state.userStat.nnm,
+      roomName : '',
+      roomPwd : '',
+      meuns : '',
+      roomTitle : '',
+      roomCate : '',
 		}
 	},
-
+  computed : {
+    ...mapState(["userStat"])
+  },
+  created() {
+    const menuData = require('@/views/main/menu.json')
+    this.menus = menuData;
+  },
 	methods: {
-		DetailSession(){},
-		joinSession () {
-			// --- Get an OpenVidu object ---
+    makeRoom () {
+      	// --- Get an OpenVidu object ---
 			this.OV = new OpenVidu();
 
 			// --- Init a session ---
@@ -173,8 +182,8 @@ export default {
 
       console.log("!!!!"+this.role)
       window.addEventListener('beforeunload', this.leaveSession)
-		},
-
+    },
+		DetailSession(){},
 		leaveSession () {
 			// --- Leave the session by calling 'disconnect' method over the Session object ---
 			if (this.session) this.session.unpublish();
