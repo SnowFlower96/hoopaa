@@ -11,8 +11,11 @@ public class RoomOpenReq {
     @ApiModelProperty(name = "방 패스워드", example = "abcd")
     String pwd;
 
-    @ApiModelProperty(name = "host id", example = "1")
-    long host_id;
+    @ApiModelProperty(name = "host email", example = "abc@ssafy.com")
+    String host_em;
+
+    @ApiModelProperty(name = "host 포지션", example = "0")
+    long pos;
 
     @ApiModelProperty(name = "시스템 모드", example = "0")
     int is_sys;
