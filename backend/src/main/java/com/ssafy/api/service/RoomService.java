@@ -6,6 +6,7 @@ import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.entity.RoomInfo;
+import com.ssafy.db.entity.User;
 
 import java.util.NoSuchElementException;
 
@@ -17,7 +18,7 @@ public interface RoomService {
 
     public void finishRoom(RoomCloseReq roomCloseReq);
 
-    public RoomInfoDto enterDebate(RoomEnterReq roomEnterReq) throws NoSuchElementException;
+    public RoomInfoDto enterDebate(RoomEnterReq roomEnterReq, User user) throws NoSuchElementException;
 
 
     public int findHashtagId(String nm);
