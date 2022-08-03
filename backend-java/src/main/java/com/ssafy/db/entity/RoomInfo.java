@@ -42,6 +42,10 @@ public class RoomInfo {
     @JoinColumn(name = "host_id", referencedColumnName = "id")
     User user;
 
+    @OneToOne
+    @JoinColumn(name="id", referencedColumnName = "id")
+    RoomStatus roomStatus;
+
     @Builder
     public RoomInfo(Long id, String pwd, Long host_id, int is_sys, String thumb_url, int phase, int max_num, int cur_num, LocalDateTime start_time, Integer cate, Integer hash_1, Integer hash_2, Integer hash_3, String title, String subtitle) {
         this.id = id;

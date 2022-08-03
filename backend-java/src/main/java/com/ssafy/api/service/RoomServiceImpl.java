@@ -4,12 +4,10 @@ import com.ssafy.api.request.RoomCloseReq;
 import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.db.dto.RoomInfoDto;
-import com.ssafy.db.entity.Hashtag;
-import com.ssafy.db.entity.RoomHistory;
-import com.ssafy.db.entity.RoomInfo;
-import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.HashtagRepository;
 import com.ssafy.db.repository.RoomInfoRepository;
+import com.ssafy.db.repository.RoomStatusRepository;
 import com.ssafy.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +32,9 @@ public class RoomServiceImpl implements RoomService{
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    RoomStatusRepository roomStatusRepository;
+
 
     /*@Autowired
     PasswordEncoder passwordEncoder;*/
@@ -47,13 +48,36 @@ public class RoomServiceImpl implements RoomService{
                 .thumb_url(roomOpenInfo.getThumb_url())
                 .phase(roomOpenInfo.getPhase())
                 .max_num(roomOpenInfo.getMax_num())
-                .cur_num(roomOpenInfo.getCur_num())
+                .cur_num(1)
                 .cate(roomOpenInfo.getCate())
                 .title(roomOpenInfo.getTitle())
                 .subtitle(roomOpenInfo.getSubtitle())
                 .build();
         System.out.println("host id : " + roomOpenInfo.getHost_id());
+        roomInfo =  roomInfoRepository.save(roomInfo);
         User user = userRepository.findUserById(roomOpenInfo.getHost_id()).get();
+        RoomStatus roomStatus = RoomStatus.builder()
+                .id(roomInfo.getId())
+                .build();
+        System.out.println("포지션 : "+roomOpenInfo.getPos() );
+        //시스템 모드 , 사회자 모드면 자동으로 호스트는 사회자
+        if(roomOpenInfo.getIs_sys()==1){
+
+            if(roomOpenInfo.getPos()==1){ //찬성
+                System.out.println("찬성");
+                roomStatus.setAgree(1);
+                roomStatus.setAgree_1(roomOpenInfo.getHost_id());
+                System.out.println(roomStatus.getAgree_1());
+            }else if(roomOpenInfo.getPos()==2){ //반대
+                roomStatus.setDisagree(1);
+                roomStatus.setDisagree_1(roomInfo.getHost_id());
+            }else if(roomOpenInfo.getPos()==3){ //방청객
+
+            }
+        }
+        roomStatusRepository.save(roomStatus);
+
+
         roomInfo.setUser(user);
         if(roomOpenInfo.getHash_1()!=null&&!roomOpenInfo.getHash_1().equals("")){
             roomInfo.setHash_1(roomService.findHashtagId(roomOpenInfo.getHash_1()));
@@ -62,7 +86,6 @@ public class RoomServiceImpl implements RoomService{
             roomInfo.setHash_2(roomService.findHashtagId(roomOpenInfo.getHash_2()));
         }
         if(roomOpenInfo.getHash_3()!=null&&!roomOpenInfo.getHash_3().equals("")){
-            System.out.println(roomOpenInfo.getHash_3());
             roomInfo.setHash_3(roomService.findHashtagId(roomOpenInfo.getHash_3()));
         }
         return new RoomInfoDto(roomInfoRepository.save(roomInfo));
