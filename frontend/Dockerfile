@@ -12,7 +12,7 @@ RUN npm run build
 
 FROM nginx:stable-alpine as production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-COPY ssl/default.conf /etc/nginx/conf.d/default.conf
+COPY default.conf /etc/nginx/conf.d/default.conf
 COPY ssl /etc/nginx/ssl
 RUN chmod 600 /etc/nginx/ssl/selfsigned.crt /etc/nginx/ssl/private.key
 EXPOSE 80
