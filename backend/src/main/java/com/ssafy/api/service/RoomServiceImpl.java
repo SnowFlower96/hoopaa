@@ -128,7 +128,7 @@ public class RoomServiceImpl implements RoomService{
 
 
     @Override
-    public RoomInfoDto enterDebate(RoomEnterReq roomEnterReq) throws NoSuchElementException{
+    public RoomInfoDto enterDebate(RoomEnterReq roomEnterReq, User user) throws NoSuchElementException{
         RoomInfo roomInfo = roomInfoRepository.findById(roomEnterReq.getId()).get();
 
         System.out.println(roomInfo.getPwd()+" : "+roomEnterReq.getPwd());
@@ -141,22 +141,58 @@ public class RoomServiceImpl implements RoomService{
             int max_num = roomInfo.getMax_num();
             RoomStatus roomStatus = roomInfo.getRoomStatus();
             if(roomStatus.getAgree()>=max_num){
-
+                throw new IllegalArgumentException();
+            }else{
+                int cur_agree = roomStatus.getAgree();
+                if(cur_agree==0){
+                    roomStatus.setAgree_1(user.getId());
+                    roomStatus.setAgree(1);
+                }else if(cur_agree==1){
+                    roomStatus.setAgree_2(user.getId());
+                    roomStatus.setAgree(2);
+                }else if(cur_agree==2){
+                    roomStatus.setAgree_3(user.getId());
+                    roomStatus.setAgree(3);
+                }else if(cur_agree==3){
+                    roomStatus.setAgree_4(user.getId());
+                    roomStatus.setAgree(4);
+                }else if(cur_agree==4){
+                    roomStatus.setAgree_5(user.getId());
+                    roomStatus.setAgree(5);
+                }
             }
 
-        }else if(roomEnterReq.getPos()==2){//반대
-
-        }else{ //방청객
-
+        }else if(roomEnterReq.getPos()==2) {//반대
+            int max_num = roomInfo.getMax_num();
+            RoomStatus roomStatus = roomInfo.getRoomStatus();
+            if (roomStatus.getAgree() >= max_num) {
+                throw new IllegalArgumentException();
+            } else {
+                int cur_agree = roomStatus.getDisagree();
+                if (cur_agree == 0) {
+                    roomStatus.setDisagree_1(user.getId());
+                    roomStatus.setDisagree(1);
+                } else if (cur_agree == 1) {
+                    roomStatus.setDisagree_2(user.getId());
+                    roomStatus.setDisagree(2);
+                } else if (cur_agree == 2) {
+                    roomStatus.setDisagree_3(user.getId());
+                    roomStatus.setDisagree(3);
+                } else if (cur_agree == 3) {
+                    roomStatus.setDisagree_4(user.getId());
+                    roomStatus.setDisagree(4);
+                } else if (cur_agree == 4) {
+                    roomStatus.setDisagree_5(user.getId());
+                    roomStatus.setDisagree(5);
+                }
+            }
         }
-
         //방 인원 수 한명 증가
         roomInfo.setCur_num(roomInfo.getCur_num()+1);
         roomInfoRepository.save(roomInfo);
 
         RoomInfoDto roomInfoDto = new RoomInfoDto(roomInfo);
         return roomInfoDto;
-
 
     }
 
