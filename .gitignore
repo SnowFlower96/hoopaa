@@ -1,5 +1,4 @@
 ### backend-java ###
-backend/
 backend-java/.gradle
 backend-java/build
 backend-java/!gradle/wrapper/gradle-wrapper.jar
