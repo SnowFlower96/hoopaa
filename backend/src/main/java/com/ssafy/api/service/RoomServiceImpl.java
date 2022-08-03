@@ -53,21 +53,17 @@ public class RoomServiceImpl implements RoomService{
                 .title(roomOpenInfo.getTitle())
                 .subtitle(roomOpenInfo.getSubtitle())
                 .build();
-        System.out.println("host email : " + roomOpenInfo.getHost_em());
         roomInfo =  roomInfoRepository.save(roomInfo);
         User user = userRepository.findUserByEm(roomOpenInfo.getHost_em()).get();
         RoomStatus roomStatus = RoomStatus.builder()
                 .id(roomInfo.getId())
                 .build();
-        System.out.println("포지션 : "+roomOpenInfo.getPos() );
         //시스템 모드 , 사회자 모드면 자동으로 호스트는 사회자
         if(roomOpenInfo.getIs_sys()==1){
 
             if(roomOpenInfo.getPos()==1){ //찬성
-                System.out.println("찬성");
                 roomStatus.setAgree(1);
                 roomStatus.setAgree_1(user.getId());
-                System.out.println(roomStatus.getAgree_1());
             }else if(roomOpenInfo.getPos()==2){ //반대
                 roomStatus.setDisagree(1);
                 roomStatus.setDisagree_1(roomInfo.getHost_id());
@@ -119,8 +115,6 @@ public class RoomServiceImpl implements RoomService{
                 .disagree(roomCloseReq.getDisagree())
                 .invalid(roomCloseReq.getInvalid()).build();
         roomInfo.setPhase(3);
-        System.out.println("roomInfo id = " + roomInfo.getId());
-        System.out.println("roomHistoy id = "+ roomHistory.getId());
         roomInfo.setRoomHistory(roomHistory);
         roomInfoRepository.save(roomInfo);
     }
@@ -131,7 +125,6 @@ public class RoomServiceImpl implements RoomService{
     public RoomInfoDto enterDebate(RoomEnterReq roomEnterReq, User user) throws NoSuchElementException{
         RoomInfo roomInfo = roomInfoRepository.findById(roomEnterReq.getId()).get();
 
-        System.out.println(roomInfo.getPwd()+" : "+roomEnterReq.getPwd());
         //비밀번호 체크
         if(!roomInfo.getPwd().equals(roomEnterReq.getPwd())){
             return null;
@@ -198,7 +191,6 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public int findHashtagId(String nm) {
-        System.out.println("해시태그 아이디 찾기");
         hashtagRepository.findHashtagByNm(nm);
 
         Optional<Hashtag> hash = hashtagRepository.findHashtagByNm(nm);
