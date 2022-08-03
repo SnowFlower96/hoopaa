@@ -24,19 +24,19 @@ public class UserStat {
 
     int draw;
 
-    int panelty;
+    int penalty;
 
     int king;
 
     @Builder
-    public UserStat(Long id, int exp, int total, int win, int lose, int draw, int panelty, int king) {
+    public UserStat(Long id, int exp, int total, int win, int lose, int draw, int penalty, int king) {
         this.id = id;
         this.exp = exp;
         this.total = total;
         this.win = win;
         this.lose = lose;
         this.draw = draw;
-        this.panelty = panelty;
+        this.penalty = penalty;
         this.king = king;
     }
 }

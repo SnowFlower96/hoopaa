@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `hashtag`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hashtag` (
-  `id` mediumint(8) unsigned NOT NULL,
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `nm` varchar(5) COLLATE utf8mb4_bin DEFAULT NULL,
   `cnt` mediumint(8) unsigned DEFAULT '0',
   `recent` datetime DEFAULT CURRENT_TIMESTAMP,
@@ -144,62 +144,6 @@ INSERT INTO `room_info` VALUES (1,'test',1,0,'thumbnail',0,5,2,'2022-07-21 15:48
 UNLOCK TABLES;
 
 --
--- Table structure for table `room_status`
---
-
-DROP TABLE IF EXISTS `room_status`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `room_status` (
-  `id` int(10) unsigned NOT NULL,
-  `agree_1` mediumint(8) unsigned DEFAULT NULL,
-  `agree_2` mediumint(8) unsigned DEFAULT NULL,
-  `agree_3` mediumint(8) unsigned DEFAULT NULL,
-  `agree_4` mediumint(8) unsigned DEFAULT NULL,
-  `agree_5` mediumint(8) unsigned DEFAULT NULL,
-  `disagree_1` mediumint(8) unsigned DEFAULT NULL,
-  `disagree_2` mediumint(8) unsigned DEFAULT NULL,
-  `disagree_3` mediumint(8) unsigned DEFAULT NULL,
-  `disagree_4` mediumint(8) unsigned DEFAULT NULL,
-  `disagree_5` mediumint(8) unsigned DEFAULT NULL,
-  `agree` tinyint(3) unsigned DEFAULT '0',
-  `disagree` tinyint(3) unsigned DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `agree_1_idx` (`agree_1`),
-  KEY `agree__idx` (`agree_2`),
-  KEY `agree_3_idx` (`agree_3`),
-  KEY `agree_4_idx` (`agree_4`),
-  KEY `agree_5_idx` (`agree_5`),
-  KEY `disagree_1_idx` (`disagree_1`),
-  KEY `disagree_2_idx` (`disagree_2`),
-  KEY `disagree_3_idx` (`disagree_3`),
-  KEY `disagree_4_idx` (`disagree_4`),
-  KEY `disagree_5_idx` (`disagree_5`),
-  CONSTRAINT `agree_1` FOREIGN KEY (`agree_1`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `agree_2` FOREIGN KEY (`agree_2`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `agree_3` FOREIGN KEY (`agree_3`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `agree_4` FOREIGN KEY (`agree_4`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `agree_5` FOREIGN KEY (`agree_5`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `disagree_1` FOREIGN KEY (`disagree_1`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `disagree_2` FOREIGN KEY (`disagree_2`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `disagree_3` FOREIGN KEY (`disagree_3`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `disagree_4` FOREIGN KEY (`disagree_4`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `disagree_5` FOREIGN KEY (`disagree_5`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `room_id` FOREIGN KEY (`id`) REFERENCES `room_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `room_status`
---
-
-LOCK TABLES `room_status` WRITE;
-/*!40000 ALTER TABLE `room_status` DISABLE KEYS */;
-INSERT INTO `room_status` VALUES (1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0),(2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0),(3,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0);
-/*!40000 ALTER TABLE `room_status` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `user`
 --
 
@@ -306,4 +250,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-08-03 11:06:24
+-- Dump completed on 2022-07-26 11:04:40

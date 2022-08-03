@@ -1,6 +1,8 @@
 package com.ssafy.db.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -23,6 +25,7 @@ public class RoomInfo {
     private int phase;
     private int max_num;
     private int cur_num;
+    @Generated(GenerationTime.INSERT)
     private LocalDateTime start_time;
     private Integer cate;
     private Integer hash_1;
@@ -31,7 +34,7 @@ public class RoomInfo {
     private String title;
     private String subtitle;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
     RoomHistory roomHistory;
 
