@@ -339,19 +339,19 @@ export default {
       const orderedDate = this.$store.state.roomList.sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
       this.GET_ROOM_LIST(JSON.stringify(orderedDate));
       this.data = orderedDate;
-      this.$router.replace;
+
     },
     sortCur () {
       const sortdata = this.$store.state.roomList.sort((a,b) => b.cur_num - a.cur_num);
       this.GET_ROOM_LIST(JSON.stringify(sortdata));
       this.data= sortdata;
-      this.$router.replace;
+
     },
     sortOld () {
       const orderedDate = this.$store.state.roomList.sort((a, b) => new Date(a.start_time) - new Date(b.start_time))
       this.GET_ROOM_LIST(JSON.stringify(orderedDate));
       this.data = orderedDate;
-      this.$router.replace;
+
     },
     sortRank () {
 
@@ -368,11 +368,11 @@ export default {
         }
 
     this.GET_ROOM_LIST(JSON.stringify(data));
-    this.$router.replace;
+
     } else {
       this.data = JSON.stringify(this.data)
       this.GET_ROOM_LIST(this.data);
-      this.$router.replace;
+     
     }
     },
 

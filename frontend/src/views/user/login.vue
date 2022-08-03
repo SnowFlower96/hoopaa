@@ -34,16 +34,16 @@ export default {
     if(this.loginNew) {
       this.$store.dispatch("emailAuth",data)
     }
-  },
 
+  },
   methods : {
-    login () {
+    async login () {
       var data = {
         em : this.em,
         pwd : this.pwd
       }
       console.log(data);
-      this.$store.dispatch("login",data);
+      await this.$store.dispatch("login",data);
     }
   }
 }

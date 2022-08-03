@@ -19,7 +19,6 @@ import myPage from '@/views/user/mypage'
 import checkPwd from '@/views/user/checkPwd'
 import myPageInfo from '@/views/user/mypage-info'
 
-
 const fullMenu = require('@/views/main/menu.json')
 
 const checkLogin = () => (from, to, next) => {
@@ -81,6 +80,7 @@ function makeRoutesFromMenu () {
 
   },
 
+
   {
   path : '/myPage/info',
   name : 'myPage-info',
@@ -127,9 +127,9 @@ function makeRoutesFromMenu () {
   path : '/myPage/reSign',
   name : 'reSign',
   component : reSign
-}
-  )
+},
 
+  )
   return routes
 }
 

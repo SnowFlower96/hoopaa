@@ -30,6 +30,8 @@ export default new Vuex.Store({
       state.isLogin = true;
       sessionStorage.setItem("accessToken", token);
       api.defaults.headers["accessToken"] = token;
+      this.dispatch("getUserHistory");
+      this.dispatch("getUserStat");
     },
     // 로그아웃
     USER_LOGOUT(state) {
@@ -106,7 +108,6 @@ export default new Vuex.Store({
       }).then((res) => {
           commit("USER_LOGIN", res.data.accessToken);
           router.push('/')
-
       }).catch(error => {
         reject(error)
         alert("이메일 , 비밀번호를 확인하세요")
@@ -200,7 +201,7 @@ export default new Vuex.Store({
     },
 
     // 유저 비밀번호 확인
-    checkPwd(data) {
+    checkPwd({commit}, data) {
       return new Promise((reject) => {
       tapi({
         url : `/users/verify`,
@@ -216,6 +217,7 @@ export default new Vuex.Store({
         } else {
           router.push('/myPage/reSign')
         }
+        commit();
       }).catch(error => {
         reject(error)
         alert("비밀번호를 확인하세요")
@@ -230,6 +232,18 @@ export default new Vuex.Store({
       })
     })
   },
+
+  // 토론방 생성
+  makeRoom({commit}, room) {
+    api({
+      url : `/room`,
+      method : "POST",
+      data : room,
+    }).then(() =>{
+      router.push('/debateRoom')
+    })
+    commit();
+  }
 
 
 }})
