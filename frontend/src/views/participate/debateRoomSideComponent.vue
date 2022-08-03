@@ -68,7 +68,7 @@ export default {
 .panel-video {
     width: var(--side-video-width);
     height: var(--side-video-height-inner);
-    background-color: rgb(100, 232, 255);
+    /* background-color: rgb(100, 232, 255); */
     display: flex;
     align-items: center;
 }
