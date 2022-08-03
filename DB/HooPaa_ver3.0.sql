@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `hashtag`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hashtag` (
-  `id` mediumint(8) unsigned NOT NULL,
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `nm` varchar(5) COLLATE utf8mb4_bin DEFAULT NULL,
   `cnt` mediumint(8) unsigned DEFAULT '0',
   `recent` datetime DEFAULT CURRENT_TIMESTAMP,
@@ -306,4 +306,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-08-03 11:06:24
+-- Dump completed on 2022-08-03 14:54:47
