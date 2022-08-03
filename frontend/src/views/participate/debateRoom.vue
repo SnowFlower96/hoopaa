@@ -1,7 +1,33 @@
 <template>
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
+<!-- 사회자에게 메세지 보내기 -->
+<div v-if="callToMdModal" class="call-to-moderator-container" :style="customCaroselStyle">
+    <div class="call-to-moderator-blank"></div>
+    <div class="call-to-moderator">
+        <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
+        <div class="call-to-moderator-inner call-to-moderator-center" :style="customCaroselStyle">
+            <button @click="offCallModal">끄기</button>
+            <!-- <call-to-moderator></call-to-moderator>
+            <user-out></user-out> -->
+            <!-- <message-from-team></message-from-team> -->
+            <!-- <upload-file></upload-file> -->
+            <!-- <let-team-speak></let-team-speak> -->
+            <!-- <rest-time></rest-time> -->
+            <let-vote></let-vote>
+        </div>
+        <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
+    </div>
+    <div class="call-to-moderator-blank"></div>
+</div>
+<!-- 사회자에게 메세지 보내기 -->
+
 <div v-if="imgTF" class="startImg">
-    <animation-view></animation-view>
+    <!-- <animation-view></animation-view> -->
+    <!-- 뷰바꾸는 임시버튼 -->
+    <button @click="moderatorView">사회자뷰</button>
+    <button @click="allView">방청객뷰</button>
+    <button @click="teamView">패널뷰</button>
+    <!-- 뷰바꾸는 임시버튼 -->
 </div>
     <div class="debate-backcolor">
         <div class="video-chatt-wrap">
@@ -21,12 +47,17 @@
                 </div>
             </div>
             <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
-                <chatting-all></chatting-all>
+                <chatting-all v-if="chattingAllView"></chatting-all>
+                <chatting-team v-if="chattingTeamView"></chatting-team>
             </div>
         </div>
         <div class="debate-room-footer-class">
-            <button @click="">자료올리는버튼 => v-if로 view 조절하기</button>
-            <button @click="footerButton">채팅방 버튼</button>
+            <button @click="changeChatView">채팅방 버튼</button>
+            <footer-team 
+            v-if="footerTeam"
+            @call-modal="EmitcallModal"></footer-team>
+            <footer-moderator v-if="footerModerator" @call-modal="EmitcallModal"></footer-moderator>
+            <footer-all v-if="footerAll"></footer-all>
         </div>
     </div>
 </template>
@@ -37,6 +68,20 @@ import debateRoomSideComponent from './debateRoomSideComponent'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
 // import animationView from './animation-view.vue'
 import chattingAll from './ChattingComponents/chatting-all'
+import chattingTeam from './ChattingComponents/chatting-team'
+import FooterTeam from './debateRoomFooter/FooterTeam'
+import FooterModerator from './debateRoomFooter/FooterModerator'
+import FooterAll from './debateRoomFooter/FooterAll'
+
+import callToModerator from './ModalContent/TeamView/callToModerator'
+import UploadFile from './ModalContent/TeamView/UploadFile'
+
+import UserOut from './ModalContent/ModeratorView/UserOut'
+import MessageFromTeam from './ModalContent/ModeratorView/MessageFromTeam'
+import LetTeamSpeak from './ModalContent/ModeratorView/LetTeamSpeak'
+import RestTime from './ModalContent/ModeratorView/RestTime'
+import LetVote from './ModalContent/ModeratorView/LetVote'
+
 
 export default {
     name: 'debateRoom',
@@ -44,7 +89,19 @@ export default {
         debateRoomSideComponent,
         debateRoomCenterComponent,
         // animationView,
-        chattingAll
+        chattingAll,
+        chattingTeam,
+        FooterTeam,
+        FooterModerator,
+        FooterAll,
+        callToModerator,
+        UserOut,
+        MessageFromTeam,
+        UploadFile,
+        LetTeamSpeak,
+        RestTime,
+        LetVote
+
     },
     computed : {
         customCaroselStyle() {
@@ -61,6 +118,12 @@ export default {
                 "--chatt-box": this.chattBox,      // chatting-box
 
                 "--db-bg" : this.debateBackground, // debate background
+
+                "--call-to-md-view" : this.callToMDView,
+                "--call-to-md-blnk" : this.callToMDBlnk,
+                "--call-to-md-ct" : this.callToMDCt,
+                "--call-to-md-in-width" : this.callToMDInW,
+                "--call-to-md-in-height" : this.callToMDInH,
             }
         }
     },
@@ -78,7 +141,22 @@ export default {
             debateBackground: '',
 
             chattTF: true,
-            imgTF:false,
+            imgTF:true,
+
+            chattingAllView: false,
+            chattingTeamView: false,
+
+            footerTeam: false,
+            footerModerator: false,
+            footerAll: false,
+
+            callToMDView: '',
+            callToMDBlnk: '',
+            callToMDCt: '',
+            callToMDInW: '',
+            callToMDInH: '',
+
+            callToMdModal: true
         }
     },
     mounted() {
@@ -97,6 +175,28 @@ export default {
 
         this.debateCenterBoxHeight = `${hValue*0.8}px`
         this.debateSideBoxHeight = `${hValue*0.8}px`
+
+        this.callToMDView = `${debateBackground}px`
+        this.callToMDBlnk = `${debateBackground*0.3}px`
+        this.callToMDCt = `${debateBackground*0.4}px`
+        this.callToMDInW = `${debateBackground*0.4}px`
+        this.callToMDInH = `${hValue*0.31}px`
+        // const wVideoValue = document.body.clientWidth
+        // const debateBackground = wVideoValue
+
+        // const hValue = document.body.clientHeight
+
+
+        // this.debateBackground = `${debateBackground}px`
+        // this.chattBox = `${wVideoValue*0.25}px`
+        // this.footerWidth = `${wVideoValue}px`
+        
+
+        // this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
+        // this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
+        
+        // this.debateCenterBoxHeight = `${hValue*0.8}px`
+        // this.debateSideBoxHeight = `${hValue*0.8}px`
         
         window.addEventListener('resize', this.handleResizeHome);
 
@@ -106,41 +206,75 @@ export default {
             if (this.chattTF === true) {    // 채팅창 열려있을때
                 const wVideoValue = document.body.clientWidth
                 const debateBackground = wVideoValue*0.75
-
                 const hValue = document.body.clientHeight
 
 
                 this.debateBackground = `${debateBackground}px`
-                this.chattBox = `${wVideoValue*0.25}px`
+                this.chattBox =  `${wVideoValue*0.25}px`
                 this.footerWidth = `${wVideoValue}px`
                 
 
                 this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
                 this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
-                
+
                 this.debateCenterBoxHeight = `${hValue*0.8}px`
                 this.debateSideBoxHeight = `${hValue*0.8}px`
+
+                this.callToMDView = `${debateBackground}px`
+                this.callToMDBlnk = `${debateBackground*0.3}px`
+                this.callToMDCt = `${debateBackground*0.4}px`
+                this.callToMDInW = `${debateBackground*0.4}px`
+                this.callToMDInH = `${hValue*0.31}px`
             }
             else {     // 채팅창 닫혀있을때
                 const wVideoValue = document.body.clientWidth
                 const debateBackground = wVideoValue
-
                 const hValue = document.body.clientHeight
 
 
                 this.debateBackground = `${debateBackground}px`
-                this.chattBox = `${wVideoValue*0.25}px`
+                this.chattBox =  `${wVideoValue*0.25}px`
                 this.footerWidth = `${wVideoValue}px`
                 
 
                 this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
                 this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
-                
+
                 this.debateCenterBoxHeight = `${hValue*0.8}px`
                 this.debateSideBoxHeight = `${hValue*0.8}px`
+
+                this.callToMDView = `${debateBackground}px`
+                this.callToMDBlnk = `${debateBackground*0.3}px`
+                this.callToMDCt = `${debateBackground*0.4}px`
+                this.callToMDInW = `${debateBackground*0.4}px`
+                this.callToMDInH = `${hValue*0.31}px`
             }
         },
-        footerButton() {
+        moderatorView() {
+            this.chattingAllView = true
+            this.chattingTeamView = false
+
+            this.footerModerator = true
+            this.footerTeam = false
+            this.footerAll = false
+        },
+        allView() {
+            this.chattingAllView = true
+            this.chattingTeamView = false
+
+            this.footerAll = true
+            this.footerModerator = false
+            this.footerTeam = false
+        },
+        teamView() {
+            this.chattingAllView = false
+            this.chattingTeamView = true
+
+            this.footerTeam = true
+            this.footerModerator = false
+            this.footerAll = false
+        },
+        changeChatView() {
             this.chattTF = !this.chattTF
             if (this.chattTF === true) {    // 채팅창 열려있을때
                 const wVideoValue = document.body.clientWidth
@@ -178,13 +312,49 @@ export default {
                 this.debateCenterBoxHeight = `${hValue*0.8}px`
                 this.debateSideBoxHeight = `${hValue*0.8}px`
             }
+        },
+        offCallModal() {
+            this.callToMdModal = false
+        },
+        // Emit 함수를 하나로 하고 그 안에서 분기처리하기
+        EmitcallModal() {
+            this.callToMdModal = !this.callToMdModal
         }
+
 
     }
 }
 </script>
 
 <style>
+/* 사회자에게 메세지 보내기 스타일 라인 */
+.call-to-moderator-container {
+    position: absolute;
+    height: 93vh;
+    width: var(--call-to-md-view);
+    /* background-color: yellow; */
+    /* opacity: 50%; */
+    display: flex;
+    justify-content: start;
+}
+.call-to-moderator-blank {
+    width: var(--call-to-md-blnk);
+}
+.call-to-moderator {
+    width: var(--call-to-md-ct);
+}
+.call-to-moderator-inner {
+    width: var(--call-to-md-in-width);
+    height: var(--call-to-md-in-height);
+    /* outline: solid 3px orange; */
+}
+.call-to-moderator-center {
+    background-color: whitesmoke;
+    border-radius: 10px;
+    outline: black 3px solid;
+}
+/* 사회자에게 메세지 보내기 스타일 라인 */
+
 .startImg {
     position: absolute;
     top: 20%;
