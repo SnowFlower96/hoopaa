@@ -1,6 +1,6 @@
 <template>
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
-<div class="startImg">
+<div v-if="imgTF" class="startImg">
     <animation-view></animation-view>
 </div>
     <div class="debate-backcolor">
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
-                <div>여기는 채팅창</div>
+                <chatting-all></chatting-all>
             </div>
         </div>
         <div class="debate-room-footer-class">
@@ -36,13 +36,15 @@
 import debateRoomSideComponent from './debateRoomSideComponent'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
 import animationView from './animation-view.vue'
+import chattingAll from './ChattingComponents/chatting-all'
 
 export default {
     name: 'debateRoom',
     components: {
         debateRoomSideComponent,
         debateRoomCenterComponent,
-        animationView
+        animationView,
+        chattingAll
     },
     computed : {
         customCaroselStyle() {
@@ -76,7 +78,7 @@ export default {
             debateBackground: '',
 
             chattTF: true,
-            imgTF:true,
+            imgTF:false,
         }
     },
     mounted() {
@@ -214,9 +216,10 @@ export default {
     align-items: center;
 }
 .chatting-box {
-    background-color: pink;
+    background-color: whitesmoke;
     width: var(--chatt-box);
     height: 93vh;
+    border-radius: 10px;
 }
 .debate-room-wrap {
     display: flex;
