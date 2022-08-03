@@ -146,7 +146,7 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
 			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
 	})
-	public ResponseEntity<UserLoginPostRes> refresToken(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value="리프레시 토큰", required = true) Map<String ,String > tokens) {
+	public ResponseEntity<UserLoginPostRes> refreshToken(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value="리프레시 토큰", required = true) Map<String ,String > tokens) {
 
 		String accessToken = tokens.get("accessToken");
 		String refreshToken = tokens.get("refreshToken");
