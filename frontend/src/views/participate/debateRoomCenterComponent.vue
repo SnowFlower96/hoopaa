@@ -1,7 +1,11 @@
 <template>
     <div class="debate-center-wrap" >
         <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle">사회자비디오</div></div>
-        <div class="debate-guague" :style="customViewStyle"><div class="debate-guague-inner" :style="customViewStyle">게이지바</div></div>
+        <div class="debate-guague" :style="customViewStyle">
+            <div class="debate-guague-inner" :style="customViewStyle">
+                <div></div>
+            </div>
+        </div>
         <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle">자료화면</div></div>
     </div>
 </template>
@@ -92,6 +96,7 @@ export default {
     background-color: white;
     height: var(--center-video-height);
     width: var(--center-video-width);
+    border-radius: 10px;
 }
 
 

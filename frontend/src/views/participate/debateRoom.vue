@@ -47,17 +47,18 @@
                 </div>
             </div>
             <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
+                <button @click="changeChatView">닫기</button>
                 <chatting-all v-if="chattingAllView"></chatting-all>
                 <chatting-team v-if="chattingTeamView"></chatting-team>
             </div>
         </div>
         <div class="debate-room-footer-class">
-            <button @click="changeChatView">채팅방 버튼</button>
             <footer-team 
             v-if="footerTeam"
             @call-modal="EmitcallModal"></footer-team>
             <footer-moderator v-if="footerModerator" @call-modal="EmitcallModal"></footer-moderator>
             <footer-all v-if="footerAll"></footer-all>
+            <button @click="changeChatView">채팅방 버튼</button>
         </div>
     </div>
 </template>
@@ -67,8 +68,10 @@
 import debateRoomSideComponent from './debateRoomSideComponent'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
 // import animationView from './animation-view.vue'
+
 import chattingAll from './ChattingComponents/chatting-all'
 import chattingTeam from './ChattingComponents/chatting-team'
+
 import FooterTeam from './debateRoomFooter/FooterTeam'
 import FooterModerator from './debateRoomFooter/FooterModerator'
 import FooterAll from './debateRoomFooter/FooterAll'
@@ -156,7 +159,7 @@ export default {
             callToMDInW: '',
             callToMDInH: '',
 
-            callToMdModal: true
+            callToMdModal: false
         }
     },
     mounted() {
@@ -181,22 +184,6 @@ export default {
         this.callToMDCt = `${debateBackground*0.4}px`
         this.callToMDInW = `${debateBackground*0.4}px`
         this.callToMDInH = `${hValue*0.31}px`
-        // const wVideoValue = document.body.clientWidth
-        // const debateBackground = wVideoValue
-
-        // const hValue = document.body.clientHeight
-
-
-        // this.debateBackground = `${debateBackground}px`
-        // this.chattBox = `${wVideoValue*0.25}px`
-        // this.footerWidth = `${wVideoValue}px`
-        
-
-        // this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
-        // this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
-        
-        // this.debateCenterBoxHeight = `${hValue*0.8}px`
-        // this.debateSideBoxHeight = `${hValue*0.8}px`
         
         window.addEventListener('resize', this.handleResizeHome);
 
@@ -279,38 +266,48 @@ export default {
             if (this.chattTF === true) {    // 채팅창 열려있을때
                 const wVideoValue = document.body.clientWidth
                 const debateBackground = wVideoValue*0.75
-
                 const hValue = document.body.clientHeight
 
 
                 this.debateBackground = `${debateBackground}px`
-                this.chattBox = `${wVideoValue*0.25}px`
+                this.chattBox =  `${wVideoValue*0.25}px`
                 this.footerWidth = `${wVideoValue}px`
                 
 
                 this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
                 this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
-                
+
                 this.debateCenterBoxHeight = `${hValue*0.8}px`
                 this.debateSideBoxHeight = `${hValue*0.8}px`
+
+                this.callToMDView = `${debateBackground}px`
+                this.callToMDBlnk = `${debateBackground*0.3}px`
+                this.callToMDCt = `${debateBackground*0.4}px`
+                this.callToMDInW = `${debateBackground*0.4}px`
+                this.callToMDInH = `${hValue*0.31}px`
             }
             else {     // 채팅창 닫혀있을때
                 const wVideoValue = document.body.clientWidth
                 const debateBackground = wVideoValue
-
                 const hValue = document.body.clientHeight
 
 
                 this.debateBackground = `${debateBackground}px`
-                this.chattBox = `${wVideoValue*0.25}px`
+                this.chattBox =  `${wVideoValue*0.25}px`
                 this.footerWidth = `${wVideoValue}px`
                 
 
                 this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
                 this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
-                
+
                 this.debateCenterBoxHeight = `${hValue*0.8}px`
                 this.debateSideBoxHeight = `${hValue*0.8}px`
+
+                this.callToMDView = `${debateBackground}px`
+                this.callToMDBlnk = `${debateBackground*0.3}px`
+                this.callToMDCt = `${debateBackground*0.4}px`
+                this.callToMDInW = `${debateBackground*0.4}px`
+                this.callToMDInH = `${hValue*0.31}px`
             }
         },
         offCallModal() {

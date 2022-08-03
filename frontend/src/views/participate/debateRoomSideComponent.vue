@@ -76,6 +76,7 @@ export default {
     width: var(--side-video-width);
     height: var(--side-video-height);
     background-color: white;
+    border-radius: 10px;
 }
 </style>
 
