@@ -41,7 +41,7 @@
     
 }
 .chatting-all-view-inner {
-    height:60vh;
+    height:55vh;
     overflow: auto;
 }
 .chatting-all-write {
