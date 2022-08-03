@@ -13,8 +13,7 @@ services:
     networks:
       - my_network
   backend:
-    build:
-      context: backend
+    build: backend
     container_name: backend
     restart: always
     expose:
