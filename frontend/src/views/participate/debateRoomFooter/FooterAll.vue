@@ -9,9 +9,6 @@
 export default {
     name: 'debateRoomFooter',
     methods: {
-        callChatAll() {
-            this.$emit('call-chat-all')
-        }
     }
 }
 </script>

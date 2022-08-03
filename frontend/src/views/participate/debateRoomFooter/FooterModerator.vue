@@ -1,8 +1,8 @@
 <template>
     <div class="debate-room-footer-container">
         <span>여기는 사회버튼</span>
-        <button @click="callModal">도구모음</button>
-        <button @click="callModal">강퇴버튼</button>
+        <button @click="callModalMenu">도구모음</button>
+        <button @click="callModalOut">강퇴버튼</button>
     </div>
 </template>
 
@@ -10,9 +10,8 @@
 export default {
     name: 'debateRoomFooter',
     methods: {
-        callModal() {
-            this.$emit('call-modal')
-        }
+        callModalMenu() {this.$emit('call-modal', 'menu')},
+        callModalOut() {this.$emit('call-modal', 'out')},
     }
 }
 </script>

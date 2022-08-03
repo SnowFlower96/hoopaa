@@ -7,13 +7,13 @@
         <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
         <div class="call-to-moderator-inner call-to-moderator-center" :style="customCaroselStyle">
             <button @click="offCallModal">끄기</button>
-            <!-- <call-to-moderator></call-to-moderator>
-            <user-out></user-out> -->
-            <!-- <message-from-team></message-from-team> -->
-            <!-- <upload-file></upload-file> -->
-            <!-- <let-team-speak></let-team-speak> -->
-            <!-- <rest-time></rest-time> -->
-            <let-vote></let-vote>
+            <call-to-moderator v-if="message"></call-to-moderator>
+            <user-out v-if="out"></user-out>
+            <message-from-team v-if="messageFrom"></message-from-team>
+            <upload-file v-if="file"></upload-file>
+            <let-team-speak v-if="menu"></let-team-speak>
+            <rest-time v-if="false"></rest-time>
+            <let-vote v-if="false"></let-vote>
         </div>
         <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
     </div>
@@ -27,6 +27,7 @@
     <button @click="moderatorView">사회자뷰</button>
     <button @click="allView">방청객뷰</button>
     <button @click="teamView">패널뷰</button>
+    <router-link to="/detailSession"><button>세부세션 가기</button></router-link>
     <!-- 뷰바꾸는 임시버튼 -->
 </div>
     <div class="debate-backcolor">
@@ -159,7 +160,13 @@ export default {
             callToMDInW: '',
             callToMDInH: '',
 
-            callToMdModal: false
+            callToMdModal: false,
+
+            message: false,
+            file: false,
+            out: false,
+            menu: false,
+            options: [this.menu, this.out, this.message, this.file]
         }
     },
     mounted() {
@@ -314,8 +321,44 @@ export default {
             this.callToMdModal = false
         },
         // Emit 함수를 하나로 하고 그 안에서 분기처리하기
-        EmitcallModal() {
+        EmitcallModal(option) {
+            // const labels = ['menu', 'out', 'message', 'file'];
+            
+            // for (let idx=0; idx < this.options.length; idx++) {
+            //      console.log(labels[idx], option, this.options[idx])
+            //     if (labels[idx] == option) {
+            //         this.options[idx] = true
+            //         console.log('여기를 왔는데 ?', labels[idx], this.options)
+            //     } else {
+            //         this.options[idx] = false
+            //     }
+            // }
             this.callToMdModal = !this.callToMdModal
+
+            if (option == 'menu') {
+                this.menu = true
+                this.out = false
+                this.message = false
+                this.file = false
+            }
+            else if (option == 'out') {
+                this.menu = false
+                this.out = true
+                this.message = false
+                this.file = false
+            }
+            else if (option == 'message') {
+                this.menu = false
+                this.out = false
+                this.message = true
+                this.file = false
+            }
+            else if (option == 'file') {
+                this.menu = false
+                this.out = false
+                this.message = false
+                this.file = true
+            }
         }
 
 
