@@ -53,9 +53,9 @@ public class RoomServiceImpl implements RoomService{
                 .title(roomOpenInfo.getTitle())
                 .subtitle(roomOpenInfo.getSubtitle())
                 .build();
-        System.out.println("host id : " + roomOpenInfo.getHost_id());
+        System.out.println("host email : " + roomOpenInfo.getHost_em());
         roomInfo =  roomInfoRepository.save(roomInfo);
-        User user = userRepository.findUserById(roomOpenInfo.getHost_id()).get();
+        User user = userRepository.findUserByEm(roomOpenInfo.getHost_em()).get();
         RoomStatus roomStatus = RoomStatus.builder()
                 .id(roomInfo.getId())
                 .build();
@@ -66,7 +66,7 @@ public class RoomServiceImpl implements RoomService{
             if(roomOpenInfo.getPos()==1){ //찬성
                 System.out.println("찬성");
                 roomStatus.setAgree(1);
-                roomStatus.setAgree_1(roomOpenInfo.getHost_id());
+                roomStatus.setAgree_1(user.getId());
                 System.out.println(roomStatus.getAgree_1());
             }else if(roomOpenInfo.getPos()==2){ //반대
                 roomStatus.setDisagree(1);
@@ -135,6 +135,19 @@ public class RoomServiceImpl implements RoomService{
         //비밀번호 체크
         if(!roomInfo.getPwd().equals(roomEnterReq.getPwd())){
             return null;
+        }
+
+        if(roomEnterReq.getPos()==1){//찬성
+            int max_num = roomInfo.getMax_num();
+            RoomStatus roomStatus = roomInfo.getRoomStatus();
+            if(roomStatus.getAgree()>=max_num){
+
+            }
+
+        }else if(roomEnterReq.getPos()==2){//반대
+
+        }else{ //방청객
+
         }
 
         //방 인원 수 한명 증가
