@@ -1,8 +1,8 @@
 <template>
-<img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt="">
+<!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
     <div class="debate-backcolor">
         <div class="video-chatt-wrap">
-            <div class="debate-background">
+            <div class="debate-background" :style="customCaroselStyle">
                 <div class="debate-room-wrap">
                     <div class="videobox-side" :style="customCaroselStyle">
                         <debate-room-side-component></debate-room-side-component>
@@ -17,12 +17,13 @@
                     </div>
                 </div>
             </div>
-            <div class="chatting-box" :style="customCaroselStyle">
+            <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
                 <div>여기는 채팅창</div>
             </div>
         </div>
         <div class="debate-room-footer-class">
-            <debate-room-footer></debate-room-footer>
+            <button @click="">자료올리는버튼 => v-if로 view 조절하기</button>
+            <button @click="footerButton">채팅방 버튼</button>
         </div>
     </div>
 </template>
@@ -31,27 +32,28 @@
 <script>
 import debateRoomSideComponent from './debateRoomSideComponent'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
-import debateRoomFooter from './debateRoomFooter'
 
 export default {
     name: 'debateRoom',
     components: {
         debateRoomSideComponent,
-        debateRoomCenterComponent,
-        debateRoomFooter
+        debateRoomCenterComponent
     },
     computed : {
         customCaroselStyle() {
             return {
-                "--debate-box-center-width": this.debateCenterBoxWidth,
-                "--debate-box-center-height": this.debateCenterBoxHeight,
-                "--debate-box-side-width": this.debateSideBoxWidth,
-                "--debate-box-side-height": this.debateSideBoxHeight,
-                "--debate-box-width": this.debateBoxWidth,
-                "--debate-box-height": this.debateBoxHeight,
-                "--video-box": this.videoBox,
-                "--chatt-box": this.chattBox,
+                "--debate-box-center-width": this.debateCenterBoxWidth,    // videobox-center
+                "--debate-box-center-height": this.debateCenterBoxHeight,  // videobox-center
 
+                "--debate-box-side-width": this.debateSideBoxWidth,        // videobox-side
+                "--debate-box-side-height": this.debateSideBoxHeight,      // videobox-side
+
+                "--footer-width": this.footerWidth,    // debate-room-footer-class
+
+                "--video-box": this.videoBox,
+                "--chatt-box": this.chattBox,      // chatting-box
+
+                "--db-bg" : this.debateBackground, // debate background
             }
         }
     },
@@ -59,46 +61,118 @@ export default {
         return {
             debateCenterBoxWidth: '',
             debateCenterBoxHeight: '',
+            
             debateSideBoxWidth: '',
             debateSideBoxHeight: '',
+            
             videoBox: '',
             chattBox: '',
+
+            debateBackground: '',
+
             chattTF: true,
             imgTF:true,
         }
     },
     mounted() {
         const wVideoValue = document.body.clientWidth
-        const wValue = wVideoValue*0.8
-        this.chattBox =  `${wVideoValue*0.25}px`
-        this.videoBox =  `${wVideoValue*0.7}px`
+        const debateBackground = wVideoValue*0.75
         const hValue = document.body.clientHeight
-        this.debateCenterBoxWidth = `${wValue*0.4}px` // margin buffer 10px 고려한 계산
-        this.debateSideBoxWidth = `${wValue*0.8*0.25}px` // margin buffer 10px 고려한 계산
-        this.debateBoxWidth = `${wValue}px` // margin buffer 10px 고려한 계산
 
+
+        this.debateBackground = `${debateBackground}px`
+        this.chattBox =  `${wVideoValue*0.25}px`
+        this.footerWidth = `${wVideoValue}px`
         
 
-        this.debateCenterBoxHeight = `${hValue*0.7}px` // margin buffer 10px 고려한 계산
-        this.debateSideBoxHeight = `${hValue*0.7}px` // margin buffer 10px 고려한 계산
+        this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
+        this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
+
+        this.debateCenterBoxHeight = `${hValue*0.8}px`
+        this.debateSideBoxHeight = `${hValue*0.8}px`
+        
         window.addEventListener('resize', this.handleResizeHome);
 
-
-        
     },
     methods: {
         handleResizeHome() {
-        const wVideoValue = document.body.clientWidth
-        const wValue = wVideoValue*0.8
-        this.chattBox = `${wVideoValue*0.25}px`
-        const hValue = document.body.clientHeight
-        this.debateCenterBoxWidth = `${wValue*0.35}px` // margin buffer 10px 고려한 계산
-        this.debateSideBoxWidth = `${wValue*0.8*0.25}px` // margin buffer 10px 고려한 계산
-        this.debateBoxWidth = `${wValue}px` // margin buffer 10px 고려한 계산
-        
-        this.debateCenterBoxHeight = `${hValue*0.7}px` // margin buffer 10px 고려한 계산
-        this.debateSideBoxHeight = `${hValue*0.7}px` // margin buffer 10px 고려한 계산
+            if (this.chattTF === true) {    // 채팅창 열려있을때
+                const wVideoValue = document.body.clientWidth
+                const debateBackground = wVideoValue*0.75
+
+                const hValue = document.body.clientHeight
+
+
+                this.debateBackground = `${debateBackground}px`
+                this.chattBox = `${wVideoValue*0.25}px`
+                this.footerWidth = `${wVideoValue}px`
+                
+
+                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
+                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
+                
+                this.debateCenterBoxHeight = `${hValue*0.8}px`
+                this.debateSideBoxHeight = `${hValue*0.8}px`
+            }
+            else {     // 채팅창 닫혀있을때
+                const wVideoValue = document.body.clientWidth
+                const debateBackground = wVideoValue
+
+                const hValue = document.body.clientHeight
+
+
+                this.debateBackground = `${debateBackground}px`
+                this.chattBox = `${wVideoValue*0.25}px`
+                this.footerWidth = `${wVideoValue}px`
+                
+
+                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
+                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
+                
+                this.debateCenterBoxHeight = `${hValue*0.8}px`
+                this.debateSideBoxHeight = `${hValue*0.8}px`
+            }
         },
+        footerButton() {
+            this.chattTF = !this.chattTF
+            if (this.chattTF === true) {    // 채팅창 열려있을때
+                const wVideoValue = document.body.clientWidth
+                const debateBackground = wVideoValue*0.75
+
+                const hValue = document.body.clientHeight
+
+
+                this.debateBackground = `${debateBackground}px`
+                this.chattBox = `${wVideoValue*0.25}px`
+                this.footerWidth = `${wVideoValue}px`
+                
+
+                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
+                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
+                
+                this.debateCenterBoxHeight = `${hValue*0.8}px`
+                this.debateSideBoxHeight = `${hValue*0.8}px`
+            }
+            else {     // 채팅창 닫혀있을때
+                const wVideoValue = document.body.clientWidth
+                const debateBackground = wVideoValue
+
+                const hValue = document.body.clientHeight
+
+
+                this.debateBackground = `${debateBackground}px`
+                this.chattBox = `${wVideoValue*0.25}px`
+                this.footerWidth = `${wVideoValue}px`
+                
+
+                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
+                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
+                
+                this.debateCenterBoxHeight = `${hValue*0.8}px`
+                this.debateSideBoxHeight = `${hValue*0.8}px`
+            }
+        }
+
     }
 }
 </script>
@@ -113,54 +187,52 @@ export default {
 .debate-backcolor {
     background-color: black;
     height: 100vh;
-    text-align: center;
+    /* text-align: center; */
 }
 .video-chatt-wrap {
     display: flex;
-    justify-content: space-evenly;
 }
 .debate-background {
-    height: 95vh;
+    height: 93vh;
     display: flex;
     align-items: center;
+    justify-content: center;
+    /* background-color: rgba(96, 255, 112, 0.766); */
+    width: var(--db-bg);
 }
-
-.debate-room-wrap {
+.debate-room-footer-class {
+    width: var(--footer-width);
+    height: 7vh;
+    /* outline: 10px #669977 solid; */
     display: flex;
-    /* 여기 조절해야됨 */
-    /* width: var(--video-box); */
-    /* 여기 조절해야됨 */
+    justify-content: center;
+    align-items: center;
 }
 .chatting-box {
     background-color: pink;
-    /* 여기 조절해야됨 */
     width: var(--chatt-box);
-    /* 여기 조절해야됨 */
-    height: 95vh;
-    /* position: fixed;
-    top: 0;
-    right: 0; */
+    height: 93vh;
+}
+.debate-room-wrap {
+    display: flex;
+    /* background-color: rgba(146, 227, 153, 0.581); */
 }
 .videobox-side {
-  height: var(--debate-box-side-height);
-  width: var(--debate-box-side-width);
-  color: black;
-  /* background-color: aliceblue; */
-  outline: 10px #667799 solid;
+    display: flex;
+    justify-content: center;
+    height: var(--debate-box-side-height);
+    width: var(--debate-box-side-width);
+    color: black;
+    /* background-color: rgb(61, 255, 94); */
+    /* outline: 10px #667799 solid; */
 }
 .videobox-center {
   height: var(--debate-box-center-height);
   width: var(--debate-box-center-width);
   color: black;
-  /* background-color: aliceblue; */
-  outline: 10px #667799 solid;
+  /* background-color: rgba(121, 193, 255, 0.621); */
+  /* outline: 10px #667799 solid; */
 }
-.debate-room-component-content {
-    color: brown;
-}
-.debate-room-footer-class {
-    width: var(--debate-box-width);
-    height: 5vh;
-    outline: 10px #669977 solid;
-}
+
+
 </style>

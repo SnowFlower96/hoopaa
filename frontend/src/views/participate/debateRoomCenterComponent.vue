@@ -1,27 +1,125 @@
 <template>
-    <div>
-        <div class="debate-moderator">사회자 화면 넣으면 됨</div>
-        <div class="debate-guague">게이지바</div>
-        <div class="debate-content">자료화면</div>
+    <div class="debate-center-wrap" >
+        <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle">사회자비디오</div></div>
+        <div class="debate-guague" :style="customViewStyle"><div class="debate-guague-inner" :style="customViewStyle">게이지바</div></div>
+        <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle">자료화면</div></div>
     </div>
 </template>
 
+<script>
+export default {
+    computed : {
+        customViewStyle() {
+            return {
+                "--center-video-height" : this.centerVideoHeight,
+                "--center-video-width" : this.centerVideoWidth,
+
+                "--db-mod" : this.dbModerator,
+                "--db-gg" : this.dbGuague,
+                "--db-ct" : this.dbContent,
+
+                "--db-gg-in-w" : this.dbGuagueInnerWidth,
+                "--db-ct-in-w" : this.dbContentInnerWidth,
+                "--db-gg-in-h" : this.dbGuagueInnerHeight,
+                "--db-ct-in-h" : this.dbContentInnerHeight,
+            }
+        }
+    },
+    data() {
+        return {
+            centerVideoHeight : '',
+            centerVideoWidth : '',
+
+            dbModerator: '',
+            dbGuague: '',
+            dbContent:'',
+
+            dbGuagueInnerWidth: '',
+            dbContentInnerWidth: '',
+            dbGuagueInnerHeight: '',
+            dbContentInnerHeight: '',
+        }
+    },
+    mounted() {
+        const wValue = document.body.clientWidth*0.75*0.3-20  // 사회자 비디오
+        const wValueNotVid = document.body.clientWidth*0.75*0.4 // 게이지 + 컨텐츠
+        this.centerVideoWidth = `${wValue}px`
+        this.centerVideoHeight = `${wValue*0.6}px`
+
+        const hValue = document.body.clientHeight*0.8 - (wValue*0.6)
+
+        this.dbModerator = `${wValue*0.6}px`
+        this.dbGuague = `${hValue*0.15}px`
+        this.dbContent = `${hValue*0.85}px`
+
+        this.dbGuagueInnerWidth = `${wValueNotVid-30}px`
+        this.dbContentInnerWidth = `${wValueNotVid-50}px`
+        this.dbGuagueInnerHeight = `${hValue*0.15-30}px`
+        this.dbContentInnerHeight = `${hValue*0.85-50}px`
+        window.addEventListener('resize', this.handleResizeHome);
+    },
+    methods: {
+        handleResizeHome() {
+            const wValue = document.body.clientWidth*0.75*0.3-20  // 사회자 비디오
+            const wValueNotVid = document.body.clientWidth*0.75*0.4 // 게이지 + 컨텐츠
+            this.centerVideoWidth = `${wValue}px`
+            this.centerVideoHeight = `${wValue*0.6}px`
+
+            const hValue = document.body.clientHeight*0.8 - (wValue*0.6)
+
+            this.dbModerator = `${wValue*0.6}px`
+            this.dbGuague = `${hValue*0.15}px`
+            this.dbContent = `${hValue*0.85}px`
+
+            this.dbGuagueInnerWidth = `${wValueNotVid-30}px`
+            this.dbContentInnerWidth = `${wValueNotVid-50}px`
+            this.dbGuagueInnerHeight = `${hValue*0.15-30}px`
+            this.dbContentInnerHeight = `${hValue*0.85-50}px`
+        },
+    }
+}
+</script>
 
 <style>
 .debate-moderator {
-    color: brown;
-    height: 25vh;
-    outline: aqua solid 3px;
+    height: var(--db-mod);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* outline: aqua solid 3px; */
 }
+.debate-moderator-inner{
+    background-color: white;
+    height: var(--center-video-height);
+    width: var(--center-video-width);
+}
+
+
 .debate-guague {
-    color: brown;
-    height: 5vh;
-    outline: aqua solid 3px;
+    height: var(--db-gg);
+    /* background-color: rgb(255, 255, 24); */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }
+.debate-guague-inner {
+    height: var(--db-gg-in-h);
+    width: var(--db-gg-in-w);
+    background-color: rgb(23, 139, 32);
+}
+
+
 .debate-content {
-    color: brown;
-    height: 40vh;
-    outline: aqua solid 3px;
+    height: var(--db-ct);
+    /* background-color: rgb(23, 139, 32); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.debate-content-inner {
+    height: var(--db-ct-in-h);
+    width: var(--db-ct-in-w);
+    background-color: rgb(255, 255, 24);
 }
 </style>
 
