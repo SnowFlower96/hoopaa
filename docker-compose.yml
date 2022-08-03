@@ -14,7 +14,7 @@ services:
       - my_network
   backend:
     build:
-      context: backend-java
+      context: backend
     container_name: backend
     restart: always
     expose:
