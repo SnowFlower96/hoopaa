@@ -5,16 +5,21 @@ import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.api.response.RoomRes;
 import com.ssafy.api.service.RoomService;
+import com.ssafy.api.service.UserService;
+import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.entity.RoomInfo;
+import com.ssafy.db.entity.User;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.NoSuchElementException;
 
@@ -24,6 +29,9 @@ public class RoomController {
 
     @Autowired
     RoomService roomService;
+
+    @Autowired
+    UserService userService;
 
     @PostMapping()
     @ApiOperation(value = "토론 방 오픈", notes = "토론 방을 세팅하고 모집 중 상태로 만든다.")
@@ -63,9 +71,13 @@ public class RoomController {
             @ApiResponse(code=404, message = "없는 토론 방"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> enterRoom(@RequestBody RoomEnterReq roomEnterReq) {
+    public ResponseEntity<? extends BaseResponseBody> enterRoom(@ApiIgnore Authentication authentication, @RequestBody RoomEnterReq roomEnterReq) {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String id = userDetails.getUsername();
+        User user = userService.getUserById(Long.parseLong(id));
+
         try {
-            RoomInfoDto roomInfoDto = roomService.enterDebate(roomEnterReq);
+            RoomInfoDto roomInfoDto = roomService.enterDebate(roomEnterReq, user);
             if(roomInfoDto==null){
                 return ResponseEntity.status(400).body(RoomRes.of(400, "비밀번호 오류"));
             }
@@ -75,6 +87,8 @@ public class RoomController {
             return ResponseEntity.status(200).body(RoomRes.of(200,"success", roomInfoDto));
         }catch (NoSuchElementException e){
             return ResponseEntity.status(404).body(RoomRes.of(404, "존재하지 않는 토론 방"));
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(404).body(RoomRes.of(404, "이미 패널 가득 찼습니다."));
         }
     }
 
