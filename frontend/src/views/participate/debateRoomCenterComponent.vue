@@ -1,14 +1,18 @@
 <template>
     <div class="debate-center-wrap" >
-        <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle"><user-video class="moderatorVideo" :stream-manager="publisher"/></div></div>
-        <div class="debate-guague" :style="customViewStyle"><div class="debate-guague-inner" :style="customViewStyle">게이지바</div></div>
-        <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle">자료화면</div></div>
+        <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle">
+            <user-video class="moderatorVideo" :stream-manager="publisher"/>
+        </div>
+    </div>
+    <div class="debate-guague" :style="customViewStyle"><div class="debate-guague-inner" :style="customViewStyle">게이지바</div></div>
+    <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle">자료화면</div></div>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
-import { OpenVidu } from 'openvidu-browser';
+import { OpenVidu } from 'openvidu-browser';<video height="180" width="288" controls>
+</video>
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -56,6 +60,8 @@ export default {
             dbContentInnerWidth: '',
             dbGuagueInnerHeight: '',
             dbContentInnerHeight: '',
+            resol_w: 300,
+            resol_h: 200
         }
     },
     created () {
@@ -105,7 +111,7 @@ export default {
 							videoSource: undefined, // The source of video. If undefined default webcam
 							publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
 							publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-							resolution: '640x480',  // The resolution of your video
+							resolution: '680x480',  // The resolution of your video
 							frameRate: 30,			// The frame rate of your video
 							insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
 							mirror: false       	// Whether to mirror your local video or not
@@ -168,6 +174,10 @@ export default {
 </script>
 
 <style>
+.moderatorVideo > #local-video-undefined {
+    height: var(--center-video-height);
+    width: var(--center-video-width);
+}
 .debate-moderator {
     height: var(--db-mod);
     display: flex;
@@ -182,8 +192,8 @@ export default {
     border-radius: 10px;
 }
 .moderatorVideo {
-   height: var(--center-video-height);
-  width: var(--center-video-width);
+   height: 300px;
+   width: 300px;
 }
 
 
