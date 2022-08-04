@@ -14,15 +14,23 @@
                   </div>
                 </div>
 
-                <div class="sys-mod-mode-sel-item"><input v-model="roomName" type="text" placeholder="방 이름"/></div>
+                <div class="sys-mod-mode-sel-item-name"><input v-model="roomName" type="text" placeholder="방 이름"/></div>
                 <div class="password-wrap">
-                  <input type="checkbox"><div class="sys-mod-mode-sel-item"><input v-model="roomPwd" type="password" placeholder="비밀번호"></div>
+                  <div class="password-wrap-label">
+                    <p>비밀번호 설정</p>  
+                  </div>
+                  <input type="checkbox">
+                  <div class="sys-mod-mode-sel-item-pw">
+                    <input  v-model="roomPwd" type="password" placeholder="비밀번호">
+                  </div>
                 </div>
 
                 <div class="obj-hashtag-wrap">
-                  <select v-model="selectedMenu" class="menu-combo-box">
-                    <option v-for="(item, index) in menus" :key="index" :value="item">{{item.name}}</option>
-                  </select>
+                  <div class="menu-combo-box">
+                    <select v-model="selectedMenu">
+                      <option v-for="(item, index) in menus" :key="index" :value="item">{{item.name}}</option>
+                    </select>
+                  </div>
 
                   <div><input class="sys-mod-hash" v-model="hashTag1" type="text" placeholder="해쉬태그1"></div>
                   <div><input class="sys-mod-hash" v-model="hashTag2" type="text" placeholder="해쉬태그2"></div>
@@ -46,7 +54,6 @@
 <script>
 
 import { mapState } from 'vuex';
-import router from '../../common/lib/vue-router';
 
 
 export default {
@@ -123,12 +130,27 @@ export default {
 
 </script>
 <style>
+.password-wrap > input {
+  margin: 20px;
+}
 .password-wrap {
   display: flex;
   justify-content: center;
 }
+.password-wrap-label {
+  display: flex;
+  align-items: center;
+}
 .sys-mod-mode-sel-item {
   margin: 10px;
+}
+.sys-mod-mode-sel-item-name > input{
+  margin: 10px;
+  width: 350px;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  background-color: #E0E4EB;
 }
 .fadein-make-room{
   overflow: hidden;
@@ -197,22 +219,34 @@ export default {
   filter: brightness(60%);
   box-shadow: 0px 0px 0px 0px gray;
 }
-.sys-mod-mode-sel-item > input {
+
+.sys-mod-mode-sel-item-pw {
+  display: flex;
+  align-items: center;
+}
+
+.sys-mod-mode-sel-item-pw > input {
+  width: 180px;
   padding: 8px;
   border-radius: 5px;
   border: none;
   background-color: #E0E4EB;
+  margin: 10px;
 }
-.sys-mod-mode-sel-item > input:focus {
+.sys-mod-mode-sel-item-pw > input:focus {
   outline: solid 2px #ABB2BF;
   background-color: #d7dae0;
 }
-
 .menu-combo-box {
+  display: flex;
+  align-items: center;
+}
+.menu-combo-box > select{
   height: 20px;
 }
 .make-room-outer {
   text-align: center;
+  height: 80vh;
 }
 .make-room-black-space {
     height: 100px;
@@ -221,9 +255,6 @@ export default {
 .obj-hashtag-wrap {
   display: flex;
   justify-content: center;
-}
-.make-room-main-container {
-  height: 70vh;
 }
 
 #dropdown-sort {
