@@ -5,6 +5,8 @@
 	<div id="main-container" class="container">
 		<div id="join">
 			<div id="join-dialog" class="jumbotron vertical-center">
+				<h1>Join a video session</h1>
+				<div class="form-group">
 					<p>
 						<label>Participant</label>
 						<input v-model="myUserName" class="form-control" type="text" required>
@@ -13,58 +15,39 @@
 						<label>Session</label>
 						<input v-model="mySessionId" class="form-control" type="text" required>
 					</p>
-          			<p>
-						<label>host</label>
-						<input v-model="host" class="form-control" type="text" required>
-					</p>
-
-					<h1>토론 방 들어왔을 때 (참가자 있는 화면)</h1>
-					<button @click='role=1'>찬성</button>
-					<button @click='role=2'>반대</button>
-
 					<p class="text-center">
-						<button class="btn btn-lg btn-success" @click="joinSession()">패널로 참여하기</button>
+						<button class="btn btn-lg btn-success" @click="role=0">사회자</button>
+						<button class="btn btn-lg btn-success" @click="role=1">찬성</button>
+						<button class="btn btn-lg btn-success" @click="role=-1">반대</button>
+						role:{{this.role}}
 					</p>
 				</div>
 			</div>
 		</div>
 
-		<div id="session" v-if="session">
-
-			<div class="form-group">
-
+		<div id="session">
 			<div id="session-header">
 				<h1 id="session-title">{{ mySessionId }}</h1>
-				<h1>myrole:{{role}}</h1>
-				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
-				<input class="btn btn-large btn" type="button" id="" @click="DetailSession" value="Detail session">
+				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="role=2" value="방청객">
+				<input class="btn btn-large btn" type="button" id="buttonLeaveSession" @click="DetailSession" value="Detail session">
 			</div>
-			<div id="video-container">
-		<div id="host"><h1>HOST</h1>
-        <!-- <div>{{myUserName}} & {{host}}</div> -->
-        <div v-if="myUserName === host"><button @click='role=0'>사회자</button>
-		<user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
-        <div v-else>
-          <div v-for="s in subscribers" :key="s.stream.connection.connectionId">
-            <div v-if="s.stream.connection.dataObject.clientData==host"><user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/></div>
-          </div>
-        </div></div>
-
-		<div v-if="myUserName != host">
-		<h1>agree</h1>
-		<div v-if="role===1"><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/>
-
-		</div>
-
-		<h1>disagree</h1>
-		<div v-if="role===2"><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/>
-		</div></div>
-
-		<div><button @click="screenShare()">화면공유</button></div>
-        <!-- <div v-for="s in subscribers" :key="s.stream.connection.connectionId">{{s.stream.connection.dataObject.clientData}}&{{s.stream.connection.connectionId}}
-            <user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
-        </div> -->
-				<!-- <user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/> -->
+			<div id="video-container" class="col-md-6">
+				<div><h4>me {{this.myUserName}} {{this.role}}</h4><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
+				<div v-for="s in subscribers" :key="s.stream.connection.connectionId">
+					<div v-if="s.stream.connection.dataObject.role===0">
+						<h4>HOST {{s.stream.connection.client.clientData}}</h4>
+						<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+					</div>
+					<div v-if="s.stream.connection.dataObject.role===1">
+						<h4>AGREE {{s.stream.connection.client.clientData}}</h4>
+						<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+					</div>
+					<div v-if="s.stream.connection.dataObject.role===-1">
+						<h4>DISAGREE {{s.stream.connection.client.clientData}}</h4>
+						<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+					</div>
+				</div>
+				<!-- {{s.stream.connection.client.clientData}}&&{{s.stream.connection.dataObject.role}} -->
 				<!-- <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click.native="updateMainVideoStreamManager(sub)"/> -->
 			</div>
 		</div>
@@ -95,18 +78,49 @@ export default {
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
-
-			role:3,
-      		host:'',
+			role:2,
 
 			mySessionId: 'SessionA',
 			myUserName: 'Participant' + Math.floor(Math.random() * 100),
 		}
 	},
 
+	watch:{
+		role:function(){
+
+			this.leaveSession();
+			if(this.role!=2)
+				this.joinSession();
+
+			console.log(this.role+"!!!!!!!!!!!!!!!!!!!")
+		}
+	},
+
 	methods: {
 		DetailSession(){},
+		streamCreated(){
+			console.log("streamCreated")
+			// On every new Stream received...
+			this.session.on('streamCreated', ({ stream }) => {
+				const subscriber = this.session.subscribe(stream);
+				subscriber.stream.connection.client=JSON.parse(subscriber.stream.connection.data)[0];
+				subscriber.stream.connection.dataObject=JSON.parse(subscriber.stream.connection.data)[1];
+				console.log("!!!!!!!!!!"+subscriber.stream.connection.data);
+				this.subscribers.push(subscriber);
+			});
+		},
+		streamDestroyed(){
+			console.log("streamDestroyed")
+			// On every Stream destroyed...
+			this.session.on('streamDestroyed', ({ stream }) => {
+				const index = this.subscribers.indexOf(stream.streamManager, 0);
+				if (index >= 0) {
+					this.subscribers.splice(index, 1);
+				}
+			});
+		},
 		joinSession () {
+			console.log("joinSession")
 			// --- Get an OpenVidu object ---
 			this.OV = new OpenVidu();
 
@@ -115,21 +129,9 @@ export default {
 
 			// --- Specify the actions when events take place in the session ---
 
-			// On every new Stream received...
-			this.session.on('streamCreated', ({ stream }) => {
-				const subscriber = this.session.subscribe(stream);
-        subscriber.stream.connection.dataObject=JSON.parse(subscriber.stream.connection.data)
-        subscriber.stream.connection.role=this.role
-				this.subscribers.push(subscriber);
-			});
+			this.streamCreated();
+			this.streamDestroyed();
 
-			// On every Stream destroyed...
-			this.session.on('streamDestroyed', ({ stream }) => {
-				const index = this.subscribers.indexOf(stream.streamManager, 0);
-				if (index >= 0) {
-					this.subscribers.splice(index, 1);
-				}
-			});
 
 			// On every asynchronous exception...
 			this.session.on('exception', ({ exception }) => {
@@ -141,7 +143,7 @@ export default {
 			// 'getToken' method is simulating what your server-side should do.
 			// 'token' parameter should be retrieved and returned by your own backend
 			this.getToken(this.mySessionId).then(token => {
-				this.session.connect(token, { clientData: this.myUserName })
+				this.session.connect(token, [{ clientData: this.myUserName }, { role:this.role }])
 					.then(() => {
 
 						// --- Get your own camera stream with the desired properties ---
@@ -163,21 +165,19 @@ export default {
 						// --- Publish your stream ---
 
 						this.session.publish(this.publisher);
-
 					})
 					.catch(error => {
 						console.log('There was an error connecting to the session:', error.code, error.message);
 					});
 			});
 
-
-      console.log("!!!!"+this.role)
-      window.addEventListener('beforeunload', this.leaveSession)
+			window.addEventListener('beforeunload', this.leaveSession)
 		},
 
 		leaveSession () {
+			console.log("leaveSession")
 			// --- Leave the session by calling 'disconnect' method over the Session object ---
-			if (this.session) this.session.unpublish();
+			if (this.session) this.session.disconnect();
 
 			this.session = undefined;
 			this.mainStreamManager = undefined;
@@ -189,6 +189,7 @@ export default {
 		},
 
 		updateMainVideoStreamManager (stream) {
+			console.log("updateMainVideoStreamManager")
 			if (this.mainStreamManager === stream) return;
 			this.mainStreamManager = stream;
 		},
@@ -206,11 +207,13 @@ export default {
 		 */
 
 		getToken (mySessionId) {
+			console.log("getToken")
 			return this.createSession(mySessionId).then(sessionId => this.createToken(sessionId));
 		},
 
 		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-session
 		createSession (sessionId) {
+			console.log("createSession")
 			return new Promise((resolve, reject) => {
 				axios
 					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions`, JSON.stringify({
@@ -225,6 +228,7 @@ export default {
 					.then(data => resolve(data.id))
 					.catch(error => {
 						if (error.response.status === 409) {
+							console.log("not host!!!!!")
 							resolve(sessionId);
 						} else {
 							console.warn(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`);
@@ -239,6 +243,7 @@ export default {
 
 		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
 		createToken (sessionId) {
+			console.log("createToken")
 			return new Promise((resolve, reject) => {
 				axios
 					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`, {}, {
