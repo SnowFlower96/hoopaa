@@ -13,7 +13,7 @@ public interface RoomService {
 
     RoomInfoDto createRoom(RoomOpenReq roomOpenInfo);
 
-    //    boolean enterRoom(RoomEnterReq roomEnterReq, String userEm) throws NoSuchElementException;
+    boolean enterRoom(Long id) throws NoSuchElementException;
     RoomInfoDto findRoomByRoomId(Long roomId);
 
     RoomInfoDto findRoomBySessionId(String sessionId);
