@@ -52,7 +52,7 @@ public class RoomController {
         this.SECRET = secret;
         this.OPENVIDU_URL = openviduUrl;
         this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
-
+        this.openVidu.fetch();
         List<Session> sessionList = this.openVidu.getActiveSessions();
         System.out.println(sessionList.size());
         for (Session session : sessionList) {
@@ -185,7 +185,6 @@ public class RoomController {
 
         Session session = this.mapSessions.get(userEm).getSession();
         session.close();
-//        roomService.finishRoom(roomCloseReq);
 
         return ResponseEntity.status(200).body(RoomRes.of(200, "Success"));
 
