@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.RoomCloseReq;
+import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.entity.*;
@@ -59,12 +60,9 @@ public class RoomServiceImpl implements RoomService{
 
         //시스템 모드 , 사회자 모드면 자동으로 호스트는 사회자
         if(roomOpenInfo.getIs_sys()==1){
-
             if(roomOpenInfo.getPos()==1){ //찬성
-                System.out.println("찬성");
                 roomStatus.setAgree(1);
-                roomStatus.setAgree_1(user.getId());
-                System.out.println(roomStatus.getAgree_1());
+                roomStatus.setAgree_1(roomInfo.getHostId());
             }else if(roomOpenInfo.getPos()==2){ //반대
                 roomStatus.setDisagree(1);
                 roomStatus.setDisagree_1(roomInfo.getHostId());
@@ -85,6 +83,22 @@ public class RoomServiceImpl implements RoomService{
             roomInfo.setHash3(roomService.findHashtagId(roomOpenInfo.getHash_3()));
         }
         return new RoomInfoDto(roomInfoRepository.save(roomInfo));
+    }
+
+    @Override
+    public boolean enterRoom(Long id)  {
+        Optional<RoomInfo> room= roomInfoRepository.findById(id);
+        //방이 존재하지 않는 방
+        if(!room.isPresent()){
+            return false;
+        }
+        RoomInfo roomInfo = room.get();
+        //투표 중이거나 이미 종료된 방이면 입장 불가능
+        if(roomInfo.getPhase()>=2){
+            return false;
+        }
+        roomInfo.setCurNum(roomInfo.getCurNum()+1);
+        return true;
     }
 
     @Override
