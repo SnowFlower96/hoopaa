@@ -85,7 +85,7 @@ export default {
       }
     },
 
-    checkNickName(nnm) {
+    checkNickName() {
       var nickname = {
         nnm : this.nnm
       }

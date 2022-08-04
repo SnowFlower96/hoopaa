@@ -16,6 +16,7 @@
 </template>
 <script>
 import { useRouter } from 'vue-router'
+import { mapState } from 'vuex';
 export default {
   name: 'checkPwd',
    data () {

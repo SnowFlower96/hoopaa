@@ -8,7 +8,10 @@ import reSign from '@/views/user/resign'
 import mainPage from '@/views/main-page/main-page'
 import Participate from '@/views/participate/participating-code'
 import participatingPage from '@/views/participate/participating-page'
+
 import debateRoom from '@/views/participate/debateRoom'
+import detailSession from '@/views/participate/detailSession'
+
 import signUpEmail from '@/views/user/email'
 import gameSetPage from '@/views/debate-hosting/game-set-page'
 import makeRoom from '@/views/debate-hosting/make-room'
@@ -18,7 +21,6 @@ import store from '@/store'
 import myPage from '@/views/user/mypage'
 import checkPwd from '@/views/user/checkPwd'
 import myPageInfo from '@/views/user/mypage-info'
-
 
 const fullMenu = require('@/views/main/menu.json')
 
@@ -81,6 +83,7 @@ function makeRoutesFromMenu () {
 
   },
 
+
   {
   path : '/myPage/info',
   name : 'myPage-info',
@@ -127,9 +130,14 @@ function makeRoutesFromMenu () {
   path : '/myPage/reSign',
   name : 'reSign',
   component : reSign
+},
+{
+  path : '/detailSession',
+  name: 'detailSession',
+  component: detailSession
 }
-  )
 
+  )
   return routes
 }
 
