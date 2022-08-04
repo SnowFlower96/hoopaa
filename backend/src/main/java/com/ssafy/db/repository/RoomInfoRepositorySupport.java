@@ -20,7 +20,7 @@ public class RoomInfoRepositorySupport {
 
     public List<RoomInfo> findAll(){
         List<RoomInfo> roomInfo= jpaQueryFactory.selectFrom(qRoomInfo).where(qRoomInfo.phase.in(0,1))
-                .orderBy(qRoomInfo.cur_num.desc()).fetch();
+                .orderBy(qRoomInfo.curNum.desc()).fetch();
        return roomInfo;
     }
 
@@ -28,14 +28,14 @@ public class RoomInfoRepositorySupport {
         List<RoomInfo> searchBy = jpaQueryFactory.selectFrom(qRoomInfo)
                 .where((qRoomInfo.subtitle.like("%"+keyword+"%").or(qRoomInfo.title.like("%"+keyword+"%")))
                         .and(qRoomInfo.phase.in(0,1)))
-                .orderBy(qRoomInfo.cur_num.desc()).fetch();
+                .orderBy(qRoomInfo.curNum.desc()).fetch();
         return searchBy;
     }
 
     public List<RoomInfo> findByCate(int cate){
         List<RoomInfo> findByCate=jpaQueryFactory.selectFrom(qRoomInfo)
                 .where(qRoomInfo.cate.eq(cate).and(qRoomInfo.phase.in(0,1)))
-                .orderBy(qRoomInfo.cur_num.desc()).fetch();
+                .orderBy(qRoomInfo.curNum.desc()).fetch();
         return findByCate;
     }
 }
