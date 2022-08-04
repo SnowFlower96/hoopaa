@@ -119,10 +119,9 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
 			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
 	})
-	public ResponseEntity<? extends BaseResponseBody> checkPwd(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value="패스워드", required = true) UserLoginPostReq userLoginInfo) {
+	public ResponseEntity<? extends BaseResponseBody> checkPwd(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value="패스워드", required = true) String pwd) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String userId = userDetails.getUsername();
-		String pwd = userLoginInfo.getPwd();
 
 		User user = userService.getUserById(Long.parseLong(userId));
 
