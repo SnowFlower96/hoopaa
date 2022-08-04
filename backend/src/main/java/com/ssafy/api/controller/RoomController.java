@@ -52,7 +52,7 @@ public class RoomController {
         this.SECRET = secret;
         this.OPENVIDU_URL = openviduUrl;
         this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
-
+        this.openVidu.fetch();
         List<Session> sessionList = this.openVidu.getActiveSessions();
         System.out.println(sessionList.size());
         for (Session session : sessionList) {
@@ -126,7 +126,7 @@ public class RoomController {
             // Access Token의 유저와 세션의 ID가 같다면 Moderator 권한
             OpenViduRole role = userEm.equals(session.getSessionId()) ? OpenViduRole.MODERATOR : OpenViduRole.PUBLISHER;
             ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
-                    .data(userEm + " has Connected").role(role).build();
+                    .role(role).build();
             token = session.createConnection(connectionProperties).getToken();
 
             this.mapSessionNamesTokens.put(userEm, new ConcurrentHashMap<>());
@@ -186,7 +186,6 @@ public class RoomController {
 
         Session session = this.mapSessions.get(userEm).getSession();
         session.close();
-//        roomService.finishRoom(roomCloseReq);
 
         return ResponseEntity.status(200).body(RoomRes.of(200, "Success"));
 
