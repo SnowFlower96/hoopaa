@@ -131,6 +131,7 @@ public class RoomController {
 
             this.mapSessionNamesTokens.put(userEm, new ConcurrentHashMap<>());
             this.mapSessionNamesTokens.get(userEm).put(token, role);
+            if(!roomService.enterRoom(vSession.getRoom_id())) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session Not Exists"));
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             throw new RuntimeException(e);
         }
