@@ -179,6 +179,7 @@ export default {
     background-color: white;
     height: var(--center-video-height);
     width: var(--center-video-width);
+    border-radius: 10px;
 }
 .moderatorVideo {
    height: var(--center-video-height);

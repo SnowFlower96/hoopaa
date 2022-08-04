@@ -8,7 +8,10 @@ import reSign from '@/views/user/resign'
 import mainPage from '@/views/main-page/main-page'
 import Participate from '@/views/participate/participating-code'
 import participatingPage from '@/views/participate/participating-page'
+
 import debateRoom from '@/views/participate/debateRoom'
+import detailSession from '@/views/participate/detailSession'
+
 import signUpEmail from '@/views/user/email'
 import gameSetPage from '@/views/debate-hosting/game-set-page'
 import makeRoom from '@/views/debate-hosting/make-room'
@@ -128,6 +131,11 @@ function makeRoutesFromMenu () {
   name : 'reSign',
   component : reSign
 },
+{
+  path : '/detailSession',
+  name: 'detailSession',
+  component: detailSession
+}
 
   )
   return routes
