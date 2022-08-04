@@ -59,7 +59,7 @@
             @call-modal="EmitcallModal"></footer-team>
             <footer-moderator v-if="footerModerator" @call-modal="EmitcallModal"></footer-moderator>
             <footer-all v-if="footerAll"></footer-all>
-            <button @click="changeChatView">채팅방 버튼</button>
+            <div class="chatt-btn" @click="changeChatView">C</div>
         </div>
     </div>
 </template>
@@ -367,6 +367,23 @@ export default {
 </script>
 
 <style>
+.chatt-btn {
+    width: 5vh;
+    height: 5vh;
+    outline: solid 1px aqua;
+    border-radius: 50%;
+    margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: aqua;
+}
+.chatt-btn:hover {
+    cursor: pointer;
+    background-color: aqua;
+    opacity: 50%;
+    color: black;
+}
 /* 사회자에게 메세지 보내기 스타일 라인 */
 .call-to-moderator-container {
     position: absolute;

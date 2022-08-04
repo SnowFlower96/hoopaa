@@ -1,8 +1,7 @@
 <template>
     <div class="debate-room-footer-container">
-        <span>여기는 팀버튼</span>
-        <button @click="callModalFile">자료올리는버튼 => v-if로 view 조절하기</button>
-        <button @click="callModalMessage">사회자에게 메세지보내기</button>
+        <div @click="callModalFile" class="file-btn footer-btn">F</div>
+        <div @click="callModalMessage" class="message-btn footer-btn">M</div>
     </div>
 </template>
 
@@ -20,5 +19,35 @@ export default {
 <style>
 .debate-room-footer-container {
     color: white;
+    display: flex;
+}
+.footer-btn {
+    width: 5vh;
+    height: 5vh;
+    border-radius: 50%;
+    margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.footer-btn:hover {
+    cursor: pointer;
+    opacity: 50%;
+    color: black;
+}
+.file-btn {
+    outline: tomato solid 1px;
+    color: tomato;
+}
+.file-btn:hover {
+    background-color: tomato;
+}
+.message-btn {
+    outline: rgb(80, 255, 71) solid 1px;
+    color: rgb(80, 255, 71);
+}
+.message-btn:hover {
+    background-color: rgb(80, 255, 71);
 }
 </style>
