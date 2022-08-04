@@ -1,7 +1,7 @@
 package com.ssafy.api.service;
 
+import com.ssafy.common.data.UserDupl;
 import com.ssafy.common.util.MailUtil;
-import com.ssafy.db.dto.UserEmNnmDto;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.dto.UserStatDto;
@@ -20,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
@@ -44,11 +46,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserEmNnmDto createUser(UserRegisterPostReq userRegisterInfo) {
-        boolean isEmDupl = userRepository.findUserByEm(userRegisterInfo.getEm()).isPresent();
-        boolean isNnmDupl = userRepository.findUserByNnm(userRegisterInfo.getNnm()).isPresent();
-        UserEmNnmDto userEmNnmDto = UserEmNnmDto.builder().emDuple(isEmDupl).nnmDuple(isNnmDupl).build();
-        if (userEmNnmDto.isNnmDuple() || userEmNnmDto.isEmDuple()) return userEmNnmDto;
+    public UserDupl createUser(UserRegisterPostReq userRegisterInfo) {
+        UserDupl userDupl = new UserDupl();
+        userDupl.setEmDupl(userRepository.findUserByEm(userRegisterInfo.getEm()).isPresent());
+        userDupl.setNnmDupl(userRepository.findUserByNnm(userRegisterInfo.getNnm()).isPresent());
+        if (userDupl.isDuple()) return userDupl;
 
         User user = User.builder()
                 .em(userRegisterInfo.getEm())
@@ -176,10 +178,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean checkDupl(UserEmNnmDto userEmNnmDto) {
-        String em = userEmNnmDto.getEm();
-        String nnm = userEmNnmDto.getNnm();
-
+    public Boolean checkDupl(String em, String nnm) {
         if (em != null) return userRepository.findUserByEm(em).isPresent();
         if (nnm != null) return userRepository.findUserByNnm(nnm).isPresent();
         return null;

@@ -7,12 +7,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.api.response.JsonRes;
 import com.ssafy.api.response.StringRes;
 import com.ssafy.api.response.UserRes;
-import com.ssafy.db.dto.UserEmNnmDto;
+import com.ssafy.common.data.UserDupl;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.dto.UserStatDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,13 +64,13 @@ public class UserController {
 			@RequestBody @ApiParam(value="회원가입 정보", required = true) UserRegisterPostReq registerInfo) {
 		
 		//임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
-		UserEmNnmDto userEmNnmDto = userService.createUser(registerInfo);
+		UserDupl userDupl = userService.createUser(registerInfo);
 
 		// 이미 존재하는 회원(이메일, 닉네임)일 경우 400 에러
-		if (userEmNnmDto != null) {
-			if (userEmNnmDto.isEmDuple()) {
+		if (userDupl != null) {
+			if (userDupl.isEmDupl()) {
 				return ResponseEntity.status(400).body(BaseResponseBody.of(400, "이메일 중복입니다"));
-			} else if (userEmNnmDto.isNnmDuple()) {
+			} else if (userDupl.isNnmDupl()) {
 				return ResponseEntity.status(400).body(BaseResponseBody.of(400, "닉네임 중복입니다"));
 			}
 		}
@@ -308,8 +307,8 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<? extends BaseResponseBody> checkEmDupl(@RequestBody @ApiParam(value = "중복 체크할 이메일 정보", required = true) UserEmNnmDto userEmNnmDto) {
-		Boolean result = userService.checkDupl(userEmNnmDto);
+	public ResponseEntity<? extends BaseResponseBody> checkEmDupl(@RequestBody @ApiParam(value = "중복 체크할 이메일 정보", required = true) String em) {
+		Boolean result = userService.checkDupl(em, null);
 		if (result == null) return ResponseEntity.status(401).body(BaseResponseBody.of(401, "fail"));
 		return ResponseEntity.ok(StringRes.of(200, "success", result ? "1" : "0"));
 	}
@@ -322,8 +321,8 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<? extends BaseResponseBody> checkNnmDupl(@RequestBody @ApiParam(value = "중복 체크할 닉네임 정보", required = true) UserEmNnmDto userEmNnmDto) {
-		Boolean result = userService.checkDupl(userEmNnmDto);
+	public ResponseEntity<? extends BaseResponseBody> checkNnmDupl(@RequestBody @ApiParam(value = "중복 체크할 닉네임 정보", required = true) String nnm) {
+		Boolean result = userService.checkDupl(null, nnm);
 		if (result == null) return ResponseEntity.status(401).body(BaseResponseBody.of(401, "fail"));
 		return ResponseEntity.ok(StringRes.of(200, "success", result ? "1" : "0"));
 	}
