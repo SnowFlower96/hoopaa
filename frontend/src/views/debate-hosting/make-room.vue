@@ -43,11 +43,13 @@
 </template>
 
 <script>
+
 import { mapState } from 'vuex';
+import router from '../../common/lib/vue-router';
+
 
 export default {
   components : {
-
   },
   data () {
     return {
@@ -102,7 +104,15 @@ export default {
         title : this.roomTitle
       }
       console.log(room)
-      this.$store.dispatch("makeRoom",room);
+      this.$store.dispatch("makeRoom",room).then(response => {
+        let data = {
+          sessionId : this.$store.state.userStat.em,
+          pwd : this.pwd
+        }
+         this.$store.dispatch("enterRoom", data)
+         
+      })
+
     }
   }
 }

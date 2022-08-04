@@ -16,7 +16,8 @@ export default new Vuex.Store({
     userStat : '',
     userInfo : '',
     roomList : [],
-    headerVisible: true
+    headerVisible: true,
+    tempToken : '',
   },
 
   mutations : {
@@ -49,6 +50,10 @@ export default new Vuex.Store({
     USER_INFO(state, data) {
       state.userInfo = JSON.parse(data);
     },
+    CREATE_TEMP_TOKEN(state, data) {
+      state.tempToken = data;
+    },
+
   },
 
   actions : {
@@ -235,15 +240,31 @@ export default new Vuex.Store({
 
   // 토론방 생성
   makeRoom({commit}, room) {
-    api({
+    return new Promise ((resolve, reject) => {
+    tapi({
       url : `/room`,
       method : "POST",
       data : room,
-    }).then(() =>{
-      router.push('/debateRoom')
-    })
-    commit();
-  }
+    }).then((res) =>{
+      resolve(res);
+      commit();
 
+    }).catch((error) =>{
+      reject(error);
+    })
+  })
+  },
+
+  enterRoom({commit}, data) {
+    tapi({
+      url : `/room/enter`,
+      method : "POST",
+      data : data,
+    }).then((res) => {
+      console.log(res.data);
+      commit("CREATE_TEMP_TOKEN",res.data.token);
+      router.push("/debateRoom")
+    })
+  }
 
 }})

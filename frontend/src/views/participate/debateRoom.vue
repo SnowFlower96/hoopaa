@@ -53,7 +53,7 @@
         </div>
         <div class="debate-room-footer-class">
             <button @click="changeChatView">채팅방 버튼</button>
-            <footer-team 
+            <footer-team
             v-if="footerTeam"
             @call-modal="EmitcallModal"></footer-team>
             <footer-moderator v-if="footerModerator" @call-modal="EmitcallModal"></footer-moderator>
@@ -100,7 +100,8 @@ export default {
         UploadFile,
         LetTeamSpeak,
         RestTime,
-        LetVote
+        LetVote,
+ 
 
     },
     computed : {
@@ -131,10 +132,10 @@ export default {
         return {
             debateCenterBoxWidth: '',
             debateCenterBoxHeight: '',
-            
+
             debateSideBoxWidth: '',
             debateSideBoxHeight: '',
-            
+
             videoBox: '',
             chattBox: '',
 
@@ -168,7 +169,7 @@ export default {
         this.debateBackground = `${debateBackground}px`
         this.chattBox =  `${wVideoValue*0.25}px`
         this.footerWidth = `${wVideoValue}px`
-        
+
 
         this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
         this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
@@ -190,14 +191,14 @@ export default {
         // this.debateBackground = `${debateBackground}px`
         // this.chattBox = `${wVideoValue*0.25}px`
         // this.footerWidth = `${wVideoValue}px`
-        
+
 
         // this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
         // this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
-        
+
         // this.debateCenterBoxHeight = `${hValue*0.8}px`
         // this.debateSideBoxHeight = `${hValue*0.8}px`
-        
+
         window.addEventListener('resize', this.handleResizeHome);
 
     },
@@ -212,7 +213,7 @@ export default {
                 this.debateBackground = `${debateBackground}px`
                 this.chattBox =  `${wVideoValue*0.25}px`
                 this.footerWidth = `${wVideoValue}px`
-                
+
 
                 this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
                 this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
@@ -235,7 +236,7 @@ export default {
                 this.debateBackground = `${debateBackground}px`
                 this.chattBox =  `${wVideoValue*0.25}px`
                 this.footerWidth = `${wVideoValue}px`
-                
+
 
                 this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
                 this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
@@ -286,11 +287,11 @@ export default {
                 this.debateBackground = `${debateBackground}px`
                 this.chattBox = `${wVideoValue*0.25}px`
                 this.footerWidth = `${wVideoValue}px`
-                
+
 
                 this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
                 this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
-                
+
                 this.debateCenterBoxHeight = `${hValue*0.8}px`
                 this.debateSideBoxHeight = `${hValue*0.8}px`
             }
@@ -304,11 +305,11 @@ export default {
                 this.debateBackground = `${debateBackground}px`
                 this.chattBox = `${wVideoValue*0.25}px`
                 this.footerWidth = `${wVideoValue}px`
-                
+
 
                 this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
                 this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
-                
+
                 this.debateCenterBoxHeight = `${hValue*0.8}px`
                 this.debateSideBoxHeight = `${hValue*0.8}px`
             }
