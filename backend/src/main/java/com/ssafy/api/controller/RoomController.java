@@ -126,7 +126,7 @@ public class RoomController {
             // Access Token의 유저와 세션의 ID가 같다면 Moderator 권한
             OpenViduRole role = userEm.equals(session.getSessionId()) ? OpenViduRole.MODERATOR : OpenViduRole.PUBLISHER;
             ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
-                    .data(userEm + " has Connected").role(role).build();
+                    .role(role).build();
             token = session.createConnection(connectionProperties).getToken();
 
             this.mapSessionNamesTokens.put(userEm, new ConcurrentHashMap<>());
