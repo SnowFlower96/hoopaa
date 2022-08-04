@@ -6,7 +6,6 @@ import createPersistedState from "vuex-persistedstate";
 //Vue.use(Vuex);
 
 const api = createApi();
-const tapi = createTokenApi();
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
@@ -123,7 +122,8 @@ export default new Vuex.Store({
 
      // User 정보
      getUserHistory({commit}) {
-      tapi({
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/history`,
         method : "GET"
       }).then((res) => {
@@ -133,7 +133,8 @@ export default new Vuex.Store({
      },
      // User Stat
      getUserStat({commit}) {
-      tapi({
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/stat`,
         method : "GET"
       }).then((res) => {
@@ -142,7 +143,8 @@ export default new Vuex.Store({
      },
      // User Info
      getUserInfo({commit}) {
-      tapi({
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/info`,
         method : "GET"
       }).then((res) => {
@@ -152,7 +154,8 @@ export default new Vuex.Store({
 
      // User Info 수정
       putUserStat({commit},data) {
-      tapi({
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/stat`,
         method : "PUT",
         data : data,
@@ -208,7 +211,8 @@ export default new Vuex.Store({
     // 유저 비밀번호 확인
     checkPwd({commit}, data) {
       return new Promise((reject) => {
-      tapi({
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/verify`,
         method : "POST",
         data : data,
@@ -241,7 +245,8 @@ export default new Vuex.Store({
   // 토론방 생성
   makeRoom({commit}, room) {
     return new Promise ((resolve, reject) => {
-    tapi({
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
       url : `/room`,
       method : "POST",
       data : room,
@@ -256,7 +261,8 @@ export default new Vuex.Store({
   },
 
   enterRoom({commit}, data) {
-    tapi({
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
       url : `/room/enter`,
       method : "POST",
       data : data,
