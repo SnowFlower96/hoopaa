@@ -3,6 +3,7 @@ package com.ssafy.api.service;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.db.dto.UserEmNnmDto;
 import com.ssafy.db.dto.UserHistoryDto;
+import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.dto.UserStatDto;
 import com.ssafy.db.entity.User;
 
@@ -17,6 +18,9 @@ public interface UserService {
 	// Read
 	User getUserById(Long id);
 	User getUserByEm(String em);  // 로그인 단계에서만 사용
+	UserInfoDto getUserInfoDtoById(Long id);
+	UserInfoDto getUserInfoDtoByEm(String em);
+
 	// Update
 	User updateUser(Long id, UserRegisterPostReq userRegisterInfo);
 	User setRefresh(Long id, String refreshToken);

@@ -3,6 +3,7 @@ package com.ssafy.api.service;
 import com.ssafy.common.util.MailUtil;
 import com.ssafy.db.dto.UserEmNnmDto;
 import com.ssafy.db.dto.UserHistoryDto;
+import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.dto.UserStatDto;
 import com.ssafy.db.entity.UserHistory;
 import com.ssafy.db.entity.UserStat;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
@@ -74,6 +76,18 @@ public class UserServiceImpl implements UserService {
     public User getUserByEm(String em) {
         User user = userRepository.findUserByEm(em).get();
         return user;
+    }
+
+    @Override
+    public UserInfoDto getUserInfoDtoById(Long id) {
+        Optional<User> user = userRepository.findUserById(id);
+        return user.map(UserInfoDto::new).orElse(null);
+    }
+
+    @Override
+    public UserInfoDto getUserInfoDtoByEm(String em) {
+        Optional<User> user = userRepository.findUserByEm(em);
+        return user.map(UserInfoDto::new).orElse(null);
     }
 
     @Override
