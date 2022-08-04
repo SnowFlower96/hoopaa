@@ -1,13 +1,17 @@
-package com.ssafy.db.dto;
+package com.ssafy.common.data;
 
+import io.openvidu.java.client.Session;
 import lombok.Data;
 
 /**
- * 토론방 세션의 정보를 관리하기 위한 Dto
+ * 토론방 세션의 정보를 관리하기 위한 데이터 객체
  */
 @Data
-public class SessionInfo {
+public class VSession {
 
+    // OpenVidu 세션
+    private Session session;
+    
     private Long room_id;  // DB 에서의 room_info id
     private int cheer_agree;  // 찬성측 응원수
     private int cheer_disagree;  // 반대측 응원수

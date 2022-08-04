@@ -1,9 +1,7 @@
 package com.ssafy.api.response;
 
-import com.ssafy.api.service.RoomService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.dto.RoomInfoDto;
-import com.ssafy.db.entity.RoomInfo;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,13 +29,13 @@ public class RoomRes extends BaseResponseBody {
         res.setStatusCode(statusCode);
         res.setMessage(message);
         res.setId(roomInfoDto.getId());
-        res.setHost_id(roomInfoDto.getHost_id());
-        res.setIs_sys(roomInfoDto.getIs_sys());
-        res.setThumb_url(roomInfoDto.getThumb_url());
+        res.setHost_id(roomInfoDto.getHostId());
+        res.setIs_sys(roomInfoDto.getIsSys());
+        res.setThumb_url(roomInfoDto.getThumbUrl());
         res.setPhase(roomInfoDto.getPhase());
-        res.setMax_num(roomInfoDto.getMax_num());
-        res.setCur_num(roomInfoDto.getCur_num());
-        res.setStart_time(roomInfoDto.getStart_time());
+        res.setMax_num(roomInfoDto.getMaxNum());
+        res.setCur_num(roomInfoDto.getCurNum());
+        res.setStart_time(roomInfoDto.getStartTime());
         res.setTitle(roomInfoDto.getTitle());
         res.setSubtitle(roomInfoDto.getSubtitle());
         res.setNnm(roomInfoDto.getNnm());

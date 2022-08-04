@@ -5,7 +5,6 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,18 +18,18 @@ public class RoomInfo {
     private Long id;
     private String pwd;
     @Column(insertable = false, updatable = false)
-    private Long host_id;
-    private int is_sys;
-    private String thumb_url;
+    private Long hostId;
+    private int isSys;
+    private String thumbUrl;
     private int phase;
-    private int max_num;
-    private int cur_num;
+    private int maxNum;
+    private int curNum;
     @Generated(GenerationTime.INSERT)
-    private LocalDateTime start_time;
+    private LocalDateTime startTime;
     private Integer cate;
-    private Integer hash_1;
-    private Integer hash_2;
-    private Integer hash_3;
+    private Integer hash1;
+    private Integer hash2;
+    private Integer hash3;
     private String title;
     private String subtitle;
 
@@ -39,7 +38,7 @@ public class RoomInfo {
     RoomHistory roomHistory;
 
     @OneToOne
-    @JoinColumn(name = "host_id", referencedColumnName = "id")
+    @JoinColumn(name = "hostId", referencedColumnName = "id")
     User user;
 
     @OneToOne
@@ -47,20 +46,20 @@ public class RoomInfo {
     RoomStatus roomStatus;
 
     @Builder
-    public RoomInfo(Long id, String pwd, Long host_id, int is_sys, String thumb_url, int phase, int max_num, int cur_num, LocalDateTime start_time, Integer cate, Integer hash_1, Integer hash_2, Integer hash_3, String title, String subtitle) {
+    public RoomInfo(Long id, String pwd, Long hostId, int isSys, String thumbUrl, int phase, int maxNum, int curNum, LocalDateTime startTime, Integer cate, Integer hash1, Integer hash2, Integer hash3, String title, String subtitle) {
         this.id = id;
         this.pwd = pwd;
-        this.host_id = host_id;
-        this.is_sys = is_sys;
-        this.thumb_url = thumb_url;
+        this.hostId = hostId;
+        this.isSys = isSys;
+        this.thumbUrl = thumbUrl;
         this.phase = phase;
-        this.max_num = max_num;
-        this.cur_num = cur_num;
-        this.start_time = start_time;
+        this.maxNum = maxNum;
+        this.curNum = curNum;
+        this.startTime = startTime;
         this.cate = cate;
-        this.hash_1 = hash_1;
-        this.hash_2 = hash_2;
-        this.hash_3 = hash_3;
+        this.hash1 = hash1;
+        this.hash2 = hash2;
+        this.hash3 = hash3;
         this.title = title;
         this.subtitle = subtitle;
     }
