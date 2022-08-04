@@ -173,17 +173,22 @@ public class RoomController {
     }
 
     @DeleteMapping()
-    @ApiOperation(value = "종료", notes = "토론 종료")
+    @ApiOperation(value = "종료", notes = "세션 종료")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 411, message = "종료 불가"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> closeRoom(@RequestBody RoomCloseReq roomCloseReq){
+    public ResponseEntity<? extends BaseResponseBody> closeRoom(@ApiIgnore Authentication authentication) throws OpenViduJavaClientException, OpenViduHttpException {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String id = userDetails.getUsername();
+        String userEm = userService.getUserById(Long.parseLong(id)).getEm();
 
-        roomService.finishRoom(roomCloseReq);
+        Session session = this.mapSessions.get(userEm).getSession();
+        session.close();
+//        roomService.finishRoom(roomCloseReq);
 
-        return ResponseEntity.status(200).body(RoomRes.of(200, "room finished"));
+        return ResponseEntity.status(200).body(RoomRes.of(200, "Success"));
 
     }
 
