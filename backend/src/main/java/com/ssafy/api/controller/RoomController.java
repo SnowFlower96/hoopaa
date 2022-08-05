@@ -1,6 +1,6 @@
 package com.ssafy.api.controller;
 
-import com.ssafy.api.request.RoomCloseReq;
+
 import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.api.response.RoomRes;
@@ -88,6 +88,8 @@ public class RoomController {
                 session = this.openVidu.createSession(sessionProperties);
                 this.mapSessions.put(userEm, new VSession());
                 this.mapSessions.get(userEm).setSession(session);
+                this.mapSessions.get(userEm).setAgree(new UserInfo[openInfo.getMax_num()]);
+                this.mapSessions.get(userEm).setDisagree(new UserInfo[openInfo.getMax_num()]);
             } catch (OpenViduJavaClientException | OpenViduHttpException e) {
                 throw new RuntimeException(e);
             }
@@ -160,6 +162,8 @@ public class RoomController {
         String userId = ssafyUserDetails.getUsername();
         UserInfoDto user = userService.getUserInfoDtoById(Long.parseLong(userId));
 
+
+        System.out.println(sessionId);
         // 해당 세션이 존재하지 않으면
         if (!this.mapSessions.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 
@@ -172,7 +176,6 @@ public class RoomController {
         if (pos.equals("agree")) userInfos = vSession.getAgree();
         else if (pos.equals("disagree")) userInfos = vSession.getDisagree();
         else return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong request"));
-
         // 참여할 수 있으면
         for (int i = 0; i < max; i++) {
             if (userInfos[i] == null) {
