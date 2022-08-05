@@ -3,6 +3,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
+import com.ssafy.api.response.JsonRes;
 import com.ssafy.api.response.RoomRes;
 import com.ssafy.api.response.StringRes;
 import com.ssafy.api.response.VTokenRes;
@@ -154,6 +155,7 @@ public class RoomController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "파라미터 오류"),
+            @ApiResponse(code = 403, message = "호출 할 수 있는 단계가 아님"),
             @ApiResponse(code = 404, message = "해당 세션 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
@@ -169,6 +171,9 @@ public class RoomController {
 
         // 세션
         VSession vSession = this.mapSessions.get(sessionId);
+        // 모집중 단계가 아닐 시
+        if (vSession.getRoomInfo().getPhase() != 0) return ResponseEntity.status(405).body(BaseResponseBody.of(405, "Cannot select except phase 0"));
+
         int max = vSession.getRoomInfo().getMaxNum();
         UserInfo[] userInfos;
 
@@ -192,6 +197,7 @@ public class RoomController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "파라미터 오류"),
+            @ApiResponse(code = 403, message = "호출 할 수 있는 단계가 아님"),
             @ApiResponse(code = 404, message = "해당 세션 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
@@ -204,6 +210,9 @@ public class RoomController {
 
         // 세션
         VSession vSession = this.mapSessions.get(sessionId);
+        // 모집중 단계가 아닐 시
+        if (vSession.getRoomInfo().getPhase() != 0) return ResponseEntity.status(405).body(BaseResponseBody.of(405, "Cannot select except phase 0"));
+
         int max = vSession.getRoomInfo().getMaxNum();
         UserInfo[] userInfos;
 
@@ -224,37 +233,110 @@ public class RoomController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Fail"));
     }
 
-    @PutMapping("/start/{room_id}")
+    @GetMapping("/connections/agree")
+    @ApiOperation(value = "찬성 측 커넥션 조회", notes = "토론방의 찬성 측 커넥션 이름 반환")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "파라미터 오류"),
+            @ApiResponse(code = 404, message = "해당 세션 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> getAgreeConnections(@ApiIgnore Authentication authentication, String sessionId) {
+        SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
+        String userId = ssafyUserDetails.getUsername();
+
+        // 해당 세션이 존재하지 않으면
+        if (!this.mapSessions.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+
+        VSession vSession = this.mapSessions.get(sessionId);
+        Map<String, String> connections = new ConcurrentHashMap<>();
+        for (UserInfo userInfo : vSession.getAgree()) {
+            if (vSession.getParticipants().containsKey(userInfo.getEm())){
+                Connection conn = vSession.getParticipants().get(userInfo.getEm());
+                connections.put(userInfo.getEm(), conn.getConnectionId());
+            }
+        }
+
+        return ResponseEntity.status(200).body(JsonRes.of(200, "Success", connections.toString()));
+    }
+
+    @GetMapping("/connections/disagree")
+    @ApiOperation(value = "찬성 측 커넥션 조회", notes = "토론방의 찬성 측 커넥션 이름 반환")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "파라미터 오류"),
+            @ApiResponse(code = 404, message = "해당 세션 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> getDisagreeConnections(@ApiIgnore Authentication authentication, String sessionId) {
+        SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
+        String userId = ssafyUserDetails.getUsername();
+
+        // 해당 세션이 존재하지 않으면
+        if (!this.mapSessions.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+
+        VSession vSession = this.mapSessions.get(sessionId);
+        Map<String, String> connections = new ConcurrentHashMap<>();
+        for (UserInfo userInfo : vSession.getDisagree()) {
+            if (vSession.getParticipants().containsKey(userInfo.getEm())){
+                Connection conn = vSession.getParticipants().get(userInfo.getEm());
+                connections.put(userInfo.getEm(), conn.getConnectionId());
+            }
+        }
+
+        return ResponseEntity.status(200).body(JsonRes.of(200, "Success", connections.toString()));
+    }
+
+    @PutMapping("/start")
     @ApiOperation(value = "토론 시작", notes = "토론방을 모집중에서 시작으로 업데이트")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 403, message = "권한 오류"),
+            @ApiResponse(code = 404, message = "세션 없음"),
             @ApiResponse(code = 411, message = "시작 불가"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> startRoom(@RequestParam Long room_id){
+    public ResponseEntity<? extends BaseResponseBody> startRoom(@ApiIgnore Authentication authentication, @RequestBody String sessionId){
+        SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
+        String userId = ssafyUserDetails.getUsername();
+        String userEm = userService.getUserInfoDtoById(Long.parseLong(userId)).getEm();
 
-        RoomInfoDto roomInfoDto = roomService.updatePhaseByRoomId(room_id, 1);
-        if(roomInfoDto == null){
-            return ResponseEntity.status(200).body(RoomRes.of(411, "already started or finished"));
-        }
-        return ResponseEntity.status(200).body(RoomRes.of(200, "debate start", roomInfoDto));
+        // 요청한 사람이 호스트가 아니면
+        if (!sessionId.equals(userEm)) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Not host"));
+
+        // 해당 세션이 존재하지 않으면
+        if (!this.mapSessions.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+
+        VSession vSession = this.mapSessions.get(sessionId);
+        vSession.getRoomInfo().setPhase(1);
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Debate start"));
     }
 
-    @PutMapping("/vote/{room_id}")
+    @PutMapping("/vote")
     @ApiOperation(value = "투표 시작", notes = "토론 종료 전 토론 결과 투표")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
-            @ApiResponse(code = 411, message = "투표 불가"),
+            @ApiResponse(code = 403, message = "권한 오류"),
+            @ApiResponse(code = 404, message = "세션 없음"),
+            @ApiResponse(code = 411, message = "시작 불가"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> voteStart(@RequestParam Long room_id){
+    public ResponseEntity<? extends BaseResponseBody> voteStart(@ApiIgnore Authentication authentication, @RequestBody String sessionId){
+        SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
+        String userId = ssafyUserDetails.getUsername();
+        String userEm = userService.getUserInfoDtoById(Long.parseLong(userId)).getEm();
 
-        RoomInfoDto roomInfoDto = roomService.updatePhaseByRoomId(room_id, 2);
-        if(roomInfoDto == null){
-            return ResponseEntity.status(200).body(RoomRes.of(411, "Voting has already started or ended"));
-        }
-        return ResponseEntity.status(200).body(RoomRes.of(200, "vote start"));
+        // 요청한 사람이 호스트가 아니면
+        if (!sessionId.equals(userEm)) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Not host"));
 
+        // 해당 세션이 존재하지 않으면
+        if (!this.mapSessions.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+
+        VSession vSession = this.mapSessions.get(sessionId);
+        vSession.getRoomInfo().setPhase(2);
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Vote start"));
     }
 
     @DeleteMapping()
@@ -274,8 +356,18 @@ public class RoomController {
         session.close();
         roomService.finishRoom(vSession);
 
-        return ResponseEntity.status(200).body(RoomRes.of(200, "Success"));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
 
+    @PostMapping("/sync")
+    @ApiOperation(value = "동기화", notes = "OpenVidu 서버와의 동기화")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류류")
+   })
+    public ResponseEntity<? extends BaseResponseBody> syncServer() {
+        // TODO 서버의 mapSessions를 기준으로 동기화
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
 }

@@ -21,7 +21,7 @@ public interface RoomService {
 
     RoomInfoDto updatePhaseByRoomId(Long id, int phase);
 
-    void finishRoom(VSession vSession);
+    void finishRoom(VSession session);
 
 
     int findHashtagId(String nm);
