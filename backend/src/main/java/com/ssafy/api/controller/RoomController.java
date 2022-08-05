@@ -269,8 +269,10 @@ public class RoomController {
         String id = userDetails.getUsername();
         String userEm = userService.getUserById(Long.parseLong(id)).getEm();
 
-        Session session = this.mapSessions.get(userEm).getSession();
+        VSession vSession = this.mapSessions.get(userEm);
+        Session session = vSession.getSession();
         session.close();
+        roomService.finishRoom(vSession);
 
         return ResponseEntity.status(200).body(RoomRes.of(200, "Success"));
 
