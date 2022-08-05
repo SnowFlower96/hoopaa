@@ -33,8 +33,8 @@
     <div class="debate-backcolor">
         <div class="video-chatt-wrap">
             <div class="debate-background" :style="customCaroselStyle">
-                <detail-session></detail-session>
-                <!-- <debate-room-main-session></debate-room-main-session> -->
+                <!-- <detail-session></detail-session> -->
+                <debate-room-main-session></debate-room-main-session>
                 <!-- <div class="debate-room-wrap">
                     <div class="videobox-side" :style="customCaroselStyle">
                         <debate-room-side-component></debate-room-side-component>
