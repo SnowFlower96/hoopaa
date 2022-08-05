@@ -33,10 +33,9 @@
     <div class="debate-backcolor">
         <div class="video-chatt-wrap">
             <div class="debate-background" :style="customCaroselStyle">
-                <detail-session></detail-session>
-                <!-- <debate-room-main-session></debate-room-main-session> -->
-                <!-- <div class="debate-room-wrap">
-                    <div class="videobox-side" :style="customCaroselStyle">
+                <div class="debate-room-wrap">
+                    <debate-room-main-session></debate-room-main-session>
+                    <!-- <div class="videobox-side" :style="customCaroselStyle">
                         <debate-room-side-component></debate-room-side-component>
                     </div>
 
@@ -46,8 +45,8 @@
 
                     <div class="videobox-side" :style="customCaroselStyle">
                         <debate-room-side-component></debate-room-side-component>
-                    </div>
-                </div> -->
+                    </div> -->
+                </div>
             </div>
             <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
                 <button @click="changeChatView">닫기</button>
@@ -68,12 +67,10 @@
 
 
 <script>
-// import debateRoomMainSession from './debateRoomMainSession'
-// import animationView from './animation-view.vue'
 // import debateRoomSideComponent from './debateRoomSideComponent'
 // import debateRoomCenterComponent from './debateRoomCenterComponent'
-
-import detailSession from './detailSession.vue'
+// import animationView from './animation-view.vue'
+import debateRoomMainSession from './debateRoomMainSession'
 
 import chattingAll from './ChattingComponents/chatting-all'
 import chattingTeam from './ChattingComponents/chatting-team'
@@ -110,8 +107,8 @@ export default {
         LetTeamSpeak,
         RestTime,
         LetVote,
-        // debateRoomMainSession,
-        detailSession
+        debateRoomMainSession
+
 
     },
     computed : {
@@ -437,7 +434,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(96, 255, 112, 0.766);
+    /* background-color: rgba(96, 255, 112, 0.766); */
     width: var(--db-bg);
 }
 .debate-room-footer-class {
@@ -458,7 +455,22 @@ export default {
     display: flex;
     /* background-color: rgba(146, 227, 153, 0.581); */
 }
-
+.videobox-side {
+    display: flex;
+    justify-content: center;
+    height: var(--debate-box-side-height);
+    width: var(--debate-box-side-width);
+    color: black;
+    /* background-color: rgb(61, 255, 94);
+    outline: 10px #667799 solid; */
+}
+.videobox-center {
+  height: var(--debate-box-center-height);
+  width: var(--debate-box-center-width);
+  color: black;
+  /* background-color: rgba(121, 193, 255, 0.621); */
+  /* outline: 10px #667799 solid; */
+}
 
 
 </style>
