@@ -21,6 +21,7 @@ import checkPwd from '@/views/user/checkPwd'
 import myPageInfo from '@/views/user/mypage-info'
 
 import Test from '@/views/test'
+import DetailSession from '@/views/detailSession'
 
 const fullMenu = require('@/views/main/menu.json')
 
@@ -85,7 +86,7 @@ function makeRoutesFromMenu () {
   {
     path : '/test',
     name: 'test',
-    component: Test
+    component: Test,
   },
 
   {
@@ -140,8 +141,13 @@ function makeRoutesFromMenu () {
 {
   path : '/test',
   name: 'test',
-  component: Test
+  component: Test,
 },
+{
+  path : '/detailSession',
+  name: 'detailSession',
+  component: DetailSession,
+}
   )
 
   return routes
