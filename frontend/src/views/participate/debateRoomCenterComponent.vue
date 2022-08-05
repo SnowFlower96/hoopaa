@@ -1,7 +1,7 @@
 <template>
     <div class="debate-center-wrap" >
         <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle">
-            <user-video class="moderatorVideo" :stream-manager="publisher"/>
+            <user-video class="moderatorVideo" :stream-manager="publisher" v-if="!isPannel"/>
         </div>
     </div>
     <div class="debate-guague" :style="customViewStyle"><div class="debate-guague-inner" :style="customViewStyle">게이지바</div></div>
@@ -25,6 +25,7 @@ export default {
     UserVideo,
   },
     computed : {
+      ...mapState(["user"]),
         customViewStyle() {
             return {
                 "--center-video-height" : this.centerVideoHeight,
@@ -49,8 +50,7 @@ export default {
 			      mainStreamManager: undefined,
 			      publisher: undefined,
 			      subscribers: [],
-            isHost : false,
-
+            isPannel : false,
             centerVideoHeight : '',
             centerVideoWidth : '',
 
@@ -74,7 +74,6 @@ export default {
 
 			// --- Init a session ---
 			this.session = this.OV.initSession();
-
 			// --- Specify the actions when events take place in the session ---
 
 			// On every new Stream received...
@@ -107,24 +106,28 @@ export default {
 					.then(() => {
             console.log("connecting...");
 						// --- Get your own camera stream with the desired properties ---
+            console.log(this.session.sessionId)
+            if (this.user.em == this.session.sessionId) {
+              let publisher = this.OV.initPublisher(undefined, {
+                audioSource: undefined, // The source of audio. If undefined default microphone
+                videoSource: undefined, // The source of video. If undefined default webcam
+                publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
+                publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
+                resolution: '680x480',  // The resolution of your video
+                frameRate: 30,			// The frame rate of your video
+                insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
+                mirror: false       	// Whether to mirror your local video or not
+              });
 
-						let publisher = this.OV.initPublisher(undefined, {
-							audioSource: undefined, // The source of audio. If undefined default microphone
-							videoSource: undefined, // The source of video. If undefined default webcam
-							publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
-							publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-							resolution: '680x480',  // The resolution of your video
-							frameRate: 30,			// The frame rate of your video
-							insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
-							mirror: false       	// Whether to mirror your local video or not
-						});
+              this.mainStreamManager = publisher;
+              this.publisher = publisher;
 
-						this.mainStreamManager = publisher;
-						this.publisher = publisher;
+              // --- Publish your stream ---
 
-						// --- Publish your stream ---
-
-						this.session.publish(this.publisher);
+              this.session.publish(this.publisher);
+            } else {
+              this.isPannel = true;
+            }
              console.log("connected");
 					})
 					.catch(error => {
@@ -133,7 +136,7 @@ export default {
 
       console.log("!!!!"+this.role)
       window.addEventListener('beforeunload', this.leaveSession);
-      this.isHost = true;
+
     },
     mounted() {
 

@@ -2,6 +2,7 @@ import { createApi, createTokenApi } from "@/api";
 import Vuex from "vuex";
 import router from "@/common/lib/vue-router";
 import createPersistedState from "vuex-persistedstate";
+import { toRawType } from "@vue/shared";
 
 //Vue.use(Vuex);
 
@@ -17,6 +18,7 @@ export default new Vuex.Store({
     roomList : [],
     headerVisible: true,
     tempToken : '',
+    user : [],
   },
 
   mutations : {
@@ -26,12 +28,11 @@ export default new Vuex.Store({
       state.roomList = JSON.parse(data);
     },
     // 로그인 토큰, 상태
-    USER_LOGIN(state, token) {
+    USER_LOGIN(state, data) {
       state.isLogin = true;
-      sessionStorage.setItem("accessToken", token);
-      api.defaults.headers["accessToken"] = token;
-      this.dispatch("getUserHistory");
-      this.dispatch("getUserStat");
+      sessionStorage.setItem("accessToken", data.accessToken);
+      api.defaults.headers["accessToken"] = data.accessToken;
+      state.user = data.user;
     },
     // 로그아웃
     USER_LOGOUT(state) {
@@ -110,7 +111,7 @@ export default new Vuex.Store({
         method : "POST",
         data : data
       }).then((res) => {
-          commit("USER_LOGIN", res.data.accessToken);
+          commit("USER_LOGIN", res.data);
           router.push('/')
       }).catch(error => {
         reject(error)
