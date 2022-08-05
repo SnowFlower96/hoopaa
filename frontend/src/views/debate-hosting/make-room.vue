@@ -104,8 +104,8 @@ export default {
       console.log(room)
       this.$store.dispatch("makeRoom",room).then(response => {
         let data = {
+          pwd : this.pwd,
           sessionId : this.$store.state.userStat.em,
-          pwd : this.pwd
         }
          this.$store.dispatch("enterRoom", data)
 

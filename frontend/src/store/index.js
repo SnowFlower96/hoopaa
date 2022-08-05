@@ -271,6 +271,5 @@ export default new Vuex.Store({
       commit("CREATE_TEMP_TOKEN",res.data.token);
       router.push("/debateRoom")
     })
-  }
-
+  },
 }})

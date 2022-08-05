@@ -45,6 +45,8 @@ export default {
 			      mainStreamManager: undefined,
 			      publisher: undefined,
 			      subscribers: [],
+            isHost : false,
+
             centerVideoHeight : '',
             centerVideoWidth : '',
 
@@ -59,7 +61,7 @@ export default {
         }
     },
     created () {
-        this.token = this.$store.state.tempToken;
+      this.token = this.$store.state.tempToken;
 
       	// --- Get an OpenVidu object ---
 			this.OV = new OpenVidu();
@@ -125,6 +127,7 @@ export default {
 
       console.log("!!!!"+this.role)
       window.addEventListener('beforeunload', this.leaveSession);
+      this.isHost = true;
     },
     mounted() {
 
@@ -162,6 +165,18 @@ export default {
             this.dbContentInnerWidth = `${wValueNotVid-50}px`
             this.dbGuagueInnerHeight = `${hValue*0.15-30}px`
             this.dbContentInnerHeight = `${hValue*0.85-50}px`
+        },
+         leaveSession() {
+           console.log("leaveSession")
+            // --- Leave the session by calling 'disconnect' method over the Session object ---
+            if (this.session) this.session.disconnect();
+            this.session = undefined;
+            this.mainStreamManager = undefined;
+            this.publisher = undefined;
+            this.subscribers = [];
+            this.OV = undefined;
+            window.removeEventListener('beforeunload', this.leaveSession);
+            this.$router.push("/list");
         },
     }
 }

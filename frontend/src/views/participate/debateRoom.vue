@@ -28,6 +28,9 @@
     <button @click="allView">방청객뷰</button>
     <button @click="teamView">패널뷰</button>
     <router-link to="/detailSession"><button>세부세션 가기</button></router-link>
+    <!-- 임시 진연선택 버튼-->
+    <button @click="positionAgree">찬성</button>
+    <button @click="positionDisagree">반대</button>
     <!-- 뷰바꾸는 임시버튼 -->
 </div>
     <div class="debate-backcolor">
@@ -39,7 +42,7 @@
                     </div>
 
                     <div class="videobox-center" :style="customCaroselStyle">
-                        <debate-room-center-component></debate-room-center-component>
+                        <debate-room-center-component ref="debateRoomSideComponent"></debate-room-center-component>
                     </div>
 
                     <div class="videobox-side" :style="customCaroselStyle">
@@ -62,6 +65,7 @@
             <div class="chatt-btn" @click="changeChatView">C</div>
         </div>
     </div>
+    <button @click="leaveSession">닫기닫기닫기</button>
 </template>
 
 
@@ -359,9 +363,17 @@ export default {
                 this.message = false
                 this.file = true
             }
-        }
+        },
+        leaveSession() {
+          this.$refs.debateRoomSideComponent.leaveSession();
+        },
+      // 찬성 참여
+      positionAgree() {
+        
+      },
+      positionDisagree() {
 
-
+      },
     }
 }
 </script>
