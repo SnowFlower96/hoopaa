@@ -34,8 +34,7 @@
         <div class="video-chatt-wrap">
             <div class="debate-background" :style="customCaroselStyle">
                 <div class="debate-room-wrap">
-                    <debate-room-main-session></debate-room-main-session>
-                    <!-- <div class="videobox-side" :style="customCaroselStyle">
+                    <div class="videobox-side" :style="customCaroselStyle">
                         <debate-room-side-component></debate-room-side-component>
                     </div>
 
@@ -45,7 +44,7 @@
 
                     <div class="videobox-side" :style="customCaroselStyle">
                         <debate-room-side-component></debate-room-side-component>
-                    </div> -->
+                    </div>
                 </div>
             </div>
             <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
@@ -67,10 +66,9 @@
 
 
 <script>
-// import debateRoomSideComponent from './debateRoomSideComponent'
-// import debateRoomCenterComponent from './debateRoomCenterComponent'
+import debateRoomSideComponent from './debateRoomSideComponent'
+import debateRoomCenterComponent from './debateRoomCenterComponent'
 // import animationView from './animation-view.vue'
-import debateRoomMainSession from './debateRoomMainSession'
 
 import chattingAll from './ChattingComponents/chatting-all'
 import chattingTeam from './ChattingComponents/chatting-team'
@@ -92,8 +90,8 @@ import LetVote from './ModalContent/ModeratorView/LetVote'
 export default {
     name: 'debateRoom',
     components: {
-        // debateRoomSideComponent,
-        // debateRoomCenterComponent,
+        debateRoomSideComponent,
+        debateRoomCenterComponent,
         // animationView,
         chattingAll,
         chattingTeam,
@@ -107,7 +105,6 @@ export default {
         LetTeamSpeak,
         RestTime,
         LetVote,
-        debateRoomMainSession
 
 
     },
