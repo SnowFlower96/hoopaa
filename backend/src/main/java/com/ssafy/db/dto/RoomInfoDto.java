@@ -17,7 +17,6 @@ public class RoomInfoDto {
     private String thumbUrl;
     private int phase;
     private int maxNum;
-    private int curNum;
     private LocalDateTime startTime;
     private Integer cate;
     private Integer hash1;
@@ -25,7 +24,6 @@ public class RoomInfoDto {
     private Integer hash3;
     private String title;
     private String subtitle;
-    private String nnm;
 
     public RoomInfoDto(RoomInfo roomInfo){
         this.id = roomInfo.getId();
@@ -35,7 +33,6 @@ public class RoomInfoDto {
         this.thumbUrl = roomInfo.getThumbUrl();
         this.phase = roomInfo.getPhase();
         this.maxNum = roomInfo.getMaxNum();
-        this.curNum = roomInfo.getCurNum();
         this.startTime = roomInfo.getStartTime();
         this.cate = roomInfo.getCate();
         this.hash1 = roomInfo.getHash1();
@@ -43,6 +40,5 @@ public class RoomInfoDto {
         this.hash3 = roomInfo.getHash3();
         this.title = roomInfo.getTitle();
         this.subtitle = roomInfo.getSubtitle();
-        this.nnm= roomInfo.getUser().getNnm();
     }
 }

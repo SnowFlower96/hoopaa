@@ -39,8 +39,10 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public RoomInfoDto createRoom(RoomOpenReq roomOpenInfo) {
+        User user = userRepository.findUserByEm(roomOpenInfo.getHost_em()).get();
         RoomInfo roomInfo = RoomInfo.builder()
-                .pwd(/*passwordEncoder.encode(*/roomOpenInfo.getPwd())
+                .pwd(/*passwordEncoder.encode(*/roomOpenInfo.getPwd().length() == 0 ? null : roomOpenInfo.getPwd())
+                .hostId(user.getId())
                 .isSys(roomOpenInfo.getIs_sys())
                 .thumbUrl(roomOpenInfo.getThumb_url())
                 .phase(roomOpenInfo.getPhase())
@@ -50,31 +52,6 @@ public class RoomServiceImpl implements RoomService{
                 .title(roomOpenInfo.getTitle())
                 .subtitle(roomOpenInfo.getSubtitle())
                 .build();
-
-        roomInfo =  roomInfoRepository.save(roomInfo);
-        User user = userRepository.findUserByEm(roomOpenInfo.getHost_em()).get();
-        RoomStatus roomStatus = RoomStatus.builder()
-                .id(roomInfo.getId())
-                .build();
-
-        //시스템 모드 , 사회자 모드면 자동으로 호스트는 사회자
-        if(roomOpenInfo.getIs_sys()==1){
-
-            if(roomOpenInfo.getPos()==1){ //찬성
-                System.out.println("찬성");
-                roomStatus.setAgree(1);
-                roomStatus.setAgree_1(user.getId());
-                System.out.println(roomStatus.getAgree_1());
-            }else if(roomOpenInfo.getPos()==2){ //반대
-                roomStatus.setDisagree(1);
-                roomStatus.setDisagree_1(roomInfo.getHostId());
-            }else if(roomOpenInfo.getPos()==3){ //방청객
-
-            }
-        }
-        roomStatusRepository.save(roomStatus);
-
-        roomInfo.setUser(user);
         if(roomOpenInfo.getHash_1()!=null&&!roomOpenInfo.getHash_1().equals("")){
             roomInfo.setHash1(roomService.findHashtagId(roomOpenInfo.getHash_1()));
         }
@@ -84,7 +61,15 @@ public class RoomServiceImpl implements RoomService{
         if(roomOpenInfo.getHash_3()!=null&&!roomOpenInfo.getHash_3().equals("")){
             roomInfo.setHash3(roomService.findHashtagId(roomOpenInfo.getHash_3()));
         }
-        return new RoomInfoDto(roomInfoRepository.save(roomInfo));
+        roomInfo =  roomInfoRepository.save(roomInfo);
+
+        RoomStatus roomStatus = RoomStatus.builder()
+                .id(roomInfo.getId())
+                .build();
+        System.out.println(roomStatus);
+        roomStatusRepository.save(roomStatus);
+        System.out.println(roomInfo);
+        return new RoomInfoDto(roomInfo);
     }
 
     @Override

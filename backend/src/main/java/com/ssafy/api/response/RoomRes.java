@@ -22,7 +22,6 @@ public class RoomRes extends BaseResponseBody {
     LocalDateTime start_time;
     String title;
     String subtitle;
-    String nnm;
 
     public static RoomRes of(Integer statusCode, String message, RoomInfoDto  roomInfoDto) {
         RoomRes res = new RoomRes();
@@ -38,7 +37,6 @@ public class RoomRes extends BaseResponseBody {
         res.setStart_time(roomInfoDto.getStartTime());
         res.setTitle(roomInfoDto.getTitle());
         res.setSubtitle(roomInfoDto.getSubtitle());
-        res.setNnm(roomInfoDto.getNnm());
 
         return res;
     }

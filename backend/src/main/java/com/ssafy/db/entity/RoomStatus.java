@@ -33,7 +33,6 @@ public class RoomStatus {
     private int disagree;
 
     @Builder
-
     public RoomStatus(Long id, Long agree_1, Long agree_2, Long agree_3, Long agree_4, Long agree_5, Long disagree_1, Long disagree_2, Long disagree_3, Long disagree_4, Long disagree_5, int agree, int disagree) {
         this.id = id;
         this.agree_1 = agree_1;
