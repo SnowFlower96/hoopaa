@@ -232,9 +232,9 @@ public class RoomController {
 
         RoomInfoDto roomInfoDto = roomService.updatePhaseByRoomId(room_id, 1);
         if(roomInfoDto == null){
-            return ResponseEntity.status(200).body(RoomRes.of(411, "already started or finished"));
+            return ResponseEntity.status(200).body(BaseResponseBody.of(411, "already started or finished"));
         }
-        return ResponseEntity.status(200).body(RoomRes.of(200, "debate start", roomInfoDto));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "debate start"));
     }
 
     @PutMapping("/vote/{room_id}")
@@ -248,9 +248,9 @@ public class RoomController {
 
         RoomInfoDto roomInfoDto = roomService.updatePhaseByRoomId(room_id, 2);
         if(roomInfoDto == null){
-            return ResponseEntity.status(200).body(RoomRes.of(411, "Voting has already started or ended"));
+            return ResponseEntity.status(200).body(BaseResponseBody.of(411, "Voting has already started or ended"));
         }
-        return ResponseEntity.status(200).body(RoomRes.of(200, "vote start"));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "vote start"));
 
     }
 
@@ -269,7 +269,7 @@ public class RoomController {
         Session session = this.mapSessions.get(userEm).getSession();
         session.close();
 
-        return ResponseEntity.status(200).body(RoomRes.of(200, "Success"));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 
     }
 

@@ -23,7 +23,7 @@ public class RoomRes extends BaseResponseBody {
     String title;
     String subtitle;
 
-    public static RoomRes of(Integer statusCode, String message, RoomInfoDto  roomInfoDto) {
+    public static RoomRes of(Integer statusCode, String message, RoomInfoDto roomInfoDto) {
         RoomRes res = new RoomRes();
         res.setStatusCode(statusCode);
         res.setMessage(message);
@@ -33,7 +33,7 @@ public class RoomRes extends BaseResponseBody {
         res.setThumb_url(roomInfoDto.getThumbUrl());
         res.setPhase(roomInfoDto.getPhase());
         res.setMax_num(roomInfoDto.getMaxNum());
-        res.setCur_num(roomInfoDto.getCurNum());
+//        res.setCur_num(roomInfoDto.getCurNum());
         res.setStart_time(roomInfoDto.getStartTime());
         res.setTitle(roomInfoDto.getTitle());
         res.setSubtitle(roomInfoDto.getSubtitle());
