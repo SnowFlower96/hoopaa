@@ -2,12 +2,11 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.RoomCloseReq;
 import com.ssafy.api.request.RoomOpenReq;
+import com.ssafy.common.data.UserInfo;
+import com.ssafy.common.data.VSession;
 import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.entity.*;
-import com.ssafy.db.repository.HashtagRepository;
-import com.ssafy.db.repository.RoomInfoRepository;
-import com.ssafy.db.repository.RoomStatusRepository;
-import com.ssafy.db.repository.UserRepository;
+import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +30,12 @@ public class RoomServiceImpl implements RoomService{
 
     @Autowired
     RoomStatusRepository roomStatusRepository;
+
+    @Autowired
+    UserHistoryRepository userHistoryRepository;
+
+    @Autowired
+    UserStatRepository userStatRepository;
 
 
     /*@Autowired
@@ -103,91 +108,96 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public void finishRoom(RoomCloseReq roomCloseReq) {
-        RoomInfo roomInfo = roomInfoRepository.findById(roomCloseReq.getId()).get();
+    public void finishRoom( VSession vSession) {
+        RoomInfo roomInfo = roomInfoRepository.findById(vSession.getRoomInfo().getId()).get();
+        int winner = 0;
+        if(vSession.getVote_final_agree()> vSession.getVote_final_disagree())winner=1;
+        else if(vSession.getVote_final_agree() < vSession.getVote_final_disagree())winner=2;
         RoomHistory roomHistory = RoomHistory.builder()
-                .id(roomCloseReq.getId())
-                .log(roomCloseReq.getLog())
+                .id(vSession.getRoomInfo().getId())
                 .end_time(LocalDateTime.now())
-                .winner(roomCloseReq.getWinner())
-                .agree(roomCloseReq.getAgree())
-                .disagree(roomCloseReq.getDisagree())
-                .invalid(roomCloseReq.getInvalid()).build();
+                .winner(winner)
+                .agree(vSession.getVote_final_agree())
+                .disagree(vSession.getVote_final_disagree())
+                .build();
         roomInfo.setPhase(3);
 
+        // 토론왕 확인하기 위한 변수 설정정
+        int kingCntMax = -1;
+        Long kingId=-1L;
+        //user history 업데이트
+        //찬성 진영 업데이트
+        for(UserInfo userInfo : vSession.getAgree()){
+            if(userInfo == null) continue; //
+            kingCntMax=userInfo.getKingCnt();
+            kingId = userInfo.getId();
+            User user = userRepository.findUserById(userInfo.getId()).get();
+            UserHistory userHistory = UserHistory.builder()
+                    .userId(user.getId()) //id
+                    .roomId(roomInfo.getId()) //roomId
+                    .userPos(1)//userPos
+                    .build();
+            if(roomInfo.getHostId()==user.getId()){ //host라면
+                userHistory.setHost(true); //isHost
+            }
+            userHistory.setRoomInfo(roomInfo);
+            userHistoryRepository.save(userHistory);
+
+            //user stat 업데이트
+            UserStat userStat = userStatRepository.findStatById(user.getId()).get();
+            userStat.setTotal(userStat.getTotal()+1);
+            //승 , 패 , 무
+            if(vSession.getVote_final_agree()> vSession.getVote_final_disagree()) {
+                userStat.setWin(userStat.getWin()+1);
+            }else if(vSession.getVote_final_agree()< vSession.getVote_final_disagree()){
+                userStat.setLose(userStat.getLose()+1);
+            }else{
+                userStat.setDraw(userStat.getDraw()+1);
+            }
+            userStatRepository.save(userStat);
+        }
+
+        //반대 진영 업데이트
+        for(UserInfo userInfo : vSession.getDisagree()){
+            if(userInfo == null) continue; //
+            if(userInfo.getKingCnt()>kingCntMax){
+                kingCntMax=userInfo.getKingCnt();
+                kingId = userInfo.getId();
+            }
+            User user = userRepository.findUserById(userInfo.getId()).get();
+            UserHistory userHistory = UserHistory.builder()
+                    .userId(user.getId()) //id
+                    .roomId(roomInfo.getId()) //roomId
+                    .userPos(2)//userPos
+                    .build();
+            if(roomInfo.getHostId()==user.getId()){ //host라면
+                userHistory.setHost(true); //isHost
+            }
+            userHistory.setRoomInfo(roomInfo);
+            userHistoryRepository.save(userHistory);
+
+            //user stat 업데이트
+            UserStat userStat = userStatRepository.findStatById(user.getId()).get();
+            userStat.setTotal(userStat.getTotal()+1);
+            //승 , 패 , 무
+            if(vSession.getVote_final_agree()< vSession.getVote_final_disagree()) {
+                userStat.setWin(userStat.getWin()+1);
+            }else if(vSession.getVote_final_agree()> vSession.getVote_final_disagree()){
+                userStat.setLose(userStat.getLose()+1);
+            }else{
+                userStat.setDraw(userStat.getDraw()+1);
+            }
+            userStatRepository.save(userStat);
+
+        }
+        //토론왕 설정
+        UserStat userStat = userStatRepository.findStatById(kingId).get();
+        UserHistory userHistory = userHistoryRepository.findUserHistoryByUserIdAndRoomId(kingId, vSession.getRoomInfo().getId()).get();
+        userStatRepository.save(userStat);
+        userHistoryRepository.save(userHistory);
         roomInfo.setRoomHistory(roomHistory);
         roomInfoRepository.save(roomInfo);
     }
-
-
-
-//    @Override
-//    public boolean enterRoom(RoomEnterReq roomEnterReq, String userEm) throws NoSuchElementException{
-//        RoomInfo roomInfo = roomInfoRepository.findById(roomEnterReq.getId()).get();
-//
-//        //비밀번호 체크
-//        if(!roomInfo.getPwd().equals(roomEnterReq.getPwd())){
-//            return false;
-//        }
-
-//        if(roomEnterReq.getPos()==1){//찬성
-//            int max_num = roomInfo.getMax_num();
-//            RoomStatus roomStatus = roomInfo.getRoomStatus();
-//            if(roomStatus.getAgree()>=max_num){
-//                throw new IllegalArgumentException();
-//            }else{
-//                int cur_agree = roomStatus.getAgree();
-//                if(cur_agree==0){
-//                    roomStatus.setAgree_1(user.getId());
-//                    roomStatus.setAgree(1);
-//                }else if(cur_agree==1){
-//                    roomStatus.setAgree_2(user.getId());
-//                    roomStatus.setAgree(2);
-//                }else if(cur_agree==2){
-//                    roomStatus.setAgree_3(user.getId());
-//                    roomStatus.setAgree(3);
-//                }else if(cur_agree==3){
-//                    roomStatus.setAgree_4(user.getId());
-//                    roomStatus.setAgree(4);
-//                }else if(cur_agree==4){
-//                    roomStatus.setAgree_5(user.getId());
-//                    roomStatus.setAgree(5);
-//                }
-//            }
-//
-//        }else if(roomEnterReq.getPos()==2) {//반대
-//            int max_num = roomInfo.getMax_num();
-//            RoomStatus roomStatus = roomInfo.getRoomStatus();
-//            if (roomStatus.getAgree() >= max_num) {
-//                throw new IllegalArgumentException();
-//            } else {
-//                int cur_agree = roomStatus.getDisagree();
-//                if (cur_agree == 0) {
-//                    roomStatus.setDisagree_1(user.getId());
-//                    roomStatus.setDisagree(1);
-//                } else if (cur_agree == 1) {
-//                    roomStatus.setDisagree_2(user.getId());
-//                    roomStatus.setDisagree(2);
-//                } else if (cur_agree == 2) {
-//                    roomStatus.setDisagree_3(user.getId());
-//                    roomStatus.setDisagree(3);
-//                } else if (cur_agree == 3) {
-//                    roomStatus.setDisagree_4(user.getId());
-//                    roomStatus.setDisagree(4);
-//                } else if (cur_agree == 4) {
-//                    roomStatus.setDisagree_5(user.getId());
-//                    roomStatus.setDisagree(5);
-//                }
-//            }
-//        }
-        //방 인원 수 한명 증가
-//        roomInfo.setCur_num(roomInfo.getCur_num()+1);
-//        roomInfoRepository.save(roomInfo);
-//
-//        RoomInfoDto roomInfoDto = new RoomInfoDto(roomInfo);
-//        return true;
-//
-//    }
 
     @Override
     public int findHashtagId(String nm) {

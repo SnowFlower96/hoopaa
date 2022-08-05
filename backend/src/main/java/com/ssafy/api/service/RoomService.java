@@ -4,6 +4,7 @@ package com.ssafy.api.service;
 import com.ssafy.api.request.RoomCloseReq;
 import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
+import com.ssafy.common.data.VSession;
 import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.entity.User;
 
@@ -19,7 +20,7 @@ public interface RoomService {
 
     RoomInfoDto updatePhaseByRoomId(Long id, int phase);
 
-    void finishRoom(RoomCloseReq roomCloseReq);
+    void finishRoom(VSession session);
 
 
     int findHashtagId(String nm);
