@@ -17,7 +17,7 @@
                 <div class="sys-mod-mode-sel-item-name"><input v-model="roomName" type="text" placeholder="방 이름"/></div>
                 <div class="password-wrap">
                   <div class="password-wrap-label">
-                    <p>비밀번호 설정</p>  
+                    <p>비밀번호 설정</p>
                   </div>
                   <input type="checkbox">
                   <div class="sys-mod-mode-sel-item-pw">
@@ -95,7 +95,7 @@ export default {
         this.maxNum = event.target.value;
         console.log(this.maxNum)
     },
-    makeRoom() {
+    async makeRoom() {
       var room = {
         cate : this.roomCate,
         hash_1 : this.hashTag1,
@@ -108,15 +108,12 @@ export default {
         subtitle : this.roomName,
         title : this.roomTitle
       }
-      console.log(room)
-      this.$store.dispatch("makeRoom",room).then(response => {
         let data = {
-          pwd : this.pwd,
-          sessionId : this.$store.state.userStat.em,
+          pwd : room["pwd"],
+          sessionId : room["host_em"],
         }
-         this.$store.dispatch("enterRoom", data)
-
-      })
+      await this.$store.dispatch("makeRoom",room);
+      this.$store.dispatch("enterRoom", data);
 
     },
     isSysStatus0() {

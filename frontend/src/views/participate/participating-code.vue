@@ -2,7 +2,7 @@
     <div>
         <div class="participate-black-space"></div>
         <h1>참여 코드를 받았나요?</h1>
-            <input v-model="sessonId" type="text" placeholder="sessionId 입력">
+            <input v-model="sessionId" type="text" placeholder="sessionId 입력">
             <input v-model="pwd" type="password" placeholder="방 비밀번호 입력">
             <button @click="roomEnter">submit</button>
 
@@ -23,6 +23,7 @@ export default {
         pwd : this.pwd,
         sessionId : this.sessionId,
       }
+      console.log(data)
       this.$store.dispatch("enterRoom", data)
     }
   }

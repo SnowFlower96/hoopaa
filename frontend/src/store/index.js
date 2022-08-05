@@ -253,7 +253,6 @@ export default new Vuex.Store({
     }).then((res) =>{
       resolve(res);
       commit();
-
     }).catch((error) =>{
       reject(error);
     })
@@ -269,7 +268,7 @@ export default new Vuex.Store({
     }).then((res) => {
       console.log(res.data);
       commit("CREATE_TEMP_TOKEN",res.data.token);
-      router.push("/debateRoom")
+      router.push("/participatingPage")
     })
   },
 }})
