@@ -66,9 +66,7 @@ public class RoomServiceImpl implements RoomService{
         RoomStatus roomStatus = RoomStatus.builder()
                 .id(roomInfo.getId())
                 .build();
-        System.out.println(roomStatus);
         roomStatusRepository.save(roomStatus);
-        System.out.println(roomInfo);
         return new RoomInfoDto(roomInfo);
     }
 
