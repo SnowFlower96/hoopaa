@@ -14,3 +14,4 @@ public class RoomEnterReq {
     @ApiModelProperty(name = "방 패스워드", example = "abcd")
     String pwd;
 }
+
