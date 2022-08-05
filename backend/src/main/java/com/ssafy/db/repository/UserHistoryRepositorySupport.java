@@ -24,4 +24,11 @@ public class UserHistoryRepositorySupport {
         return Optional.ofNullable(userHistoryList);
     }
 
+    public Optional<UserHistory> findUserHistoryByUserIdAndRoomId(Long user_id, Long room_id){
+        UserHistory userHistory = jpaQueryFactory.select(qUserHistory).from(qUserHistory)
+                .where(qUserHistory.userId.eq(user_id).and(qUserHistory.roomId.eq(room_id))).fetchOne();
+        if(userHistory==null) return  Optional.empty();
+        return Optional.ofNullable(userHistory);
+    }
+
 }
