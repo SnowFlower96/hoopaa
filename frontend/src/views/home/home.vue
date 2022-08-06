@@ -8,7 +8,6 @@
 
           <div class="left">
             <ul>
-              <div id="logo">카테고리</div>
               <li v-for="(item, index) in menus" :key="index" @click="goCate(item.path)">
                 <div class="cate-li-div-container">{{item.name}}</div>
               </li>

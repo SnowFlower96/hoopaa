@@ -190,7 +190,7 @@ export default {
   box-shadow: 2px 2px 2px 2px rgb(178, 178, 178);
   outline: 2px solid rgb(163, 163, 255);
   border-style:outset;
-  border-width: 8px;
+  border-width: 12px;
   cursor: pointer;
   margin: 10px;
   border-radius: 10px;
@@ -215,7 +215,7 @@ export default {
   margin: 10px;
   border-radius: 10px;
   border-style:inset;
-  border-width: 8px;
+  border-width: 12px;
   filter: brightness(60%);
   box-shadow: 0px 0px 0px 0px gray;
 }
@@ -246,7 +246,7 @@ export default {
 }
 .make-room-outer {
   text-align: center;
-  height: 80vh;
+  height: 90vh;
 }
 .make-room-black-space {
     height: 100px;

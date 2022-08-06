@@ -34,6 +34,7 @@
         <div class="video-chatt-wrap">
             <div class="debate-background" :style="customCaroselStyle">
                 <div class="debate-room-wrap">
+                    <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
                     <div class="videobox-side" :style="customCaroselStyle">
                         <debate-room-side-component></debate-room-side-component>
                     </div>
@@ -69,6 +70,7 @@
 import debateRoomSideComponent from './debateRoomSideComponent'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
 // import animationView from './animation-view.vue'
+import detailSession from './detailSession'
 
 import chattingAll from './ChattingComponents/chatting-all'
 import chattingTeam from './ChattingComponents/chatting-team'
@@ -105,8 +107,7 @@ export default {
         LetTeamSpeak,
         RestTime,
         LetVote,
-
-
+        detailSession
     },
     computed : {
         customCaroselStyle() {
