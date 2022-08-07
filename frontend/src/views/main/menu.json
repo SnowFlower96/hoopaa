@@ -1,53 +1,53 @@
 {
-  "All" : {
+  "0" : {
     "name" : "all",
     "hidden" : false,
     "path" : "/list/all",
     "children" : []
   },
-  "유머" : {
+  "1" : {
     "name" : "유머",
     "hidden" : false,
     "path" : "/list/1",
     "children" : []
   },
-  "정치" : {
+  "2" : {
     "name" : "정치",
     "hidden" : false,
     "path" : "/list/2",
     "children" : []
   },
-  "경제" : {
+  "3" : {
     "name" : "경제",
     "hidden" : false,
     "path" : "/list/3",
     "children" : []
   },
-  "사회" : {
+  "4" : {
     "name" : "사회",
     "hidden" : false,
     "path" : "/list/4",
     "children" : []
   },
-  "문화" : {
+  "5" : {
     "name" : "문화",
     "hidden" : false,
     "path" : "/list/5",
     "children" : []
   },
-  "교육" : {
+  "6" : {
     "name" : "교육",
     "hidden" : false,
     "path" : "/list/6",
     "children" : []
   },
-  "과학" : {
+  "7" : {
     "name" : "과학",
     "hidden" : false,
     "path" : "/list/7",
     "children" : []
   },
-  "스포츠" : {
+  "8" : {
     "name" : "스포츠",
     "hidden" : false,
     "path" : "/list/8",

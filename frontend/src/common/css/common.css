@@ -40,4 +40,10 @@ body {
   font-weight: 400;
   src: url('../../assets/fonts/Cafe24Ssurround.ttf') format('truetype');
 }
+/* @font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('../assets/fonts/Pretendard-Medium.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+} */
 
