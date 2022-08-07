@@ -1,4 +1,21 @@
 <template>
+<div v-if="imgTF" class="startImg">
+    <!-- <animation-view></animation-view> -->
+    <!-- 뷰바꾸는 임시버튼 -->
+    <button @click="moderatorView">사회자뷰</button>
+    <button @click="allView">방청객뷰</button>
+    <button @click="teamView">패널뷰</button>
+    <router-link to="/detailSession"><button>세부세션 가기</button></router-link>
+    <button @click="voteView">투표모달창 끄기</button>
+    <!-- 뷰바꾸는 임시버튼 -->
+</div>
+
+
+<div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">
+    <div>
+        투표받을 모달창
+    </div>
+</div>
 <div class="live-heart-container">
     <div id="heart-div"></div>
     <div>하트 누른 갯수{{countingHeart}}</div>
@@ -24,16 +41,6 @@
     <div class="call-to-moderator-blank"></div>
 </div>
 <!-- 사회자에게 메세지 보내기 -->
-
-<div v-if="imgTF" class="startImg">
-    <!-- <animation-view></animation-view> -->
-    <!-- 뷰바꾸는 임시버튼 -->
-    <button @click="moderatorView">사회자뷰</button>
-    <button @click="allView">방청객뷰</button>
-    <button @click="teamView">패널뷰</button>
-    <router-link to="/detailSession"><button>세부세션 가기</button></router-link>
-    <!-- 뷰바꾸는 임시버튼 -->
-</div>
     <div class="debate-backcolor">
         <div class="video-chatt-wrap">
             <div class="debate-background" :style="customCaroselStyle">
@@ -56,6 +63,12 @@
                 <chatting-all v-if="chattingAllView" @close-chat="changeChatView"></chatting-all>
                 <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
             </div>
+        </div>
+        <div class="moderator-menus" v-if="true" :style="customCaroselStyle">
+            <p>찬성측 발언권 부여</p>
+            <p>반대측 발언권 부여</p>
+            <p>쉬는시간 부여</p>
+            <router-link to="/"><p>투표 보내기</p></router-link>
         </div>
         <div class="debate-room-footer-class">
             <footer-team
@@ -136,6 +149,8 @@ export default {
                 "--call-to-md-ct" : this.callToMDCt,
                 "--call-to-md-in-width" : this.callToMDInW,
                 "--call-to-md-in-height" : this.callToMDInH,
+                "--mod-menus-loc" : this.modMenusLoc,
+                "--vote-modal-width" : this.voteModalWidth
             }
         }
     },
@@ -175,7 +190,10 @@ export default {
             out: false,
             menu: false,
             options: [this.menu, this.out, this.message, this.file],
-            countingHeart :0
+            countingHeart :0,
+            modMenusLoc: '',
+            voteViewTF: true,
+            voteModalWidth: ''
         }
     },
     mounted() {
@@ -200,9 +218,15 @@ export default {
         this.callToMDCt = `${debateBackground*0.4}px`
         this.callToMDInW = `${debateBackground*0.4}px`
         this.callToMDInH = `${hValue*0.31}px`
+
+        this.modMenusLoc = `${wVideoValue*0.36}px`
+        this.voteModalWidth = `${debateBackground}px`
         window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
+        voteView() {
+            this.voteViewTF = !this.voteViewTF
+        },
         risingHeart() {
             const stripe = document.getElementById('heart-div')
             setTimeout(() => {
@@ -237,6 +261,8 @@ export default {
                 this.callToMDCt = `${debateBackground*0.4}px`
                 this.callToMDInW = `${debateBackground*0.4}px`
                 this.callToMDInH = `${hValue*0.31}px`
+                this.modMenusLoc = `${wVideoValue*0.36}px`
+                this.voteModalWidth = `${debateBackground}px`
             }
             else {     // 채팅창 닫혀있을때
                 const wVideoValue = document.body.clientWidth
@@ -260,6 +286,8 @@ export default {
                 this.callToMDCt = `${debateBackground*0.4}px`
                 this.callToMDInW = `${debateBackground*0.4}px`
                 this.callToMDInH = `${hValue*0.31}px`
+                this.modMenusLoc = `${wVideoValue*0.36}px`
+                this.voteModalWidth = `${debateBackground}px`
             }
         },
         moderatorView() {
@@ -310,6 +338,7 @@ export default {
                 this.callToMDCt = `${debateBackground*0.4}px`
                 this.callToMDInW = `${debateBackground*0.4}px`
                 this.callToMDInH = `${hValue*0.31}px`
+                this.voteModalWidth = `${debateBackground}px`
             }
             else {     // 채팅창 닫혀있을때
                 const wVideoValue = document.body.clientWidth
@@ -333,6 +362,7 @@ export default {
                 this.callToMDCt = `${debateBackground*0.4}px`
                 this.callToMDInW = `${debateBackground*0.4}px`
                 this.callToMDInH = `${hValue*0.31}px`
+                this.voteModalWidth = `${debateBackground}px`
             }
         },
         offCallModal() {
@@ -385,6 +415,20 @@ export default {
 </script>
 
 <style>
+.vote-modal-container {
+    position: absolute;
+    height: 93vh;
+    width: var(--vote-modal-width);
+    background-color: rgba(255, 255, 255, 0.295);
+}
+.moderator-menus {
+    position: absolute;
+    width:200px;
+    height: auto;
+    background-color: aliceblue;
+    bottom: 7vh;
+    left: var(--mod-menus-loc);
+}
 .live-heart-container {
     top: 500px;
     left: 100px;
@@ -479,6 +523,7 @@ export default {
     top: 20%;
     color: aliceblue;
     background-color: rgb(93, 93, 53);
+    z-index: 3;
 }
 .debate-backcolor {
     background-color: black;
