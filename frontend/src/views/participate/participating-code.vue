@@ -32,17 +32,19 @@
     height: 30px;
 }
 .pp-goto-home > span {
-    margin-top: 2px;
+    margin-top: 20px;
 }
 .pp-goto-home > img {
     height: 20px;
     width: 25px;
     margin-left: 10px;
+    margin-top: 18px;
 }
 .participate-with-code-container {
     width: 500px;
-    height: 300px;
-    background: linear-gradient(to bottom right, white, #E1CAFF);
+    height: 350px;
+    background-color: #e8d6ff2f;
+    /* outline: 3px solid  #E1CAFF; */
     box-shadow: 3px 10px 10px 3px  rgba(0, 0, 0, 0.112);
     border-radius: 10px;
     display: flex;
@@ -52,11 +54,11 @@
 }
 .pp-items-wrap {
     width: 400px;
+    text-align: center;
 }
 .pp-items-wrap > p {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    /* text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.297); */
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 .participate-black-space {
     width:100vh;
@@ -68,58 +70,34 @@
     height: calc(90vh - 150px);
 }
 .pp-code-item > input {
-    width: 394px;
-    padding: 0px;
-    height: 40px;
-    border: #E0C8FF 1px solid;
+    padding: 8px;
     border-radius: 5px;
-    background-color: #e0c8ff25;
-    padding: none;
-    outline: none;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding-left: 5px;
+    width:384px;
+    border: none;
+    outline: solid 1px #ABB2BF;
+
 }
-.pp-code-item > input:hover {
-    outline: none;
-    box-shadow: inset 1px 2px 2px 1px rgba(0, 0, 0, 0.297);
-}
+
 .pp-code-item > input:focus {
-    outline: none;
-    box-shadow: inset 1px 2px 2px 1px rgba(0, 0, 0, 0.297);
+    outline: solid 4px #E0E4EB;
+    border: solid 1px black
 }
 
-
-.fadein-pp-code{
-  overflow: hidden;
-  
-}
-
-@keyframes fadein-pp-code{
-  0% {
-    box-shadow: 3px 10px 10px 3px  rgba(0, 0, 0, 0.086);
-  }
-  100% {
-    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.297);
-    /* filter: brightness(30%); */
-  }
-}
 .pp-code-item-btn:hover {
   cursor: pointer;
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.297);
-  animation: fadein-pp-code 0.07s ease-in-out;
-  /* background-color: #d9c0fa; */
+
 }
 .pp-code-item-btn {
   background-color: #e8d6ff;
   border-radius: 5px;
   border: none;
-  width: 400px;
+  width: 80px;
   height: 40px;
   box-shadow: 3px 10px 10px 3px  rgba(0, 0, 0, 0.086);
   outline: 1px solid #d8bbff;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .pp-code-item {
 }
