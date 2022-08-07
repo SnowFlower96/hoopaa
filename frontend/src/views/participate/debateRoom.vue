@@ -1,4 +1,8 @@
 <template>
+<div class="live-heart-container">
+    <div id="heart-div"></div>
+    <div>하트 누른 갯수{{countingHeart}}</div>
+</div>
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
 <!-- 사회자에게 메세지 보내기 -->
 <div v-if="callToMdModal" class="call-to-moderator-container" :style="customCaroselStyle">
@@ -49,9 +53,8 @@
                 </div>
             </div>
             <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
-                <button @click="changeChatView">닫기</button>
-                <chatting-all v-if="chattingAllView"></chatting-all>
-                <chatting-team v-if="chattingTeamView"></chatting-team>
+                <chatting-all v-if="chattingAllView" @close-chat="changeChatView"></chatting-all>
+                <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
             </div>
         </div>
         <div class="debate-room-footer-class">
@@ -59,8 +62,11 @@
             v-if="footerTeam"
             @call-modal="EmitcallModal"></footer-team>
             <footer-moderator v-if="footerModerator" @call-modal="EmitcallModal"></footer-moderator>
-            <footer-all v-if="footerAll"></footer-all>
-            <div class="chatt-btn" @click="changeChatView">C</div>
+            <footer-all 
+            v-if="footerAll"
+            @rising-heart="risingHeart"
+            ></footer-all>
+            <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
         </div>
     </div>
 </template>
@@ -168,7 +174,8 @@ export default {
             file: false,
             out: false,
             menu: false,
-            options: [this.menu, this.out, this.message, this.file]
+            options: [this.menu, this.out, this.message, this.file],
+            countingHeart :0
         }
     },
     mounted() {
@@ -197,6 +204,14 @@ export default {
 
     },
     methods: {
+        risingHeart() {
+            const stripe = document.getElementById('heart-div')
+            setTimeout(() => {
+                stripe.classList.remove('animate');
+            }, 400);
+            stripe.classList.add('animate');
+            this.countingHeart += 1
+        },
         handleResizeHome() {
             if (this.chattTF === true) {    // 채팅창 열려있을때
                 const wVideoValue = document.body.clientWidth
@@ -368,6 +383,50 @@ export default {
 </script>
 
 <style>
+.live-heart-container {
+    top: 500px;
+    left: 100px;
+    position: absolute;
+}
+
+#heart-div {
+  position: absolute;
+  bottom: -60px;
+  width: 50px;
+  height: 50px;
+  background: url("https://s3.us-east-2.amazonaws.com/upload-icon/uploads/icons/png/15721583221557740359-512.png") no-repeat;
+  background-size: cover;
+  left: 10px;
+}
+#heart-div.animate {
+  animation: bubble 1s linear;
+}
+/* .smile-div {
+    position: absolute;
+    bottom: -60px;
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    background: url("https://user-images.githubusercontent.com/87743473/183299200-727383c3-6ae0-4631-bf17-169720b9f480.png") no-repeat;
+    left: 10px;
+    animation: bubble 1s linear infinite;
+} */
+
+@keyframes bubble {
+    0% {
+        bottom: 0px;
+        opacity: 1
+    }
+    70% {
+        opacity: 0
+    }
+    100% {
+        bottom: 500px;
+        opacity: 0
+    }
+}
+
+
 .chatt-btn {
     width: 5vh;
     height: 5vh;

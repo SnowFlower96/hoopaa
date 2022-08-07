@@ -17,15 +17,15 @@
             <div class="inner-wrap">
               <div class="label-container "><p>방 이름 입력</p></div>
               <div class="input-container">
-                <div class="name-input"><input class="name-input" v-model="roomName" type="text" placeholder="방 이름"/></div>
+                <div class="name-input"><input class="name-input" v-model="roomName" type="text" placeholder="방 이름을 입력해주세요"/></div>
               </div>
             </div>
 
             <div class="inner-wrap">
-              <div class="label-container "><p>비밀번호 설정</p></div>
+              <div class="label-container "><p>비밀방 여부</p></div>
               <div class="input-container">
                 <div class="pw-check" ><input class="pw-check" type="checkbox"></div>
-                <div class="pw-input"><input class="pw-input" v-model="roomPwd" placeholder="비밀번호" /></div>
+                <div class="pw-input"><input class="pw-input" v-model="roomPwd" placeholder="비밀번호를 정해주세요" /></div>
               </div>
             </div>
 

@@ -9,12 +9,12 @@
             </div>
         </div>
         <div v-if="chattTF" class="chatting-box" :style="customDetailSessionSize">
-            <button @click="changeChatView">닫기</button>
-            <chatting-team></chatting-team>
+            <chatting-team @click="changeChatView"></chatting-team>
         </div>
     </div>
     <div class="debate-room-footer-class-detail">
         <footer-team @call-modal="changeChatView"></footer-team>
+        <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
     </div>
     
 </template>

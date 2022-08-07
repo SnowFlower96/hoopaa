@@ -1,6 +1,6 @@
 <template>
     <div class="debate-room-footer-container">
-        <div class="heart-btn">😍</div>
+        <div class="heart-btn" @click="risingHeart"><i class="fas fa-heart"></i></div>
     </div>
 </template>
 
@@ -8,6 +8,7 @@
 export default {
     name: 'debateRoomFooter',
     methods: {
+        risingHeart() {this.$emit('rising-heart')},
     }
 }
 </script>
