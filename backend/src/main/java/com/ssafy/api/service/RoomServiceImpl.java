@@ -44,7 +44,6 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public RoomInfoDto createRoom(RoomOpenReq roomOpenInfo) {
-        System.out.println(roomOpenInfo);
         User user = userRepository.findUserByEm(roomOpenInfo.getHost_em()).get();
         RoomInfo roomInfo = RoomInfo.builder()
                 .pwd(/*passwordEncoder.encode(*/roomOpenInfo.getPwd().length() == 0 ? null : roomOpenInfo.getPwd())

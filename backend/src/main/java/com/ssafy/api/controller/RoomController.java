@@ -20,6 +20,7 @@ import com.ssafy.db.entity.RoomInfo;
 import io.openvidu.java.client.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +76,7 @@ public class RoomController {
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         String userId = userDetails.getUsername();
         String userEm = userService.getUserById(Long.parseLong(userId)).getEm();
-
+        log.debug("Creating room" + userEm + " " + openInfo);
         // 유저 이메일로 생성된 세션이 이미 있으면
         if (this.mapSessions.get(userEm) != null) {
             return ResponseEntity.status(405).body(StringRes.of(405, "Session Already Exist"));
