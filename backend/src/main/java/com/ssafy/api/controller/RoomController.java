@@ -76,7 +76,7 @@ public class RoomController {
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         String userId = userDetails.getUsername();
         String userEm = userService.getUserById(Long.parseLong(userId)).getEm();
-        log.debug("Creating room" + userEm + " " + openInfo);
+
         // 유저 이메일로 생성된 세션이 이미 있으면
         if (this.mapSessions.get(userEm) != null) {
             return ResponseEntity.status(405).body(StringRes.of(405, "Session Already Exist"));
@@ -97,6 +97,7 @@ public class RoomController {
             }
             // DB 저장
             try {
+                openInfo.setHost_em(userEm);
                 RoomInfoDto roomInfoDto = roomService.createRoom(openInfo);
                 this.mapSessions.get(userEm).setRoomInfo(roomInfoDto);
                 this.mapSessions.get(userEm).setParticipants(new ConcurrentHashMap<>());
