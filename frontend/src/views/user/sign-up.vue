@@ -24,7 +24,7 @@
           <p class="alert-message" v-if="!availableNickName">이미 사용중인 닉네임 입니다.</p>
         </div>
         <div class="signup-item"><button class="signup-button" type="submit" @click="submitForm">회원가입</button></div>
-        <div class="signup-item"><p class="signup-to-login">회원이신가요? <router-link style=text-decoration:none; to="/login">로그임</router-link></p></div>
+        <div class="signup-item"><p class="signup-to-login">회원이신가요? <router-link style=text-decoration:none; to="/login">로그인</router-link></p></div>
     </div>
   </div>
 </template>
@@ -85,7 +85,7 @@ export default {
       }
     },
 
-    checkNickName(nnm) {
+    checkNickName() {
       var nickname = {
         nnm : this.nnm
       }
@@ -191,10 +191,6 @@ export default {
 .signup-favi-img {
   margin-top: 50px;
   width: 70px;
-}
-.signup-img {
-  width: 30%;
-  margin-bottom: 3%;
 }
 .signup-item {
   margin: 10px;

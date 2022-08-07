@@ -4,8 +4,8 @@ import { createApp, h } from 'vue'
 import store from './store'
 import ElementPlus from './common/lib/element-plus'
 import App from './App.vue'
-import VueAxios from './common/lib/axios'
-import axios from './common/lib/axios'
+import VueAxios from '@/api'
+import axios from '@/api'
 import i18n from './common/lib/i18n'
 import router from './common/lib/vue-router'
 
@@ -209,10 +209,6 @@ app.use(router)
 
 components.forEach(component => {
   app.component(component.name, component)
-})
-
-plugins.forEach(plugin => {
-  app.use(plugin)
 })
 
 app.mount('#app')

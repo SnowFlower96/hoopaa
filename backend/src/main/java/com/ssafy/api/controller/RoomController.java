@@ -20,6 +20,7 @@ import com.ssafy.db.entity.RoomInfo;
 import io.openvidu.java.client.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -96,6 +97,7 @@ public class RoomController {
             }
             // DB 저장
             try {
+                openInfo.setHost_em(userEm);
                 RoomInfoDto roomInfoDto = roomService.createRoom(openInfo);
                 this.mapSessions.get(userEm).setRoomInfo(roomInfoDto);
                 this.mapSessions.get(userEm).setParticipants(new ConcurrentHashMap<>());
