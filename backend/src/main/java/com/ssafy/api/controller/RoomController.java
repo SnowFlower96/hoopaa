@@ -124,7 +124,11 @@ public class RoomController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String id = userDetails.getUsername();
         String userEm = userService.getUserInfoDtoById((Long.parseLong(id))).getEm();
-
+        log.debug("--------------------");
+        for (String key : this.mapSessions.keySet()) {
+            log.debug(key);
+        }
+        log.debug("--------------------");
         // 해당 세션이 존재하지 않으면
         if (!this.mapSessions.containsKey(roomEnterReq.getSessionId())) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 

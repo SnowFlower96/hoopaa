@@ -10,8 +10,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ssafy
       TZ: "Asia/Seoul"
-    networks:
-      - my_network
+    network_mode: "host"
   backend:
     build: backend
     container_name: backend
@@ -23,8 +22,7 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/debate?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true"
     depends_on:
       - db
-    networks:
-      - my_network
+    network_mode: "host"
   frontend:
     build: frontend
     container_name: frontend
@@ -32,9 +30,5 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    networks:
-      - my_network
+    network_mode: "host"
 
-networks:
-  my_network:
-    driver: bridge
