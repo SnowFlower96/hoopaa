@@ -201,7 +201,6 @@ export default {
         this.callToMDInW = `${debateBackground*0.4}px`
         this.callToMDInH = `${hValue*0.31}px`
         window.addEventListener('resize', this.handleResizeHome);
-
     },
     methods: {
         risingHeart() {
@@ -211,6 +210,9 @@ export default {
             }, 400);
             stripe.classList.add('animate');
             this.countingHeart += 1
+            if(this.countingHeart === 5) {
+                console.log('5개')
+            }
         },
         handleResizeHome() {
             if (this.chattTF === true) {    // 채팅창 열려있을때
@@ -378,7 +380,7 @@ export default {
         }
 
 
-    }
+    },
 }
 </script>
 
