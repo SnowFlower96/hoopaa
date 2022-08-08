@@ -11,13 +11,18 @@ import participatingPage from '@/views/participate/participating-page'
 import homeToParticipate from '@/views/home/homeToParticipate'
 
 import debateRoom from '@/views/participate/debateRoom'
+import detailSessionView from '@/views/participate/detailSessionView'
+
 import detailSession from '@/views/participate/detailSession'
+import test from '@/views/participate/test'
+
 
 import signUpEmail from '@/views/user/email'
 import gameSetPage from '@/views/debate-hosting/game-set-page'
 import makeRoom from '@/views/debate-hosting/make-room'
 import store from '@/store'
 // const routerComponent = require('@/views/main/router-components.json')
+
 
 import myPage from '@/views/user/mypage'
 import checkPwd from '@/views/user/checkPwd'
@@ -84,7 +89,6 @@ function makeRoutesFromMenu () {
 
   },
 
-
   {
   path : '/myPage/info',
   name : 'myPage-info',
@@ -134,17 +138,32 @@ function makeRoutesFromMenu () {
   component : reSign
 },
 {
-  path : '/detailSession',
-  name: 'detailSession',
-  component: detailSession
+  path : '/detailSessionView',
+  name: 'detailSessionView',
+  component: detailSessionView
 },
 {
   path : '/homeToParticipate',
   name: 'homeToParticipate',
   component: homeToParticipate
-}
-
+},
+{
+  path : '/detailSession',
+  name: 'detailSession',
+  component: detailSession
+},
+{
+  path : '/test',
+  name: 'test',
+  component: test,
+},
+{
+  path : '/detailSession',
+  name: 'detailSession',
+  component: detailSession,
+},
   )
+
   return routes
 }
 

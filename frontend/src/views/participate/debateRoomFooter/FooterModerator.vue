@@ -9,7 +9,7 @@
 export default {
     name: 'debateRoomFooter',
     methods: {
-        callModalMenu() {this.$emit('call-modal', 'menu')},
+        callModalMenu() {this.$emit('mod-menu')},
         callModalOut() {this.$emit('call-modal', 'out')},
     }
 }

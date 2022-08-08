@@ -1,69 +1,36 @@
 <template>
-<h1>session</h1>
-<h1>session</h1>
-<h1>session</h1>
+<h1>detailsession</h1>
+<h1>detailsession</h1>
+<h1>detailsession</h1>
 	<div id="main-container" class="container">
 		<div id="join">
 			<div id="join-dialog" class="jumbotron vertical-center">
-
-
-          			<p>
-						<label>host</label>
-						<input v-model="host" class="form-control" type="text" required>
+				<div class="form-group">
+					<p>
+						<label>Participant</label>
+						<input v-model="myUserName" class="form-control" type="text" required>
 					</p>
-          <div><input v-model="roomName" type="text" placeholder="방 이름"/></div>
-          <div><input type="checkbox"><input v-model="roomPwd" type="password" placeholder="비밀번호"></div>
-          <div><input v-model="roomTitle" type="text" placeholder="주제"></div>
-          <div class="dropdown-sort-wrap">
-                          <button class="dropdown-sort-btn" @click="dropdownSortBtnTF">카테고리</button>
-                          <div id="dropdown-sort" v-if="dropdownSortTF">
-                            <div v-for="(item, index) in munus" :key="index">{{item.name}}</div>
-                          </div>
-                        </div>
-          <router-link to="/"><button>뒤로가기</button></router-link> <button @click="makeRoom">토론방 생성</button>
-					<h1>토론 방 들어왔을 때 (참가자 있는 화면)</h1>
-					<button @click='role=1'>찬성</button>
-					<button @click='role=2'>반대</button>
+					<p>
+						<label>Session</label>
+						<input v-model="mySessionId" class="form-control" type="text" required>
+					</p>
 				</div>
 			</div>
 		</div>
 
-		<div id="session" v-if="session">
-
-			<div class="form-group">
-
+		<div id="session">
 			<div id="session-header">
 				<h1 id="session-title">{{ mySessionId }}</h1>
-				<h1>myrole:{{role}}</h1>
-				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
-				<input class="btn btn-large btn" type="button" id="" @click="DetailSession" value="Detail session">
+        <div v-if="session">
+				<input class="btn btn-large btn" type="button" id="buttonLeaveSession" @click="goMainSession()" value="메인세션 가기"></div>
 			</div>
-			<div id="video-container">
-		<div id="host"><h1>HOST</h1>
-        <!-- <div>{{myUserName}} & {{host}}</div> -->
-        <div v-if="myUserName === host"><button @click='role=0'>사회자</button>
-		<user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
-        <div v-else>
-          <div v-for="s in subscribers" :key="s.stream.connection.connectionId">
-            <div v-if="s.stream.connection.dataObject.clientData==host"><user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/></div>
-          </div>
-        </div></div>
-
-		<div v-if="myUserName != host">
-		<h1>agree</h1>
-		<div v-if="role===1"><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/>
-
-		</div>
-
-		<h1>disagree</h1>
-		<div v-if="role===2"><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/>
-		</div></div>
-
-		<div><button @click="screenShare()">화면공유</button></div>
-        <!-- <div v-for="s in subscribers" :key="s.stream.connection.connectionId">{{s.stream.connection.dataObject.clientData}}&{{s.stream.connection.connectionId}}
-            <user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
-        </div> -->
-				<!-- <user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/> -->
+			<div id="video-container" class="col-md-6">
+				<div><h4>me {{this.myUserName}} {{this.role}}</h4><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
+				<div v-for="s in subscribers" :key="s.stream.connection.connectionId">
+						<h4>{{s.stream.connection.client.clientData}}</h4>
+						<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+					</div>
+        <!-- {{s.stream.connection.client.clientData}}&&{{s.stream.connection.dataObject.role}} -->
 				<!-- <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click.native="updateMainVideoStreamManager(sub)"/> -->
 			</div>
 		</div>
@@ -73,15 +40,15 @@
 <script>
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
-import UserVideo from '@/views/openvidu/UserVideo.vue';
-import { mapState } from 'vuex';
+import UserVideo from './openvidu/UserVideo.vue';
+
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-const OPENVIDU_SERVER_URL = "https://3.38.181.187:8443";
+const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
 export default {
-	name: 'Room',
+	name: 'App',
 
 	components: {
 		UserVideo,
@@ -94,44 +61,38 @@ export default {
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
+			role:-5,
+      originSessionId:'',
 
-			role:3,
-      host: this.$store.state.userStat.em,
-
-			mySessionId: 'SessionA',
-			myUserName: this.$store.state.userStat.nnm,
-      roomName : '',
-      roomPwd : '',
-      meuns : '',
-      roomTitle : '',
-      roomCate : '',
+			mySessionId: '',
+			myUserName: 'Participant' + Math.floor(Math.random() * 100),
 		}
 	},
-  computed : {
-    ...mapState(["userStat"])
+
+  created(){
+    let query = window.location.search;
+    let param = new URLSearchParams(query);
+    this.role = param.get('role');
+    this.originSessionId=param.get('mySessionId')
+    this.mySessionId=this.originSessionId+this.role;
+
+    if(this.role!=null)
+      this.joinSession();
   },
-  created() {
-    const menuData = require('@/views/main/menu.json')
-    this.menus = menuData;
-  },
+
 	methods: {
-    makeRoom () {
-      	// --- Get an OpenVidu object ---
-			this.OV = new OpenVidu();
-
-			// --- Init a session ---
-			this.session = this.OV.initSession();
-
-			// --- Specify the actions when events take place in the session ---
-
+		streamCreated(){
+			console.log("streamCreated")
 			// On every new Stream received...
 			this.session.on('streamCreated', ({ stream }) => {
 				const subscriber = this.session.subscribe(stream);
-        subscriber.stream.connection.dataObject=JSON.parse(subscriber.stream.connection.data)
-        subscriber.stream.connection.role=this.role
+				subscriber.stream.connection.client=JSON.parse(subscriber.stream.connection.data)[0];
+				subscriber.stream.connection.dataObject=JSON.parse(subscriber.stream.connection.data)[1];
 				this.subscribers.push(subscriber);
 			});
-
+		},
+		streamDestroyed(){
+			console.log("streamDestroyed")
 			// On every Stream destroyed...
 			this.session.on('streamDestroyed', ({ stream }) => {
 				const index = this.subscribers.indexOf(stream.streamManager, 0);
@@ -139,6 +100,20 @@ export default {
 					this.subscribers.splice(index, 1);
 				}
 			});
+		},
+		joinSession () {
+			console.log("joinSession")
+			// --- Get an OpenVidu object ---
+			this.OV = new OpenVidu();
+
+			// --- Init a session ---
+			this.session = this.OV.initSession();
+
+			// --- Specify the actions when events take place in the session ---
+
+			this.streamCreated();
+			this.streamDestroyed();
+
 
 			// On every asynchronous exception...
 			this.session.on('exception', ({ exception }) => {
@@ -150,7 +125,7 @@ export default {
 			// 'getToken' method is simulating what your server-side should do.
 			// 'token' parameter should be retrieved and returned by your own backend
 			this.getToken(this.mySessionId).then(token => {
-				this.session.connect(token, { clientData: this.myUserName })
+				this.session.connect(token, [{ clientData: this.myUserName }, { role:this.role }])
 					.then(() => {
 
 						// --- Get your own camera stream with the desired properties ---
@@ -172,21 +147,19 @@ export default {
 						// --- Publish your stream ---
 
 						this.session.publish(this.publisher);
-
 					})
 					.catch(error => {
 						console.log('There was an error connecting to the session:', error.code, error.message);
 					});
 			});
 
+			window.addEventListener('beforeunload', this.leaveSession)
+		},
 
-      console.log("!!!!"+this.role)
-      window.addEventListener('beforeunload', this.leaveSession)
-    },
-		DetailSession(){},
 		leaveSession () {
+			console.log("leaveSession")
 			// --- Leave the session by calling 'disconnect' method over the Session object ---
-			if (this.session) this.session.unpublish();
+			if (this.session) this.session.disconnect();
 
 			this.session = undefined;
 			this.mainStreamManager = undefined;
@@ -197,7 +170,14 @@ export default {
 			window.removeEventListener('beforeunload', this.leaveSession);
 		},
 
+    goMainSession(){
+      console.log("go main")
+      this.leaveSession();
+      this.$router.push('/test?mySessionId='+this.originSessionId+'&role='+this.role)
+    },
+
 		updateMainVideoStreamManager (stream) {
+			console.log("updateMainVideoStreamManager")
 			if (this.mainStreamManager === stream) return;
 			this.mainStreamManager = stream;
 		},
@@ -215,11 +195,13 @@ export default {
 		 */
 
 		getToken (mySessionId) {
+			console.log("getToken")
 			return this.createSession(mySessionId).then(sessionId => this.createToken(sessionId));
 		},
 
 		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-session
 		createSession (sessionId) {
+			console.log("createSession")
 			return new Promise((resolve, reject) => {
 				axios
 					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions`, JSON.stringify({
@@ -234,6 +216,7 @@ export default {
 					.then(data => resolve(data.id))
 					.catch(error => {
 						if (error.response.status === 409) {
+							console.log("not host!!!!!")
 							resolve(sessionId);
 						} else {
 							console.warn(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`);
@@ -248,6 +231,7 @@ export default {
 
 		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
 		createToken (sessionId) {
+			console.log("createToken")
 			return new Promise((resolve, reject) => {
 				axios
 					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`, {}, {
