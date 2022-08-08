@@ -92,8 +92,9 @@ export default {
     console.log("before"+this.role+"#####")
     let query = window.location.search;
     let param = new URLSearchParams(query);
-    this.role = Number(param.get('role'));
     this.mySessionId=param.get('mySessionId')
+    if(param.get('role') != null)
+      this.role = Number(param.get('role'));
 
     console.log("!!!!!!"+this.role)
   },
