@@ -7,6 +7,7 @@
     <button @click="teamView">패널뷰</button>
     <router-link to="/detailSession"><button>세부세션 가기</button></router-link>
     <button @click="voteView">투표모달창 끄기</button>
+    <button @click="positionAgree">찬성</button>
     <!-- 뷰바꾸는 임시버튼 -->
 </div>
 
@@ -47,7 +48,7 @@
                 <div class="debate-room-wrap">
                     <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
                     <div class="videobox-side" :style="customCaroselStyle">
-                        <debate-room-side-component></debate-room-side-component>
+                        <debate-room-side-component ></debate-room-side-component>
                     </div>
 
                     <div class="videobox-center" :style="customCaroselStyle">
@@ -55,7 +56,7 @@
                     </div>
 
                     <div class="videobox-side" :style="customCaroselStyle">
-                        <debate-room-side-component></debate-room-side-component>
+                        <debate-room-side-component v-bind:position="position" ref="debateRoomSideComponent"></debate-room-side-component>
                     </div>
                 </div>
             </div>
@@ -157,6 +158,8 @@ export default {
     },
     data() {
         return {
+            position : '',
+
             debateCenterBoxWidth: '',
             debateCenterBoxHeight: '',
 
@@ -414,7 +417,9 @@ export default {
         },
       // 찬성 참여
       positionAgree() {
-
+        this.position = 'agree',
+        console.log(this.$refs);
+        this.$refs.debateRoomSideComponent.joinPannel()
       },
       positionDisagree() {
 

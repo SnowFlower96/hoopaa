@@ -10,7 +10,10 @@
                         <input type="text" v-model="sessionId" placeholder="참여 코드를 입력하세요">
                     </div>
                     <div class="pp-code-item">
-                        <button class="pp-code-item-btn">입장</button>
+                        <input type="text" v-model="pwd" placeholder="방 비밀번호를 입력하세요">
+                    </div>
+                    <div class="pp-code-item">
+                        <button class="pp-code-item-btn" @click="roomEnter">입장</button>
                     </div>
                 </div>
             </div>

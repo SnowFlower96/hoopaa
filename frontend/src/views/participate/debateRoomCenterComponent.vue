@@ -2,6 +2,7 @@
     <div class="debate-center-wrap" >
         <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle">
             <user-video class="moderatorVideo" :stream-manager="publisher" v-if="!isPannel"/>
+            
         </div>
     </div>
     <div class="debate-guague" :style="customViewStyle"><div class="debate-guague-inner" :style="customViewStyle">게이지바</div></div>
@@ -11,14 +12,13 @@
 
 <script>
 import axios from 'axios';
-import { OpenVidu } from 'openvidu-browser';<video height="180" width="288" controls>
-</video>
+import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-const OPENVIDU_SERVER_URL = "https://3.38.181.187:8443";
-const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
+const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 
 export default {
   components : {
@@ -129,6 +129,7 @@ export default {
               this.isPannel = true;
             }
              console.log("connected");
+             console.log(this.session.connect)
 					})
 					.catch(error => {
 						console.log('There was an error connecting to the session:', error.code, error.message);
