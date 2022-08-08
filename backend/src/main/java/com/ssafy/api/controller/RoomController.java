@@ -112,6 +112,47 @@ public class RoomController {
         }
     }
 
+    @PostMapping("/enter")
+    @ApiOperation(value = "방 입장", notes = "토론 방 입장")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "비밀번호 오류"),
+            @ApiResponse(code = 404, message = "없는 토론 방"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> enterRoom(@ApiIgnore Authentication authentication, @RequestBody RoomEnterReq roomEnterReq) throws OpenViduJavaClientException, OpenViduHttpException {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String id = userDetails.getUsername();
+        String userEm = userService.getUserInfoDtoById((Long.parseLong(id))).getEm();
+
+        // 해당 세션이 존재하지 않으면
+        if (!this.mapRooms.containsKey(roomEnterReq.getSessionId())) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
+
+        // 세션
+        Connection connection;
+        VRoom vRoom = this.mapRooms.get(roomEnterReq.getSessionId());
+        Session session = vRoom.getSession();
+
+        // 세션 암호 확인
+        String pwd = vRoom.getRoomInfo().getPwd();
+        if (pwd != null && !pwd.equals(roomEnterReq.getPwd())) return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong Password"));
+
+        try {
+            // Access Token의 유저와 세션의 ID가 같다면 Moderator 권한
+            OpenViduRole role = userEm.equals(session.getSessionId()) ? OpenViduRole.MODERATOR : OpenViduRole.SUBSCRIBER;
+            ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
+                    .role(role).build();
+            connection = session.createConnection(connectionProperties);
+
+            vRoom.getMapConnections().put(userEm, connection);
+        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            vRoom.getMapConnections().remove(userEm);
+            throw new RuntimeException(e);
+        }
+
+        return ResponseEntity.status(200).body(VTokenRes.of(200, "Success", connection.getToken()));
+    }
+
     @PostMapping("/session")
     @ApiOperation(value = "세부 세션 생성", notes = "호스트의 세부 세션 생성")
     @ApiResponses({
@@ -131,7 +172,7 @@ public class RoomController {
         if (!this.mapRooms.containsKey(sessionReq.getSessionId())) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
         // 호스트가 아니면
-        if (!userEm.equals(sessionID)) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Not host"));
+        if (!userEm.equals(sessionID)) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Unauthorized"));
 
         // 세부 세션 생성
         SessionProperties sessionProperties;
@@ -227,49 +268,12 @@ public class RoomController {
         this.mapSessions.get(sessionID).getSessionAgree().close();
         this.mapSessions.get(sessionID).getSessionDisagree().close();
 
+        // 세션 정보 삭제
+        this.mapSessions.remove(sessionID);
+
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
-    @PostMapping("/enter")
-    @ApiOperation(value = "방 입장", notes = "토론 방 입장")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "성공"),
-            @ApiResponse(code = 400, message = "비밀번호 오류"),
-            @ApiResponse(code = 404, message = "없는 토론 방"),
-            @ApiResponse(code = 500, message = "서버 오류")
-    })
-    public ResponseEntity<? extends BaseResponseBody> enterRoom(@ApiIgnore Authentication authentication, @RequestBody RoomEnterReq roomEnterReq) throws OpenViduJavaClientException, OpenViduHttpException {
-        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-        String id = userDetails.getUsername();
-        String userEm = userService.getUserInfoDtoById((Long.parseLong(id))).getEm();
-
-        // 해당 세션이 존재하지 않으면
-        if (!this.mapRooms.containsKey(roomEnterReq.getSessionId())) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
-
-        // 세션
-        Connection connection;
-        VRoom vRoom = this.mapRooms.get(roomEnterReq.getSessionId());
-        Session session = vRoom.getSession();
-
-        // 세션 암호 확인
-        String pwd = vRoom.getRoomInfo().getPwd();
-        if (pwd != null && !pwd.equals(roomEnterReq.getPwd())) return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong Password"));
-
-        try {
-            // Access Token의 유저와 세션의 ID가 같다면 Moderator 권한
-            OpenViduRole role = userEm.equals(session.getSessionId()) ? OpenViduRole.MODERATOR : OpenViduRole.SUBSCRIBER;
-            ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
-                    .role(role).build();
-            connection = session.createConnection(connectionProperties);
-
-            vRoom.getMapConnections().put(userEm, connection);
-        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
-            vRoom.getMapConnections().remove(userEm);
-            throw new RuntimeException(e);
-        }
-
-        return ResponseEntity.status(200).body(VTokenRes.of(200, "Success", connection.getToken()));
-    }
 
     @PostMapping("/enter/select")
     @ApiOperation(value = "진영 선택", notes = "원하는 진영에 들어갈 수 있는지 여부에 대한 응답")
@@ -354,21 +358,21 @@ public class RoomController {
     }
 
     @GetMapping("/connections/agree")
-    @ApiOperation(value = "찬성 측 커넥션 조회", notes = "토론방의 찬성 측 커넥션 이름 반환")
+    @ApiOperation(value = "찬성 측 커넥션 ID 조회", notes = "토론방의 찬성 측 커넥션 이름 반환")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "파라미터 오류"),
             @ApiResponse(code = 404, message = "해당 세션 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> getAgreeConnections(@ApiIgnore Authentication authentication, String sessionId) {
+    public ResponseEntity<? extends BaseResponseBody> getAgreeConnections(@ApiIgnore Authentication authentication, String sessionID) {
         SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
         String userId = ssafyUserDetails.getUsername();
 
         // 해당 세션이 존재하지 않으면
-        if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
+        if (!this.mapRooms.containsKey(sessionID)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
-        VRoom vRoom = this.mapRooms.get(sessionId);
+        VRoom vRoom = this.mapRooms.get(sessionID);
         Map<String, String> connections = new ConcurrentHashMap<>();
         for (UserInfo userInfo : vRoom.getAgree()) {
             if (vRoom.getMapConnections().containsKey(userInfo.getEm())){
@@ -381,7 +385,7 @@ public class RoomController {
     }
 
     @GetMapping("/connections/disagree")
-    @ApiOperation(value = "찬성 측 커넥션 조회", notes = "토론방의 찬성 측 커넥션 이름 반환")
+    @ApiOperation(value = "반대 측 커넥션 ID 조회", notes = "토론방의 찬성 측 커넥션 이름 반환")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "파라미터 오류"),
@@ -487,6 +491,19 @@ public class RoomController {
    })
     public ResponseEntity<? extends BaseResponseBody> syncServer() {
         // TODO 서버의 mapSessions를 기준으로 동기화
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+    }
+
+    @PostMapping("/init")
+    @ApiOperation(value = "초기화")
+    public ResponseEntity<? extends BaseResponseBody> initServer() throws OpenViduJavaClientException, OpenViduHttpException {
+        // 정보 초기화
+        mapRooms = new ConcurrentHashMap<>();
+        mapSessions = new ConcurrentHashMap<>();
+        // openvidu 초기화
+        this.openVidu.fetch();
+        List<Session> list = this.openVidu.getActiveSessions();
+        for (Session s : list) s.close();
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
