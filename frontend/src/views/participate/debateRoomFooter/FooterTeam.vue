@@ -1,7 +1,7 @@
 <template>
     <div class="debate-room-footer-container">
-        <div @click="callModalFile" class="file-btn footer-btn">F</div>
-        <div @click="callModalMessage" class="message-btn footer-btn">M</div>
+        <div @click="callModalFile" class="file-btn footer-btn"><i class="fas fa-desktop"></i></div>
+        <div @click="callModalMessage" class="message-btn footer-btn"><i class="fas fa-envelope"></i></div>
     </div>
 </template>
 

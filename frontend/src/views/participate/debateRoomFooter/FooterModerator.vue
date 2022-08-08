@@ -1,7 +1,7 @@
 <template>
     <div class="debate-room-footer-container">
-        <div class="footer-btn menu-btn" @click="callModalMenu">🥨</div>
-        <div class="footer-btn out-btn" @click="callModalOut">⛔</div>
+        <div class="footer-btn menu-btn" @click="callModalMenu"><i class="fas fa-bars"></i></div>
+        <div class="footer-btn out-btn" @click="callModalOut"><i class="fas fa-user-alt-slash"></i></div>
     </div>
 </template>
 

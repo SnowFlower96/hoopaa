@@ -2,11 +2,12 @@
   <div class="search-out-container">
     <div class="search-head">
       <!-- <span class="search-item">검색조건</span> -->
-      <div class="search-item search-item-wrap">
+      <div class="search-item-wrap">
         <input placeholder="검색어를 입력하세요">
-        <button>검색</button>
+        <div class="search-icon"><i class="fas fa-search "></i></div>
       </div>
     </div>
+    
   </div>
 </template>
 
@@ -29,8 +30,17 @@ export default {
   padding: 20px;
   height: 50px;
 }
-
-
+.search-icon {
+  display: flex;
+  align-items: center;
+}
+.search-icon  > i {
+  color: rgba(134, 134, 134, 0.671);
+}
+.search-icon  > i:hover {
+  color: rgba(83, 83, 83, 0.733);
+  cursor: pointer;
+}
 .search-item-wrap {
   /* height: 30px; */
   padding: 4px;
@@ -38,6 +48,9 @@ export default {
   width: 40%;
   max-width: 500px;
   border: solid 2px rgba(197, 196, 196, 0.505);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 .search-item-wrap:hover {
   border: solid 2px rgba(141, 141, 141, 0.505);

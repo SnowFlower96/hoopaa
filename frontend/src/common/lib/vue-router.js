@@ -8,6 +8,7 @@ import reSign from '@/views/user/resign'
 import mainPage from '@/views/main-page/main-page'
 import Participate from '@/views/participate/participating-code'
 import participatingPage from '@/views/participate/participating-page'
+import homeToParticipate from '@/views/home/homeToParticipate'
 
 import debateRoom from '@/views/participate/debateRoom'
 import detailSession from '@/views/participate/detailSession'
@@ -135,6 +136,11 @@ function makeRoutesFromMenu () {
   path : '/detailSession',
   name: 'detailSession',
   component: detailSession
+},
+{
+  path : '/homeToParticipate',
+  name: 'homeToParticipate',
+  component: homeToParticipate
 }
 
   )

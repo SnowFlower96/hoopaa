@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="chatting-all-view">
+            <div class="chat-close-btn" @click="EmitChatClose"><i class="fas fa-times"></i></div>
             <h1>전체 채팅창</h1>
             <div class="chatting-all-view-inner">
                 <p>안뇽</p>
@@ -35,7 +36,21 @@
     </div>
 </template>
 
+<script>
+export default {
+    methods: {
+        EmitChatClose() {
+            this.$emit('close-chat')
+        }
+    }
+}
+</script>
+
 <style>
+.chat-close-btn {
+    display: flex;
+    justify-content: end;
+}
 .chatting-all-view {
     padding: 5%;
     

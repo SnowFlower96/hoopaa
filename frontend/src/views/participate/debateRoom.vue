@@ -1,4 +1,25 @@
 <template>
+<div v-if="imgTF" class="startImg">
+    <!-- <animation-view></animation-view> -->
+    <!-- 뷰바꾸는 임시버튼 -->
+    <button @click="moderatorView">사회자뷰</button>
+    <button @click="allView">방청객뷰</button>
+    <button @click="teamView">패널뷰</button>
+    <router-link to="/detailSession"><button>세부세션 가기</button></router-link>
+    <button @click="voteView">투표모달창 끄기</button>
+    <!-- 뷰바꾸는 임시버튼 -->
+</div>
+
+
+<div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">
+    <div>
+        투표받을 모달창
+    </div>
+</div>
+<div class="live-heart-container">
+    <div id="heart-div"></div>
+    <div>하트 누른 갯수{{countingHeart}}</div>
+</div>
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
 <!-- 사회자에게 메세지 보내기 -->
 <div v-if="callToMdModal" class="call-to-moderator-container" :style="customCaroselStyle">
@@ -20,23 +41,11 @@
     <div class="call-to-moderator-blank"></div>
 </div>
 <!-- 사회자에게 메세지 보내기 -->
-
-<div v-if="imgTF" class="startImg">
-    <!-- <animation-view></animation-view> -->
-    <!-- 뷰바꾸는 임시버튼 -->
-    <button @click="moderatorView">사회자뷰</button>
-    <button @click="allView">방청객뷰</button>
-    <button @click="teamView">패널뷰</button>
-    <router-link to="/detailSession"><button>세부세션 가기</button></router-link>
-    <!-- 임시 진연선택 버튼-->
-    <button @click="positionAgree">찬성</button>
-    <button @click="positionDisagree">반대</button>
-    <!-- 뷰바꾸는 임시버튼 -->
-</div>
     <div class="debate-backcolor">
         <div class="video-chatt-wrap">
             <div class="debate-background" :style="customCaroselStyle">
                 <div class="debate-room-wrap">
+                    <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
                     <div class="videobox-side" :style="customCaroselStyle">
                         <debate-room-side-component></debate-room-side-component>
                     </div>
@@ -51,18 +60,26 @@
                 </div>
             </div>
             <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
-                <button @click="changeChatView">닫기</button>
-                <chatting-all v-if="chattingAllView"></chatting-all>
-                <chatting-team v-if="chattingTeamView"></chatting-team>
+                <chatting-all v-if="chattingAllView" @close-chat="changeChatView"></chatting-all>
+                <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
             </div>
+        </div>
+        <div class="moderator-menus" v-if="true" :style="customCaroselStyle">
+            <p>찬성측 발언권 부여</p>
+            <p>반대측 발언권 부여</p>
+            <p>쉬는시간 부여</p>
+            <router-link to="/"><p>투표 보내기</p></router-link>
         </div>
         <div class="debate-room-footer-class">
             <footer-team
             v-if="footerTeam"
             @call-modal="EmitcallModal"></footer-team>
             <footer-moderator v-if="footerModerator" @call-modal="EmitcallModal"></footer-moderator>
-            <footer-all v-if="footerAll"></footer-all>
-            <div class="chatt-btn" @click="changeChatView">C</div>
+            <footer-all
+            v-if="footerAll"
+            @rising-heart="risingHeart"
+            ></footer-all>
+            <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
         </div>
     </div>
     <button @click="leaveSession">닫기닫기닫기</button>
@@ -73,6 +90,7 @@
 import debateRoomSideComponent from './debateRoomSideComponent'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
 // import animationView from './animation-view.vue'
+import detailSession from './detailSession'
 
 import chattingAll from './ChattingComponents/chatting-all'
 import chattingTeam from './ChattingComponents/chatting-team'
@@ -109,8 +127,7 @@ export default {
         LetTeamSpeak,
         RestTime,
         LetVote,
-
-
+        detailSession
     },
     computed : {
         customCaroselStyle() {
@@ -133,6 +150,8 @@ export default {
                 "--call-to-md-ct" : this.callToMDCt,
                 "--call-to-md-in-width" : this.callToMDInW,
                 "--call-to-md-in-height" : this.callToMDInH,
+                "--mod-menus-loc" : this.modMenusLoc,
+                "--vote-modal-width" : this.voteModalWidth
             }
         }
     },
@@ -171,7 +190,11 @@ export default {
             file: false,
             out: false,
             menu: false,
-            options: [this.menu, this.out, this.message, this.file]
+            options: [this.menu, this.out, this.message, this.file],
+            countingHeart :0,
+            modMenusLoc: '',
+            voteViewTF: true,
+            voteModalWidth: ''
         }
     },
     mounted() {
@@ -196,10 +219,26 @@ export default {
         this.callToMDCt = `${debateBackground*0.4}px`
         this.callToMDInW = `${debateBackground*0.4}px`
         this.callToMDInH = `${hValue*0.31}px`
-        window.addEventListener('resize', this.handleResizeHome);
 
+        this.modMenusLoc = `${wVideoValue*0.36}px`
+        this.voteModalWidth = `${debateBackground}px`
+        window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
+        voteView() {
+            this.voteViewTF = !this.voteViewTF
+        },
+        risingHeart() {
+            const stripe = document.getElementById('heart-div')
+            setTimeout(() => {
+                stripe.classList.remove('animate');
+            }, 400);
+            stripe.classList.add('animate');
+            this.countingHeart += 1
+            if(this.countingHeart === 5) {
+                console.log('5개')
+            }
+        },
         handleResizeHome() {
             if (this.chattTF === true) {    // 채팅창 열려있을때
                 const wVideoValue = document.body.clientWidth
@@ -223,6 +262,8 @@ export default {
                 this.callToMDCt = `${debateBackground*0.4}px`
                 this.callToMDInW = `${debateBackground*0.4}px`
                 this.callToMDInH = `${hValue*0.31}px`
+                this.modMenusLoc = `${wVideoValue*0.36}px`
+                this.voteModalWidth = `${debateBackground}px`
             }
             else {     // 채팅창 닫혀있을때
                 const wVideoValue = document.body.clientWidth
@@ -246,6 +287,8 @@ export default {
                 this.callToMDCt = `${debateBackground*0.4}px`
                 this.callToMDInW = `${debateBackground*0.4}px`
                 this.callToMDInH = `${hValue*0.31}px`
+                this.modMenusLoc = `${wVideoValue*0.36}px`
+                this.voteModalWidth = `${debateBackground}px`
             }
         },
         moderatorView() {
@@ -296,6 +339,7 @@ export default {
                 this.callToMDCt = `${debateBackground*0.4}px`
                 this.callToMDInW = `${debateBackground*0.4}px`
                 this.callToMDInH = `${hValue*0.31}px`
+                this.voteModalWidth = `${debateBackground}px`
             }
             else {     // 채팅창 닫혀있을때
                 const wVideoValue = document.body.clientWidth
@@ -319,6 +363,7 @@ export default {
                 this.callToMDCt = `${debateBackground*0.4}px`
                 this.callToMDInW = `${debateBackground*0.4}px`
                 this.callToMDInH = `${hValue*0.31}px`
+                this.voteModalWidth = `${debateBackground}px`
             }
         },
         offCallModal() {
@@ -369,7 +414,7 @@ export default {
         },
       // 찬성 참여
       positionAgree() {
-        
+
       },
       positionDisagree() {
 
@@ -379,6 +424,64 @@ export default {
 </script>
 
 <style>
+.vote-modal-container {
+    position: absolute;
+    height: 93vh;
+    width: var(--vote-modal-width);
+    background-color: rgba(255, 255, 255, 0.295);
+}
+.moderator-menus {
+    position: absolute;
+    width:200px;
+    height: auto;
+    background-color: aliceblue;
+    bottom: 7vh;
+    left: var(--mod-menus-loc);
+}
+.live-heart-container {
+    top: 500px;
+    left: 100px;
+    position: absolute;
+}
+
+#heart-div {
+  position: absolute;
+  bottom: -60px;
+  width: 50px;
+  height: 50px;
+  background: url("https://s3.us-east-2.amazonaws.com/upload-icon/uploads/icons/png/15721583221557740359-512.png") no-repeat;
+  background-size: cover;
+  left: 10px;
+}
+#heart-div.animate {
+  animation: bubble 1s linear;
+}
+/* .smile-div {
+    position: absolute;
+    bottom: -60px;
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    background: url("https://user-images.githubusercontent.com/87743473/183299200-727383c3-6ae0-4631-bf17-169720b9f480.png") no-repeat;
+    left: 10px;
+    animation: bubble 1s linear infinite;
+} */
+
+@keyframes bubble {
+    0% {
+        bottom: 0px;
+        opacity: 1
+    }
+    70% {
+        opacity: 0
+    }
+    100% {
+        bottom: 500px;
+        opacity: 0
+    }
+}
+
+
 .chatt-btn {
     width: 5vh;
     height: 5vh;
@@ -429,6 +532,7 @@ export default {
     top: 20%;
     color: aliceblue;
     background-color: rgb(93, 93, 53);
+    z-index: 3;
 }
 .debate-backcolor {
     background-color: black;
