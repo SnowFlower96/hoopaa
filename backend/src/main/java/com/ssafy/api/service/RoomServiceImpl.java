@@ -1,9 +1,8 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.request.RoomCloseReq;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.common.data.UserInfo;
-import com.ssafy.common.data.VSession;
+import com.ssafy.common.data.VRoom;
 import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
@@ -108,17 +107,17 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public void finishRoom( VSession vSession) {
-        RoomInfo roomInfo = roomInfoRepository.findById(vSession.getRoomInfo().getId()).get();
+    public void finishRoom( VRoom vRoom) {
+        RoomInfo roomInfo = roomInfoRepository.findById(vRoom.getRoomInfo().getId()).get();
         int winner = 0;
-        if(vSession.getVote_final_agree()> vSession.getVote_final_disagree())winner=1;
-        else if(vSession.getVote_final_agree() < vSession.getVote_final_disagree())winner=2;
+        if(vRoom.getVote_final_agree()> vRoom.getVote_final_disagree())winner=1;
+        else if(vRoom.getVote_final_agree() < vRoom.getVote_final_disagree())winner=2;
         RoomHistory roomHistory = RoomHistory.builder()
-                .id(vSession.getRoomInfo().getId())
+                .id(vRoom.getRoomInfo().getId())
                 .end_time(LocalDateTime.now())
                 .winner(winner)
-                .agree(vSession.getVote_final_agree())
-                .disagree(vSession.getVote_final_disagree())
+                .agree(vRoom.getVote_final_agree())
+                .disagree(vRoom.getVote_final_disagree())
                 .build();
         roomInfo.setPhase(3);
 
@@ -127,7 +126,7 @@ public class RoomServiceImpl implements RoomService{
         Long kingId=-1L;
         //user history 업데이트
         //찬성 진영 업데이트
-        for(UserInfo userInfo : vSession.getAgree()){
+        for(UserInfo userInfo : vRoom.getAgree()){
             if(userInfo == null) continue; //
             kingCntMax=userInfo.getKingCnt();
             kingId = userInfo.getId();
@@ -147,9 +146,9 @@ public class RoomServiceImpl implements RoomService{
             UserStat userStat = userStatRepository.findStatById(user.getId()).get();
             userStat.setTotal(userStat.getTotal()+1);
             //승 , 패 , 무
-            if(vSession.getVote_final_agree()> vSession.getVote_final_disagree()) {
+            if(vRoom.getVote_final_agree()> vRoom.getVote_final_disagree()) {
                 userStat.setWin(userStat.getWin()+1);
-            }else if(vSession.getVote_final_agree()< vSession.getVote_final_disagree()){
+            }else if(vRoom.getVote_final_agree()< vRoom.getVote_final_disagree()){
                 userStat.setLose(userStat.getLose()+1);
             }else{
                 userStat.setDraw(userStat.getDraw()+1);
@@ -158,7 +157,7 @@ public class RoomServiceImpl implements RoomService{
         }
 
         //반대 진영 업데이트
-        for(UserInfo userInfo : vSession.getDisagree()){
+        for(UserInfo userInfo : vRoom.getDisagree()){
             if(userInfo == null) continue; //
             if(userInfo.getKingCnt()>kingCntMax){
                 kingCntMax=userInfo.getKingCnt();
@@ -180,9 +179,9 @@ public class RoomServiceImpl implements RoomService{
             UserStat userStat = userStatRepository.findStatById(user.getId()).get();
             userStat.setTotal(userStat.getTotal()+1);
             //승 , 패 , 무
-            if(vSession.getVote_final_agree()< vSession.getVote_final_disagree()) {
+            if(vRoom.getVote_final_agree()< vRoom.getVote_final_disagree()) {
                 userStat.setWin(userStat.getWin()+1);
-            }else if(vSession.getVote_final_agree()> vSession.getVote_final_disagree()){
+            }else if(vRoom.getVote_final_agree()> vRoom.getVote_final_disagree()){
                 userStat.setLose(userStat.getLose()+1);
             }else{
                 userStat.setDraw(userStat.getDraw()+1);
@@ -192,7 +191,7 @@ public class RoomServiceImpl implements RoomService{
         }
         //토론왕 설정
         UserStat userStat = userStatRepository.findStatById(kingId).get();
-        UserHistory userHistory = userHistoryRepository.findUserHistoryByUserIdAndRoomId(kingId, vSession.getRoomInfo().getId()).get();
+        UserHistory userHistory = userHistoryRepository.findUserHistoryByUserIdAndRoomId(kingId, vRoom.getRoomInfo().getId()).get();
         userStatRepository.save(userStat);
         userHistoryRepository.save(userHistory);
         roomInfo.setRoomHistory(roomHistory);

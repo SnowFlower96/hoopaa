@@ -1,14 +1,9 @@
 package com.ssafy.api.service;
 
 
-import com.ssafy.api.request.RoomCloseReq;
-import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
-import com.ssafy.common.data.VSession;
+import com.ssafy.common.data.VRoom;
 import com.ssafy.db.dto.RoomInfoDto;
-import com.ssafy.db.entity.User;
-
-import java.util.NoSuchElementException;
 
 public interface RoomService {
 
@@ -20,7 +15,7 @@ public interface RoomService {
 
     RoomInfoDto updatePhaseByRoomId(Long id, int phase);
 
-    void finishRoom(VSession session);
+    void finishRoom(VRoom session);
 
 
     int findHashtagId(String nm);

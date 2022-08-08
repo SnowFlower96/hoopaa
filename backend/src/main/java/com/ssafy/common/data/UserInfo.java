@@ -16,12 +16,16 @@ public class UserInfo {
     String em;
     String nnm;
     int kingCnt;
+    boolean hasVote;
+    boolean hasFinalVote;
 
     @Builder
-    public UserInfo(Long id, String em, String nnm, int kingCnt) {
+    public UserInfo(Long id, String em, String nnm, int kingCnt, boolean hasVote, boolean hasFinalVote) {
         this.id = id;
         this.em = em;
         this.nnm = nnm;
         this.kingCnt = kingCnt;
+        this.hasVote = hasVote;
+        this.hasFinalVote = hasFinalVote;
     }
 }
