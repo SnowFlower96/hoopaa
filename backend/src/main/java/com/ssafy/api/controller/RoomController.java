@@ -1,22 +1,22 @@
 package com.ssafy.api.controller;
 
-
 import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
+import com.ssafy.api.request.SessionOpenReq;
 import com.ssafy.api.response.JsonRes;
-import com.ssafy.api.response.RoomRes;
 import com.ssafy.api.response.StringRes;
 import com.ssafy.api.response.VTokenRes;
+import com.ssafy.api.response.VTokensRes;
 import com.ssafy.api.service.RoomInfoService;
 import com.ssafy.api.service.RoomService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.data.UserInfo;
+import com.ssafy.common.data.VSession;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.dto.RoomInfoDto;
-import com.ssafy.common.data.VSession;
+import com.ssafy.common.data.VRoom;
 import com.ssafy.db.dto.UserInfoDto;
-import com.ssafy.db.entity.RoomInfo;
 import io.openvidu.java.client.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +47,7 @@ public class RoomController {
     UserService userService;
 
     private OpenVidu openVidu;
+    private Map<String, VRoom> mapRooms = new ConcurrentHashMap<>();
     private Map<String, VSession> mapSessions = new ConcurrentHashMap<>();
     private String OPENVIDU_URL;
     private String SECRET;
@@ -78,7 +79,7 @@ public class RoomController {
         String userEm = userService.getUserById(Long.parseLong(userId)).getEm();
 
         // 유저 이메일로 생성된 세션이 이미 있으면
-        if (this.mapSessions.get(userEm) != null) {
+        if (this.mapRooms.get(userEm) != null) {
             return ResponseEntity.status(405).body(StringRes.of(405, "Session Already Exist"));
         }
         // 세션 생성
@@ -88,10 +89,10 @@ public class RoomController {
             try {
                 SessionProperties sessionProperties = new SessionProperties.Builder().customSessionId(userEm).build();
                 session = this.openVidu.createSession(sessionProperties);
-                this.mapSessions.put(userEm, new VSession());
-                this.mapSessions.get(userEm).setSession(session);
-                this.mapSessions.get(userEm).setAgree(new UserInfo[openInfo.getMax_num()]);
-                this.mapSessions.get(userEm).setDisagree(new UserInfo[openInfo.getMax_num()]);
+                this.mapRooms.put(userEm, new VRoom());
+                this.mapRooms.get(userEm).setSession(session);
+                this.mapRooms.get(userEm).setAgree(new UserInfo[openInfo.getMax_num()]);
+                this.mapRooms.get(userEm).setDisagree(new UserInfo[openInfo.getMax_num()]);
             } catch (OpenViduJavaClientException | OpenViduHttpException e) {
                 throw new RuntimeException(e);
             }
@@ -99,17 +100,70 @@ public class RoomController {
             try {
                 openInfo.setHost_em(userEm);
                 RoomInfoDto roomInfoDto = roomService.createRoom(openInfo);
-                this.mapSessions.get(userEm).setRoomInfo(roomInfoDto);
-                this.mapSessions.get(userEm).setParticipants(new ConcurrentHashMap<>());
+                this.mapRooms.get(userEm).setRoomInfo(roomInfoDto);
+                this.mapRooms.get(userEm).setMapConnections(new ConcurrentHashMap<>());
             } catch (Exception e) {
                 // 생성된 세션 롤백
                 session.close();
-                this.mapSessions.remove(userEm);
+                this.mapRooms.remove(userEm);
                 throw new RuntimeException(e);
             }
 
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
         }
+    }
+
+    @PostMapping("/session")
+    @ApiOperation(value = "세부 세션 생성", notes = "호스트의 세부 세션 생성")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "비밀번호 오류"),
+            @ApiResponse(code = 403, message = "권한 오류"),
+            @ApiResponse(code = 404, message = "없는 토론 방"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> openSession(@ApiIgnore Authentication authentication, @RequestBody SessionOpenReq sessionOpenReq) throws OpenViduJavaClientException, OpenViduHttpException {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String id = userDetails.getUsername();
+        String userEm = userService.getUserInfoDtoById((Long.parseLong(id))).getEm();
+
+        // 해당 세션이 존재하지 않으면
+        if (!this.mapRooms.containsKey(sessionOpenReq.getSessionId())) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+
+        // 세부 세션 생성
+        SessionProperties sessionProperties;
+        Session sessionAgree;
+        Session sessionDisagree;
+        try {
+            sessionProperties = new SessionProperties.Builder().customSessionId(userEm + "_agree").build();
+            sessionAgree = this.openVidu.createSession(sessionProperties);
+        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            sessionProperties = new SessionProperties.Builder().customSessionId(userEm + "_disagree").build();
+            sessionDisagree = this.openVidu.createSession(sessionProperties);
+        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            // 생성된 찬성 세부세션 롤백
+            assert sessionAgree != null;
+            sessionAgree.close();
+            throw new RuntimeException(e);
+        }
+
+        // 세부 세션 커넥션 생성 및 토큰 반환
+        ConnectionProperties connectionProperties;
+        Connection connection;
+        // 찬성측
+//        for (String em : sessionOpenReq.getAgree()) {
+//            try {
+//                OpenViduRole role = OpenViduRole.SUBSCRIBER;
+//                ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
+//                        .role(role).build();
+//                connection = session.createConnection(connectionProperties);
+//            }
+//        }
+        // 반대측
+        return ResponseEntity.status(200).body(VTokensRes.of(200, "Success"));
     }
 
     @PostMapping("/enter")
@@ -126,15 +180,15 @@ public class RoomController {
         String userEm = userService.getUserInfoDtoById((Long.parseLong(id))).getEm();
 
         // 해당 세션이 존재하지 않으면
-        if (!this.mapSessions.containsKey(roomEnterReq.getSessionId())) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+        if (!this.mapRooms.containsKey(roomEnterReq.getSessionId())) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 
         // 세션
         Connection connection;
-        VSession vSession = this.mapSessions.get(roomEnterReq.getSessionId());
-        Session session = vSession.getSession();
+        VRoom vRoom = this.mapRooms.get(roomEnterReq.getSessionId());
+        Session session = vRoom.getSession();
 
         // 세션 암호 확인
-        String pwd = vSession.getRoomInfo().getPwd();
+        String pwd = vRoom.getRoomInfo().getPwd();
         if (pwd != null && !pwd.equals(roomEnterReq.getPwd())) return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong Password"));
 
         try {
@@ -144,8 +198,9 @@ public class RoomController {
                     .role(role).build();
             connection = session.createConnection(connectionProperties);
 
-            vSession.getParticipants().put(userEm, connection);
+            vRoom.getMapConnections().put(userEm, connection);
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            vRoom.getMapConnections().remove(userEm);
             throw new RuntimeException(e);
         }
 
@@ -169,24 +224,24 @@ public class RoomController {
 
         System.out.println(sessionId);
         // 해당 세션이 존재하지 않으면
-        if (!this.mapSessions.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+        if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 
         // 세션
-        VSession vSession = this.mapSessions.get(sessionId);
+        VRoom vRoom = this.mapRooms.get(sessionId);
         // 모집중 단계가 아닐 시
-        if (vSession.getRoomInfo().getPhase() != 0) return ResponseEntity.status(405).body(BaseResponseBody.of(405, "Cannot select except phase 0"));
+        if (vRoom.getRoomInfo().getPhase() != 0) return ResponseEntity.status(405).body(BaseResponseBody.of(405, "Cannot select except phase 0"));
 
-        int max = vSession.getRoomInfo().getMaxNum();
+        int max = vRoom.getRoomInfo().getMaxNum();
         UserInfo[] userInfos;
 
         // 유저가 선택하고자 하는 진영
-        if (pos.equals("agree")) userInfos = vSession.getAgree();
-        else if (pos.equals("disagree")) userInfos = vSession.getDisagree();
+        if (pos.equals("agree")) userInfos = vRoom.getAgree();
+        else if (pos.equals("disagree")) userInfos = vRoom.getDisagree();
         else return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong request"));
         // 참여할 수 있으면
         for (int i = 0; i < max; i++) {
             if (userInfos[i] == null) {
-                userInfos[i] = new UserInfo(Long.parseLong(userId), user.getEm(), user.getNnm(), 0);
+                userInfos[i] = new UserInfo(Long.parseLong(userId), user.getEm(), user.getNnm(), 0, false, false);
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
             }
         }
@@ -208,19 +263,19 @@ public class RoomController {
         String userId = ssafyUserDetails.getUsername();
 
         // 해당 세션이 존재하지 않으면
-        if (!this.mapSessions.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+        if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 
         // 세션
-        VSession vSession = this.mapSessions.get(sessionId);
+        VRoom vRoom = this.mapRooms.get(sessionId);
         // 모집중 단계가 아닐 시
-        if (vSession.getRoomInfo().getPhase() != 0) return ResponseEntity.status(405).body(BaseResponseBody.of(405, "Cannot select except phase 0"));
+        if (vRoom.getRoomInfo().getPhase() != 0) return ResponseEntity.status(405).body(BaseResponseBody.of(405, "Cannot select except phase 0"));
 
-        int max = vSession.getRoomInfo().getMaxNum();
+        int max = vRoom.getRoomInfo().getMaxNum();
         UserInfo[] userInfos;
 
         // 유저가 나가고자 하는 진영
-        if (pos.equals("agree")) userInfos = vSession.getAgree();
-        else if (pos.equals("disagree")) userInfos = vSession.getDisagree();
+        if (pos.equals("agree")) userInfos = vRoom.getAgree();
+        else if (pos.equals("disagree")) userInfos = vRoom.getDisagree();
         else return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong request"));
 
         // 나갈 수 있는지 확인
@@ -248,13 +303,13 @@ public class RoomController {
         String userId = ssafyUserDetails.getUsername();
 
         // 해당 세션이 존재하지 않으면
-        if (!this.mapSessions.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+        if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 
-        VSession vSession = this.mapSessions.get(sessionId);
+        VRoom vRoom = this.mapRooms.get(sessionId);
         Map<String, String> connections = new ConcurrentHashMap<>();
-        for (UserInfo userInfo : vSession.getAgree()) {
-            if (vSession.getParticipants().containsKey(userInfo.getEm())){
-                Connection conn = vSession.getParticipants().get(userInfo.getEm());
+        for (UserInfo userInfo : vRoom.getAgree()) {
+            if (vRoom.getMapConnections().containsKey(userInfo.getEm())){
+                Connection conn = vRoom.getMapConnections().get(userInfo.getEm());
                 connections.put(userInfo.getEm(), conn.getConnectionId());
             }
         }
@@ -275,13 +330,13 @@ public class RoomController {
         String userId = ssafyUserDetails.getUsername();
 
         // 해당 세션이 존재하지 않으면
-        if (!this.mapSessions.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+        if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 
-        VSession vSession = this.mapSessions.get(sessionId);
+        VRoom vRoom = this.mapRooms.get(sessionId);
         Map<String, String> connections = new ConcurrentHashMap<>();
-        for (UserInfo userInfo : vSession.getDisagree()) {
-            if (vSession.getParticipants().containsKey(userInfo.getEm())){
-                Connection conn = vSession.getParticipants().get(userInfo.getEm());
+        for (UserInfo userInfo : vRoom.getDisagree()) {
+            if (vRoom.getMapConnections().containsKey(userInfo.getEm())){
+                Connection conn = vRoom.getMapConnections().get(userInfo.getEm());
                 connections.put(userInfo.getEm(), conn.getConnectionId());
             }
         }
@@ -307,10 +362,10 @@ public class RoomController {
         if (!sessionId.equals(userEm)) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Not host"));
 
         // 해당 세션이 존재하지 않으면
-        if (!this.mapSessions.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+        if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 
-        VSession vSession = this.mapSessions.get(sessionId);
-        vSession.getRoomInfo().setPhase(1);
+        VRoom vRoom = this.mapRooms.get(sessionId);
+        vRoom.getRoomInfo().setPhase(1);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Debate start"));
     }
@@ -333,10 +388,10 @@ public class RoomController {
         if (!sessionId.equals(userEm)) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Not host"));
 
         // 해당 세션이 존재하지 않으면
-        if (!this.mapSessions.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+        if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 
-        VSession vSession = this.mapSessions.get(sessionId);
-        vSession.getRoomInfo().setPhase(2);
+        VRoom vRoom = this.mapRooms.get(sessionId);
+        vRoom.getRoomInfo().setPhase(2);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Vote start"));
     }
@@ -353,10 +408,10 @@ public class RoomController {
         String id = userDetails.getUsername();
         String userEm = userService.getUserById(Long.parseLong(id)).getEm();
 
-        VSession vSession = this.mapSessions.get(userEm);
-        Session session = vSession.getSession();
+        VRoom vRoom = this.mapRooms.get(userEm);
+        Session session = vRoom.getSession();
         session.close();
-        roomService.finishRoom(vSession);
+        roomService.finishRoom(vRoom);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
