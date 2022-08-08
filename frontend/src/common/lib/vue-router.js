@@ -4,11 +4,14 @@ import ConferencesDetail from '@/views/conferences/conference-detail'
 import History from '@/views/history/history'
 import SignUp from '@/views/user/sign-up'
 import Login from '@/views/user/login'
-
+import reSign from '@/views/user/resign'
 import mainPage from '@/views/main-page/main-page'
 import Participate from '@/views/participate/participating-code'
 import participatingPage from '@/views/participate/participating-page'
-import waitingPage from '@/views/participate/waiting-page'
+
+import debateRoom from '@/views/participate/debateRoom'
+import detailSession from '@/views/participate/detailSession'
+
 import signUpEmail from '@/views/user/email'
 import gameSetPage from '@/views/debate-hosting/game-set-page'
 import makeRoom from '@/views/debate-hosting/make-room'
@@ -16,7 +19,6 @@ import store from '@/store'
 // const routerComponent = require('@/views/main/router-components.json')
 
 import myPage from '@/views/user/mypage'
-import tempKey from '@/views/user/tempKey'
 import checkPwd from '@/views/user/checkPwd'
 import myPageInfo from '@/views/user/mypage-info'
 
@@ -81,17 +83,11 @@ function makeRoutesFromMenu () {
 
   },
 
+
   {
   path : '/myPage/info',
   name : 'myPage-info',
   component : myPageInfo,
-  beforeEnter: (to, from, next) => {
-    if (to.query[tempKey]) {
-      next();
-    } else {
-      next('/checkPwd');
-    }
-  },
 },
 {
   path : '/checkPwd',
@@ -110,9 +106,9 @@ function makeRoutesFromMenu () {
   component: Participate
 },
 {
-  path: '/waitingPage',
-  name: 'waiting-page',
-  component: waitingPage
+  path: '/debateRoom',
+  name: 'debateRoom',
+  component: debateRoom
 },
 {
   path : '/makeRoomPage',
@@ -129,9 +125,19 @@ function makeRoutesFromMenu () {
   path : '/testmyPage',
   name: 'testmyPage',
   component: myPageInfo
+},
+{
+  path : '/myPage/reSign',
+  name : 'reSign',
+  component : reSign
+},
+{
+  path : '/detailSession',
+  name: 'detailSession',
+  component: detailSession
 }
-  )
 
+  )
   return routes
 }
 

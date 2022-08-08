@@ -2,11 +2,11 @@ import { createApi, createTokenApi } from "@/api";
 import Vuex from "vuex";
 import router from "@/common/lib/vue-router";
 import createPersistedState from "vuex-persistedstate";
+import { toRawType } from "@vue/shared";
 
 //Vue.use(Vuex);
 
 const api = createApi();
-const tapi = createTokenApi();
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
@@ -16,7 +16,9 @@ export default new Vuex.Store({
     userStat : '',
     userInfo : '',
     roomList : [],
-    headerVisible: true
+    headerVisible: true,
+    tempToken : '',
+    user : [],
   },
 
   mutations : {
@@ -26,10 +28,11 @@ export default new Vuex.Store({
       state.roomList = JSON.parse(data);
     },
     // 로그인 토큰, 상태
-    USER_LOGIN(state, token) {
+    USER_LOGIN(state, data) {
       state.isLogin = true;
-      sessionStorage.setItem("accessToken", token);
-      api.defaults.headers["accessToken"] = token;
+      sessionStorage.setItem("accessToken", data.accessToken);
+      api.defaults.headers["accessToken"] = data.accessToken;
+      state.user = data.user;
     },
     // 로그아웃
     USER_LOGOUT(state) {
@@ -47,6 +50,10 @@ export default new Vuex.Store({
     USER_INFO(state, data) {
       state.userInfo = JSON.parse(data);
     },
+    CREATE_TEMP_TOKEN(state, data) {
+      state.tempToken = data;
+    },
+
   },
 
   actions : {
@@ -104,9 +111,8 @@ export default new Vuex.Store({
         method : "POST",
         data : data
       }).then((res) => {
-          commit("USER_LOGIN", res.data.accessToken);
+          commit("USER_LOGIN", res.data);
           router.push('/')
-
       }).catch(error => {
         reject(error)
         alert("이메일 , 비밀번호를 확인하세요")
@@ -117,7 +123,8 @@ export default new Vuex.Store({
 
      // User 정보
      getUserHistory({commit}) {
-      tapi({
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/history`,
         method : "GET"
       }).then((res) => {
@@ -127,7 +134,8 @@ export default new Vuex.Store({
      },
      // User Stat
      getUserStat({commit}) {
-      tapi({
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/stat`,
         method : "GET"
       }).then((res) => {
@@ -136,7 +144,8 @@ export default new Vuex.Store({
      },
      // User Info
      getUserInfo({commit}) {
-      tapi({
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/info`,
         method : "GET"
       }).then((res) => {
@@ -146,7 +155,8 @@ export default new Vuex.Store({
 
      // User Info 수정
       putUserStat({commit},data) {
-      tapi({
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/stat`,
         method : "PUT",
         data : data,
@@ -199,6 +209,67 @@ export default new Vuex.Store({
       })
     },
 
+    // 유저 비밀번호 확인
+    checkPwd({commit}, data) {
+      return new Promise((reject) => {
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+        url : `/users/verify`,
+        method : "POST",
+        data : data,
+      }).then((res) => {
+        console.log(res)
+        let query = window.location.search;
+        let param = new URLSearchParams(query);
+        let loc = param.get('loc');
+        if (loc == 'info') {
+          router.push('/myPage/info')
+        } else {
+          router.push('/myPage/reSign')
+        }
+        commit();
+      }).catch(error => {
+        reject(error)
+        alert("비밀번호를 확인하세요")
+        let query = window.location.search;
+        let param = new URLSearchParams(query);
+        let loc = param.get('loc');
+        if (loc == 'info') {
+          router.push('/checkPwd?loc=info')
+        } else {
+          router.push('/checkPwd?loc=reSign')
+        }
+      })
+    })
+  },
 
-  }
-})
+  // 토론방 생성
+  makeRoom({commit}, room) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : `/room`,
+      method : "POST",
+      data : room,
+    }).then((res) =>{
+      resolve(res);
+      commit();
+    }).catch((error) =>{
+      reject(error);
+    })
+  })
+  },
+
+  enterRoom({commit}, data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : `/room/enter`,
+      method : "POST",
+      data : data,
+    }).then((res) => {
+      console.log(res.data);
+      commit("CREATE_TEMP_TOKEN",res.data.token);
+      router.push("/participatingPage")
+    })
+  },
+}})

@@ -19,6 +19,7 @@ export default {
       em : '',
       pwd : '',
       loginNew : '',
+      checked : false,
     }
   },
   created () {
@@ -33,16 +34,16 @@ export default {
     if(this.loginNew) {
       this.$store.dispatch("emailAuth",data)
     }
-  },
 
+  },
   methods : {
-    login () {
+    async login () {
       var data = {
         em : this.em,
         pwd : this.pwd
       }
       console.log(data);
-      this.$store.dispatch("login",data);
+      await this.$store.dispatch("login",data);
     }
   }
 }
@@ -72,11 +73,7 @@ export default {
 }
 .login-favi-img {
   margin-top: 100px;
-  width: 70px;
-}
-.logo-img {
-  width: 30%;
-  margin-bottom: 3%;
+  width: 70px !important;
 }
 .login-item {
   margin: 10px;

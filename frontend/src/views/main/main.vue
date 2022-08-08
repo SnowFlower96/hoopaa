@@ -1,8 +1,8 @@
 <template>
   <el-container class="main-wrapper">
-    <main-header v-if="visible" class="main-header-class" />
+    <main-header v-if="visibleMainHeader" class="main-header-class" />
       <router-view></router-view>
-    <main-footer class="main-footer-class"/>
+    <main-footer v-if="visibleMainFooter" class="main-footer-class"/>
   </el-container>
 </template>
 <style scoped>
@@ -14,6 +14,7 @@
   position: fixed;
   color: white;
   background-color: white;
+  z-index: 10;
 }
   .el-main::-webkit-scrollbar{width: 0px;}
   .main-footer-class {
@@ -33,7 +34,8 @@ export default {
   data () {
     return {
       tired: null,
-      visible: true,
+      visibleMainHeader: true,
+      visibleMainFooter: true,
       location: null
     }
   },
@@ -44,9 +46,9 @@ export default {
         const percentageOfPageScroll = scrollPosition/document.body.scrollHeight *100
         // console.log('돌아가는중',this.visible, this.location)
         if (percentageOfPageScroll < 15) {
-          this.visible = false
+          this.visibleMainHeader = false
         } else {
-          this.visible = true
+          this.visibleMainHeader = true
         }
       }
 
@@ -55,14 +57,19 @@ export default {
   watch: {
     '$route' (to, from) {
       console.log(to.name)
-      if (to.name === 'main-page' || to.name === 'login' || to.name === 'sign-up' || to.name === 'checkPwd') {
+      if (to.name === 'main-page' || to.name === 'login' || to.name === 'sign-up' || to.name === 'checkPwd' || to.name === 'make-room') {
         this.location = to.name
-        this.visible = false
+        this.visibleMainHeader = false
         document.addEventListener('scroll', this.zeroLocation)
-        }
+        } 
+      else if (to.name === 'debateRoom' || to.name === 'detailSession') {
+        this.visibleMainHeader = false
+        this.visibleMainFooter = false
+      }
       else {
         this.location = to.name
-        this.visible = true
+        this.visibleMainHeader = true
+        this.visibleMainFooter = true
       }
     }
   },
