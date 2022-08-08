@@ -20,7 +20,6 @@ import com.ssafy.db.dto.UserInfoDto;
 import io.openvidu.java.client.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -98,7 +97,6 @@ public class RoomController {
             }
             // DB 저장
             try {
-                openInfo.setHost_em(userEm);
                 RoomInfoDto roomInfoDto = roomService.createRoom(openInfo);
                 this.mapRooms.get(userEm).setRoomInfo(roomInfoDto);
                 this.mapRooms.get(userEm).setMapConnections(new ConcurrentHashMap<>());
@@ -221,8 +219,6 @@ public class RoomController {
         String userId = ssafyUserDetails.getUsername();
         UserInfoDto user = userService.getUserInfoDtoById(Long.parseLong(userId));
 
-
-        System.out.println(sessionId);
         // 해당 세션이 존재하지 않으면
         if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 
@@ -238,10 +234,11 @@ public class RoomController {
         if (pos.equals("agree")) userInfos = vRoom.getAgree();
         else if (pos.equals("disagree")) userInfos = vRoom.getDisagree();
         else return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong request"));
+
         // 참여할 수 있으면
         for (int i = 0; i < max; i++) {
             if (userInfos[i] == null) {
-                userInfos[i] = new UserInfo(Long.parseLong(userId), user.getEm(), user.getNnm(), 0, false, false);
+                userInfos[i] = new UserInfo(Long.parseLong(userId), user.getEm(), user.getNnm(), 0, false, false, false);
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
             }
         }

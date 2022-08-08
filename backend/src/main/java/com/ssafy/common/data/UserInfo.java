@@ -16,16 +16,18 @@ public class UserInfo {
     String em;
     String nnm;
     int kingCnt;
-    boolean hasVote;
+    boolean hasAgree;
+    boolean hasDisagree;
     boolean hasFinalVote;
 
     @Builder
-    public UserInfo(Long id, String em, String nnm, int kingCnt, boolean hasVote, boolean hasFinalVote) {
+    public UserInfo(Long id, String em, String nnm, int kingCnt, boolean hasAgree, boolean hasDisagree, boolean hasFinalVote) {
         this.id = id;
         this.em = em;
         this.nnm = nnm;
         this.kingCnt = kingCnt;
-        this.hasVote = hasVote;
+        this.hasAgree = hasAgree;
+        this.hasDisagree = hasDisagree;
         this.hasFinalVote = hasFinalVote;
     }
 }
