@@ -28,8 +28,6 @@ import myPage from '@/views/user/mypage'
 import checkPwd from '@/views/user/checkPwd'
 import myPageInfo from '@/views/user/mypage-info'
 
-import room from '@/views/debate-hosting/room'
-
 const fullMenu = require('@/views/main/menu.json')
 
 const checkLogin = () => (from, to, next) => {
@@ -156,18 +154,13 @@ function makeRoutesFromMenu () {
 {
   path : '/test',
   name: 'test',
-  component: Test,
+  component: test,
 },
 {
   path : '/detailSession',
   name: 'detailSession',
-  component: DetailSession,
+  component: detailSession,
 },
-{
-  path : '/room',
-  name: 'room',
-  component: room,
-}
   )
 
   return routes

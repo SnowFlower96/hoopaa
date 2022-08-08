@@ -89,15 +89,14 @@ export default {
 	},
 
   created(){
+    console.log("before"+this.role+"#####")
     let query = window.location.search;
     let param = new URLSearchParams(query);
-    this.role = param.get('role');
     this.mySessionId=param.get('mySessionId')
+    if(param.get('role') != null)
+      this.role = Number(param.get('role'));
 
     console.log("!!!!!!"+this.role)
-
-    if(this.role!=null)
-      this.joinSession();
   },
 
 	watch:{
@@ -105,8 +104,8 @@ export default {
 
 			this.leaveSession();
 			this.joinSession();
+			console.log(this.role+"~~~~~~~~~~")
 
-			console.log(this.role+"!!!!!!!!!!!!!!!!!!!")
 		}
 	},
 
