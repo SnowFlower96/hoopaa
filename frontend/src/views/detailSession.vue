@@ -10,16 +10,16 @@
 						<label>Participant</label>
 						<input v-model="myUserName" class="form-control" type="text" required>
 					</p>
-					<!-- <p>
+					<p>
 						<label>Session</label>
 						<input v-model="mySessionId" class="form-control" type="text" required>
-					</p> -->
-					<!-- <p class="text-center">
+					</p>
+					<p class="text-center">
 						<button class="btn btn-lg btn-success" @click="role=0">사회자</button>
 						<button class="btn btn-lg btn-success" @click="role=1">찬성</button>
 						<button class="btn btn-lg btn-success" @click="role=-1">반대</button>
 						role:{{this.role}}
-					</p> -->
+					</p>
 				</div>
 			</div>
 		</div>
@@ -27,12 +27,28 @@
 		<div id="session">
 			<div id="session-header">
 				<h1 id="session-title">{{ mySessionId }}</h1>
+				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="role=2" value="방청객">
         <div v-if="session">
-				<input class="btn btn-large btn" type="button" id="buttonLeaveSession" @click="MainSession" value="돌아 가기"></div>
+				<input class="btn btn-large btn" type="button" id="buttonLeaveSession" @click="MainSession" value="메인세션 가기"></div>
 			</div>
 			<div id="video-container" class="col-md-6">
-				{{s.stream.connection.client.clientData}}&&{{s.stream.connection.dataObject.role}}
-				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click.native="updateMainVideoStreamManager(sub)"/>
+				<div><h4>me {{this.myUserName}} {{this.role}}</h4><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
+				<div v-for="s in subscribers" :key="s.stream.connection.connectionId">
+					<div v-if="s.stream.connection.dataObject.role===0">
+						<h4>HOST {{s.stream.connection.client.clientData}}</h4>
+						<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+					</div>
+					<div v-if="s.stream.connection.dataObject.role===1">
+						<h4>AGREE {{s.stream.connection.client.clientData}}</h4>
+						<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+					</div>
+					<div v-if="s.stream.connection.dataObject.role===-1">
+						<h4>DISAGREE {{s.stream.connection.client.clientData}}</h4>
+						<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+					</div>
+				</div>
+				<!-- {{s.stream.connection.client.clientData}}&&{{s.stream.connection.dataObject.role}} -->
+				<!-- <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click.native="updateMainVideoStreamManager(sub)"/> -->
 			</div>
 		</div>
 	</div>
@@ -72,8 +88,6 @@ export default {
 	watch:{
 		role:function(){
 
-			this.leaveSession();
-			if(this.role!=2)
 				this.joinSession();
 
 			console.log(this.role+"!!!!!!!!!!!!!!!!!!!")
@@ -85,8 +99,6 @@ export default {
     let param = new URLSearchParams(query);
     this.role = param.get('role');
     this.mySessionId=this.mySessionId+this.role;
-
-    this.joinSession();
   },
 
 	methods: {

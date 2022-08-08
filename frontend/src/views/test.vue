@@ -18,6 +18,7 @@
 						<button class="btn btn-lg btn-success" @click="role=0">사회자</button>
 						<button class="btn btn-lg btn-success" @click="role=1">찬성</button>
 						<button class="btn btn-lg btn-success" @click="role=-1">반대</button>
+            <button class="btn btn-lg btn-success" @click="role=2">입장</button>
 						role:{{this.role}}
 					</p>
 				</div>
@@ -28,7 +29,7 @@
 			<div id="session-header">
         <!-- <div v-if="session && !detailSession"> -->
 				<h1 id="session-title">{{ mySessionId }}</h1>
-				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="role=2" value="방청객">
+				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="role=2" value="나가기">
         <div v-if="session">
         <button class="btn btn-large btn" type="button" id="buttonDetailSession" @click="goDetailSession">세부세션 가기</button>
 
@@ -106,7 +107,7 @@ export default {
 			mainStreamManager: undefined,
 			publisher: undefined,
 			subscribers: [],
-			role:2,
+			role:-5,
       detailSession:false,
 
 			mySessionId: 'SessionA',
@@ -118,7 +119,7 @@ export default {
 		role:function(){
 
 			this.leaveSession();
-			if(this.role!=2)
+			// if(this.role!=2)
 				this.joinSession();
 
 			console.log(this.role+"!!!!!!!!!!!!!!!!!!!")
