@@ -19,7 +19,7 @@
                 <!-- 곧 지우는 코드 -->
                   <router-link style="position: absolute;" to="/homeToParticipate"><button>모든토론보기 썸네일 누르면 가게되는 페이지</button></router-link>
                 <!-- 곧 지우는 코드 -->
-                <h1>실시간 인기 토론</h1> 
+                <h1>실시간 인기 토론</h1>
                 <div class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
@@ -59,7 +59,7 @@
 
                 <!-- <div class="list">여기가 기본 all, 총 방 갯수 : {{roomList.length}}</div> -->
                 <ul class="room-ul">
-                  <li v-for="(indexOut) in (roomList.length/4-1)" :key="indexOut">
+                  <li v-for="(indexOut) in (roomList.length/4)" :key="indexOut">
                     <ul class="card-container-ul">
                       <li v-for="(indexIn) in 4" :key="indexIn">
                       <div class="room-card">
@@ -374,7 +374,7 @@ export default {
     } else {
       this.data = JSON.stringify(this.data)
       this.GET_ROOM_LIST(this.data);
-     
+
     }
     },
 

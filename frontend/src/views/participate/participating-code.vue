@@ -95,6 +95,7 @@ export default {
     width:384px;
     border: none;
     outline: solid 1px #ABB2BF;
+    margin-bottom: 10px;
 
 }
 

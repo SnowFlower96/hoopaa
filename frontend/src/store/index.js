@@ -19,6 +19,14 @@ export default new Vuex.Store({
     headerVisible: true,
     tempToken : '',
     user : [],
+    room: {
+      OV: "",
+      session: "",
+      host: "",
+      publisher: "",
+      agrees: [],
+      disagrees: []
+    }
   },
 
   mutations : {

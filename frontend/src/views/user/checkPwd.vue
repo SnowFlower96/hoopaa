@@ -28,7 +28,7 @@ export default {
       var data = {
         pwd : this.checkPwd,
       }
-      this.$store.dispatch("checkPwd", data)
+      this.$store.dispatch("checkPwd", this.checkPwd)
     }
    }
   }

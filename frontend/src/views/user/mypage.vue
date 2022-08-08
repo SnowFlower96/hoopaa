@@ -46,7 +46,6 @@ created () {
   for (let i = 0; i < this.userHistory.length; i++) {
     this.show.push(false);
   }
-    console.log(this.show)
  }
 
 }

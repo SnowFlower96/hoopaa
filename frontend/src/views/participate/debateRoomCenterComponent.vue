@@ -1,8 +1,8 @@
 <template>
     <div class="debate-center-wrap" >
         <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle">
-            <user-video class="moderatorVideo" :stream-manager="publisher" v-if="!isPannel"/>
-            
+            <user-video class="moderatorVideo" :stream-manager="room.host"/>
+
         </div>
     </div>
     <div class="debate-guague" :style="customViewStyle"><div class="debate-guague-inner" :style="customViewStyle">게이지바</div></div>
@@ -12,7 +12,6 @@
 
 <script>
 import axios from 'axios';
-import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -25,7 +24,7 @@ export default {
     UserVideo,
   },
     computed : {
-      ...mapState(["user"]),
+      ...mapState(["user","room"]),
         customViewStyle() {
             return {
                 "--center-video-height" : this.centerVideoHeight,
@@ -44,13 +43,7 @@ export default {
     },
     data() {
         return {
-            token : '',
-            OV: undefined,
-			      session: undefined,
-			      mainStreamManager: undefined,
-			      publisher: undefined,
-			      subscribers: [],
-            isPannel : false,
+
             centerVideoHeight : '',
             centerVideoWidth : '',
 
@@ -67,76 +60,6 @@ export default {
         }
     },
     created () {
-      this.token = this.$store.state.tempToken;
-
-      	// --- Get an OpenVidu object ---
-			this.OV = new OpenVidu();
-
-			// --- Init a session ---
-			this.session = this.OV.initSession();
-			// --- Specify the actions when events take place in the session ---
-
-			// On every new Stream received...
-			this.session.on('streamCreated', ({ stream }) => {
-				const subscriber = this.session.subscribe(stream);
-        subscriber.stream.connection.dataObject=JSON.parse(subscriber.stream.connection.data)
-        subscriber.stream.connection.role=this.role
-				this.subscribers.push(subscriber);
-			});
-
-			// On every Stream destroyed...
-			this.session.on('streamDestroyed', ({ stream }) => {
-				const index = this.subscribers.indexOf(stream.streamManager, 0);
-				if (index >= 0) {
-					this.subscribers.splice(index, 1);
-				}
-			});
-
-			// On every asynchronous exception...
-			this.session.on('exception', ({ exception }) => {
-				console.warn(exception);
-			});
-
-			// --- Connect to the session with a valid user token ---
-
-			// 'getToken' method is simulating what your server-side should do.
-			// 'token' parameter should be retrieved and returned by your own backend
-      console.log("before connect", this.token);
-				this.session.connect(this.token, { clientData: this.$store.state.userStat.em })
-					.then(() => {
-            console.log("connecting...");
-						// --- Get your own camera stream with the desired properties ---
-            console.log(this.session.sessionId)
-            if (this.user.em == this.session.sessionId) {
-              let publisher = this.OV.initPublisher(undefined, {
-                audioSource: undefined, // The source of audio. If undefined default microphone
-                videoSource: undefined, // The source of video. If undefined default webcam
-                publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
-                publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-                resolution: '680x480',  // The resolution of your video
-                frameRate: 30,			// The frame rate of your video
-                insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
-                mirror: false       	// Whether to mirror your local video or not
-              });
-
-              this.mainStreamManager = publisher;
-              this.publisher = publisher;
-
-              // --- Publish your stream ---
-
-              this.session.publish(this.publisher);
-            } else {
-              this.isPannel = true;
-            }
-             console.log("connected");
-             console.log(this.session.connect)
-					})
-					.catch(error => {
-						console.log('There was an error connecting to the session:', error.code, error.message);
-					});
-
-      console.log("!!!!"+this.role)
-      window.addEventListener('beforeunload', this.leaveSession);
 
     },
     mounted() {

@@ -104,7 +104,8 @@ function makeRoutesFromMenu () {
 {
   path: '/startWithCode',
   name: 'Participate',
-  component: Participate
+  component: Participate,
+  beforeEnter: checkLogin(),
 },
 {
   path: '/debateRoom',

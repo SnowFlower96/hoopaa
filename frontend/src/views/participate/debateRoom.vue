@@ -108,7 +108,15 @@ import MessageFromTeam from './ModalContent/ModeratorView/MessageFromTeam'
 import LetTeamSpeak from './ModalContent/ModeratorView/LetTeamSpeak'
 import RestTime from './ModalContent/ModeratorView/RestTime'
 import LetVote from './ModalContent/ModeratorView/LetVote'
+import axios from 'axios';
+import { OpenVidu } from 'openvidu-browser';
+import UserVideo from '@/views/openvidu/UserVideo.vue';
+import { mapState} from 'vuex';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
+
+const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
+const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 
 export default {
     name: 'debateRoom',
@@ -130,7 +138,78 @@ export default {
         LetVote,
         detailSession
     },
+    async created() {
+    var token = this.$store.state.tempToken;
+
+    // --- Get an OpenVidu object ---
+    this.room.OV = new OpenVidu();
+
+    // --- Init a session ---
+    this.room.session = this.room.OV.initSession();
+    // --- Specify the actions when events take place in the session ---
+
+    // On every new Stream received...
+    this.room.session.on("streamCreated", ({ stream }) => {
+      const subscriber = this.room.session.subscribe(stream);
+      subscriber.stream.connection.dataObject = JSON.parse(
+        subscriber.stream.connection.data
+      );
+      var clientData = subscriber.stream.connection.dataObject.clientData;
+      console.log(clientData.split("/"));
+      if (clientData[0] == this.room.session.sessionId)
+        this.room.host = subscriber;
+      else this.room.agrees.push(subscriber);
+    });
+
+    // On every Stream destroyed...
+    // TODO
+    this.room.session.on("streamDestroyed", ({ stream }) => {
+      const index = this.subscribers.indexOf(stream.streamManager, 0);
+      if (index >= 0) {
+        this.subscribers.splice(index, 1);
+      }
+    });
+
+    // On every asynchronous exception...
+    this.room.session.on("exception", ({ exception }) => {
+      console.warn(exception);
+    });
+
+    await this.room.session
+      .connect(token, { clientData: this.user.em })
+      .then(() => {
+        console.log("Connected!!!");
+      })
+      .catch(error => {
+        console.log(
+          "There was an error connecting to the session:",
+          error.code,
+          error.message
+        );
+      });
+
+    if (this.user.em == this.room.session.sessionId) {
+      console.log("you are host");
+      let publisher = this.room.OV.initPublisher(undefined, {
+        audioSource: undefined, // The source of audio. If undefined default microphone
+        videoSource: undefined, // The source of video. If undefined default webcam
+        publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+        publishVideo: true, // Whether you want to start publishing with your video enabled or not
+        resolution: "680x480", // The resolution of your video
+        frameRate: 30, // The frame rate of your video
+        insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+        mirror: true, // Whether to mirror your local video or not
+      });
+
+      this.room.publisher = publisher;
+      this.room.host = publisher;
+
+      // --- Publish your stream ---
+      this.room.session.publish(publisher);
+    }
+  },
     computed : {
+      ...mapState(["user", "room"]),
         customCaroselStyle() {
             return {
                 "--debate-box-center-width": this.debateCenterBoxWidth,    // videobox-center
