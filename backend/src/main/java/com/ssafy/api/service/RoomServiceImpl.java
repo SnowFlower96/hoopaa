@@ -122,7 +122,7 @@ public class RoomServiceImpl implements RoomService{
         roomInfo.setPhase(3);
 
         // 토론왕 확인하기 위한 변수 설정정
-        int kingCntMax = -1;
+        int kingCntMax = 0;
         Long kingId=-1L;
         //user history 업데이트
         //찬성 진영 업데이트
@@ -190,10 +190,14 @@ public class RoomServiceImpl implements RoomService{
 
         }
         //토론왕 설정
-        UserStat userStat = userStatRepository.findStatById(kingId).get();
-        UserHistory userHistory = userHistoryRepository.findUserHistoryByUserIdAndRoomId(kingId, vRoom.getRoomInfo().getId()).get();
-        userStatRepository.save(userStat);
-        userHistoryRepository.save(userHistory);
+        if(kingId!=-1L){
+            UserStat userStat = userStatRepository.findStatById(kingId).get();
+            UserHistory userHistory = userHistoryRepository.findUserHistoryByUserIdAndRoomId(kingId, vRoom.getRoomInfo().getId()).get();
+            userStat.setKing(userStat.getKing()+1);
+            userHistory.setKing(true);
+            userStatRepository.save(userStat);
+            userHistoryRepository.save(userHistory);
+        }
         roomInfo.setRoomHistory(roomHistory);
         roomInfoRepository.save(roomInfo);
     }
