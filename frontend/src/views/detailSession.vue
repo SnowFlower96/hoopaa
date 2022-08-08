@@ -14,13 +14,6 @@
 						<label>Session</label>
 						<input v-model="mySessionId" class="form-control" type="text" required>
 					</p>
-          <button class="btn btn-lg btn-success" @click="joinSession()">경고창 확인</button>
-					<!-- <p class="text-center">
-						<button class="btn btn-lg btn-success" @click="role=0">사회자</button>
-						<button class="btn btn-lg btn-success" @click="role=1">찬성</button>
-						<button class="btn btn-lg btn-success" @click="role=-1">반대</button>
-						role:{{this.role}}
-					</p> -->
 				</div>
 			</div>
 		</div>
