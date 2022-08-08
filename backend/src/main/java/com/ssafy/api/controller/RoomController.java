@@ -17,6 +17,7 @@ import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.common.data.VRoom;
 import com.ssafy.db.dto.UserInfoDto;
+import com.ssafy.db.entity.User;
 import io.openvidu.java.client.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -93,6 +94,7 @@ public class RoomController {
                 this.mapRooms.get(userEm).setSession(session);
                 this.mapRooms.get(userEm).setAgree(new UserInfo[openInfo.getMax_num()]);
                 this.mapRooms.get(userEm).setDisagree(new UserInfo[openInfo.getMax_num()]);
+                this.mapRooms.get(userEm).setMapParticipants(new ConcurrentHashMap<>());
             } catch (OpenViduJavaClientException | OpenViduHttpException e) {
                 throw new RuntimeException(e);
             }
@@ -123,6 +125,7 @@ public class RoomController {
     public ResponseEntity<? extends BaseResponseBody> enterRoom(@ApiIgnore Authentication authentication, @RequestBody RoomEnterReq roomEnterReq) throws OpenViduJavaClientException, OpenViduHttpException {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String id = userDetails.getUsername();
+        User user = userService.getUserById(Long.parseLong(id));
         String userEm = userService.getUserInfoDtoById((Long.parseLong(id))).getEm();
 
         // 해당 세션이 존재하지 않으면
@@ -145,6 +148,9 @@ public class RoomController {
             connection = session.createConnection(connectionProperties);
 
             vRoom.getMapConnections().put(userEm, connection);
+
+            //토론방 참가자 관리 Map에 저장
+            vRoom.getMapParticipants().put(userEm, new UserInfo(Long.parseLong(id), user.getEm(), user.getNnm(), 0, false, false, false));
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             vRoom.getMapConnections().remove(userEm);
             throw new RuntimeException(e);
@@ -308,7 +314,7 @@ public class RoomController {
         // 참여할 수 있으면
         for (int i = 0; i < max; i++) {
             if (userInfos[i] == null) {
-                userInfos[i] = new UserInfo(Long.parseLong(userId), user.getEm(), user.getNnm(), 0, false, false);
+                userInfos[i] = vRoom.getMapParticipants().get(user.getEm());
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
             }
         }
@@ -481,6 +487,91 @@ public class RoomController {
         roomService.finishRoom(vRoom);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    @PostMapping("/vote/middle")
+    @ApiOperation(value = "중간 투표", notes = "중간 투표 기능 ")
+    public ResponseEntity<? extends BaseResponseBody> voteMiddle(Authentication authentication, String sessionId, String vote){
+        SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
+        String userId = ssafyUserDetails.getUsername();
+        String userEm = userService.getUserInfoDtoById(Long.parseLong(userId)).getEm();
+
+        VRoom vRoom= this.mapRooms.get(sessionId);
+        // 해당 세션이 존재하지 않으면
+        if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+
+        //해당 토론방에 유저가 참가하지 않았다면
+        if(!vRoom.getMapParticipants().containsKey(userEm)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "User not exists"));
+
+        UserInfo userInfo = vRoom.getMapParticipants().get(userEm);
+
+        if(vote.equals("agree")){
+            if(userInfo.isHasDisagree()){ //기존에 반대였다면
+                userInfo.setHasDisagree(false);
+                //반대표 1 감소
+                vRoom.setVote_disagree(vRoom.getVote_disagree()-1);
+            }
+            //이미 찬성한 상태가 아니라면
+            if(!userInfo.isHasAgree()) {
+                //참가자의 중간 투표 현황 업데이트
+                userInfo.setHasAgree(true);
+                //찬성표 1 증가
+                vRoom.setVote_agree(vRoom.getVote_agree() + 1);
+            }
+        }else if(vote.equals("disagree")){
+            if(userInfo.isHasAgree()){ //기존에 찬성이었다면
+                userInfo.setHasAgree(false);
+                //찬성표 1 감소
+                vRoom.setVote_agree(vRoom.getVote_agree()-1);
+            }
+            //이미 찬성한 상태가 아니라면
+            if(!userInfo.isHasDisagree()) {
+                //참가자의 중간 투표 현황 업데이트
+                userInfo.setHasDisagree(true);
+                //반대표 1 증가
+                vRoom.setVote_disagree(vRoom.getVote_disagree() + 1);
+            }
+        }
+        System.out.println(vRoom.toString());
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+    }
+
+    @PostMapping("/vote/final")
+    @ApiOperation(value = "최종 투표", notes = "최종 투표 기능 ")
+    public ResponseEntity<? extends BaseResponseBody> voteFinal(Authentication authentication, String sessionId, String vote, String kingUserEm){
+        SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
+        String userId = ssafyUserDetails.getUsername();
+        String userEm = userService.getUserInfoDtoById(Long.parseLong(userId)).getEm();
+
+        VRoom vRoom= this.mapRooms.get(sessionId);
+        // 해당 세션이 존재하지 않으면
+        if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+
+        //해당 토론방에 유저가 참가하지 않았다면
+        if(!vRoom.getMapParticipants().containsKey(userEm)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "User not exists"));
+
+        UserInfo userInfo = vRoom.getMapParticipants().get(userEm);
+
+        //아직 마지막 투표를 하지 않았다면
+        if(!userInfo.isHasFinalVote()){
+            userInfo.setHasFinalVote(true);
+            if(vote.equals("agree")){
+                vRoom.setVote_final_agree(vRoom.getVote_final_agree()+1);
+            }else{
+                vRoom.setVote_final_disagree(vRoom.getVote_final_disagree()+1);
+            }
+        }
+
+        //토론왕 업데이트
+//        if(!vRoom.getMapParticipants().containsKey(kingUserEm)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "User not exists"));
+        //토론왕 투표 받은 유저
+        UserInfo kingUser = vRoom.getMapParticipants().get(kingUserEm);
+        //토론왕 득표 수 업데이트
+        kingUser.setKingCnt(kingUser.getKingCnt()+1);
+
+        System.out.println(vRoom.toString());
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
     @PostMapping("/sync")
