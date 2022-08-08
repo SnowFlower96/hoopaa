@@ -62,7 +62,7 @@ export default {
         this.visibleMainHeader = false
         document.addEventListener('scroll', this.zeroLocation)
         } 
-      else if (to.name === 'debateRoom'|| to.name === 'make-room' || to.name === 'homeToParticipate' || to.name === 'detailSession') {
+      else if (to.name === 'debateRoom'|| to.name === 'make-room' || to.name === 'homeToParticipate' || to.name === 'detailSessionView') {
         this.visibleMainHeader = false
         this.visibleMainFooter = false
       }

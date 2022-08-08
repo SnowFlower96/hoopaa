@@ -5,7 +5,7 @@
     <button @click="moderatorView">사회자뷰</button>
     <button @click="allView">방청객뷰</button>
     <button @click="teamView">패널뷰</button>
-    <router-link to="/detailSession"><button>세부세션 가기</button></router-link>
+    <router-link to="/detailSessionView"><button>세부세션 가기</button></router-link>
     <button @click="voteView">투표모달창 끄기</button>
     <!-- 뷰바꾸는 임시버튼 -->
 </div>
@@ -18,6 +18,11 @@
 </div>
 <div class="live-heart-container">
     <div id="heart-div"></div>
+    <div id="heart-div"></div>
+    <div id="clap-div"></div>
+    <div id="clap-div"></div>
+    <button @click="clapAnime">이거눌로바</button>
+    <button @click="risingHeart">dlrjeh</button>
     <div>하트 누른 갯수{{countingHeart}}</div>
 </div>
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
@@ -64,7 +69,7 @@
                 <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
             </div>
         </div>
-        <div class="moderator-menus" v-if="true" :style="customCaroselStyle">
+        <div class="moderator-menus" v-if="modMenu" :style="customCaroselStyle">
             <p>찬성측 발언권 부여</p>
             <p>반대측 발언권 부여</p>
             <p>쉬는시간 부여</p>
@@ -73,12 +78,21 @@
         <div class="debate-room-footer-class">
             <footer-team
             v-if="footerTeam"
-            @call-modal="EmitcallModal"></footer-team>
-            <footer-moderator v-if="footerModerator" @call-modal="EmitcallModal"></footer-moderator>
+            @call-modal="EmitcallModal"
+            ></footer-team>
+
+            <footer-moderator 
+            v-if="footerModerator" 
+            @call-modal="EmitcallModal"
+            @mod-menu="openCloseModMenu"
+            ></footer-moderator>
+
             <footer-all 
             v-if="footerAll"
             @rising-heart="risingHeart"
+            @clap-anime="clapAnime"
             ></footer-all>
+
             <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
         </div>
     </div>
@@ -89,7 +103,7 @@
 import debateRoomSideComponent from './debateRoomSideComponent'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
 // import animationView from './animation-view.vue'
-import detailSession from './detailSession'
+import detailSessionView from './detailSessionView'
 
 import chattingAll from './ChattingComponents/chatting-all'
 import chattingTeam from './ChattingComponents/chatting-team'
@@ -126,7 +140,7 @@ export default {
         LetTeamSpeak,
         RestTime,
         LetVote,
-        detailSession
+        detailSessionView
     },
     computed : {
         customCaroselStyle() {
@@ -193,7 +207,8 @@ export default {
             countingHeart :0,
             modMenusLoc: '',
             voteViewTF: true,
-            voteModalWidth: ''
+            voteModalWidth: '',
+            modMenu: false
         }
     },
     mounted() {
@@ -224,6 +239,16 @@ export default {
         window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
+        openCloseModMenu() {
+            this.modMenu = !this.modMenu
+        },
+        clapAnime() {
+            const stripe = document.getElementById('clap-div')
+            setTimeout(() => {
+                stripe.classList.remove('animate');
+            }, 250);
+            stripe.classList.add('animate');
+        },
         voteView() {
             this.voteViewTF = !this.voteViewTF
         },
@@ -231,7 +256,7 @@ export default {
             const stripe = document.getElementById('heart-div')
             setTimeout(() => {
                 stripe.classList.remove('animate');
-            }, 400);
+            }, 250);
             stripe.classList.add('animate');
             this.countingHeart += 1
             if(this.countingHeart === 5) {
@@ -444,8 +469,20 @@ export default {
   background-size: cover;
   left: 10px;
 }
+#clap-div {
+  position: absolute;
+  bottom: -60px;
+  width: 50px;
+  height: 50px;
+    background: url("https://user-images.githubusercontent.com/87743473/183299200-727383c3-6ae0-4631-bf17-169720b9f480.png") no-repeat;
+    background-size: cover;
+  left: 10px;
+}
+#clap-div.animate {
+    animation: bubble 0.7s linear;
+}
 #heart-div.animate {
-  animation: bubble 1s linear;
+  animation: bubble 0.7s linear;
 }
 /* .smile-div {
     position: absolute;
@@ -468,6 +505,8 @@ export default {
     }
     100% {
         bottom: 500px;
+        width: 200px;
+        height: 200px;
         opacity: 0
     }
 }
