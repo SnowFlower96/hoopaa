@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class SessionOpenReq {
+public class SessionReq {
 
     @ApiModelProperty(name = "방 ID", example = "SessionID")
     String sessionId;
