@@ -28,7 +28,7 @@
 				<div><h4>me {{this.myUserName}} {{this.role}}</h4><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
 				<div v-for="s in subscribers" :key="s.stream.connection.connectionId">
 						<h4>{{s.stream.connection.client.clientData}}</h4>
-						<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+						<user-video class="my-video" :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
 					</div>
         <!-- {{s.stream.connection.client.clientData}}&&{{s.stream.connection.dataObject.role}} -->
 				<!-- <user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click.native="updateMainVideoStreamManager(sub)"/> -->
@@ -36,6 +36,15 @@
 		</div>
 	</div>
 </template>
+
+<style>
+.my-video > #local-video-undefined {
+	outline: pink 50px solid;
+}
+#video-container {
+	background: yellow;
+}
+</style>
 
 <script>
 import axios from 'axios';

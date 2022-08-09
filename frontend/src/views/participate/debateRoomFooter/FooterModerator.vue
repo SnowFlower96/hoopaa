@@ -36,17 +36,17 @@ export default {
     color: black;
 }
 .menu-btn {
-    outline: rgb(255, 255, 5) solid 1px;
-    color: rgb(255, 255, 5);
+    outline: white solid 1px;
+    color: white;
 }
 .menu-btn:hover {
-    background-color: rgb(255, 255, 5);
+    background-color: white;
 }
 .out-btn {
-    outline: rgb(255, 49, 87) solid 1px;
-    color: rgb(255, 49, 87);
+    outline: white solid 1px;
+    color: white;
 }
 .out-btn:hover {
-    background-color: rgb(255, 49, 87);
+    background-color: white;
 }
 </style>

@@ -23,17 +23,17 @@ export default {
 .heart-btn {
     width: 5vh;
     height: 5vh;
-    outline: tomato solid 1px;
+    outline: white solid 1px;
     border-radius: 50%;
     margin-left: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: tomato;
+    color: white;
 }
 .heart-btn:hover {
     cursor: pointer;
-    background-color: tomato;
+    background-color: white;
     opacity: 50%;
     color: black;
 }
@@ -41,17 +41,16 @@ export default {
 .clap-btn {
     width: 5vh;
     height: 5vh;
-    outline: yellow solid 1px;
+    outline: white solid 1px;
     border-radius: 50%;
     margin-left: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: yellowtomato;
 }
 .clap-btn:hover {
     cursor: pointer;
-    background-color: yellow;
+    background-color: white;
     opacity: 50%;
     color: black;
 }
