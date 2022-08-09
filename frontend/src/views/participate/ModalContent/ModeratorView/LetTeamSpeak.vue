@@ -13,6 +13,7 @@
                 <div>3분<input type="radio" value="3" v-model="timeSpeak"/></div>
                 <div>5분<input type="radio" value="5" v-model="timeSpeak"/></div>
                 <div>10분<input type="radio" value="10" v-model="timeSpeak"/></div>
+                {{}}
             </div>
         </div>
     </div>

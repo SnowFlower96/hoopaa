@@ -101,7 +101,7 @@
             <div class="debate-room-wrap">
                 <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
                 <div class="videobox-side" :style="customCaroselStyle">
-                    <debate-room-side-component ></debate-room-side-component>
+                    <debate-room-side-component-agree ></debate-room-side-component-agree>
                 </div>
 
                 <div class="videobox-center" :style="customCaroselStyle">
@@ -153,6 +153,7 @@
 
 <script>
 import debateRoomSideComponent from './debateRoomSideComponent'
+import debateRoomSideComponentAgree from './debateRoomSideComponentAgree'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
 // import animationView from './animation-view.vue'
 import detailSessionView from './detailSessionView'
@@ -200,7 +201,8 @@ export default {
         LetTeamSpeak,
         RestTime,
         LetVote,
-        detailSessionView
+        detailSessionView,
+        debateRoomSideComponentAgree
     },
     async created() {
     var token = this.$store.state.tempToken;
