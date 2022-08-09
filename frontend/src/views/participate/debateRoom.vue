@@ -98,15 +98,15 @@
             <div class="debate-room-wrap">
                 <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
                 <div class="videobox-side" :style="customCaroselStyle">
-                    <debate-room-side-component-agree :room="room"></debate-room-side-component-agree>
+                    <debate-room-side-component-agree v-bind:agree="agree" :agreesub="agreesub"></debate-room-side-component-agree>
                 </div>
 
                 <div class="videobox-center" :style="customCaroselStyle">
-                    <debate-room-center-component :time-list="timeList" :room="room" ></debate-room-center-component>
+                    <debate-room-center-component v-bind:time-list="timeList" :host="host" ></debate-room-center-component>
                 </div>
 
                 <div class="videobox-side" :style="customCaroselStyle">
-                    <debate-room-side-component :room="room"></debate-room-side-component>
+                    <debate-room-side-component v-bind:disagree="disagree" :disagreesub="disagreesub"></debate-room-side-component>
 
                 </div>
             </div>
@@ -171,21 +171,15 @@ import MessageFromTeam from './ModalContent/ModeratorView/MessageFromTeam'
 import LetTeamSpeak from './ModalContent/ModeratorView/LetTeamSpeak'
 import RestTime from './ModalContent/ModeratorView/RestTime'
 import LetVote from './ModalContent/ModeratorView/LetVote'
-import axios from 'axios';
+
 import { OpenVidu } from 'openvidu-browser';
 import { mapState } from 'vuex';
-import UserVideo from '@/views/openvidu/UserVideo.vue';
-
-
-
-const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
-const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
-
 
 export default {
     name: 'debateRoom',
     components: {
         debateRoomSideComponent,
+        debateRoomSideComponentAgree,
         debateRoomCenterComponent,
         // animationView,
         chattingAll,
@@ -201,93 +195,10 @@ export default {
         RestTime,
         LetVote,
         detailSessionView,
-        debateRoomSideComponentAgree
+
     },
-    async created() {
-    var token = this.$store.state.tempToken;
-
-    // --- Get an OpenVidu object ---
-    this.room.OV = new OpenVidu();
-
-    // --- Init a session ---
-    this.room.session = this.room.OV.initSession();
-    // --- Specify the actions when events take place in the session ---
-
-    // On every new Stream received...
-    this.room.session.on("streamCreated", ({ stream }) => {
-      const subscriber = this.room.session.subscribe(stream);
-      subscriber.stream.connection.dataObject = JSON.parse(
-        subscriber.stream.connection.data
-      );
-      var clientData = subscriber.stream.connection.dataObject.clientData.split("/")
-
-      if (clientData[0] == this.room.session.sessionId)
-        this.room.host = subscriber;
-      else if (clientData[1] == 'agree') {
-        this.room.agrees.push(subscriber);
-      } else {
-        this.room.disagrees.push(subscriber);
-      }
-    });
-
-    // On every Stream destroyed...
-    // TODO
-    this.room.session.on("streamDestroyed", ({ stream }) => {
-      const index = this.subscribers.indexOf(stream.streamManager, 0);
-      if (index >= 0) {
-        this.subscribers.splice(index, 1);
-      }
-    });
-
-    // On every asynchronous exception...
-    this.room.session.on("exception", ({ exception }) => {
-      console.warn(exception);
-    });
-
-    await this.room.session
-      .connect(token, { clientData: this.user.id + '/' + this.position})
-      .then(() => {
-        console.log("Connected!!!");
-      })
-      .catch(error => {
-        console.log(
-          "There was an error connecting to the session:",
-          error.code,
-          error.message
-        );
-      });
-
-       if (this.user.id == this.room.session.sessionId) {
-         console.log("you are host");
-    } else {
-      console.log("you are pannel")
-    }
-      let publisher = this.room.OV.initPublisher(undefined, {
-        audioSource: undefined, // The source of audio. If undefined default microphone
-        videoSource: undefined, // The source of video. If undefined default webcam
-        publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
-        publishVideo: true, // Whether you want to start publishing with your video enabled or not
-        resolution: "680x480", // The resolution of your video
-        frameRate: 30, // The frame rate of your video
-        insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-        mirror: true, // Whether to mirror your local video or not
-      });
-
-      this.room.publisher = publisher;
-      if (this.user.id == this.room.session.sessionId) {
-      this.room.host = publisher;
-      } else if (this.position == 'agree') {
-        this.room.agrees.push(publisher);
-      } else {
-        this.room.disagrees.push(publisher);
-      }
-      // --- Publish your stream ---
-      this.room.session.publish(publisher);
-
-
-  },
     computed : {
-      ...mapState(["user", "position"]),
+      ...mapState(["user", "position", "tempToken"]),
         customCaroselStyle() {
             return {
                 "--debate-box-center-width": this.debateCenterBoxWidth,    // videobox-center
@@ -355,17 +266,15 @@ export default {
             voteModalWidth: '',
             modMenu: false,
 
+            OV: undefined,
+            session: undefined,
+            publisher: undefined,
+            host : undefined,
+            agree : undefined,
+            disagree : undefined,
+            agreesub : [],
+            disagreesub : [],
 
-            room : {
-              OV: undefined,
-              session: undefined,
-              publisher: undefined,
-              host : '',
-              agrees : [],
-              disagrees : {},
-            },
-			      subscribers: [],
-			      mainStreamManager: undefined,
 
             voteTeam: false,
             voteAll: false,
@@ -403,8 +312,99 @@ export default {
         window.addEventListener('resize', this.handleResizeHome);
 
 
+
     },
+    created () {
+       this.joinSession();
+    },
+  //   watch:{
+	// 	role:function(){
+	// 			this.joinSession();
+	// 	}
+	// },
+
     methods: {
+    async joinSession () {
+    const token = this.tempToken;
+    console.log(token)
+    // --- Get an OpenVidu object ---
+    this.OV = new OpenVidu();
+    console.log("1")
+    // --- Init a session ---
+    this.session = this.OV.initSession();
+    // --- Specify the actions when events take place in the session ---
+    console.log("2")
+    // On every new Stream received...
+    await this.session.on("streamCreated", ({ stream }) => {
+      const subscriber = this.session.subscribe(stream);
+      subscriber.stream.connection.dataObject = JSON.parse(
+        subscriber.stream.connection.data
+      );
+      var clientData = subscriber.stream.connection.dataObject.clientData.split("/")
+      console.log(clientData)
+      if (clientData[0] == this.session.sessionId)
+        this.host = subscriber;
+      else if (clientData[1] == 'agree') {
+        this.agreesub.push(subscriber);
+      } else if (clientData[1] == 'disagree') {
+        this.disagreesub.push(subscriber);
+      }
+    });
+    console.log("3")
+    // On every Stream destroyed...
+    // TODO
+    this.session.on("streamDestroyed", ({ stream }) => {
+      const index = this.subscribers.indexOf(stream.streamManager, 0);
+      if (index >= 0) {
+        this.subscribers.splice(index, 1);
+      }
+    });
+    console.log("4")
+    // On every asynchronous exception...
+    this.session.on("exception", ({ exception }) => {
+      console.warn(exception);
+    });
+    console.log("5")
+    await this.session
+      .connect(token, { clientData: this.user.id + '/' + this.position})
+      .then(() => {
+        let publisher = this.OV.initPublisher(undefined, {
+        audioSource: undefined, // The source of audio. If undefined default microphone
+        videoSource: undefined, // The source of video. If undefined default webcam
+        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+        publishVideo: true, // Whether you want to start publishing with your video enabled or not
+        resolution: "680x480", // The resolution of your video
+        frameRate: 30, // The frame rate of your video
+        insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+        mirror: true, // Whether to mirror your local video or not
+      });
+      if (this.user.id == this.session.sessionId) {
+      this.host = publisher;
+      console.log("호스트래")
+      } else if (this.position == 'agree') {
+        this.agree = publisher;
+        console.log("찬성이래")
+      } else if (this.position == 'disagree') {
+        this.disagree = publisher;
+        console.log("반대래")
+      }
+        console.log("Connected!!!");
+         this.session.publish(publisher);
+      })
+      .catch(error => {
+        console.log(
+          "There was an error connecting to the session:",
+          error.code,
+          error.message
+        );
+      });
+
+       if (this.user.id == this.session.sessionId) {
+         console.log("you are host");
+    } else {
+      console.log("you are pannel")
+    }
+    },
         voteFunction(status) {
             this.voteStatus = status
         },

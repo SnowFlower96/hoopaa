@@ -2,9 +2,14 @@
     <div class="debate-room-component-content-side-a">
         <!-- <div>여기에 패널 화면 넣으면 됨</div> -->
         <div class="blank-space-video-a" :style="customViewStyle"></div>
-        <div v-for="(item, index) in room.agree" :key="index" class="panel-video-a" :style="customViewStyle">
+        <div v-if="position == 'agree'" class="panel-video-a" :style="customViewStyle">
           <div class="panel-video-a-inner-a">
-            <user-video class="moderatorVideo" :stream-manager="room.agrees[index]"/>
+            <user-video  class="moderatorVideo" :stream-manager="agree"/>
+          </div>
+        </div>
+        <div v-for="item in agreesub" :key="item.stream.connection.connectionId" class="panel-video-a" :style="customViewStyle">
+          <div class="panel-video-a-inner-a">
+            <user-video class="moderatorVideo" :stream-manager="item"/>
           </div>
         </div>
 
@@ -16,18 +21,14 @@ import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
-
-
-const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
-const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
-
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 export default {
-    name : 'debateRoomSideComponent',
+    name : 'debateRoomSideComponentAgree',
     componets : {
       UserVideo
     },
     computed : {
-       ...mapState(["user"]),
+       ...mapState(["user","position"]),
         customViewStyle() {
             return {
                 "--side-video-width" : this.sideVideoWidth,
@@ -39,21 +40,14 @@ export default {
     },
     data() {
         return {
-            token : '',
-            OV: undefined,
-			      session: undefined,
-			      mainStreamManager: undefined,
-			      publisher: undefined,
-			      subscribers: [],
-            position : '',
-            role : '',
             sideVideoWidth: '',
             sideVideoHeight: '',
             sideVideoHeightInner: '',
             blankSpaceVideo: ''
         }
     },
-    props : ['room'],
+    props : ['agree','agreesub'],
+
     mounted() {
         const wValue = document.body.clientWidth*0.75*0.3-20
 
@@ -67,8 +61,7 @@ export default {
 
         window.addEventListener('resize', this.handleResizeHome);
     },
-    created () {
-    },
+
     methods: {
         handleResizeHome() {
             const wValue = document.body.clientWidth*0.75*0.3-20
@@ -82,42 +75,6 @@ export default {
             this.blankSpaceVideo = `${hBlankValue}px`
         },
 
-      joinPannel () {
-        if (this.position && this.user.em != this.session.sessionId) {
-				this.session.connect(this.token, { clientData: this.$store.state.userStat.em + '/' + this.position })
-					.then(() => {
-            console.log("connecting...");
-						// --- Get your own camera stream with the desired properties ---
-            console.log(this.session.sessionId)
-
-              let publisher = this.OV.initPublisher(undefined, {
-                audioSource: undefined, // The source of audio. If undefined default microphone
-                videoSource: undefined, // The source of video. If undefined default webcam
-                publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
-                publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-                resolution: '680x480',  // The resolution of your video
-                frameRate: 30,			// The frame rate of your video
-                insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
-                mirror: false       	// Whether to mirror your local video or not
-              });
-
-              this.mainStreamManager = publisher;
-              this.publisher = publisher;
-
-              // --- Publish your stream ---
-
-              this.session.publish(this.publisher);
-
-             console.log("connected");
-					})
-					.catch(error => {
-						console.log('There was an error connecting to the session:', error.code, error.message);
-					});
-
-      console.log("!!!!"+this.role)
-      window.addEventListener('beforeunload', this.leaveSession);
-        }
-    },
     }
 }
 </script>

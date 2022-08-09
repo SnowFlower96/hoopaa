@@ -2,9 +2,14 @@
     <div class="debate-room-component-content-side">
         <!-- <div>여기에 패널 화면 넣으면 됨</div> -->
         <div class="blank-space-video" :style="customViewStyle"></div>
-        <div v-for="(item, index) in room.disagree" :key="index" class="panel-video" :style="customViewStyle">
+        <div v-if="position == 'disagree'" class="panel-video" :style="customViewStyle">
           <div class="panel-video-inner">
-            <user-video class="moderatorVideo" :stream-manager="room.disagrees[index]"/>
+            <user-video  class="moderatorVideo" :stream-manager="disagree"/>
+          </div>
+        </div>
+        <div v-for="item in disagreesub" :key="item.stream.connection.connectionId" class="panel-video" :style="customViewStyle">
+          <div class="panel-video-inner">
+            <user-video class="moderatorVideo" :stream-manager="item"/>
           </div>
         </div>
     </div>
@@ -15,18 +20,14 @@ import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
-
-
-// const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
-// const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
-
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 export default {
     name : 'debateRoomSideComponent',
     componets : {
       UserVideo
     },
     computed : {
-       ...mapState(["user"]),
+       ...mapState(["user", "position"]),
         customViewStyle() {
             return {
                 "--side-video-width" : this.sideVideoWidth,
@@ -38,8 +39,6 @@ export default {
     },
     data() {
         return {
-            position : '',
-            role : '',
             sideVideoWidth: '',
             sideVideoHeight: '',
             sideVideoHeightInner: '',
@@ -48,7 +47,7 @@ export default {
 
         }
     },
-    props : ['room'],
+    props : ['disagree','disagreesub'],
 
     mounted() {
         const wValue = document.body.clientWidth*0.75*0.3-20

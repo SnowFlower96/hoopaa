@@ -1,7 +1,7 @@
 <template>
     <div class="debate-center-wrap" >
         <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle">
-            <user-video class="moderatorVideo" :stream-manager="room.host"/>
+            <user-video class="moderatorVideo" :stream-manager="host"/>
 
         </div>
     </div>
@@ -18,7 +18,7 @@ import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
-
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
 const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
@@ -65,10 +65,9 @@ export default {
             resol_h: 200
         }
     },
-    props : ['room'],
+    props : ['host'],
     created () {
       console.log("room 확인")
-      console.log(this.room)
     },
     mounted() {
         console.log(this.timeList)
