@@ -10,7 +10,7 @@
             <span style="font-size: 25px;" v-if="!timeList[1]">반대팀</span>
             <span style="font-size: 25px;" v-if="timeList[0]">찬성팀</span>
             <div id="speaktimer">0분0초</div>
-            <button v-if="moderator" @click="startTimer">시작하기</button>
+            <div class="st-tim-btn" v-if="moderator" @click="startTimer">시작</div>
         </div>
     </div>
     <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle"></div></div>
@@ -154,6 +154,22 @@ export default {
 </script>
 
 <style>
+.st-tim-btn {
+    width: 80px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(0, 0, 0);
+    border-radius: 10px;
+    outline: 1px solid rgba(168, 168, 168, 0.753);
+    color: rgb(182, 182, 182);
+}
+.st-tim-btn:hover {
+    outline: 1px solid white;
+    cursor: pointer;
+    color: white;
+}
 #speaktimer {
     font-size: 45px;
 }

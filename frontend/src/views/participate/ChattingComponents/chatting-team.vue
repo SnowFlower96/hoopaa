@@ -80,7 +80,6 @@ export default {
 .chat-close-btn:hover {
     cursor: pointer;
 }
-
 .chatting-team-ta {
     border-radius: 5px;
     background-color:  rgb(54, 54, 54);
