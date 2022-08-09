@@ -22,10 +22,10 @@ export default {
   },
   methods : {
     positionAgree () {
-      this.$store.state.position = 'agree'
+      this.$store.commit("SET_POSITION",'agree')
     },
     positionDisagree () {
-      this.$store.state.position = 'disagree'
+      this.$store.commit("SET_POSITION",'disagree')
     }
   },
   created () {

@@ -18,14 +18,6 @@ export default new Vuex.Store({
     headerVisible: true,
     tempToken : '',
     user : [],
-    room: {
-      OV: "",
-      session: "",
-      host: "",
-      publisher: "",
-      agrees: [],
-      disagrees: []
-    },
     position : '',
   },
 
@@ -58,9 +50,9 @@ export default new Vuex.Store({
     CREATE_TEMP_TOKEN(state, data) {
       state.tempToken = data;
     },
-    SET_ROOM(state, data) {
-      state.room = data;
-    },
+    SET_POSITION(state, data) {
+      state.position = data;
+    }
   },
 
   actions : {

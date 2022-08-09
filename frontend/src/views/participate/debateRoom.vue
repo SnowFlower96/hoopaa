@@ -52,16 +52,16 @@
                 <div class="debate-room-wrap">
                     <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
                     <div class="videobox-side" :style="customCaroselStyle">
-                        <debate-room-side-component ></debate-room-side-component>
+                        <debate-room-side-component :room = "room"></debate-room-side-component>
                     </div>
 
                     <div class="videobox-center" :style="customCaroselStyle">
-                        <debate-room-center-component ref="debateRoomSideComponent"></debate-room-center-component>
+                        <debate-room-center-component  :room = "room"></debate-room-center-component>
                     </div>
 
-                    <div class="videobox-side" :style="customCaroselStyle">
-                        <debate-room-side-component v-bind:position="position" ref="debateRoomSideComponent"></debate-room-side-component>
-                    </div>
+                    <!-- <div class="videobox-side" :style="customCaroselStyle">
+                        <debate-room-side-component :room = "room"></debate-room-side-component>
+                    </div> -->
                 </div>
             </div>
             <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
@@ -123,13 +123,12 @@ import RestTime from './ModalContent/ModeratorView/RestTime'
 import LetVote from './ModalContent/ModeratorView/LetVote'
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
-import UserVideo from '@/views/openvidu/UserVideo.vue';
-import { mapState} from 'vuex';
+import { mapState } from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 
-const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
-const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
+const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 
 
 export default {
@@ -206,8 +205,11 @@ export default {
         );
       });
 
-
-      console.log("you are host");
+       if (this.user.em == this.room.session.sessionId) {
+         console.log("you are host");
+    } else {
+      console.log("you are pannel")
+    }
       let publisher = this.room.OV.initPublisher(undefined, {
         audioSource: undefined, // The source of audio. If undefined default microphone
         videoSource: undefined, // The source of video. If undefined default webcam
@@ -230,12 +232,10 @@ export default {
       // --- Publish your stream ---
       this.room.session.publish(publisher);
 
-      // mutation
-      this.$store.dispatch("SET_ROOM", this.room);
 
   },
     computed : {
-      ...mapState(["user", "room","position"]),
+      ...mapState(["user", "position"]),
         customCaroselStyle() {
             return {
                 "--debate-box-center-width": this.debateCenterBoxWidth,    // videobox-center
@@ -309,7 +309,7 @@ export default {
               publisher: undefined,
               host : '',
               agrees : [],
-              disagrees : [],
+              disagrees : {},
             },
 			      subscribers: [],
 			      mainStreamManager: undefined,

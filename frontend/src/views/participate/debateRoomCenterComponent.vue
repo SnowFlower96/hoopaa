@@ -24,7 +24,7 @@ export default {
     UserVideo,
   },
     computed : {
-      ...mapState(["user","room"]),
+      ...mapState(["user"]),
         customViewStyle() {
             return {
                 "--center-video-height" : this.centerVideoHeight,
@@ -59,8 +59,10 @@ export default {
             resol_h: 200
         }
     },
+    props : ['room'],
     created () {
-
+      console.log("room 확인")
+      console.log(this.room)
     },
     mounted() {
 

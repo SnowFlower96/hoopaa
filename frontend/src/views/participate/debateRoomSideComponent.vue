@@ -3,11 +3,10 @@
         <!-- <div>여기에 패널 화면 넣으면 됨</div> -->
         <div class="blank-space-video" :style="customViewStyle"></div>
         <div class="panel-video" :style="customViewStyle"><div class="panel-video-inner">
-          <user-video class="moderatorVideo" :stream-manager="room.publisher"/>
+          <user-video v-for="(item, index) in room.agrees" :key="index" class="moderatorVideo" :stream-manager="item"/>
 
           <!-- <user-video class="moderatorVideo" :stream-manager="room.agrees"/> -->
         </div></div>
-        <div class="panel-video" :style="customViewStyle"><div class="panel-video-inner"></div></div>
     </div>
 </template>
 
@@ -28,7 +27,7 @@ export default {
       UserVideo
     },
     computed : {
-       ...mapState(["user","room"]),
+       ...mapState(["user"]),
         customViewStyle() {
             return {
                 "--side-video-width" : this.sideVideoWidth,
@@ -45,9 +44,12 @@ export default {
             sideVideoWidth: '',
             sideVideoHeight: '',
             sideVideoHeightInner: '',
-            blankSpaceVideo: ''
+            blankSpaceVideo: '',
+
+
         }
     },
+    props : ['room'],
 
     mounted() {
         const wValue = document.body.clientWidth*0.75*0.3-20
