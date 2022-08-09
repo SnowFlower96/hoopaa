@@ -14,7 +14,7 @@
 
 
 <!-- 투표 받는 창 -->
-<div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">
+<div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">``
     <div>
         <div class="vote-view">
             <div class="vote-view-inner">
@@ -35,7 +35,7 @@
                         <p>방청객이 투표중입니다 ...</p>
                         <p>타이머가 끝나면 종료버튼을 눌러 토론을 종료하세요</p>
                         <div class="vote-btn-wrap">
-                            <router-link to="/"><div class="vote-btn">결과화면으로</div></router-link>
+                            <router-link style="text-decoration: none;" to="/"><div class="vote-btn">결과화면으로</div></router-link>
                         </div>
                     </div>
                 </div>
@@ -94,6 +94,7 @@
 <!-- 토론방 추가기능 모달창 -->
 
 
+<!-- 토론방 메인화면 -->
 <div class="debate-backcolor">
     <div class="video-chatt-wrap">
         <div class="debate-background" :style="customCaroselStyle">
@@ -104,7 +105,7 @@
                 </div>
 
                 <div class="videobox-center" :style="customCaroselStyle">
-                    <debate-room-center-component ref="debateRoomSideComponent"></debate-room-center-component>
+                    <debate-room-center-component :time-list="timeList" ref="debateRoomSideComponent"></debate-room-center-component>
                 </div>
 
                 <div class="videobox-side" :style="customCaroselStyle">
@@ -119,7 +120,7 @@
     </div>
 
     <div class="moderator-menus" v-if="modMenu" :style="customCaroselStyle">
-        <p>패널 발언권 부여</p>
+        <p @click="EmitcallModal('menu')">패널 발언권 부여</p>
         <p>쉬는시간 부여</p>
         <p @click="voteVisible">투표 보내기</p>
     </div>
@@ -145,6 +146,7 @@
         <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
     </div>
 </div>
+<!-- 토론방 메인화면 -->
 <button @click="leaveSession">닫기닫기닫기</button>
 </template>
 
@@ -346,8 +348,8 @@ export default {
             voteMod: false,
 
             voteTime: 60,
-
             voteStatus: null
+
         }
     },
     mounted() {
@@ -376,9 +378,6 @@ export default {
         this.modMenusLoc = `${wVideoValue*0.36}px`
         this.voteModalWidth = `${debateBackground}px`
         window.addEventListener('resize', this.handleResizeHome);
-
-        // 타이머 로직
-
         
 
     },
@@ -404,7 +403,7 @@ export default {
                 clearInterval(x);
                 document.getElementById("demo").innerHTML = "투표가 종료되었습니다";
             }
-        }, 1000);
+            }, 1000);
 
         // 타이머 로직
         },
@@ -809,9 +808,11 @@ export default {
     /* outline: solid 3px orange; */
 }
 .call-to-moderator-center {
-    background-color: whitesmoke;
     border-radius: 10px;
-    outline: black 3px solid;
+    background: rgba(0, 0, 0, 0.856);
+    border-radius: 10px;
+    outline: rgb(122, 122, 122) 1px solid;
+    box-shadow: 3px 10px 10px 3px  rgba(0, 0, 0, 0.589);
 }
 /* 사회자에게 메세지 보내기 스타일 라인 */
 
