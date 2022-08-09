@@ -4,7 +4,8 @@
         <div class="blank-space-video" :style="customViewStyle"></div>
         <div class="panel-video" :style="customViewStyle"><div class="panel-video-inner">
           <user-video class="moderatorVideo" :stream-manager="room.publisher"/>
-          <user-video class="moderatorVideo" :stream-manager="room.agrees"/>
+
+          <!-- <user-video class="moderatorVideo" :stream-manager="room.agrees"/> -->
         </div></div>
         <div class="panel-video" :style="customViewStyle"><div class="panel-video-inner"></div></div>
     </div>
@@ -18,8 +19,8 @@ import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 
-const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
-const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
+// const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
+// const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 
 export default {
     name : 'debateRoomSideComponent',
@@ -74,48 +75,48 @@ export default {
             this.blankSpaceVideo = `${hBlankValue}px`
         },
 
-      async joinPannel () {
-       var data = {
-        pwd : '',
-        sessionId : this.room.session.sessionId
-       }
+    //   async joinPannel () {
+    //    var data = {
+    //     pwd : '',
+    //     sessionId : this.room.session.sessionId
+    //    }
 
-      //await this.$store.dispatch("enterRoom",data)
-       var token = this.$store.state.tempToken;
+    //   //await this.$store.dispatch("enterRoom",data)
+    //    var token = this.$store.state.tempToken;
 
-    //await this.room.session.disconnect();
+    // //await this.room.session.disconnect();
 
-    await this.room.session
-      .connect(token, { clientData: this.user.em + '/' + this.position})
-      .then(() => {
-        console.log("Connected!!!");
-      })
-      .catch(error => {
-        console.log(
-          "There was an error connecting to the session:",
-          error.code,
-          error.message
-        );
-      });
-      console.log("you are pannel");
-      let publisher = this.room.OV.initPublisher(undefined, {
-        audioSource: undefined, // The source of audio. If undefined default microphone
-        videoSource: undefined, // The source of video. If undefined default webcam
-        publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
-        publishVideo: true, // Whether you want to start publishing with your video enabled or not
-        resolution: "680x480", // The resolution of your video
-        frameRate: 30, // The frame rate of your video
-        insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-        mirror: true, // Whether to mirror your local video or not
-      });
+    // await this.room.session
+    //   .connect(token, { clientData: this.user.em + '/' + this.position})
+    //   .then(() => {
+    //     console.log("Connected!!!");
+    //   })
+    //   .catch(error => {
+    //     console.log(
+    //       "There was an error connecting to the session:",
+    //       error.code,
+    //       error.message
+    //     );
+    //   });
+    //   console.log("you are pannel");
+    //   let publisher = this.room.OV.initPublisher(undefined, {
+    //     audioSource: undefined, // The source of audio. If undefined default microphone
+    //     videoSource: undefined, // The source of video. If undefined default webcam
+    //     publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+    //     publishVideo: true, // Whether you want to start publishing with your video enabled or not
+    //     resolution: "680x480", // The resolution of your video
+    //     frameRate: 30, // The frame rate of your video
+    //     insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+    //     mirror: true, // Whether to mirror your local video or not
+    //   });
 
-      this.room.publisher = publisher;
-      this.room.agrees = publisher;
-      // --- Publish your stream ---
-      this.room.session.publish(publisher);
+    //   this.room.publisher = publisher;
+    //   this.room.agrees = publisher;
+    //   // --- Publish your stream ---
+    //   this.room.session.publish(publisher);
 
 
-    },
+    // },
 
 }
 }

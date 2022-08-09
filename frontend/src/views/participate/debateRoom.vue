@@ -7,7 +7,6 @@
     <button @click="teamView">패널뷰</button>
     <router-link to="/detailSessionView"><button>세부세션 가기</button></router-link>
     <button @click="voteView">투표모달창 끄기</button>
-    <button @click="positionAgree">찬성</button>
     <!-- 뷰바꾸는 임시버튼 -->
 </div>
 
@@ -129,8 +128,9 @@ import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 
-const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
-const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
+const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+
 
 export default {
     name: 'debateRoom',
@@ -172,7 +172,11 @@ export default {
       console.log(clientData);
       if (clientData[0] == this.room.session.sessionId)
         this.room.host = subscriber;
-      else this.room.agrees=subscriber;
+      else if (clientData[1] == 'agree') {
+        this.room.agrees.push(subscriber);
+      } else {
+        this.room.disagrees.push(subscriber);
+      }
     });
 
     // On every Stream destroyed...
@@ -190,7 +194,7 @@ export default {
     });
 
     await this.room.session
-      .connect(token, { clientData: this.user.em })
+      .connect(token, { clientData: this.user.em + '/' + this.position})
       .then(() => {
         console.log("Connected!!!");
       })
@@ -202,7 +206,7 @@ export default {
         );
       });
 
-    if (this.user.em == this.room.session.sessionId) {
+
       console.log("you are host");
       let publisher = this.room.OV.initPublisher(undefined, {
         audioSource: undefined, // The source of audio. If undefined default microphone
@@ -216,15 +220,22 @@ export default {
       });
 
       this.room.publisher = publisher;
+      if (this.user.em == this.room.session.sessionId) {
       this.room.host = publisher;
-
+      } else if (this.position == 'agree') {
+        this.room.agrees.push(publisher);
+      } else {
+        this.room.disagrees.push(publisher);
+      }
       // --- Publish your stream ---
       this.room.session.publish(publisher);
 
-    }
+      // mutation
+      this.$store.dispatch("SET_ROOM", this.room);
+
   },
     computed : {
-      ...mapState(["user", "room"]),
+      ...mapState(["user", "room","position"]),
         customCaroselStyle() {
             return {
                 "--debate-box-center-width": this.debateCenterBoxWidth,    // videobox-center
@@ -252,8 +263,6 @@ export default {
     },
     data() {
         return {
-            position : '',
-
             debateCenterBoxWidth: '',
             debateCenterBoxHeight: '',
 
@@ -292,7 +301,18 @@ export default {
             modMenusLoc: '',
             voteViewTF: true,
             voteModalWidth: '',
-            modMenu: false
+            modMenu: false,
+
+            room : {
+              OV: undefined,
+              session: undefined,
+              publisher: undefined,
+              host : '',
+              agrees : [],
+              disagrees : [],
+            },
+			      subscribers: [],
+			      mainStreamManager: undefined,
         }
     },
     mounted() {
@@ -520,17 +540,6 @@ export default {
         leaveSession() {
           this.$refs.debateRoomSideComponent.leaveSession();
         },
-      // 찬성 참여
-      positionAgree() {
-        this.position = 'agree',
-        this.$refs.debateRoomSideComponent.position = 'agree';
-        this.$refs.debateRoomSideComponent.joinPannel()
-      },
-      positionDisagree() {
-        this.position = 'disagree',
-        this.$refs.debateRoomSideComponent.position = 'disagree';
-        this.$refs.debateRoomSideComponent.joinPannel()
-      },
     }
 }
 </script>

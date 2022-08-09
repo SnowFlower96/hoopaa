@@ -25,7 +25,8 @@ export default new Vuex.Store({
       publisher: "",
       agrees: [],
       disagrees: []
-    }
+    },
+    position : '',
   },
 
   mutations : {
@@ -57,7 +58,9 @@ export default new Vuex.Store({
     CREATE_TEMP_TOKEN(state, data) {
       state.tempToken = data;
     },
-
+    SET_ROOM(state, data) {
+      state.room = data;
+    },
   },
 
   actions : {
