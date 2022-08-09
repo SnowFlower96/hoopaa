@@ -3,7 +3,8 @@
         <!-- <div>여기에 패널 화면 넣으면 됨</div> -->
         <div class="blank-space-video" :style="customViewStyle"></div>
         <div class="panel-video" :style="customViewStyle"><div class="panel-video-inner">
-          <user-video class="moderatorVideo" :stream-manager="publisher" v-if="position == 'agree'"/>
+          <user-video class="moderatorVideo" :stream-manager="room.publisher"/>
+          <user-video class="moderatorVideo" :stream-manager="room.agrees"/>
         </div></div>
         <div class="panel-video" :style="customViewStyle"><div class="panel-video-inner"></div></div>
     </div>
@@ -26,7 +27,7 @@ export default {
       UserVideo
     },
     computed : {
-       ...mapState(["user"]),
+       ...mapState(["user","room"]),
         customViewStyle() {
             return {
                 "--side-video-width" : this.sideVideoWidth,
@@ -38,12 +39,6 @@ export default {
     },
     data() {
         return {
-            token : '',
-            OV: undefined,
-			      session: undefined,
-			      mainStreamManager: undefined,
-			      publisher: undefined,
-			      subscribers: [],
             position : '',
             role : '',
             sideVideoWidth: '',
@@ -66,43 +61,6 @@ export default {
 
         window.addEventListener('resize', this.handleResizeHome);
     },
-    created () {
-      this.token = this.$store.state.tempToken;
-
-      	// --- Get an OpenVidu object ---
-			this.OV = new OpenVidu();
-
-			// --- Init a session ---
-			this.session = this.OV.initSession();
-			// --- Specify the actions when events take place in the session ---
-
-			// On every new Stream received...
-			this.session.on('streamCreated', ({ stream }) => {
-				const subscriber = this.session.subscribe(stream);
-        subscriber.stream.connection.dataObject=JSON.parse(subscriber.stream.connection.data)
-        subscriber.stream.connection.role=this.role
-				this.subscribers.push(subscriber);
-			});
-
-			// On every Stream destroyed...
-			this.session.on('streamDestroyed', ({ stream }) => {
-				const index = this.subscribers.indexOf(stream.streamManager, 0);
-				if (index >= 0) {
-					this.subscribers.splice(index, 1);
-				}
-			});
-
-			// On every asynchronous exception...
-			this.session.on('exception', ({ exception }) => {
-				console.warn(exception);
-			});
-
-			// --- Connect to the session with a valid user token ---
-
-			// 'getToken' method is simulating what your server-side should do.
-			// 'token' parameter should be retrieved and returned by your own backend
-      console.log("before connect", this.token);
-    },
     methods: {
         handleResizeHome() {
             const wValue = document.body.clientWidth*0.75*0.3-20
@@ -115,44 +73,51 @@ export default {
             this.sideVideoHeightInner = `${hValue}px`
             this.blankSpaceVideo = `${hBlankValue}px`
         },
-        
-      joinPannel () {
-        if (this.position && this.user.em != this.session.sessionId) {
-				this.session.connect(this.token, { clientData: this.$store.state.userStat.em + '/' + this.position })
-					.then(() => {
-            console.log("connecting...");
-						// --- Get your own camera stream with the desired properties ---
-            console.log(this.session.sessionId)
 
-              let publisher = this.OV.initPublisher(undefined, {
-                audioSource: undefined, // The source of audio. If undefined default microphone
-                videoSource: undefined, // The source of video. If undefined default webcam
-                publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
-                publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-                resolution: '680x480',  // The resolution of your video
-                frameRate: 30,			// The frame rate of your video
-                insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
-                mirror: false       	// Whether to mirror your local video or not
-              });
+      async joinPannel () {
+       var data = {
+        pwd : '',
+        sessionId : this.room.session.sessionId
+       }
 
-              this.mainStreamManager = publisher;
-              this.publisher = publisher;
+      //await this.$store.dispatch("enterRoom",data)
+       var token = this.$store.state.tempToken;
 
-              // --- Publish your stream ---
+    //await this.room.session.disconnect();
 
-              this.session.publish(this.publisher);
+    await this.room.session
+      .connect(token, { clientData: this.user.em + '/' + this.position})
+      .then(() => {
+        console.log("Connected!!!");
+      })
+      .catch(error => {
+        console.log(
+          "There was an error connecting to the session:",
+          error.code,
+          error.message
+        );
+      });
+      console.log("you are pannel");
+      let publisher = this.room.OV.initPublisher(undefined, {
+        audioSource: undefined, // The source of audio. If undefined default microphone
+        videoSource: undefined, // The source of video. If undefined default webcam
+        publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+        publishVideo: true, // Whether you want to start publishing with your video enabled or not
+        resolution: "680x480", // The resolution of your video
+        frameRate: 30, // The frame rate of your video
+        insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+        mirror: true, // Whether to mirror your local video or not
+      });
 
-             console.log("connected");
-					})
-					.catch(error => {
-						console.log('There was an error connecting to the session:', error.code, error.message);
-					});
+      this.room.publisher = publisher;
+      this.room.agrees = publisher;
+      // --- Publish your stream ---
+      this.room.session.publish(publisher);
 
-      console.log("!!!!"+this.role)
-      window.addEventListener('beforeunload', this.leaveSession);
-        }
+
     },
-    }
+
+}
 }
 </script>
 
