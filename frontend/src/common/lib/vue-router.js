@@ -16,6 +16,7 @@ import detailSessionView from '@/views/participate/detailSessionView'
 import detailSession from '@/views/participate/detailSession'
 import test from '@/views/participate/test'
 
+import endDebate from '@/views/participate/end/endDebate'
 
 import signUpEmail from '@/views/user/email'
 import gameSetPage from '@/views/debate-hosting/game-set-page'
@@ -162,6 +163,11 @@ function makeRoutesFromMenu () {
   name: 'detailSession',
   component: detailSession,
 },
+{
+  path : '/endDebate',
+  name: 'endDebate',
+  component: endDebate,
+}
   )
 
   return routes

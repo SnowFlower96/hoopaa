@@ -1,199 +1,201 @@
-<template>
-<div v-if="imgTF" class="startImg">
-<!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
-    <!-- <animation-view></animation-view> -->
-    <!-- 뷰바꾸는 임시버튼 -->
-    <button @click="moderatorView">사회자뷰</button>
-    <button @click="allView">방청객뷰</button>
-    <button @click="teamView">패널뷰</button>
-    <router-link to="/detailSessionView"><button>세부세션 가기</button></router-link>
-    <button @click="positionAgree">찬성</button>
-    <!-- <div id="demo">넨</div> -->
-    <!-- 뷰바꾸는 임시버튼 -->
-</div>
-
-<!-- 쉬는시간 모달 -->
-<div class="vote-modal-container" v-if="restModal" :style="customCaroselStyle">
-    <div class="rest-timer">
-        <p id="restTimerDemo">0분0초</p>
+<template id="debate-room-body">
+<div >
+    <div v-if="imgTF" class="startImg">
+    <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
+        <!-- <animation-view></animation-view> -->
+        <!-- 뷰바꾸는 임시버튼 -->
+        <button @click="moderatorView">사회자뷰</button>
+        <button @click="allView">방청객뷰</button>
+        <button @click="teamView">패널뷰</button>
+        <router-link to="/detailSessionView"><button>세부세션 가기</button></router-link>
+        <button @click="positionAgree">찬성</button>
+        <!-- <div id="demo">넨</div> -->
+        <!-- 뷰바꾸는 임시버튼 -->
     </div>
-    <div class="rest-animation">
-        여기 애니메이션 들어갈곳
+
+    <!-- 쉬는시간 모달 -->
+    <div class="vote-modal-container" v-if="restModal" :style="customCaroselStyle">
+        <div class="rest-timer">
+            <p id="restTimerDemo">0분0초</p>
+        </div>
+        <div class="rest-animation">
+            여기 애니메이션 들어갈곳
+        </div>
     </div>
-</div>
-<!-- 쉬는시간 모달 -->
+    <!-- 쉬는시간 모달 -->
 
 
-<!-- 투표 받는 창 -->
-<div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">
-    <div>
-        <div class="vote-view">
-            <div class="vote-view-inner">
-                <div class="common-vote-view">
-                    <div class="all-view-wrap">
-                        <div style="font-size: 40px;">최종 투표</div>
-                        <div class="timer">
-                            <div id="demo"></div>
+    <!-- 투표 받는 창 -->
+    <div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">
+        <div>
+            <div class="vote-view">
+                <div class="vote-view-inner">
+                    <div class="common-vote-view">
+                        <div class="all-view-wrap">
+                            <div style="font-size: 40px;">최종 투표</div>
+                            <div class="timer">
+                                <div id="demo"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div v-if="voteTeam" class="team-view">
-                    <p>방청객이 투표중입니다 ...</p>
-                </div>
-                <div v-if="voteMod" class="mod-view">
-                    <div>
+                    <div v-if="voteTeam" class="team-view">
                         <p>방청객이 투표중입니다 ...</p>
-                        <p>타이머가 끝나면 종료버튼을 눌러 토론을 종료하세요</p>
-                        <div class="vote-btn-wrap">
-                            <router-link style="text-decoration: none;" to="/"><div class="vote-btn">결과화면으로</div></router-link>
+                    </div>
+                    <div v-if="voteMod" class="mod-view">
+                        <div>
+                            <p>방청객이 투표중입니다 ...</p>
+                            <p>타이머가 끝나면 종료버튼을 눌러 토론을 종료하세요</p>
+                            <div class="vote-btn-wrap">
+                                <router-link style="text-decoration: none;" to="/endDebate"><div class="vote-btn">결과화면으로</div></router-link>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div v-if="voteAll" class="all-view">
-                    <div class="all-view-wrap">
-                        <p>당신의 최종 의견을 투표하세요</p> 
-                        <p>제한시간안에 투표하지 않으면 무효 처리됩니다</p>
-                        <p>타이머가 끝나면 자동으로 제출됩니다</p>
-                        <div class="vote-btn-wrap">
-                            <div class="vote-btn" @click="voteFunction(1)">찬성</div>
-                            <div class="vote-btn" @click="voteFunction(0)">반대</div>
+                    <div v-if="voteAll" class="all-view">
+                        <div class="all-view-wrap">
+                            <p>당신의 최종 의견을 투표하세요</p> 
+                            <p>제한시간안에 투표하지 않으면 무효 처리됩니다</p>
+                            <p>타이머가 끝나면 자동으로 제출됩니다</p>
+                            <div class="vote-btn-wrap">
+                                <div class="vote-btn" @click="voteFunction(1)">찬성</div>
+                                <div class="vote-btn" @click="voteFunction(0)">반대</div>
+                            </div>
+                            <p>
+                                <span v-if="voteStatus">찬성</span> 
+                                <span v-if="!voteStatus">반대</span> 
+                                을(를) 선택하셨습니다</p>
                         </div>
-                        <p>
-                            <span v-if="voteStatus">찬성</span> 
-                            <span v-if="!voteStatus">반대</span> 
-                            을(를) 선택하셨습니다</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- 투표 받는 창 -->
+    <!-- 투표 받는 창 -->
 
 
-<!-- 방청객 반응 -->
-<div class="live-heart-container" :style="customCaroselStyle">
-    <div id="heart-div"></div>
-    <div id="heart-div"></div>
-    <div id="clap-div"></div>
-    <div id="clap-div"></div>
-    <div>하트 누른 갯수{{countingHeart}}</div>
-</div>
-<!-- 방청객 반응 -->
-
-
-<!-- 토론방 추가기능 모달창 -->
-<div v-if="callToMdModal" class="call-to-moderator-container" :style="customCaroselStyle">
-    <div class="call-to-moderator-blank"></div>
-    <div class="call-to-moderator">
-        <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
-        <div class="call-to-moderator-inner-c call-to-moderator-center" :style="customCaroselStyle">
-            <div class="modal-icon" @click="offCallModal"><i class="fas fa-times"></i></div>
-            <call-to-moderator v-if="message"></call-to-moderator>
-
-            <user-out v-if="out"></user-out>
-
-            <message-from-team v-if="messageFrom"></message-from-team>
-
-            <upload-file v-if="file"></upload-file>
-
-            <let-team-speak 
-            v-if="menu"
-            @emit-time="EmitTime"
-            ></let-team-speak>
-
-            <rest-time 
-            v-if="rest"
-            @emit-rest="EmitRest"
-            ></rest-time>
-        </div>
-        <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
+    <!-- 방청객 반응 -->
+    <div class="live-heart-container" :style="customCaroselStyle">
+        <div id="heart-div"></div>
+        <div id="heart-div"></div>
+        <div id="clap-div"></div>
+        <div id="clap-div"></div>
+        <!-- <div>하트 누른 갯수{{countingHeart}}</div> -->
     </div>
-    <div class="call-to-moderator-blank"></div>
-</div>
-<!-- 토론방 추가기능 모달창 -->
+    <!-- 방청객 반응 -->
 
 
-<!-- 토론방 메인화면 -->
-<div class="debate-backcolor">
+    <!-- 토론방 추가기능 모달창 -->
+    <div v-if="callToMdModal" class="call-to-moderator-container" :style="customCaroselStyle">
+        <div class="call-to-moderator-blank"></div>
+        <div class="call-to-moderator">
+            <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
+            <div class="call-to-moderator-inner-c call-to-moderator-center" :style="customCaroselStyle">
+                <div class="modal-icon" @click="offCallModal"><i class="fas fa-times"></i></div>
+                <call-to-moderator v-if="message"></call-to-moderator>
 
-    <!-- 메인화면 + 채팅 -->
-        <div class="video-chatt-wrap">
+                <user-out v-if="out"></user-out>
 
-            <!-- 메인화면 (비디오 + 화면공유 컴포넌트 모인곳) -->
-                <div class="debate-background" :style="customCaroselStyle">
-                    <div class="debate-room-wrap">
-                        <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
-                        <div class="videobox-side" :style="customCaroselStyle">
-                            <debate-room-side-component-agree ></debate-room-side-component-agree>
-                        </div>
+                <message-from-team v-if="messageFrom"></message-from-team>
 
-                        <div class="videobox-center" :style="customCaroselStyle">
-                            <debate-room-center-component 
-                            :time-list="timeList" 
-                            ref="debateRoomSideComponent"
-                            :moderator="moderator"
-                            :all="all"
-                            :team="team"
-                            ></debate-room-center-component>
-                        </div>
+                <upload-file v-if="file"></upload-file>
 
-                        <div class="videobox-side" :style="customCaroselStyle">
-                            <debate-room-side-component v-bind:position="position" ref="debateRoomSideComponent"></debate-room-side-component>
+                <let-team-speak 
+                v-if="menu"
+                @emit-time="EmitTime"
+                ></let-team-speak>
+
+                <rest-time 
+                v-if="rest"
+                @emit-rest="EmitRest"
+                ></rest-time>
+            </div>
+            <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
+        </div>
+        <div class="call-to-moderator-blank"></div>
+    </div>
+    <!-- 토론방 추가기능 모달창 -->
+
+
+    <!-- 토론방 메인화면 -->
+    <div class="debate-backcolor">
+
+        <!-- 메인화면 + 채팅 -->
+            <div class="video-chatt-wrap">
+
+                <!-- 메인화면 (비디오 + 화면공유 컴포넌트 모인곳) -->
+                    <div class="debate-background" :style="customCaroselStyle">
+                        <div class="debate-room-wrap">
+                            <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
+                            <div class="videobox-side" :style="customCaroselStyle">
+                                <debate-room-side-component-agree ></debate-room-side-component-agree>
+                            </div>
+
+                            <div class="videobox-center" :style="customCaroselStyle">
+                                <debate-room-center-component 
+                                :time-list="timeList" 
+                                ref="debateRoomSideComponent"
+                                :moderator="moderator"
+                                :all="all"
+                                :team="team"
+                                ></debate-room-center-component>
+                            </div>
+
+                            <div class="videobox-side" :style="customCaroselStyle">
+                                <debate-room-side-component v-bind:position="position" ref="debateRoomSideComponent"></debate-room-side-component>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <!-- 메인화면 (비디오 + 화면공유 컴포넌트 모인곳) -->
+                <!-- 메인화면 (비디오 + 화면공유 컴포넌트 모인곳) -->
 
 
-            <!-- 채팅창 -->
-                <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
-                    <chatting-all v-if="chattingAllView" @close-chat="changeChatView"></chatting-all>
-                    <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
-                </div>
-            <!-- 채팅창 -->
+                <!-- 채팅창 -->
+                    <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
+                        <chatting-all v-if="chattingAllView" @close-chat="changeChatView"></chatting-all>
+                        <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
+                    </div>
+                <!-- 채팅창 -->
 
 
-        </div>
-    <!-- 메인화면 + 채팅 -->
+            </div>
+        <!-- 메인화면 + 채팅 -->
 
 
-    <!-- 사회자 footer에서 나오는 메뉴 -->
-        <div class="moderator-menus" v-if="modMenu" :style="customCaroselStyle">
-            <p @click="EmitcallModal('menu')">패널 발언권 부여</p>
-            <p @click="EmitcallModal('rest')">쉬는시간 부여</p>
-            <p @click="voteVisible">투표 보내기</p>
-        </div>
-    <!-- 사회자 footer에서 나오는 메뉴 -->
+        <!-- 사회자 footer에서 나오는 메뉴 -->
+            <div class="moderator-menus" v-if="modMenu" :style="customCaroselStyle">
+                <p @click="EmitcallModal('menu')">패널 발언권 부여</p>
+                <p @click="EmitcallModal('rest')">쉬는시간 부여</p>
+                <p @click="voteVisible">투표 보내기</p>
+            </div>
+        <!-- 사회자 footer에서 나오는 메뉴 -->
 
 
-    <!-- footer -->
-        <div class="debate-room-footer-class">
-            <footer-team
-            v-if="footerTeam"
-            @call-modal="EmitcallModal"
-            ></footer-team>
+        <!-- footer -->
+            <div class="debate-room-footer-class">
+                <footer-team
+                v-if="footerTeam"
+                @call-modal="EmitcallModal"
+                ></footer-team>
 
-            <footer-moderator
-            v-if="footerModerator"
-            @call-modal="EmitcallModal"
-            @mod-menu="openCloseModMenu"
-            ></footer-moderator>
+                <footer-moderator
+                v-if="footerModerator"
+                @call-modal="EmitcallModal"
+                @mod-menu="openCloseModMenu"
+                ></footer-moderator>
 
-            <footer-all
-            v-if="footerAll"
-            @rising-heart="risingHeart"
-            @clap-anime="clapAnime"
-            ></footer-all>
+                <footer-all
+                v-if="footerAll"
+                @rising-heart="risingHeart"
+                @clap-anime="clapAnime"
+                ></footer-all>
 
-            <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
-        </div>
-    <!-- footer -->
+                <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
+            </div>
+        <!-- footer -->
 
+    </div>
+    <!-- 토론방 메인화면 -->
+    <button @click="leaveSession">닫기닫기닫기</button>
 </div>
-<!-- 토론방 메인화면 -->
-<button @click="leaveSession">닫기닫기닫기</button>
 </template>
 
 
@@ -763,7 +765,7 @@ export default {
     right: 20px;
     cursor: pointer;
 }
-body {
+#debate-room-body {
     overflow: hidden;
 }
 .vote-view {
@@ -862,18 +864,18 @@ body {
 
 #heart-div {
   position: absolute;
-  bottom: -60px;
-  width: 50px;
-  height: 50px;
+  bottom: 0px;
+  width: 0px;
+  height: 0px;
   background: url("https://s3.us-east-2.amazonaws.com/upload-icon/uploads/icons/png/15721583221557740359-512.png") no-repeat;
   background-size: cover;
   left: 10px;
 }
 #clap-div {
   position: absolute;
-  bottom: -60px;
-  width: 50px;
-  height: 50px;
+  bottom: 0px;
+  width: 0px;
+  height: 0px;
     background: url("https://user-images.githubusercontent.com/87743473/183299200-727383c3-6ae0-4631-bf17-169720b9f480.png") no-repeat;
     background-size: cover;
   left: 10px;
@@ -897,6 +899,8 @@ body {
 
 @keyframes bubble {
     0% {
+        width: 10px;
+        height: 10px;
         bottom: 0px;
         opacity: 1
     }
