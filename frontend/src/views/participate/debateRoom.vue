@@ -77,14 +77,19 @@
     <div class="call-to-moderator-blank"></div>
     <div class="call-to-moderator">
         <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
-        <div class="call-to-moderator-inner call-to-moderator-center" :style="customCaroselStyle">
+        <div class="call-to-moderator-inner-c call-to-moderator-center" :style="customCaroselStyle">
             <button @click="offCallModal">끄기</button>
             <call-to-moderator v-if="message"></call-to-moderator>
             <user-out v-if="out"></user-out>
             <message-from-team v-if="messageFrom"></message-from-team>
             <upload-file v-if="file"></upload-file>
-            <let-team-speak v-if="menu"></let-team-speak>
-            <rest-time v-if="false"></rest-time>
+
+            <let-team-speak 
+            v-if="menu"
+            @emit-time="EmitTime"
+            ></let-team-speak>
+
+            <rest-time v-if="rest"></rest-time>
             <let-vote v-if="false"></let-vote>
         </div>
         <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
@@ -121,7 +126,7 @@
 
     <div class="moderator-menus" v-if="modMenu" :style="customCaroselStyle">
         <p @click="EmitcallModal('menu')">패널 발언권 부여</p>
-        <p>쉬는시간 부여</p>
+        <p @click="EmitcallModal('rest')">쉬는시간 부여</p>
         <p @click="voteVisible">투표 보내기</p>
     </div>
 
@@ -296,6 +301,7 @@ export default {
                 "--call-to-md-ct" : this.callToMDCt,
                 "--call-to-md-in-width" : this.callToMDInW,
                 "--call-to-md-in-height" : this.callToMDInH,
+                "--call-to-md-in-height-c" : this.callToMDINHC,
                 "--mod-menus-loc" : this.modMenusLoc,
                 "--vote-modal-width" : this.voteModalWidth
             }
@@ -331,6 +337,7 @@ export default {
             callToMDCt: '',
             callToMDInW: '',
             callToMDInH: '',
+            callToMDINHC: '',
 
             callToMdModal: false,
 
@@ -338,6 +345,7 @@ export default {
             file: false,
             out: false,
             menu: false,
+            rest: false,
             options: [this.menu, this.out, this.message, this.file],
             countingHeart :0,
             modMenusLoc: '',
@@ -350,7 +358,12 @@ export default {
             voteMod: false,
 
             voteTime: 60,
-            voteStatus: null
+            voteStatus: null,
+
+            timerTime:null,
+            timerTeam:null,
+
+            timeList:[] // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
 
         }
     },
@@ -375,7 +388,8 @@ export default {
         this.callToMDBlnk = `${debateBackground*0.3}px`
         this.callToMDCt = `${debateBackground*0.4}px`
         this.callToMDInW = `${debateBackground*0.4}px`
-        this.callToMDInH = `${hValue*0.31}px`
+        this.callToMDInH = `${hValue*0.25}px`
+        this.callToMDINHC = `${hValue*0.4}px`
 
         this.modMenusLoc = `${wVideoValue*0.36}px`
         this.voteModalWidth = `${debateBackground}px`
@@ -384,6 +398,13 @@ export default {
 
     },
     methods: {
+        EmitTime(Array) {
+            this.timerTime = Array[0]*60
+            this.timerTeam = Array[1]
+            this.timeList = [this.timerTime, this.timerTeam]
+            console.log(this.timeList)
+            this.callToMdModal = false
+        },
         voteFunction(status) {
             this.voteStatus = status
         },
@@ -595,24 +616,35 @@ export default {
                 this.out = false
                 this.message = false
                 this.file = false
+                this.rest = false
             }
             else if (option == 'out') {
                 this.menu = false
                 this.out = true
                 this.message = false
                 this.file = false
+                this.rest = false
             }
             else if (option == 'message') {
                 this.menu = false
                 this.out = false
                 this.message = true
                 this.file = false
+                this.rest = false
             }
             else if (option == 'file') {
                 this.menu = false
                 this.out = false
                 this.message = false
                 this.file = true
+                this.rest = false
+            }
+            else if (option == 'rest') {
+                this.menu = false
+                this.out = false
+                this.message = false
+                this.file = false
+                this.rest = true
             }
         },
         leaveSession() {
@@ -807,6 +839,11 @@ export default {
 .call-to-moderator-inner {
     width: var(--call-to-md-in-width);
     height: var(--call-to-md-in-height);
+    /* outline: solid 3px orange; */
+}
+.call-to-moderator-inner-c {
+    width: var(--call-to-md-in-width);
+    height: var(--call-to-md-in-height-c);
     /* outline: solid 3px orange; */
 }
 .call-to-moderator-center {

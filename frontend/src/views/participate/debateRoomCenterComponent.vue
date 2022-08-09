@@ -7,9 +7,13 @@
     </div>
     <div class="debate-guague" :style="customViewStyle">
         <div class="debate-guague-inner" :style="customViewStyle">
+            <span v-if="!timeList[1]">반대팀</span>
+            <span v-if="timeList[0]">찬성팀</span>
+            <div id="demo">{{parseInt(timeList[0])/60}}분0초</div>
+            <button @click="startTimer">시작하기</button>
         </div>
     </div>
-    <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle">자료화면</div></div>
+    <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle"></div></div>
     </div>
 </template>
 
@@ -23,11 +27,22 @@ const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
 const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 
 export default {
+    data() {
+        return {
+            timerMin: 0,
+            timerSec: 0
+        }
+    },
     props: {
-        
+        timeList: Array
     },
   components : {
     UserVideo,
+  },
+  watched: {
+    timeList() {
+        console.log('이거')
+    }
   },
     computed : {
       ...mapState(["user","room"]),
@@ -87,6 +102,24 @@ export default {
         window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
+        startTimer() {
+            let time = this.timeList[0];
+            let min = this.timerMin;
+            let sec = this.timerSec;
+            let x = setInterval(function() {
+            min = parseInt(time/60);
+            sec = time%60;
+
+            document.getElementById("demo").innerHTML = min + "분" + sec + "초";
+            time--;
+
+            if (time < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "투표가 종료되었습니다";
+            }
+            }, 1000);
+
+        },
         handleResizeHome() {
             const wValue = document.body.clientWidth*0.75*0.3-20  // 사회자 비디오
             const wValueNotVid = document.body.clientWidth*0.75*0.4 // 게이지 + 컨텐츠
@@ -156,7 +189,11 @@ export default {
 .debate-guague-inner {
     height: var(--db-gg-in-h);
     width: var(--db-gg-in-w);
-    background-color: rgb(23, 139, 32);
+    /* background-color: rgb(23, 139, 32); */
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    color: white;
 }
 
 
