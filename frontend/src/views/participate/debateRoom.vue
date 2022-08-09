@@ -168,11 +168,11 @@ export default {
       subscriber.stream.connection.dataObject = JSON.parse(
         subscriber.stream.connection.data
       );
-      var clientData = subscriber.stream.connection.dataObject.clientData;
-      console.log(clientData.split("/"));
+      var clientData = subscriber.stream.connection.dataObject.clientData.split("/")
+      console.log(clientData);
       if (clientData[0] == this.room.session.sessionId)
         this.room.host = subscriber;
-      else this.room.agrees.push(subscriber);
+      else this.room.agrees=subscriber;
     });
 
     // On every Stream destroyed...
@@ -220,6 +220,7 @@ export default {
 
       // --- Publish your stream ---
       this.room.session.publish(publisher);
+
     }
   },
     computed : {
@@ -522,11 +523,13 @@ export default {
       // 찬성 참여
       positionAgree() {
         this.position = 'agree',
-        console.log(this.$refs);
+        this.$refs.debateRoomSideComponent.position = 'agree';
         this.$refs.debateRoomSideComponent.joinPannel()
       },
       positionDisagree() {
-
+        this.position = 'disagree',
+        this.$refs.debateRoomSideComponent.position = 'disagree';
+        this.$refs.debateRoomSideComponent.joinPannel()
       },
     }
 }
