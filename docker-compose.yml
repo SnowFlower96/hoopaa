@@ -25,9 +25,9 @@ services:
       - db
     networks:
       - my_network
-  nginx:
+  frontend:
     build: frontend
-    container_name: nginx
+    container_name: frontend
     restart: unless-stopped
     volumes:
       - ./data/nginx:/etc/nginx/conf.d
