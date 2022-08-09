@@ -14,7 +14,6 @@ export default new Vuex.Store({
     isLogin: false,
     userHistory : '',
     userStat : '',
-    userInfo : '',
     roomList : [],
     headerVisible: true,
     tempToken : '',
@@ -54,9 +53,6 @@ export default new Vuex.Store({
     },
     USER_STAT(state, data) {
       state.userStat = JSON.parse(data);
-    },
-    USER_INFO(state, data) {
-      state.userInfo = JSON.parse(data);
     },
     CREATE_TEMP_TOKEN(state, data) {
       state.tempToken = data;
@@ -136,7 +132,6 @@ export default new Vuex.Store({
         url : `/users/history`,
         method : "GET"
       }).then((res) => {
-        console.log(res.data.json)
         commit("USER_HISTORY",res.data.json);
       })
      },
@@ -157,7 +152,8 @@ export default new Vuex.Store({
         url : `/users/info`,
         method : "GET"
       }).then((res) => {
-        commit("USER_INFO",res.data);
+        console.log(res.data)
+        commit("USER_INFO",res.data.json);
       })
      },
 
@@ -165,7 +161,7 @@ export default new Vuex.Store({
       putUserStat({commit},data) {
       api({
         headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
-        url : `/users/stat`,
+        url : `/users/info`,
         method : "PUT",
         data : data,
       }).then((res) => {
@@ -219,17 +215,16 @@ export default new Vuex.Store({
 
     // 유저 비밀번호 확인
     checkPwd({commit}, data) {
-      return new Promise((reject) => {
       api({
         headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/verify`,
         method : "POST",
         data : data,
       }).then((res) => {
-        console.log(res)
         let query = window.location.search;
         let param = new URLSearchParams(query);
         let loc = param.get('loc');
+
         if (loc == 'info') {
           router.push('/myPage/info')
         } else {
@@ -247,7 +242,6 @@ export default new Vuex.Store({
         } else {
           router.push('/checkPwd?loc=reSign')
         }
-      })
     })
   },
 

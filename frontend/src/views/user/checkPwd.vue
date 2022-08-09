@@ -25,9 +25,6 @@ export default {
    },
    methods : {
     testPwd () {
-      var data = {
-        pwd : this.checkPwd,
-      }
       this.$store.dispatch("checkPwd", this.checkPwd)
     }
    }
