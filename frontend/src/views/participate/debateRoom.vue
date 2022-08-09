@@ -12,9 +12,20 @@
     <!-- 뷰바꾸는 임시버튼 -->
 </div>
 
+<!-- 쉬는시간 모달 -->
+<div class="vote-modal-container" v-if="restModal" :style="customCaroselStyle">
+    <div class="rest-timer">
+        <p id="restTimerDemo">0분0초</p>
+    </div>
+    <div class="rest-animation">
+        여기 애니메이션 들어갈곳
+    </div>
+</div>
+<!-- 쉬는시간 모달 -->
+
 
 <!-- 투표 받는 창 -->
-<div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">``
+<div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">
     <div>
         <div class="vote-view">
             <div class="vote-view-inner">
@@ -62,7 +73,7 @@
 
 
 <!-- 방청객 반응 -->
-<div class="live-heart-container">
+<div class="live-heart-container" :style="customCaroselStyle">
     <div id="heart-div"></div>
     <div id="heart-div"></div>
     <div id="clap-div"></div>
@@ -78,10 +89,13 @@
     <div class="call-to-moderator">
         <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
         <div class="call-to-moderator-inner-c call-to-moderator-center" :style="customCaroselStyle">
-            <button @click="offCallModal">끄기</button>
+            <div class="modal-icon" @click="offCallModal"><i class="fas fa-times"></i></div>
             <call-to-moderator v-if="message"></call-to-moderator>
+
             <user-out v-if="out"></user-out>
+
             <message-from-team v-if="messageFrom"></message-from-team>
+
             <upload-file v-if="file"></upload-file>
 
             <let-team-speak 
@@ -89,8 +103,10 @@
             @emit-time="EmitTime"
             ></let-team-speak>
 
-            <rest-time v-if="rest"></rest-time>
-            <let-vote v-if="false"></let-vote>
+            <rest-time 
+            v-if="rest"
+            @emit-rest="EmitRest"
+            ></rest-time>
         </div>
         <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
     </div>
@@ -101,55 +117,80 @@
 
 <!-- 토론방 메인화면 -->
 <div class="debate-backcolor">
-    <div class="video-chatt-wrap">
-        <div class="debate-background" :style="customCaroselStyle">
-            <div class="debate-room-wrap">
-                <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
-                <div class="videobox-side" :style="customCaroselStyle">
-                    <debate-room-side-component-agree ></debate-room-side-component-agree>
-                </div>
 
-                <div class="videobox-center" :style="customCaroselStyle">
-                    <debate-room-center-component :time-list="timeList" ref="debateRoomSideComponent"></debate-room-center-component>
-                </div>
+    <!-- 메인화면 + 채팅 -->
+        <div class="video-chatt-wrap">
 
-                <div class="videobox-side" :style="customCaroselStyle">
-                    <debate-room-side-component v-bind:position="position" ref="debateRoomSideComponent"></debate-room-side-component>
+            <!-- 메인화면 (비디오 + 화면공유 컴포넌트 모인곳) -->
+                <div class="debate-background" :style="customCaroselStyle">
+                    <div class="debate-room-wrap">
+                        <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
+                        <div class="videobox-side" :style="customCaroselStyle">
+                            <debate-room-side-component-agree ></debate-room-side-component-agree>
+                        </div>
+
+                        <div class="videobox-center" :style="customCaroselStyle">
+                            <debate-room-center-component 
+                            :time-list="timeList" 
+                            ref="debateRoomSideComponent"
+                            :moderator="moderator"
+                            :all="all"
+                            :team="team"
+                            ></debate-room-center-component>
+                        </div>
+
+                        <div class="videobox-side" :style="customCaroselStyle">
+                            <debate-room-side-component v-bind:position="position" ref="debateRoomSideComponent"></debate-room-side-component>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            <!-- 메인화면 (비디오 + 화면공유 컴포넌트 모인곳) -->
+
+
+            <!-- 채팅창 -->
+                <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
+                    <chatting-all v-if="chattingAllView" @close-chat="changeChatView"></chatting-all>
+                    <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
+                </div>
+            <!-- 채팅창 -->
+
+
         </div>
-        <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
-            <chatting-all v-if="chattingAllView" @close-chat="changeChatView"></chatting-all>
-            <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
+    <!-- 메인화면 + 채팅 -->
+
+
+    <!-- 사회자 footer에서 나오는 메뉴 -->
+        <div class="moderator-menus" v-if="modMenu" :style="customCaroselStyle">
+            <p @click="EmitcallModal('menu')">패널 발언권 부여</p>
+            <p @click="EmitcallModal('rest')">쉬는시간 부여</p>
+            <p @click="voteVisible">투표 보내기</p>
         </div>
-    </div>
+    <!-- 사회자 footer에서 나오는 메뉴 -->
 
-    <div class="moderator-menus" v-if="modMenu" :style="customCaroselStyle">
-        <p @click="EmitcallModal('menu')">패널 발언권 부여</p>
-        <p @click="EmitcallModal('rest')">쉬는시간 부여</p>
-        <p @click="voteVisible">투표 보내기</p>
-    </div>
 
-    <div class="debate-room-footer-class">
-        <footer-team
-        v-if="footerTeam"
-        @call-modal="EmitcallModal"
-        ></footer-team>
+    <!-- footer -->
+        <div class="debate-room-footer-class">
+            <footer-team
+            v-if="footerTeam"
+            @call-modal="EmitcallModal"
+            ></footer-team>
 
-        <footer-moderator
-        v-if="footerModerator"
-        @call-modal="EmitcallModal"
-        @mod-menu="openCloseModMenu"
-        ></footer-moderator>
+            <footer-moderator
+            v-if="footerModerator"
+            @call-modal="EmitcallModal"
+            @mod-menu="openCloseModMenu"
+            ></footer-moderator>
 
-        <footer-all
-        v-if="footerAll"
-        @rising-heart="risingHeart"
-        @clap-anime="clapAnime"
-        ></footer-all>
+            <footer-all
+            v-if="footerAll"
+            @rising-heart="risingHeart"
+            @clap-anime="clapAnime"
+            ></footer-all>
 
-        <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
-    </div>
+            <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
+        </div>
+    <!-- footer -->
+
 </div>
 <!-- 토론방 메인화면 -->
 <button @click="leaveSession">닫기닫기닫기</button>
@@ -177,7 +218,6 @@ import UserOut from './ModalContent/ModeratorView/UserOut'
 import MessageFromTeam from './ModalContent/ModeratorView/MessageFromTeam'
 import LetTeamSpeak from './ModalContent/ModeratorView/LetTeamSpeak'
 import RestTime from './ModalContent/ModeratorView/RestTime'
-import LetVote from './ModalContent/ModeratorView/LetVote'
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
@@ -205,7 +245,6 @@ export default {
         UploadFile,
         LetTeamSpeak,
         RestTime,
-        LetVote,
         detailSessionView,
         debateRoomSideComponentAgree
     },
@@ -303,12 +342,20 @@ export default {
                 "--call-to-md-in-height" : this.callToMDInH,
                 "--call-to-md-in-height-c" : this.callToMDINHC,
                 "--mod-menus-loc" : this.modMenusLoc,
-                "--vote-modal-width" : this.voteModalWidth
+                "--vote-modal-width" : this.voteModalWidth,
+                "--all-heart-left" : this.allHeartLeft
             }
         }
     },
     data() {
         return {
+            allHeartLeft: '',
+
+            restModal: false,
+            moderator: false,
+            team: false,
+            all: false,
+            
             position : '',
 
             debateCenterBoxWidth: '',
@@ -393,11 +440,35 @@ export default {
 
         this.modMenusLoc = `${wVideoValue*0.36}px`
         this.voteModalWidth = `${debateBackground}px`
+
+        this.allHeartLeft= `${document.body.clientWidth*0.5}px`
+
         window.addEventListener('resize', this.handleResizeHome);
         
 
     },
     methods: {
+        EmitRest(timeRest) {
+            this.restModal = true
+            this.callToMdModal = false
+
+            let time = timeRest;
+            let min = "";
+            let sec = "";
+            let z = setInterval(function() {
+            min = parseInt(time/60);
+            sec = time%60;
+
+            document.getElementById("restTimerDemo").innerHTML = min + "분" + sec + "초";
+            time--;
+
+            if (time < 0) {
+                clearInterval(z);
+                this.restModal = false
+            }
+            }, 1000);
+
+        },
         EmitTime(Array) {
             this.timerTime = Array[0]*60
             this.timerTeam = Array[1]
@@ -437,7 +508,7 @@ export default {
             const stripe = document.getElementById('clap-div')
             setTimeout(() => {
                 stripe.classList.remove('animate');
-            }, 250);
+            }, 500);
             stripe.classList.add('animate');
         },
         voteView() {
@@ -447,7 +518,7 @@ export default {
             const stripe = document.getElementById('heart-div')
             setTimeout(() => {
                 stripe.classList.remove('animate');
-            }, 250);
+            }, 500);
             stripe.classList.add('animate');
             this.countingHeart += 1
             if(this.countingHeart === 5) {
@@ -455,6 +526,7 @@ export default {
             }
         },
         handleResizeHome() {
+            
             if (this.chattTF === true) {    // 채팅창 열려있을때
                 const wVideoValue = document.body.clientWidth
                 const debateBackground = wVideoValue*0.75
@@ -479,6 +551,8 @@ export default {
                 this.callToMDInH = `${hValue*0.31}px`
                 this.modMenusLoc = `${wVideoValue*0.36}px`
                 this.voteModalWidth = `${debateBackground}px`
+
+                this.allHeartLeft= `${document.body.clientWidth*0.5}px`
             }
             else {     // 채팅창 닫혀있을때
                 const wVideoValue = document.body.clientWidth
@@ -504,9 +578,15 @@ export default {
                 this.callToMDInH = `${hValue*0.31}px`
                 this.modMenusLoc = `${wVideoValue*0.36}px`
                 this.voteModalWidth = `${debateBackground}px`
+
+                this.allHeartLeft= `${document.body.clientWidth*0.5}px`
             }
         },
         moderatorView() {
+            this.moderator = true,
+            this.all = false,
+            this.team = false,
+
             this.chattingAllView = true
             this.chattingTeamView = false
 
@@ -519,6 +599,10 @@ export default {
             this.voteMod = true
         },
         allView() {
+            this.all = true,
+            this.moderator = false,
+            this.team = false,
+
             this.chattingAllView = true
             this.chattingTeamView = false
 
@@ -531,6 +615,10 @@ export default {
             this.voteMod = false
         },
         teamView() {
+            this.team = true,
+            this.all = false,
+            this.moderator = false,
+
             this.chattingAllView = false
             this.chattingTeamView = true
 
@@ -664,6 +752,20 @@ export default {
 </script>
 
 <style>
+.modal-icon {
+    display: flex;
+    justify-content: end;
+    color:white;
+}
+.modal-icon > i {
+    position: relative;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+body {
+    overflow: hidden;
+}
 .vote-view {
     width: 500px;
     height: 500px;
@@ -689,14 +791,21 @@ export default {
 }
 .vote-btn {
     margin: 10px;
-    width: 100px;
+    width: 150px;
     height: 50px;
     background: yellow;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgb(0, 0, 0);
     border-radius: 10px;
-    color: black;
+    outline: 1px solid rgba(168, 168, 168, 0.753);
+    color: rgb(182, 182, 182);
+}
+.vote-btn:hover {
+    outline: 1px solid white;
+    cursor: pointer;
+    color: white;
 }
 #demo {
     color: white;
@@ -746,8 +855,8 @@ export default {
 }
 .moderator-menus > p {cursor: pointer;}
 .live-heart-container {
-    top: 500px;
-    left: 100px;
+    top: 100vh;
+    left: var(--all-heart-left);
     position: absolute;
 }
 
@@ -770,10 +879,10 @@ export default {
   left: 10px;
 }
 #clap-div.animate {
-    animation: bubble 0.7s linear;
+    animation: bubble 1s linear;
 }
 #heart-div.animate {
-  animation: bubble 0.7s linear;
+  animation: bubble 1s linear;
 }
 /* .smile-div {
     position: absolute;
@@ -791,11 +900,11 @@ export default {
         bottom: 0px;
         opacity: 1
     }
-    70% {
+    90% {
         opacity: 0
     }
     100% {
-        bottom: 500px;
+        bottom: 1000px;
         width: 200px;
         height: 200px;
         opacity: 0
@@ -848,7 +957,7 @@ export default {
 }
 .call-to-moderator-center {
     border-radius: 10px;
-    background: rgba(0, 0, 0, 0.856);
+    background: rgba(0, 0, 0, 0.925);
     border-radius: 10px;
     outline: rgb(122, 122, 122) 1px solid;
     box-shadow: 3px 10px 10px 3px  rgba(0, 0, 0, 0.589);
@@ -887,7 +996,7 @@ export default {
     align-items: center;
 }
 .chatting-box {
-    background-color: whitesmoke;
+    background-color: rgb(32, 32, 32);
     width: var(--chatt-box);
     height: 93vh;
     border-radius: 10px;

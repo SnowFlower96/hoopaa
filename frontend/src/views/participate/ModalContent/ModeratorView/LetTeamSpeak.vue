@@ -72,23 +72,35 @@ export default {
     margin: 10px;
     width: 200px;
     height: 40px;
-    border-radius: 10px;
-    background-color: yellow;
-    color: black;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgb(0, 0, 0);
+    border-radius: 10px;
+    outline: 1px solid rgba(168, 168, 168, 0.753);
+    color: rgb(182, 182, 182);
+}
+.ts-submit-btn:hover {
+    outline: 1px solid white;
+    cursor: pointer;
+    color: white;
 }
 .ts-btn {
     margin: 10px;
     width: 70px;
     height: 40px;
-    border-radius: 10px;
-    background-color: yellow;
-    color: black;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgb(0, 0, 0);
+    border-radius: 10px;
+    outline: 1px solid rgba(168, 168, 168, 0.753);
+    color: rgb(182, 182, 182);
+}
+.ts-btn:hover {
+    outline: 1px solid white;
+    cursor: pointer;
+    color: white;
 }
 .let-team-speak-inner {
     display: flex;

@@ -7,10 +7,10 @@
     </div>
     <div class="debate-guague" :style="customViewStyle">
         <div class="debate-guague-inner" :style="customViewStyle">
-            <span v-if="!timeList[1]">반대팀</span>
-            <span v-if="timeList[0]">찬성팀</span>
-            <div id="demo">{{parseInt(timeList[0])/60}}분0초</div>
-            <button @click="startTimer">시작하기</button>
+            <span style="font-size: 25px;" v-if="!timeList[1]">반대팀</span>
+            <span style="font-size: 25px;" v-if="timeList[0]">찬성팀</span>
+            <div id="speaktimer">0분0초</div>
+            <button v-if="moderator" @click="startTimer">시작하기</button>
         </div>
     </div>
     <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle"></div></div>
@@ -29,21 +29,19 @@ const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 export default {
     data() {
         return {
-            timerMin: 0,
+            timerMin: this.timeList[0]/60,
             timerSec: 0
         }
     },
-    props: {
-        timeList: Array
+    props: [
+        'timeList',
+        'moderator',
+        'all',
+        'team',
+    ],
+    components : {
+        UserVideo,
     },
-  components : {
-    UserVideo,
-  },
-  watched: {
-    timeList() {
-        console.log('이거')
-    }
-  },
     computed : {
       ...mapState(["user","room"]),
         customViewStyle() {
@@ -110,12 +108,12 @@ export default {
             min = parseInt(time/60);
             sec = time%60;
 
-            document.getElementById("demo").innerHTML = min + "분" + sec + "초";
+            document.getElementById("speaktimer").innerHTML = min + "분" + sec + "초";
             time--;
 
             if (time < 0) {
                 clearInterval(x);
-                document.getElementById("demo").innerHTML = "투표가 종료되었습니다";
+                document.getElementById("speaktimer").innerHTML = "0분 0초";
             }
             }, 1000);
 
@@ -156,6 +154,9 @@ export default {
 </script>
 
 <style>
+#speaktimer {
+    font-size: 45px;
+}
 .moderatorVideo > #local-video-undefined {
     height: var(--center-video-height);
     width: var(--center-video-width);
@@ -207,7 +208,8 @@ export default {
 .debate-content-inner {
     height: var(--db-ct-in-h);
     width: var(--db-ct-in-w);
-    background-color: rgb(255, 255, 24);
+    background-color: rgb(44, 44, 44);
+    border-radius: 10px;
 }
 </style>
 
