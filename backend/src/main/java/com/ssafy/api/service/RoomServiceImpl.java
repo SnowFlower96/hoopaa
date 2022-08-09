@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service("roomService")
-public class RoomServiceImpl implements RoomService{
+public class RoomServiceImpl implements RoomService {
 
     @Autowired
     RoomInfoRepository roomInfoRepository;
@@ -56,16 +56,16 @@ public class RoomServiceImpl implements RoomService{
                 .title(roomOpenInfo.getTitle())
                 .subtitle(roomOpenInfo.getSubtitle())
                 .build();
-        if(roomOpenInfo.getHash_1()!=null&&!roomOpenInfo.getHash_1().equals("")){
+        if (roomOpenInfo.getHash_1() != null && !roomOpenInfo.getHash_1().equals("")) {
             roomInfo.setHash1(roomService.findHashtagId(roomOpenInfo.getHash_1()));
         }
-        if(roomOpenInfo.getHash_2()!=null&&!roomOpenInfo.getHash_2().equals("")){
+        if (roomOpenInfo.getHash_2() != null && !roomOpenInfo.getHash_2().equals("")) {
             roomInfo.setHash2(roomService.findHashtagId(roomOpenInfo.getHash_2()));
         }
-        if(roomOpenInfo.getHash_3()!=null&&!roomOpenInfo.getHash_3().equals("")){
+        if (roomOpenInfo.getHash_3() != null && !roomOpenInfo.getHash_3().equals("")) {
             roomInfo.setHash3(roomService.findHashtagId(roomOpenInfo.getHash_3()));
         }
-        roomInfo =  roomInfoRepository.save(roomInfo);
+        roomInfo = roomInfoRepository.save(roomInfo);
 
         RoomStatus roomStatus = RoomStatus.builder()
                 .id(roomInfo.getId())
@@ -93,12 +93,12 @@ public class RoomServiceImpl implements RoomService{
     @Override
     public RoomInfoDto updatePhaseByRoomId(Long id, int phase) {
         RoomInfo roomInfo = roomInfoRepository.findById(id).get();
-        if(phase == 1){
-            if(roomInfo.getPhase()>=1){
+        if (phase == 1) {
+            if (roomInfo.getPhase() >= 1) {
                 return null;
             }
-        }else if(phase==2){
-            if(roomInfo.getPhase()>=2){
+        } else if (phase == 2) {
+            if (roomInfo.getPhase() >= 2) {
                 return null;
             }
         }
@@ -107,11 +107,11 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public void finishRoom( VRoom vRoom) {
+    public void finishRoom(VRoom vRoom) {
         RoomInfo roomInfo = roomInfoRepository.findById(vRoom.getRoomInfo().getId()).get();
         int winner = 0;
-        if(vRoom.getVote_final_agree()> vRoom.getVote_final_disagree())winner=1;
-        else if(vRoom.getVote_final_agree() < vRoom.getVote_final_disagree())winner=2;
+        if (vRoom.getVote_final_agree() > vRoom.getVote_final_disagree()) winner = 1;
+        else if (vRoom.getVote_final_agree() < vRoom.getVote_final_disagree()) winner = 2;
         RoomHistory roomHistory = RoomHistory.builder()
                 .id(vRoom.getRoomInfo().getId())
                 .end_time(LocalDateTime.now())
@@ -123,20 +123,20 @@ public class RoomServiceImpl implements RoomService{
 
         // 토론왕 확인하기 위한 변수 설정정
         int kingCntMax = 0;
-        Long kingId=-1L;
+        Long kingId = -1L;
         //user history 업데이트
         //찬성 진영 업데이트
-        for(UserInfo userInfo : vRoom.getAgree()){
-            if(userInfo == null) continue; //
-            kingCntMax=userInfo.getKingCnt();
-            kingId = userInfo.getId();
-            User user = userRepository.findUserById(userInfo.getId()).get();
+        for (UserInfo userInfo : vRoom.getAgree()) {
+            if (userInfo == null) continue; //
+            kingCntMax = userInfo.getKingCnt();
+            kingId = Long.valueOf(userInfo.getId());
+            User user = userRepository.findUserById(Long.parseLong(userInfo.getId())).get();
             UserHistory userHistory = UserHistory.builder()
                     .userId(user.getId()) //id
                     .roomId(roomInfo.getId()) //roomId
                     .userPos(1)//userPos
                     .build();
-            if(roomInfo.getHostId()==user.getId()){ //host라면
+            if (roomInfo.getHostId() == user.getId()) { //host라면
                 userHistory.setHost(true); //isHost
             }
             userHistory.setRoomInfo(roomInfo);
@@ -144,32 +144,32 @@ public class RoomServiceImpl implements RoomService{
 
             //user stat 업데이트
             UserStat userStat = userStatRepository.findStatById(user.getId()).get();
-            userStat.setTotal(userStat.getTotal()+1);
+            userStat.setTotal(userStat.getTotal() + 1);
             //승 , 패 , 무
-            if(vRoom.getVote_final_agree()> vRoom.getVote_final_disagree()) {
-                userStat.setWin(userStat.getWin()+1);
-            }else if(vRoom.getVote_final_agree()< vRoom.getVote_final_disagree()){
-                userStat.setLose(userStat.getLose()+1);
-            }else{
-                userStat.setDraw(userStat.getDraw()+1);
+            if (vRoom.getVote_final_agree() > vRoom.getVote_final_disagree()) {
+                userStat.setWin(userStat.getWin() + 1);
+            } else if (vRoom.getVote_final_agree() < vRoom.getVote_final_disagree()) {
+                userStat.setLose(userStat.getLose() + 1);
+            } else {
+                userStat.setDraw(userStat.getDraw() + 1);
             }
             userStatRepository.save(userStat);
         }
 
         //반대 진영 업데이트
-        for(UserInfo userInfo : vRoom.getDisagree()){
-            if(userInfo == null) continue; //
-            if(userInfo.getKingCnt()>kingCntMax){
-                kingCntMax=userInfo.getKingCnt();
-                kingId = userInfo.getId();
+        for (UserInfo userInfo : vRoom.getDisagree()) {
+            if (userInfo == null) continue; //
+            if (userInfo.getKingCnt() > kingCntMax) {
+                kingCntMax = userInfo.getKingCnt();
+                kingId = Long.valueOf(userInfo.getId());
             }
-            User user = userRepository.findUserById(userInfo.getId()).get();
+            User user = userRepository.findUserById(Long.valueOf(userInfo.getId())).get();
             UserHistory userHistory = UserHistory.builder()
                     .userId(user.getId()) //id
                     .roomId(roomInfo.getId()) //roomId
                     .userPos(2)//userPos
                     .build();
-            if(roomInfo.getHostId()==user.getId()){ //host라면
+            if (roomInfo.getHostId() == user.getId()) { //host라면
                 userHistory.setHost(true); //isHost
             }
             userHistory.setRoomInfo(roomInfo);
@@ -177,23 +177,23 @@ public class RoomServiceImpl implements RoomService{
 
             //user stat 업데이트
             UserStat userStat = userStatRepository.findStatById(user.getId()).get();
-            userStat.setTotal(userStat.getTotal()+1);
+            userStat.setTotal(userStat.getTotal() + 1);
             //승 , 패 , 무
-            if(vRoom.getVote_final_agree()< vRoom.getVote_final_disagree()) {
-                userStat.setWin(userStat.getWin()+1);
-            }else if(vRoom.getVote_final_agree()> vRoom.getVote_final_disagree()){
-                userStat.setLose(userStat.getLose()+1);
-            }else{
-                userStat.setDraw(userStat.getDraw()+1);
+            if (vRoom.getVote_final_agree() < vRoom.getVote_final_disagree()) {
+                userStat.setWin(userStat.getWin() + 1);
+            } else if (vRoom.getVote_final_agree() > vRoom.getVote_final_disagree()) {
+                userStat.setLose(userStat.getLose() + 1);
+            } else {
+                userStat.setDraw(userStat.getDraw() + 1);
             }
             userStatRepository.save(userStat);
 
         }
         //토론왕 설정
-        if(kingId!=-1L){
+        if (kingId != -1L) {
             UserStat userStat = userStatRepository.findStatById(kingId).get();
             UserHistory userHistory = userHistoryRepository.findUserHistoryByUserIdAndRoomId(kingId, vRoom.getRoomInfo().getId()).get();
-            userStat.setKing(userStat.getKing()+1);
+            userStat.setKing(userStat.getKing() + 1);
             userHistory.setKing(true);
             userStatRepository.save(userStat);
             userHistoryRepository.save(userHistory);
@@ -207,9 +207,9 @@ public class RoomServiceImpl implements RoomService{
         hashtagRepository.findHashtagByNm(nm);
 
         Optional<Hashtag> hash = hashtagRepository.findHashtagByNm(nm);
-        if(hash.isPresent()){ //이미 존재 한다면
+        if (hash.isPresent()) { //이미 존재 한다면
             Hashtag hashtag = hash.get();
-            hashtag.setCnt(hashtag.getCnt()+1);
+            hashtag.setCnt(hashtag.getCnt() + 1);
             hashtagRepository.save(hashtag);
             return hashtag.getId();
         }

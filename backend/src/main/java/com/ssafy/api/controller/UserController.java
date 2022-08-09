@@ -4,9 +4,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.api.response.JsonRes;
-import com.ssafy.api.response.StringRes;
-import com.ssafy.api.response.UserRes;
+import com.ssafy.api.response.*;
 import com.ssafy.common.data.UserDupl;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserInfoDto;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.api.request.UserLoginPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
-import com.ssafy.api.response.UserLoginPostRes;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -76,6 +73,17 @@ public class UserController {
 		}
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	@PostMapping("/temp/{nnm}")
+	@ApiOperation(value = "비회원 임시 토큰 발급", notes = "임시 닉네임을 받아 토큰 발급")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<? extends BaseResponseBody> nonUser(@PathVariable String nnm) {
+		String accessToken = JwtTokenUtil.getAccessToken(nnm);
+		return ResponseEntity.ok(NonUserLoginRes.of(200, "Success", accessToken, nnm));
 	}
 
 	@PostMapping("/login")

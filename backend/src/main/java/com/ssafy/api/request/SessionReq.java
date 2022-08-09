@@ -11,10 +11,10 @@ public class SessionReq {
     @ApiModelProperty(name = "방 ID", example = "SessionID")
     String sessionId;
 
-    @ApiModelProperty(name = "찬성측 email", example = "[test@test.test, ...]")
+    @ApiModelProperty(name = "찬성측 ID", example = "[2, 45, 1, 23, ...]")
     String[] agree;
 
-    @ApiModelProperty(name = "반대측 email", example = "[test@test.test, ...]")
+    @ApiModelProperty(name = "반대측 ID", example = "[2, 45, 1, 23, ...]")
     String[] disagree;
 
 }

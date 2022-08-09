@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 public class UserInfo {
 
-    Long id;
+    String id;
     String em;
     String nnm;
     int kingCnt;
@@ -21,7 +21,7 @@ public class UserInfo {
     boolean hasFinalVote;
 
     @Builder
-    public UserInfo(Long id, String em, String nnm, int kingCnt, boolean hasAgree, boolean hasDisagree, boolean hasFinalVote) {
+    public UserInfo(String id, String em, String nnm, int kingCnt, boolean hasAgree, boolean hasDisagree, boolean hasFinalVote) {
         this.id = id;
         this.em = em;
         this.nnm = nnm;
