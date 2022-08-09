@@ -9,6 +9,7 @@
         <button @click="teamView">패널뷰</button>
         <router-link to="/detailSessionView"><button>세부세션 가기</button></router-link>
         <button @click="positionAgree">찬성</button>
+        <button @click="messageFromTeam">팀에서 사회자한테 주는 메세지</button>
         <!-- <div id="demo">넨</div> -->
         <!-- 뷰바꾸는 임시버튼 -->
     </div>
@@ -412,7 +413,9 @@ export default {
             timerTime:null,
             timerTeam:null,
 
-            timeList:[] // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
+            timeList:[], // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
+
+            messageFrom: false
 
         }
     },
@@ -450,6 +453,10 @@ export default {
 
     },
     methods: {
+        messageFromTeam() {
+            this.callToMdModal = !this.callToMdModal
+            this.messageFrom = !this.messageFrom
+        },
         EmitRest(timeRest) {
             this.restModal = true
             this.callToMdModal = false
