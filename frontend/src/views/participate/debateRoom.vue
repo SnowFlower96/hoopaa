@@ -1,5 +1,6 @@
 <template>
 <div v-if="imgTF" class="startImg">
+<!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
     <!-- <animation-view></animation-view> -->
     <!-- 뷰바꾸는 임시버튼 -->
     <button @click="moderatorView">사회자뷰</button>
@@ -11,22 +12,66 @@
 </div>
 
 
-<div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">
+<!-- 투표 받는 창 -->
+<div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">``
     <div>
-        투표받을 모달창
+        <div class="vote-view">
+            <div class="vote-view-inner">
+                <div class="common-vote-view">
+                    <div class="all-view-wrap">
+                        <div style="font-size: 40px;">최종 투표</div>
+                        <div class="timer">
+                            <div id="demo"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="voteTeam" class="team-view">
+                    <p>방청객이 투표중입니다 ...</p>
+                </div>
+                <div v-if="voteMod" class="mod-view">
+                    <div>
+                        <p>방청객이 투표중입니다 ...</p>
+                        <p>타이머가 끝나면 종료버튼을 눌러 토론을 종료하세요</p>
+                        <div class="vote-btn-wrap">
+                            <router-link style="text-decoration: none;" to="/"><div class="vote-btn">결과화면으로</div></router-link>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="voteAll" class="all-view">
+                    <div class="all-view-wrap">
+                        <p>당신의 최종 의견을 투표하세요</p>
+                        <p>제한시간안에 투표하지 않으면 무효 처리됩니다</p>
+                        <p>타이머가 끝나면 자동으로 제출됩니다</p>
+                        <div class="vote-btn-wrap">
+                            <div class="vote-btn" @click="voteFunction(1)">찬성</div>
+                            <div class="vote-btn" @click="voteFunction(0)">반대</div>
+                        </div>
+                        <p>
+                            <span v-if="voteStatus">찬성</span>
+                            <span v-if="!voteStatus">반대</span>
+                            을(를) 선택하셨습니다</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<!-- 투표 받는 창 -->
+
+
+<!-- 방청객 반응 -->
 <div class="live-heart-container">
     <div id="heart-div"></div>
     <div id="heart-div"></div>
     <div id="clap-div"></div>
     <div id="clap-div"></div>
-    <button @click="clapAnime">이거눌로바</button>
-    <button @click="risingHeart">dlrjeh</button>
     <div>하트 누른 갯수{{countingHeart}}</div>
 </div>
-<!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
-<!-- 사회자에게 메세지 보내기 -->
+<!-- 방청객 반응 -->
+
+
+<!-- 토론방 추가기능 모달창 -->
 <div v-if="callToMdModal" class="call-to-moderator-container" :style="customCaroselStyle">
     <div class="call-to-moderator-blank"></div>
     <div class="call-to-moderator">
@@ -45,63 +90,68 @@
     </div>
     <div class="call-to-moderator-blank"></div>
 </div>
-<!-- 사회자에게 메세지 보내기 -->
-    <div class="debate-backcolor">
-        <div class="video-chatt-wrap">
-            <div class="debate-background" :style="customCaroselStyle">
-                <div class="debate-room-wrap">
-                    <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
-                    <div class="videobox-side" :style="customCaroselStyle">
-                        <debate-room-side-component :room = "room"></debate-room-side-component>
-                    </div>
 
-                    <div class="videobox-center" :style="customCaroselStyle">
-                        <debate-room-center-component  :room = "room"></debate-room-center-component>
-                    </div>
+<!-- 토론방 메인화면 -->
+<div class="debate-backcolor">
+    <div class="video-chatt-wrap">
+        <div class="debate-background" :style="customCaroselStyle">
+            <div class="debate-room-wrap">
+                <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
+                <div class="videobox-side" :style="customCaroselStyle">
+                    <debate-room-side-component-agree :room="room"></debate-room-side-component-agree>
+                </div>
 
-                    <!-- <div class="videobox-side" :style="customCaroselStyle">
-                        <debate-room-side-component :room = "room"></debate-room-side-component>
-                    </div> -->
+                <div class="videobox-center" :style="customCaroselStyle">
+                    <debate-room-center-component :time-list="timeList" :room="room" ></debate-room-center-component>
+                </div>
+
+                <div class="videobox-side" :style="customCaroselStyle">
+                    <debate-room-side-component :room="room"></debate-room-side-component>
+
                 </div>
             </div>
-            <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
-                <chatting-all v-if="chattingAllView" @close-chat="changeChatView"></chatting-all>
-                <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
-            </div>
         </div>
-        <div class="moderator-menus" v-if="modMenu" :style="customCaroselStyle">
-            <p>찬성측 발언권 부여</p>
-            <p>반대측 발언권 부여</p>
-            <p>쉬는시간 부여</p>
-            <router-link to="/"><p>투표 보내기</p></router-link>
-        </div>
-        <div class="debate-room-footer-class">
-            <footer-team
-            v-if="footerTeam"
-            @call-modal="EmitcallModal"
-            ></footer-team>
-
-            <footer-moderator
-            v-if="footerModerator"
-            @call-modal="EmitcallModal"
-            @mod-menu="openCloseModMenu"
-            ></footer-moderator>
-
-            <footer-all
-            v-if="footerAll"
-            @rising-heart="risingHeart"
-            @clap-anime="clapAnime"
-            ></footer-all>
-
-            <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
+        <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
+            <chatting-all v-if="chattingAllView" @close-chat="changeChatView"></chatting-all>
+            <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
         </div>
     </div>
-    <button @click="leaveSession">닫기닫기닫기</button>
+
+    <div class="moderator-menus" v-if="modMenu" :style="customCaroselStyle">
+        <p @click="EmitcallModal('menu')">패널 발언권 부여</p>
+        <p>쉬는시간 부여</p>
+        <p @click="voteVisible">투표 보내기</p>
+    </div>
+
+    <div class="debate-room-footer-class">
+        <footer-team
+        v-if="footerTeam"
+        @call-modal="EmitcallModal"
+        ></footer-team>
+
+        <footer-moderator
+        v-if="footerModerator"
+        @call-modal="EmitcallModal"
+        @mod-menu="openCloseModMenu"
+        ></footer-moderator>
+
+        <footer-all
+        v-if="footerAll"
+        @rising-heart="risingHeart"
+        @clap-anime="clapAnime"
+        ></footer-all>
+
+        <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
+    </div>
+</div>
+<!-- 토론방 메인화면 -->
+<button @click="leaveSession">닫기닫기닫기</button>
 </template>
 
 
 <script>
 import debateRoomSideComponent from './debateRoomSideComponent'
+import debateRoomSideComponentAgree from './debateRoomSideComponentAgree'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
 // import animationView from './animation-view.vue'
 import detailSessionView from './detailSessionView'
@@ -124,7 +174,8 @@ import LetVote from './ModalContent/ModeratorView/LetVote'
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import { mapState } from 'vuex';
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+import UserVideo from '@/views/openvidu/UserVideo.vue';
+
 
 
 const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
@@ -149,7 +200,8 @@ export default {
         LetTeamSpeak,
         RestTime,
         LetVote,
-        detailSessionView
+        detailSessionView,
+        debateRoomSideComponentAgree
     },
     async created() {
     var token = this.$store.state.tempToken;
@@ -168,7 +220,7 @@ export default {
         subscriber.stream.connection.data
       );
       var clientData = subscriber.stream.connection.dataObject.clientData.split("/")
-      console.log(clientData);
+
       if (clientData[0] == this.room.session.sessionId)
         this.room.host = subscriber;
       else if (clientData[1] == 'agree') {
@@ -193,7 +245,7 @@ export default {
     });
 
     await this.room.session
-      .connect(token, { clientData: this.user.em + '/' + this.position})
+      .connect(token, { clientData: this.user.id + '/' + this.position})
       .then(() => {
         console.log("Connected!!!");
       })
@@ -205,7 +257,7 @@ export default {
         );
       });
 
-       if (this.user.em == this.room.session.sessionId) {
+       if (this.user.id == this.room.session.sessionId) {
          console.log("you are host");
     } else {
       console.log("you are pannel")
@@ -222,7 +274,7 @@ export default {
       });
 
       this.room.publisher = publisher;
-      if (this.user.em == this.room.session.sessionId) {
+      if (this.user.id == this.room.session.sessionId) {
       this.room.host = publisher;
       } else if (this.position == 'agree') {
         this.room.agrees.push(publisher);
@@ -299,9 +351,10 @@ export default {
             options: [this.menu, this.out, this.message, this.file],
             countingHeart :0,
             modMenusLoc: '',
-            voteViewTF: true,
+            voteViewTF: false,
             voteModalWidth: '',
             modMenu: false,
+
 
             room : {
               OV: undefined,
@@ -313,6 +366,13 @@ export default {
             },
 			      subscribers: [],
 			      mainStreamManager: undefined,
+
+            voteTeam: false,
+            voteAll: false,
+            voteMod: false,
+
+            voteTime: 60,
+            voteStatus: null
         }
     },
     mounted() {
@@ -341,8 +401,35 @@ export default {
         this.modMenusLoc = `${wVideoValue*0.36}px`
         this.voteModalWidth = `${debateBackground}px`
         window.addEventListener('resize', this.handleResizeHome);
+
+
     },
     methods: {
+        voteFunction(status) {
+            this.voteStatus = status
+        },
+        voteVisible() {
+            // this.voteViewTF = true
+            this.voteViewTF = !this.voteViewTF
+
+            let time = this.voteTime;
+            let min = "";
+            let sec = "";
+            let x = setInterval(function() {
+            min = parseInt(time/60);
+            sec = time%60;
+
+            document.getElementById("demo").innerHTML = min + "분" + sec + "초";
+            time--;
+
+            if (time < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "투표가 종료되었습니다";
+            }
+            }, 1000);
+
+        // 타이머 로직
+        },
         openCloseModMenu() {
             this.modMenu = !this.modMenu
         },
@@ -426,6 +513,10 @@ export default {
             this.footerModerator = true
             this.footerTeam = false
             this.footerAll = false
+
+            this.voteTeam = false
+            this.voteAll = false
+            this.voteMod = true
         },
         allView() {
             this.chattingAllView = true
@@ -434,6 +525,10 @@ export default {
             this.footerAll = true
             this.footerModerator = false
             this.footerTeam = false
+
+            this.voteTeam = false
+            this.voteAll = true
+            this.voteMod = false
         },
         teamView() {
             this.chattingAllView = false
@@ -442,6 +537,10 @@ export default {
             this.footerTeam = true
             this.footerModerator = false
             this.footerAll = false
+
+            this.voteTeam = true
+            this.voteAll = false
+            this.voteMod = false
         },
         changeChatView() {
             this.chattTF = !this.chattTF
@@ -545,20 +644,87 @@ export default {
 </script>
 
 <style>
+.vote-view {
+    width: 500px;
+    height: 500px;
+    background: rgba(0, 0, 0, 0.856);
+    border-radius: 10px;
+    outline: rgb(122, 122, 122) 1px solid;
+    box-shadow: 3px 10px 10px 3px  rgba(0, 0, 0, 0.589);
+}
+.vote-view-inner {
+    width: 460px;
+    height: 460px;
+    padding: 20px;
+    color: white;
+}
+.common-vote-view {
+    width: 100%;
+    height: 35%;
+    /* background: blue; */
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.vote-btn {
+    margin: 10px;
+    width: 100px;
+    height: 50px;
+    background: yellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    color: black;
+}
+#demo {
+    color: white;
+    font-size: 30px;
+}
+.timer {
+    width: 350px;
+    height: 40px;
+    /* background: rgb(126, 126, 105); */
+    margin: 10px;
+}
+.vote-btn-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.team-view, .all-view, .mod-view {
+    margin-top: 20px;
+    width: 100%;
+    height: 60%;
+    /* background: rgb(0, 255, 179); */
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .vote-modal-container {
     position: absolute;
     height: 93vh;
     width: var(--vote-modal-width);
     background-color: rgba(255, 255, 255, 0.295);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .moderator-menus {
+    color: white;
     position: absolute;
-    width:200px;
+    width:170px;
     height: auto;
-    background-color: aliceblue;
+    background-color: rgb(0, 0, 0);
     bottom: 7vh;
     left: var(--mod-menus-loc);
+    text-align: center;
+    border-radius: 10px;
+    outline: 0.5px solid white;
 }
+.moderator-menus > p {cursor: pointer;}
 .live-heart-container {
     top: 500px;
     left: 100px;
@@ -620,17 +786,17 @@ export default {
 .chatt-btn {
     width: 5vh;
     height: 5vh;
-    outline: solid 1px aqua;
+    outline: solid 1px white;
     border-radius: 50%;
     margin-left: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: aqua;
+    color: white;
 }
 .chatt-btn:hover {
     cursor: pointer;
-    background-color: aqua;
+    background-color: white;
     opacity: 50%;
     color: black;
 }
@@ -656,9 +822,11 @@ export default {
     /* outline: solid 3px orange; */
 }
 .call-to-moderator-center {
-    background-color: whitesmoke;
     border-radius: 10px;
-    outline: black 3px solid;
+    background: rgba(0, 0, 0, 0.856);
+    border-radius: 10px;
+    outline: rgb(122, 122, 122) 1px solid;
+    box-shadow: 3px 10px 10px 3px  rgba(0, 0, 0, 0.589);
 }
 /* 사회자에게 메세지 보내기 스타일 라인 */
 

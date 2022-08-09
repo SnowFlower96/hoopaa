@@ -5,21 +5,28 @@
 
         </div>
     </div>
-    <div class="debate-guague" :style="customViewStyle"><div class="debate-guague-inner" :style="customViewStyle">게이지바</div></div>
+    <div class="debate-guague" :style="customViewStyle">
+        <div class="debate-guague-inner" :style="customViewStyle">
+        </div>
+    </div>
     <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle">자료화면</div></div>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+
 
 const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
 const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 
 export default {
+    props: {
+
+    },
   components : {
     UserVideo,
   },
@@ -43,7 +50,6 @@ export default {
     },
     data() {
         return {
-
             centerVideoHeight : '',
             centerVideoWidth : '',
 
@@ -65,7 +71,7 @@ export default {
       console.log(this.room)
     },
     mounted() {
-
+        console.log(this.timeList)
         const wValue = document.body.clientWidth*0.75*0.3-20  // 사회자 비디오
         const wValueNotVid = document.body.clientWidth*0.75*0.4 // 게이지 + 컨텐츠
         this.centerVideoWidth = `${wValue}px`
@@ -113,6 +119,8 @@ export default {
             window.removeEventListener('beforeunload', this.leaveSession);
             this.$router.push("/list");
         },
+    },
+    watched: {
     }
 }
 </script>

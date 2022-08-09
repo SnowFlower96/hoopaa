@@ -2,11 +2,11 @@
     <div class="debate-room-component-content-side">
         <!-- <div>여기에 패널 화면 넣으면 됨</div> -->
         <div class="blank-space-video" :style="customViewStyle"></div>
-        <div class="panel-video" :style="customViewStyle"><div class="panel-video-inner">
-          <user-video v-for="(item, index) in room.agrees" :key="index" class="moderatorVideo" :stream-manager="item"/>
-
-          <!-- <user-video class="moderatorVideo" :stream-manager="room.agrees"/> -->
-        </div></div>
+        <div v-for="(item, index) in room.disagree" :key="index" class="panel-video" :style="customViewStyle">
+          <div class="panel-video-inner">
+            <user-video class="moderatorVideo" :stream-manager="room.disagrees[index]"/>
+          </div>
+        </div>
     </div>
 </template>
 
@@ -15,7 +15,6 @@ import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
-axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 
 // const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;

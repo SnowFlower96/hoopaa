@@ -1,61 +1,92 @@
 <template>
-<h1>session</h1>
-<h1>session</h1>
-<h1>session</h1>
-	<div id="main-container" class="container">
-		<div id="join">
-			<div id="join-dialog" class="jumbotron vertical-center">
-				<div class="form-group">
-					<p>
-						<label>Participant</label>
-						<input v-model="myUserName" class="form-control" type="text" required>
-					</p>
-					<p>
-						<label>Session</label>
-						<input v-model="mySessionId" class="form-control" type="text" required>
-					</p>
-					<p class="text-center">
-						<button class="btn btn-lg btn-success" @click="role=0">사회자</button>
-						<button class="btn btn-lg btn-success" @click="role=1">찬성</button>
-						<button class="btn btn-lg btn-success" @click="role=-1">반대</button>
-            <button class="btn btn-lg btn-success" @click="role=2">입장</button>
-						role:{{this.role}}
-					</p>
+	<div class="main-session-outer">
+		<div id="main-container">
+			<div>
+				<div>
+					<div class="form-group">
+						<p>
+							<label>Participant</label>
+							<input v-model="myUserName" class="form-control" type="text" required>
+						</p>
+						<p>
+							<label>Session</label>
+							<input v-model="mySessionId" class="form-control" type="text" required>
+						</p>
+						<p>
+							<button class="btn btn-lg btn-success" @click="role=0">사회자</button>
+							<button class="btn btn-lg btn-success" @click="role=1">찬성</button>
+							<button class="btn btn-lg btn-success" @click="role=-1">반대</button>
+							<button class="btn btn-lg btn-success" @click="role=2">입장</button>
+							role:{{this.role}}
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div id="session">
+				<div id="session-header">
+					<h1 id="session-title">{{ mySessionId }}</h1>
+					<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="role=2" value="나가기">
+					<div v-if="session">
+						<button class="btn btn-large btn" type="button" id="buttonDetailSession" @click="goDetailSession">세부세션 가기</button>
+
+
+						<div id="video-container"> 
+						<!-- 내가 사회자일때 -->
+							<div v-if="this.role===0">
+								<user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/>
+							</div>
+							<div v-for="s in subscribers" :key="s.stream.connection.connectionId" class="main-my-video">
+								<div v-if="s.stream.connection.dataObject.role===0">
+									<h4>HOST {{s.stream.connection.client.clientData}}</h4>
+									<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+								</div>
+							</div>
+						<!-- 내가 사회자일때 -->
+
+						<!-- 내가 찬성일때 -->
+							<div v-if="this.role===1">
+								<user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/>
+							</div>
+							<div v-for="s in subscribers" :key="s.stream.connection.connectionId" class="main-my-video">
+								<div v-if="s.stream.connection.dataObject.role===1">
+									<h4>AGREE {{s.stream.connection.client.clientData}}</h4>
+									<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+								</div>
+							</div>
+						<!-- 내가 찬성일때 -->
+
+						<!-- 내가 반대일때 -->
+							<div v-if="this.role===-1">
+								<user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/>
+							</div>
+							<div v-for="s in subscribers" :key="s.stream.connection.connectionId" class="main-my-video">
+								<div v-if="s.stream.connection.dataObject.role===-1">
+									<h4>DISAGREE {{s.stream.connection.client.clientData}}</h4>
+									<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
+								</div>
+							</div>
+						<!-- 내가 반대일때 -->
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-
-		<div id="session">
-			<div id="session-header">
-				<h1 id="session-title">{{ mySessionId }}</h1>
-				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="role=2" value="나가기">
-        <div v-if="session">
-        <button class="btn btn-large btn" type="button" id="buttonDetailSession" @click="goDetailSession">세부세션 가기</button>
-
-			<div id="video-container" class="col-md-6">
-				<div v-if="this.role===0"><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
-				<div v-for="s in subscribers" :key="s.stream.connection.connectionId">
-          <div v-if="s.stream.connection.dataObject.role===0">
-						<h4>HOST {{s.stream.connection.client.clientData}}</h4>
-						<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
-					</div></div>
-          <div v-if="this.role===1"><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
-          <div v-for="s in subscribers" :key="s.stream.connection.connectionId">
-					<div v-if="s.stream.connection.dataObject.role===1">
-						<h4>AGREE {{s.stream.connection.client.clientData}}</h4>
-						<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
-					</div></div>
-          <div v-if="this.role===-1"><user-video :stream-manager="publisher" @click.native="updateMainVideoStreamManager(publisher)"/></div>
-          <div v-for="s in subscribers" :key="s.stream.connection.connectionId">
-					<div v-if="s.stream.connection.dataObject.role===-1">
-						<h4>DISAGREE {{s.stream.connection.client.clientData}}</h4>
-						<user-video :stream-manager="s" @click.native="updateMainVideoStreamManager(sub)"/>
-					</div></div>
-				</div>
-        </div>
-		</div>
-  </div></div>
+	</div>
 </template>
+
+<style>
+.main-session-outer {
+	width: 100vh;
+	height: 100vh;
+	background: yellow;
+}
+#main-container {
+}
+.main-my-video {
+	
+}
+</style>
 
 <script>
 import axios from 'axios';

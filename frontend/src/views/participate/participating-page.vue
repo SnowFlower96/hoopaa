@@ -30,7 +30,7 @@ export default {
   },
   created () {
     var id = this.tempToken.split("?")[1].split("&")[0].split("=")[1]
-    if (id != this.user.em) this.isPannel = true;
+    if (id != this.user.id) this.isPannel = true;
   },
   computed : {
     ...mapState(["user", "tempToken"]),

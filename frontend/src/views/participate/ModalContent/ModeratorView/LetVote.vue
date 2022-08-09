@@ -9,7 +9,5 @@
 </template>
 
 <style>
-.modal-inner-padding-setting {
-    padding: 5%;
-}
+
 </style>
