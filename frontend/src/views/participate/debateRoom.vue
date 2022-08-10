@@ -1,8 +1,25 @@
 <template id="debate-room-body">
-<div >
+<!-- 토론진행중 애니메이션 구성 -->
+<div  class="animation-role-background" :style="customCaroselStyle">
+    <start-letter id="arb" v-if="startEvent"></start-letter>
+</div>
+<!-- 토론진행중 애니메이션 구성 -->
+
+
+
+<!-- 곧 없어질 버튼 -->
+<div class="animation-control-btns">
+    <button @click="animation('startEvent')">시작 이벤트</button>
+    <button @click="animation('heartTen')" v-if="heartTen">하트갯수 10개 됐을때</button>
+    <button @click="animation('heartfift')" v-if="heartfift">하트갯수 50개 됐을때</button>
+    <button @click="animation('heartHund')" v-if="heartHund">하트갯수 100개 됐을때</button>
+    <button @click="animation('restEvent')" v-if="restEvent">쉬는시간일때</button>
+</div>
+<!-- 곧 없어질 버튼 -->
+
+
     <div v-if="imgTF" class="startImg">
     <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
-        <!-- <animation-view></animation-view> -->
         <!-- 뷰바꾸는 임시버튼 -->
         <button @click="moderatorView">사회자뷰</button>
         <button @click="allView">방청객뷰</button>
@@ -13,6 +30,8 @@
         <!-- <div id="demo">넨</div> -->
         <!-- 뷰바꾸는 임시버튼 -->
     </div>
+
+    
 
     <!-- 쉬는시간 모달 -->
     <div class="vote-modal-container" v-if="restModal" :style="customCaroselStyle">
@@ -162,7 +181,7 @@
 
 
         <!-- 사회자 footer에서 나오는 메뉴 -->
-            <div class="moderator-menus" v-if="modMenu" :style="customCaroselStyle">
+            <div class="moderator-menus" v-if="modMenu && moderator" :style="customCaroselStyle">
                 <p @click="EmitcallModal('menu')">패널 발언권 부여</p>
                 <p @click="EmitcallModal('rest')">쉬는시간 부여</p>
                 <p @click="voteVisible">투표 보내기</p>
@@ -196,7 +215,6 @@
     </div>
     <!-- 토론방 메인화면 -->
     <button @click="leaveSession">닫기닫기닫기</button>
-</div>
 </template>
 
 
@@ -204,7 +222,7 @@
 import debateRoomSideComponent from './debateRoomSideComponent'
 import debateRoomSideComponentAgree from './debateRoomSideComponentAgree'
 import debateRoomCenterComponent from './debateRoomCenterComponent'
-// import animationView from './animation-view.vue'
+import startLetter from './animation-view/start-letter.vue'
 import detailSessionView from './detailSessionView'
 
 import chattingAll from './ChattingComponents/chatting-all'
@@ -236,7 +254,7 @@ export default {
     components: {
         debateRoomSideComponent,
         debateRoomCenterComponent,
-        // animationView,
+        startLetter,
         chattingAll,
         chattingTeam,
         FooterTeam,
@@ -352,6 +370,12 @@ export default {
     },
     data() {
         return {
+            startEvent: false,
+            heartTen: false,
+            heartfift: false,
+            heartHund: false,
+            restEvent: false,
+
             allHeartLeft: '',
 
             restModal: false,
@@ -453,9 +477,28 @@ export default {
 
     },
     methods: {
+        animation(option) {
+            if (option === 'startEvent') { 
+                // this.startEvent = true
+                this.startEvent = !this.startEvent
+                this.heartTen = false
+                this.heartfift = false
+                this.heartHund = false
+                this.restEvent = false
+                }
+            else if (option === 'heartTen') {}
+            else if (option === 'heartfift') {}
+            else if (option === 'heartHund') {}
+            else if (option === 'restEvent') {}
+        },
         messageFromTeam() {
             this.callToMdModal = !this.callToMdModal
             this.messageFrom = !this.messageFrom
+            this.menu = false
+            this.out = false
+            this.message = false
+            this.file = false
+            this.rest = false
         },
         EmitRest(timeRest) {
             this.restModal = true
@@ -714,6 +757,7 @@ export default {
                 this.message = false
                 this.file = false
                 this.rest = false
+                this.messageFrom = false
             }
             else if (option == 'out') {
                 this.menu = false
@@ -721,6 +765,7 @@ export default {
                 this.message = false
                 this.file = false
                 this.rest = false
+                this.messageFrom = false
             }
             else if (option == 'message') {
                 this.menu = false
@@ -728,6 +773,7 @@ export default {
                 this.message = true
                 this.file = false
                 this.rest = false
+                this.messageFrom = false
             }
             else if (option == 'file') {
                 this.menu = false
@@ -735,6 +781,7 @@ export default {
                 this.message = false
                 this.file = true
                 this.rest = false
+                this.messageFrom = false
             }
             else if (option == 'rest') {
                 this.menu = false
@@ -742,6 +789,7 @@ export default {
                 this.message = false
                 this.file = false
                 this.rest = true
+                this.messageFrom = false
             }
         },
         leaveSession() {
@@ -761,6 +809,20 @@ export default {
 </script>
 
 <style>
+.animation-control-btns {
+    position: absolute;
+    top: 50px;
+    background-color: rgba(202, 88, 88, 0.534);
+    height: 50px;
+}
+.animation-role-background {
+    position: absolute;
+    height: 100vh;
+    width: var(--footer-width);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .modal-icon {
     display: flex;
     justify-content: end;
