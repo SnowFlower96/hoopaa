@@ -110,18 +110,26 @@
         <div class="debate-room-wrap">
           <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
           <div class="videobox-side" :style="customCaroselStyle">
-            <debate-room-video :stream="agree"></debate-room-video>
+             <div class="debate-room-component-content-side-a">
+            <div class="blank-space-video-a" :style="customViewStyle"></div>
+            <debate-room-video v-for="(item, index) in agree" :key="index" :stream="item.data"></debate-room-video>
+            </div>
           </div>
 
           <div class="videobox-center" :style="customCaroselStyle">
             <debate-room-video :stream="host"></debate-room-video>
+            <div class="debate-guague" :style="customViewStyle">
+        <div class="debate-guague-inner" :style="customViewStyle">
+        </div>
+    </div>
+    <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle">자료화면</div></div>
           </div>
 
           <div class="videobox-side" :style="customCaroselStyle">
-            <debate-room-side-component
-              :disagree="disagree"
-              :disagreesub="disagreesub"
-            ></debate-room-side-component>
+             <div class="debate-room-component-content-side">
+        <div class="blank-space-video" :style="customViewStyle"></div>
+        <debate-room-video v-for="(item, index) in disagree" :key="index" :stream="item.data"></debate-room-video>
+        </div>
           </div>
         </div>
       </div>
@@ -247,7 +255,27 @@ export default {
         "--mod-menus-loc": this.modMenusLoc,
         "--vote-modal-width": this.voteModalWidth
       };
-    }
+    },
+    customViewStyle() {
+            return {
+                "--side-video-width" : this.sideVideoWidth,
+                "--side-video-height" : this.sideVideoHeight,
+                "--side-video-height-inner" : this.sideVideoHeightInner,
+                "--blank-space-video-a" : this.blankSpaceVideo,
+                "--blank-space-video" : this.blankSpaceVideo,
+                "--center-video-height" : this.centerVideoHeight,
+                "--center-video-width" : this.centerVideoWidth,
+
+                "--db-mod" : this.dbModerator,
+                "--db-gg" : this.dbGuague,
+                "--db-ct" : this.dbContent,
+
+                "--db-gg-in-w" : this.dbGuagueInnerWidth,
+                "--db-ct-in-w" : this.dbContentInnerWidth,
+                "--db-gg-in-h" : this.dbGuagueInnerHeight,
+                "--db-ct-in-h" : this.dbContentInnerHeight,
+            }
+        },
   },
   data() {
     return {
@@ -294,17 +322,33 @@ export default {
       OV: undefined,
       session: undefined,
       host: undefined,
-      agree: undefined,
-      disagree: undefined,
-      agreesub: [],
-      disagreesub: [],
+      agree: [],
+      disagree: [],
 
       voteTeam: false,
       voteAll: false,
       voteMod: false,
 
       voteTime: 60,
-      voteStatus: null
+      voteStatus: null,
+      sideVideoWidth: '',
+      sideVideoHeight: '',
+      sideVideoHeightInner: '',
+      blankSpaceVideo: '',
+
+      centerVideoHeight : '',
+            centerVideoWidth : '',
+
+            dbModerator: '',
+            dbGuague: '',
+            dbContent:'',
+
+            dbGuagueInnerWidth: '',
+            dbContentInnerWidth: '',
+            dbGuagueInnerHeight: '',
+            dbContentInnerHeight: '',
+            resol_w: 300,
+            resol_h: 200
     };
   },
   mounted() {
@@ -330,6 +374,29 @@ export default {
 
     this.modMenusLoc = `${wVideoValue * 0.36}px`;
     this.voteModalWidth = `${debateBackground}px`;
+
+    const wValue = document.body.clientWidth*0.75*0.3-20
+
+        const hBlankValue = document.body.clientHeight*0.8*0.2
+
+
+        this.sideVideoWidth = `${wValue}px`
+        this.sideVideoHeight = `${wValue*0.6}px`
+        this.sideVideoHeightInner = `${hValue}px`
+        this.blankSpaceVideo = `${hBlankValue}px`
+
+        const wValueNotVid = document.body.clientWidth*0.75*0.4 // 게이지 + 컨텐츠
+        this.centerVideoWidth = `${wValue}px`
+        this.centerVideoHeight = `${wValue*0.6}px`
+        
+        this.dbModerator = `${wValue*0.6}px`
+        this.dbGuague = `${hValue*0.15}px`
+        this.dbContent = `${hValue*0.85}px`
+
+        this.dbGuagueInnerWidth = `${wValueNotVid-30}px`
+        this.dbContentInnerWidth = `${wValueNotVid-50}px`
+        this.dbGuagueInnerHeight = `${hValue*0.15-30}px`
+        this.dbContentInnerHeight = `${hValue*0.85-50}px`
     window.addEventListener("resize", this.handleResizeHome);
   },
   created() {
@@ -358,16 +425,20 @@ export default {
         let connectionData = JSON.parse(subscriber.stream.connection.data);
         var clientData = connectionData.clientData.split("/");
         console.log(clientData);
+        let sub = {
+            id : clientData[0],
+            stream : 'subscriber',
+            data : subscriber
+        };
         if (clientData[0] == this.session.sessionId) {
           console.log("host video connected");
           this.host = subscriber;
         } else if (clientData[1] == "agree") {
           console.log("agree video connected");
-          // this.agreesub.push(subscriber);
-          this.agree = subscriber;
+          this.agree.push(sub);
         } else if (clientData[1] == "disagree") {
           console.log("disagree video connected");
-          this.disagreesub.push(subscriber);
+          this.disagree.push(sub);
         }
       });
 
@@ -398,14 +469,20 @@ export default {
             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
             mirror: false // Whether to mirror your local video or not
           });
+          let sub = {
+            id : this.user.id,
+            stream : 'publisher',
+            data : publisher
+        };
           if (this.user.id == this.session.sessionId) {
             this.host = publisher;
             console.log("호스트래");
           } else if (this.position == "agree") {
-            this.agree = publisher;
+
+            this.agree.push(sub);
             console.log("찬성이래");
           } else if (this.position == "disagree") {
-            this.disagree = publisher;
+            this.disagree.push(sub);
             console.log("반대래");
           }
           console.log("Connected!!!");
@@ -903,5 +980,45 @@ export default {
   color: black;
   /* background-color: rgba(121, 193, 255, 0.621); */
   /* outline: 10px #667799 solid; */
+}
+.debate-room-component-content-side-a {
+    color: brown;
+}
+.blank-space-video-a {
+    height: var(--blank-space-video-a);
+    /* background-color: blue; */
+}
+.debate-room-component-content-side {
+    color: brown;
+}
+.blank-space-video {
+    height: var(--blank-space-video);
+    /* background-color: blue; */
+}
+.debate-guague {
+    height: var(--db-gg);
+    /* background-color: rgb(255, 255, 24); */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+.debate-guague-inner {
+    height: var(--db-gg-in-h);
+    width: var(--db-gg-in-w);
+    background-color: rgb(23, 139, 32);
+}
+
+
+.debate-content {
+    height: var(--db-ct);
+    /* background-color: rgb(23, 139, 32); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.debate-content-inner {
+    height: var(--db-ct-in-h);
+    width: var(--db-ct-in-w);
+    background-color: rgb(255, 255, 24);
 }
 </style>
