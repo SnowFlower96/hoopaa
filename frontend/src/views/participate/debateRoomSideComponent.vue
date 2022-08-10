@@ -2,7 +2,7 @@
     <div class="debate-room-component-content-side">
         <!-- <div>여기에 패널 화면 넣으면 됨</div> -->
         <div class="blank-space-video" :style="customViewStyle"></div>
-        <div v-if="position == 'disagree'" class="panel-video" :style="customViewStyle">
+        <div class="panel-video" :style="customViewStyle">
           <div class="panel-video-inner">
             <user-video  class="moderatorVideo" :stream-manager="disagree"/>
           </div>

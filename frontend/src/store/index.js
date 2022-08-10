@@ -22,6 +22,19 @@ export default new Vuex.Store({
   },
 
   mutations : {
+    // State 초기화
+    RESET_STATE(state) {
+
+        state.isLogin = false;
+        state.userHistory = '';
+        state.userStat = '';
+        state.roomList = [];
+        state.headerVisible = true;
+        state.tempToken = '';
+        state.user = [];
+        state.position = '';
+
+    },
     // 방 리스트 불러오기
     GET_ROOM_LIST(state, data) {
 

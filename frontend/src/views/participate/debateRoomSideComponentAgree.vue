@@ -2,13 +2,10 @@
     <div class="debate-room-component-content-side-a">
         <!-- <div>여기에 패널 화면 넣으면 됨</div> -->
         <div class="blank-space-video-a" :style="customViewStyle"></div>
-        <!-- <div class="panel-video-a" :style="customViewStyle">
+        <div class="panel-video-a" :style="customViewStyle">
           <div class="panel-video-a-inner-a">
             <user-video  class="moderatorVideo" :stream-manager="agreeChild"/>
           </div>
-        </div> -->
-        <div class="debate-moderator-inner" :style="customViewStyle">
-            <user-video class="moderatorVideo" :stream-manager="agree"/>
         </div>
         <div v-for="item in agreesub" :key="item.stream.connection.connectionId" class="panel-video-a" :style="customViewStyle">
           <div class="panel-video-a-inner-a">
@@ -67,13 +64,7 @@ export default {
     props : ['agree','agreesub'],
     created () {
       console.log("side")
-    },
-    watch : {
-      agree() {
-        console.log('변경 감지');
-        this.agreeChild = this.agree;
-        console.log(this.agreeChild);
-      }
+      this.agreeChild = this.agree;
     },
     mounted() {
         const wValue = document.body.clientWidth*0.75*0.3-20
