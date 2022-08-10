@@ -146,23 +146,27 @@
                     <div class="debate-background" :style="customCaroselStyle">
                         <div class="debate-room-wrap">
                             <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
-                            <div class="videobox-side" :style="customCaroselStyle">
-                                <debate-room-side-component-agree ></debate-room-side-component-agree>
-                            </div>
+<!-------------------------------------------- 여기가 토론방 비디오 들어가는 부분 ------------------------------------------->
+<!-------------------------------------------- 여기가 토론방 비디오 들어가는 부분 ------------------------------------------->
+                              <!-- 토론방 왼쪽 -->
+                              <div class="videobox-side" :style="customCaroselStyle">
+                                  
+                              </div>
+                              <!-- 토론방 왼쪽 -->
+                              
+                              <!-- 토론방 센터 -->
+                                <div class="videobox-center" :style="customCaroselStyle">
+                                      
+                                </div>
+                              <!-- 토론방 센터 -->
 
-                            <div class="videobox-center" :style="customCaroselStyle">
-                                <debate-room-center-component 
-                                :time-list="timeList" 
-                                ref="debateRoomSideComponent"
-                                :moderator="moderator"
-                                :all="all"
-                                :team="team"
-                                ></debate-room-center-component>
-                            </div>
-
-                            <div class="videobox-side" :style="customCaroselStyle">
-                                <debate-room-side-component v-bind:position="position" ref="debateRoomSideComponent"></debate-room-side-component>
-                            </div>
+                              <!-- 토론방 오른쪽 -->
+                              <div class="videobox-side" :style="customCaroselStyle">
+                                  
+                              </div>
+                              <!-- 토론방 오른쪽 -->
+<!-------------------------------------------- 여기가 토론방 비디오 들어가는 부분 ------------------------------------------->
+<!-------------------------------------------- 여기가 토론방 비디오 들어가는 부분 ------------------------------------------->
                         </div>
                     </div>
                 <!-- 메인화면 (비디오 + 화면공유 컴포넌트 모인곳) -->
