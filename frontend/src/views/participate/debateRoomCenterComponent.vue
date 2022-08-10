@@ -197,15 +197,13 @@ export default {
 
 
 .debate-guague {
-    height: var(--db-gg);
+    /* height: var(--db-gg); */
     /* background-color: rgb(255, 255, 24); */
     display: flex;
     justify-content: center;
     align-items: flex-end;
 }
 .debate-guague-inner {
-    height: var(--db-gg-in-h);
-    width: var(--db-gg-in-w);
     /* background-color: rgb(23, 139, 32); */
     display: flex;
     justify-content: space-evenly;
