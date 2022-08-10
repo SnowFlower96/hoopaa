@@ -6,7 +6,7 @@
     <button @click="moderatorView">사회자뷰</button>
     <button @click="allView">방청객뷰</button>
     <button @click="teamView">패널뷰</button>
-    <router-link to="/detailSessionView"><button>세부세션 가기</button></router-link>
+    <button @click="sendSession">세부세션 보내기</button>
     <button @click="voteView">투표모달창 끄기</button>
     <!-- 뷰바꾸는 임시버튼 -->
 </div>
@@ -274,7 +274,6 @@ export default {
 
             OV: undefined,
             session: undefined,
-            publisher: undefined,
             host : undefined,
             agree : undefined,
             disagree : undefined,
@@ -321,7 +320,7 @@ export default {
 
     },
     created () {
-       this.joinSession();
+      this.joinSession();
     },
   //   watch:{
 	// 	role:function(){
@@ -341,18 +340,19 @@ export default {
     // --- Specify the actions when events take place in the session ---
 
     // On every new Stream received...
-    await this.session.on("streamCreated", ({ stream }) => {
+    this.session.on("streamCreated", ({ stream }) => {
       const subscriber = this.session.subscribe(stream);
-      subscriber.stream.connection.dataObject = JSON.parse(
-        subscriber.stream.connection.data
-      );
-      var clientData = subscriber.stream.connection.dataObject.clientData.split("/")
+      let connectionData = JSON.parse(subscriber.stream.connection.data);
+      var clientData = connectionData.clientData.split("/")
       console.log(clientData)
-      if (clientData[0] == this.session.sessionId)
+      if (clientData[0] == this.session.sessionId) {
+        console.log("host video connected");
         this.host = subscriber;
-      else if (clientData[1] == 'agree') {
+      } else if (clientData[1] == 'agree') {
+        console.log("agree video connected");
         this.agreesub.push(subscriber);
       } else if (clientData[1] == 'disagree') {
+        console.log("disagree video connected");
         this.disagreesub.push(subscriber);
       }
     });
@@ -385,8 +385,8 @@ export default {
         mirror: true, // Whether to mirror your local video or not
       });
       if (this.user.id == this.session.sessionId) {
-      this.host = publisher;
-      console.log("호스트래")
+        this.host = publisher;
+        console.log("호스트래")
       } else if (this.position == 'agree') {
         this.agree = publisher;
         console.log("찬성이래")
@@ -409,6 +409,7 @@ export default {
          console.log("you are host");
     } else {
       console.log("you are pannel")
+      console.log(this.agree);
     }
     },
         voteFunction(status) {

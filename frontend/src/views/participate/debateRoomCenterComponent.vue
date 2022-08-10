@@ -1,6 +1,7 @@
 <template>
     <div class="debate-center-wrap" >
-        <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle">
+        <div class="debate-moderator" :style="customViewStyle">
+        <div class="debate-moderator-inner" :style="customViewStyle">
             <user-video class="moderatorVideo" :stream-manager="host"/>
 
         </div>

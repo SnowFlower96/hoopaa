@@ -1,21 +1,17 @@
 <template>
-    <div class="debate-room-component-content-side-a">
+    <div class="debate-room-component-content-side">
         <!-- <div>여기에 패널 화면 넣으면 됨</div> -->
-        <div class="blank-space-video-a" :style="customViewStyle"></div>
-        <!-- <div class="panel-video-a" :style="customViewStyle">
-          <div class="panel-video-a-inner-a">
-            <user-video  class="moderatorVideo" :stream-manager="agreeChild"/>
+        <div class="blank-space-video" :style="customViewStyle"></div>
+        <div class="panel-video" :style="customViewStyle">
+          <div class="panel-video-inner">
+            <user-video  class="moderatorVideo" :stream-manager="publisher"/>
           </div>
-        </div> -->
-        <div class="debate-moderator-inner" :style="customViewStyle">
-            <user-video class="moderatorVideo" :stream-manager="agree"/>
         </div>
-        <div v-for="item in agreesub" :key="item.stream.connection.connectionId" class="panel-video-a" :style="customViewStyle">
-          <div class="panel-video-a-inner-a">
+        <div v-for="(item, index) in subscribers" :key="index" class="panel-video" :style="customViewStyle">
+          <div class="panel-video-inner">
             <user-video class="moderatorVideo" :stream-manager="item"/>
           </div>
         </div>
-
     </div>
 </template>
 
@@ -30,27 +26,20 @@ const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
 const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 
 export default {
-    name : 'debateRoomSideComponentAgree',
+    name : 'detailSessionSideComponent',
     componets : {
       UserVideo
     },
     computed : {
-       ...mapState(["user","position"]),
+       ...mapState(["user", "position"]),
         customViewStyle() {
             return {
                 "--side-video-width" : this.sideVideoWidth,
                 "--side-video-height" : this.sideVideoHeight,
                 "--side-video-height-inner" : this.sideVideoHeightInner,
-                "--blank-space-video-a" : this.blankSpaceVideo,
+                "--blank-space-video" : this.blankSpaceVideo,
             }
-        },
-      // agree() {
-      //   console.log("-------");
-      //   console.log(this.agree);
-      //   console.log(this.agreesub);
-      //   console.log("-------");
-      //   return this.agree;
-      // }
+        }
     },
     data() {
         return {
@@ -58,23 +47,10 @@ export default {
             sideVideoHeight: '',
             sideVideoHeightInner: '',
             blankSpaceVideo: '',
-
-            agreeChild: undefined,
-            agreesubChild: this.agreesubChild,
         }
     },
+    props : ['publisher','subscribers'],
 
-    props : ['agree','agreesub'],
-    created () {
-      console.log("side")
-    },
-    watch : {
-      agree() {
-        console.log('변경 감지');
-        this.agreeChild = this.agree;
-        console.log(this.agreeChild);
-      }
-    },
     mounted() {
         const wValue = document.body.clientWidth*0.75*0.3-20
 
@@ -88,7 +64,6 @@ export default {
 
         window.addEventListener('resize', this.handleResizeHome);
     },
-
     methods: {
         handleResizeHome() {
             const wValue = document.body.clientWidth*0.75*0.3-20
@@ -101,8 +76,7 @@ export default {
             this.sideVideoHeightInner = `${hValue}px`
             this.blankSpaceVideo = `${hBlankValue}px`
         },
-
-    }
+}
 }
 </script>
 
@@ -111,29 +85,25 @@ video {
   height: var(--center-video-height);
   width: var(--center-video-width);
 }
-.debate-room-component-content-side-a {
+.debate-room-component-content-side {
     color: brown;
 }
-.blank-space-video-a {
-    height: var(--blank-space-video-a);
+.blank-space-video {
+    height: var(--blank-space-video);
     /* background-color: blue; */
 }
-.panel-video-a {
+.panel-video {
     width: var(--side-video-width);
     height: var(--side-video-height-inner);
     /* background-color: rgb(100, 232, 255); */
     display: flex;
     align-items: center;
 }
-.panel-video-a-inner-a {
+.panel-video-inner {
     width: var(--side-video-width);
     height: var(--side-video-height);
     background-color: white;
     border-radius: 10px;
-}
-.moderatorVideo {
-   height: 300px;
-   width: 300px;
 }
 </style>
 
