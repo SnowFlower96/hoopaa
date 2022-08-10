@@ -57,12 +57,12 @@ export default {
   watch: {
     '$route' (to, from) {
       console.log(to.name)
-      if (to.name === 'main-page' || to.name === 'login' || to.name === 'sign-up' || to.name === 'checkPwd' || to.name === 'make-room') {
+      if (to.name === 'main-page' || to.name === 'login' || to.name === 'sign-up' || to.name === 'checkPwd' || to.name === 'Participate') {
         this.location = to.name
         this.visibleMainHeader = false
         document.addEventListener('scroll', this.zeroLocation)
         } 
-      else if (to.name === 'debateRoom' || to.name === 'detailSession') {
+      else if (to.name === 'debateRoom'|| to.name === 'make-room' || to.name === 'homeToParticipate' || to.name === 'detailSessionView' || to.name === 'endDebate' || to.name === 'resultPage') {
         this.visibleMainHeader = false
         this.visibleMainFooter = false
       }

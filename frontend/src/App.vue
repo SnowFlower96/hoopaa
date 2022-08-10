@@ -12,6 +12,9 @@ export default {
   components: {
     Main,
   },
+  created () {
+    this.$store.commit('RESET_STATE');
+  },
 
   data: () => ({
     //

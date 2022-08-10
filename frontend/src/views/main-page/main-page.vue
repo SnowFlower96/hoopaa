@@ -8,7 +8,7 @@
             <!-- background-image: url('../../../assets/images/favi6.png'); -->
             <div class="main-img-wrapp-button" v-if="resizeWidthVisible">
               <router-link class="el-menu-item" to="/makeRoomPage"><div class="img-container-mainbtn01"></div></router-link>
-              <router-link class="el-menu-item" to="/participatingPage"><div class="img-container-mainbtn02"></div></router-link>
+              <router-link class="el-menu-item" to="/startWithCode"><div class="img-container-mainbtn02"></div></router-link>
               <router-link class="el-menu-item" to="/list"><div class="img-container-mainbtn03"></div></router-link>
             </div>
             <div class="main-first-img"  v-if="!resizeWidthVisible">

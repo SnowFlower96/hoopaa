@@ -1,9 +1,9 @@
 <template>
-  <el-row class="main-footer">
+  <div class="main-footer">
     <div class="footer-contents">
       Copyright © <img :src="require(`@/assets/images/071414.png`)" alt=""> All Rights Reserved.
     </div>
-  </el-row>
+  </div>
 </template>
 
 <style>

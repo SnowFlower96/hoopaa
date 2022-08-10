@@ -1,7 +1,7 @@
 <template>
     <div class="debate-room-footer-container">
-        <div class="footer-btn menu-btn" @click="callModalMenu">🥨</div>
-        <div class="footer-btn out-btn" @click="callModalOut">⛔</div>
+        <div class="footer-btn menu-btn" @click="callModalMenu"><i class="fas fa-bars"></i></div>
+        <div class="footer-btn out-btn" @click="callModalOut"><i class="fas fa-user-alt-slash"></i></div>
     </div>
 </template>
 
@@ -9,7 +9,7 @@
 export default {
     name: 'debateRoomFooter',
     methods: {
-        callModalMenu() {this.$emit('call-modal', 'menu')},
+        callModalMenu() {this.$emit('mod-menu')},
         callModalOut() {this.$emit('call-modal', 'out')},
     }
 }
@@ -36,17 +36,17 @@ export default {
     color: black;
 }
 .menu-btn {
-    outline: rgb(255, 255, 5) solid 1px;
-    color: rgb(255, 255, 5);
+    outline: white solid 1px;
+    color: white;
 }
 .menu-btn:hover {
-    background-color: rgb(255, 255, 5);
+    background-color: white;
 }
 .out-btn {
-    outline: rgb(255, 49, 87) solid 1px;
-    color: rgb(255, 49, 87);
+    outline: white solid 1px;
+    color: white;
 }
 .out-btn:hover {
-    background-color: rgb(255, 49, 87);
+    background-color: white;
 }
 </style>

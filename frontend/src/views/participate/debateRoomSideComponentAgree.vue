@@ -1,11 +1,11 @@
 <template>
-    <div class="debate-room-component-content-side">
+    <div class="debate-room-component-content-side-a">
         <!-- <div>여기에 패널 화면 넣으면 됨</div> -->
-        <div class="blank-space-video" :style="customViewStyle"></div>
-        <div class="panel-video" :style="customViewStyle"><div class="panel-video-inner">
-          <user-video class="moderatorVideo" :stream-manager="publisher" v-if="position == 'agree'"/>
+        <div class="blank-space-video-a" :style="customViewStyle"></div>
+        <div class="panel-video-a" :style="customViewStyle"><div class="panel-video-a-inner-a">
+          <user-video class="moderatorVideo-a" :stream-manager="publisher" v-if="position == 'agree'"/>
         </div></div>
-        <div class="panel-video" :style="customViewStyle"><div class="panel-video-inner"></div></div>
+        <div class="panel-video-a" :style="customViewStyle"><div class="panel-video-a-inner-a"></div></div>
     </div>
 </template>
 
@@ -32,7 +32,7 @@ export default {
                 "--side-video-width" : this.sideVideoWidth,
                 "--side-video-height" : this.sideVideoHeight,
                 "--side-video-height-inner" : this.sideVideoHeightInner,
-                "--blank-space-video" : this.blankSpaceVideo,
+                "--blank-space-video-a" : this.blankSpaceVideo,
             }
         }
     },
@@ -158,21 +158,21 @@ export default {
 
 <style>
 
-.debate-room-component-content-side {
+.debate-room-component-content-side-a {
     color: brown;
 }
-.blank-space-video {
-    height: var(--blank-space-video);
+.blank-space-video-a {
+    height: var(--blank-space-video-a);
     /* background-color: blue; */
 }
-.panel-video {
+.panel-video-a {
     width: var(--side-video-width);
     height: var(--side-video-height-inner);
     /* background-color: rgb(100, 232, 255); */
     display: flex;
     align-items: center;
 }
-.panel-video-inner {
+.panel-video-a-inner-a {
     width: var(--side-video-width);
     height: var(--side-video-height);
     background-color: white;
