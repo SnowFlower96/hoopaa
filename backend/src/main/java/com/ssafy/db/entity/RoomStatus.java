@@ -15,7 +15,6 @@ public class RoomStatus {
     @Id
     private Long id;
 
-    @Column(name = "agree_1")
     private Long agree_1;
     private Long agree_2;
     private Long agree_3;
@@ -28,12 +27,8 @@ public class RoomStatus {
     private Long disagree_4;
     private Long disagree_5;
 
-    private int agree;
-
-    private int disagree;
-
     @Builder
-    public RoomStatus(Long id, Long agree_1, Long agree_2, Long agree_3, Long agree_4, Long agree_5, Long disagree_1, Long disagree_2, Long disagree_3, Long disagree_4, Long disagree_5, int agree, int disagree) {
+    public RoomStatus(Long id, Long agree_1, Long agree_2, Long agree_3, Long agree_4, Long agree_5, Long disagree_1, Long disagree_2, Long disagree_3, Long disagree_4, Long disagree_5) {
         this.id = id;
         this.agree_1 = agree_1;
         this.agree_2 = agree_2;
@@ -45,7 +40,5 @@ public class RoomStatus {
         this.disagree_3 = disagree_3;
         this.disagree_4 = disagree_4;
         this.disagree_5 = disagree_5;
-        this.agree = agree;
-        this.disagree = disagree;
     }
 }

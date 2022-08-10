@@ -1,6 +1,7 @@
 package com.ssafy.db.dto;
 
 import com.ssafy.db.entity.RoomInfo;
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
@@ -19,11 +20,29 @@ public class RoomInfoDto {
     private int maxNum;
     private LocalDateTime startTime;
     private Integer cate;
-    private Integer hash1;
-    private Integer hash2;
-    private Integer hash3;
+    private String hash1;
+    private String hash2;
+    private String hash3;
     private String title;
     private String subtitle;
+
+    @Builder
+    public RoomInfoDto(Long id, String pwd, Long hostId, int isSys, String thumbUrl, int phase, int maxNum, LocalDateTime startTime, Integer cate, String hash1, String hash2, String hash3, String title, String subtitle) {
+        this.id = id;
+        this.pwd = pwd;
+        this.hostId = hostId;
+        this.isSys = isSys;
+        this.thumbUrl = thumbUrl;
+        this.phase = phase;
+        this.maxNum = maxNum;
+        this.startTime = startTime;
+        this.cate = cate;
+        this.hash1 = hash1;
+        this.hash2 = hash2;
+        this.hash3 = hash3;
+        this.title = title;
+        this.subtitle = subtitle;
+    }
 
     public RoomInfoDto(RoomInfo roomInfo){
         this.id = roomInfo.getId();
@@ -35,9 +54,6 @@ public class RoomInfoDto {
         this.maxNum = roomInfo.getMaxNum();
         this.startTime = roomInfo.getStartTime();
         this.cate = roomInfo.getCate();
-        this.hash1 = roomInfo.getHash1();
-        this.hash2 = roomInfo.getHash2();
-        this.hash3 = roomInfo.getHash3();
         this.title = roomInfo.getTitle();
         this.subtitle = roomInfo.getSubtitle();
     }

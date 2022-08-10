@@ -22,7 +22,7 @@ public class VRoom {
     // 세션에 접속한 모든 사람 정보
     private Map<String, UserInfo> mapParticipants;
 
-    private RoomInfoDto roomInfo;  // 방 정보
+    private RoomInfoDto roomInfoDto;  // 방 정보
 
     private UserInfo[] agree;  // 찬성측 유저 정보 배열
     private UserInfo[] disagree;  // 반대측 유저 정보 배열

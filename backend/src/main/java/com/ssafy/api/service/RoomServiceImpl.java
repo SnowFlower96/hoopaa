@@ -56,6 +56,7 @@ public class RoomServiceImpl implements RoomService {
                 .title(roomOpenInfo.getTitle())
                 .subtitle(roomOpenInfo.getSubtitle())
                 .build();
+        // 해시태그 검색
         if (roomOpenInfo.getHash_1() != null && !roomOpenInfo.getHash_1().equals("")) {
             roomInfo.setHash1(roomService.findHashtagId(roomOpenInfo.getHash_1()));
         }
@@ -65,55 +66,49 @@ public class RoomServiceImpl implements RoomService {
         if (roomOpenInfo.getHash_3() != null && !roomOpenInfo.getHash_3().equals("")) {
             roomInfo.setHash3(roomService.findHashtagId(roomOpenInfo.getHash_3()));
         }
+        // room_info 테이블 추가
         roomInfo = roomInfoRepository.save(roomInfo);
 
+        // room_status 테이블 추가
         RoomStatus roomStatus = RoomStatus.builder()
                 .id(roomInfo.getId())
                 .build();
         roomStatusRepository.save(roomStatus);
-        return new RoomInfoDto(roomInfo);
+
+        // 방 정보 DTO 반환
+        RoomInfoDto roomInfoDto = new RoomInfoDto(roomInfo);
+        roomInfoDto.setHash1(roomOpenInfo.getHash_1());
+        roomInfoDto.setHash2(roomOpenInfo.getHash_2());
+        roomInfoDto.setHash3(roomOpenInfo.getHash_3());
+        return roomInfoDto;
     }
 
     @Override
-    public RoomInfoDto findRoomByRoomId(Long roomId) {
-        Optional<RoomInfo> roomInfo = roomInfoRepository.findRoomInfoById(roomId);
-        return roomInfo.map(RoomInfoDto::new).orElse(null);
-    }
+    public Boolean updatePhaseByRoomId(Long id, int phase) {
+        Optional<RoomInfo> roomInfo = roomInfoRepository.findById(id);
+        if (!roomInfo.isPresent()) return null;
 
-    @Override
-    public RoomInfoDto findRoomBySessionId(String sessionId) {
-        Optional<User> user = userRepository.findUserByEm(sessionId);
-        if (!user.isPresent()) return null;
-
-        Long hostId = user.get().getId();
-        Optional<RoomInfo> roomInfo = roomInfoRepository.findRoomInfoByHostId(hostId);
-        return roomInfo.map(RoomInfoDto::new).orElse(null);
-    }
-
-    @Override
-    public RoomInfoDto updatePhaseByRoomId(Long id, int phase) {
-        RoomInfo roomInfo = roomInfoRepository.findById(id).get();
         if (phase == 1) {
-            if (roomInfo.getPhase() >= 1) {
-                return null;
+            if (roomInfo.get().getPhase() >= 1) {
+                return false;
             }
         } else if (phase == 2) {
-            if (roomInfo.getPhase() >= 2) {
-                return null;
+            if (roomInfo.get().getPhase() >= 2) {
+                return false;
             }
         }
-        roomInfo.setPhase(phase);
-        return new RoomInfoDto(roomInfoRepository.save(roomInfo));
+        roomInfo.get().setPhase(phase);
+        return true;
     }
 
     @Override
     public void finishRoom(VRoom vRoom) {
-        RoomInfo roomInfo = roomInfoRepository.findById(vRoom.getRoomInfo().getId()).get();
+        RoomInfo roomInfo = roomInfoRepository.findById(vRoom.getRoomInfoDto().getId()).get();
         int winner = 0;
         if (vRoom.getVote_final_agree() > vRoom.getVote_final_disagree()) winner = 1;
         else if (vRoom.getVote_final_agree() < vRoom.getVote_final_disagree()) winner = 2;
         RoomHistory roomHistory = RoomHistory.builder()
-                .id(vRoom.getRoomInfo().getId())
+                .id(vRoom.getRoomInfoDto().getId())
                 .end_time(LocalDateTime.now())
                 .winner(winner)
                 .agree(vRoom.getVote_final_agree())
@@ -192,7 +187,7 @@ public class RoomServiceImpl implements RoomService {
         //토론왕 설정
         if (kingId != -1L) {
             UserStat userStat = userStatRepository.findStatById(kingId).get();
-            UserHistory userHistory = userHistoryRepository.findUserHistoryByUserIdAndRoomId(kingId, vRoom.getRoomInfo().getId()).get();
+            UserHistory userHistory = userHistoryRepository.findUserHistoryByUserIdAndRoomId(kingId, vRoom.getRoomInfoDto().getId()).get();
             userStat.setKing(userStat.getKing() + 1);
             userHistory.setKing(true);
             userStatRepository.save(userStat);

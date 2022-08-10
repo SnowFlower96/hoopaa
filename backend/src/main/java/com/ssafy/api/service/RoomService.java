@@ -9,19 +9,10 @@ public interface RoomService {
 
     RoomInfoDto createRoom(RoomOpenReq roomOpenInfo);
 
-//    boolean enterRoom(Long id) throws NoSuchElementException;
-    RoomInfoDto findRoomByRoomId(Long roomId);
-
-    RoomInfoDto findRoomBySessionId(String sessionId);
-
-    RoomInfoDto updatePhaseByRoomId(Long id, int phase);
+    Boolean updatePhaseByRoomId(Long id, int phase);
 
     void finishRoom(VRoom session);
 
-
     int findHashtagId(String nm);
+
 }
-
-
-
-
