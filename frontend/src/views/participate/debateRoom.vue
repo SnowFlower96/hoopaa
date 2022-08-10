@@ -388,7 +388,7 @@ export default {
         const wValueNotVid = document.body.clientWidth*0.75*0.4 // 게이지 + 컨텐츠
         this.centerVideoWidth = `${wValue}px`
         this.centerVideoHeight = `${wValue*0.6}px`
-        
+
         this.dbModerator = `${wValue*0.6}px`
         this.dbGuague = `${hValue*0.15}px`
         this.dbContent = `${hValue*0.85}px`
@@ -727,7 +727,14 @@ export default {
     },
     leaveSession() {
       this.$refs.debateRoomSideComponent.leaveSession();
-    }
+    },
+    // 세부세션 보내기 시그널
+    sendSession() {
+      let index = "/room/session/" + this.session.sessionId;
+      this.$store.dispatch("makeSessionRoom", index).then((response) => {
+        console.log(response.data);
+      })
+    },
   }
 };
 </script>

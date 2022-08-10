@@ -72,8 +72,9 @@ export default {
   },
 
   methods : {
-    ...mapMutations(["USER_LOGOUT"]),
+    ...mapMutations(["USER_LOGOUT","RESET_STATE"]),
    logout() {
+      this.RESET_STATE();
       this.USER_LOGOUT();
       this.$router.push('/');
     },
