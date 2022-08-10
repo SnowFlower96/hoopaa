@@ -18,18 +18,18 @@
 <!-- 곧 없어질 버튼 -->
 
 
-    <div v-if="imgTF" class="startImg">
-    <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
-        <!-- 뷰바꾸는 임시버튼 -->
-        <button @click="moderatorView">사회자뷰</button>
-        <button @click="allView">방청객뷰</button>
-        <button @click="teamView">패널뷰</button>
-        <router-link to="/detailSessionView"><button>세부세션 가기</button></router-link>
-        <button @click="positionAgree">찬성</button>
-        <button @click="messageFromTeam">팀에서 사회자한테 주는 메세지</button>
-        <!-- <div id="demo">넨</div> -->
-        <!-- 뷰바꾸는 임시버튼 -->
-    </div>
+<!-- 뷰바꾸는 임시버튼 -->
+<div v-if="imgTF" class="startImg">
+<!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
+    <button @click="moderatorView">사회자뷰</button>
+    <button @click="allView">방청객뷰</button>
+    <button @click="teamView">패널뷰</button>
+    <router-link to="/detailSessionView"><button>세부세션 가기</button></router-link>
+    <button @click="positionAgree">찬성</button>
+    <button @click="messageFromTeam">팀에서 사회자한테 주는 메세지</button>
+    <!-- <div id="demo">넨</div> -->
+</div>
+<!-- 뷰바꾸는 임시버튼 -->
 
     
 
