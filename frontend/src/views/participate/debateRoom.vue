@@ -1286,7 +1286,7 @@ export default {
 .moderator-video-inner {
   height: var(--center-video-height);
   width: var(--center-video-width);
-  background-color: bisque;
+  background-color: aquamarine;
 }
 
 .debateroom-center-timer {
