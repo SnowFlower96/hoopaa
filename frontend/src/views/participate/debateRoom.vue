@@ -223,26 +223,37 @@
 
 
 <script>
-import debateRoomSideComponent from './debateRoomSideComponent'
-import debateRoomSideComponentAgree from './debateRoomSideComponentAgree'
-import debateRoomCenterComponent from './debateRoomCenterComponent'
+// 토론방 위에 보여지는 효과 관련
 import startLetter from './animation-view/start-letter.vue'
+
+
+// 토론방 관련
+import debateRoomSideComponent from './debateRoomSideComponent'
+import debateRoomSideComponentAgree from './debateRoomSideComponentAgree'  // @@ 없앨거
+import debateRoomCenterComponent from './debateRoomCenterComponent'        // @@ 없앨거
 import detailSessionView from './detailSessionView'
 
+
+//  채팅
 import chattingAll from './ChattingComponents/chatting-all'
 import chattingTeam from './ChattingComponents/chatting-team'
 
+
+// 하단바
 import FooterTeam from './debateRoomFooter/FooterTeam'
 import FooterModerator from './debateRoomFooter/FooterModerator'
 import FooterAll from './debateRoomFooter/FooterAll'
 
-import callToModerator from './ModalContent/TeamView/callToModerator'
-import UploadFile from './ModalContent/TeamView/UploadFile'
 
-import UserOut from './ModalContent/ModeratorView/UserOut'
-import MessageFromTeam from './ModalContent/ModeratorView/MessageFromTeam'
-import LetTeamSpeak from './ModalContent/ModeratorView/LetTeamSpeak'
-import RestTime from './ModalContent/ModeratorView/RestTime'
+// 메뉴 및 모달뷰
+import callToModerator from './ModalContent/TeamView/callToModerator'// 팀에서 사회자한테 메세지보내는 모달
+import UploadFile from './ModalContent/TeamView/UploadFile'// 화면공유 모달
+import UserOut from './ModalContent/ModeratorView/UserOut'// 사용자 강퇴 모달
+import MessageFromTeam from './ModalContent/ModeratorView/MessageFromTeam'//사회자가 보는 메세지 (팀에서 보낸)모달
+import LetTeamSpeak from './ModalContent/ModeratorView/LetTeamSpeak'//발언권 부여 모달
+import RestTime from './ModalContent/ModeratorView/RestTime'// 쉬는시간 부여 모달
+
+// 비디오 관련 및 내부로직
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
@@ -256,22 +267,32 @@ const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 export default {
     name: 'debateRoom',
     components: {
+      // 토론방 위에 보여지는 효과 관련
+        startLetter,
+
+      // 토론방 관련
         debateRoomSideComponent,
         debateRoomCenterComponent,
-        startLetter,
+        detailSessionView,
+        debateRoomSideComponentAgree,
+
+      //  채팅
         chattingAll,
         chattingTeam,
+
+      // 하단바
         FooterTeam,
         FooterModerator,
         FooterAll,
+
+      // 메뉴 및 모달뷰
         callToModerator,
         UserOut,
         MessageFromTeam,
         UploadFile,
         LetTeamSpeak,
         RestTime,
-        detailSessionView,
-        debateRoomSideComponentAgree
+
     },
     async created() {
     var token = this.$store.state.tempToken;
@@ -347,68 +368,49 @@ export default {
       ...mapState(["user", "room"]),
         customCaroselStyle() {
             return {
-                "--debate-box-center-width": this.debateCenterBoxWidth,    // videobox-center
-                "--debate-box-center-height": this.debateCenterBoxHeight,  // videobox-center
 
-                "--debate-box-side-width": this.debateSideBoxWidth,        // videobox-side
-                "--debate-box-side-height": this.debateSideBoxHeight,      // videobox-side
+              // 토론방 센터 (.videobox-center)
+                "--debate-box-center-width": this.dCenterW,  
+                "--debate-box-center-height": this.dCenterH, 
 
-                "--footer-width": this.footerWidth,    // debate-room-footer-class
+              // 토론방 양쪽 (.videobox-side)
+                "--debate-box-side-width": this.dSideW,   
+                "--debate-box-side-height": this.dSideH, 
 
-                "--video-box": this.videoBox,
-                "--chatt-box": this.chattBox,      // chatting-box
+              // 하단바 (.debate-room-footer-class)
+                "--footer-width": this.footerWidth,
 
-                "--db-bg" : this.debateBackground, // debate background
+              // 채팅창 (.chatting-box)
+                "--chatt-box": this.chattBox,  
 
+              // 메인화면 wrap (.debate-background)
+                "--db-bg" : this.wValue075,
+
+              // 토론방 추가기능 모달창
                 "--call-to-md-view" : this.callToMDView,
                 "--call-to-md-blnk" : this.callToMDBlnk,
                 "--call-to-md-ct" : this.callToMDCt,
                 "--call-to-md-in-width" : this.callToMDInW,
                 "--call-to-md-in-height" : this.callToMDInH,
                 "--call-to-md-in-height-c" : this.callToMDINHC,
+
                 "--mod-menus-loc" : this.modMenusLoc,
                 "--vote-modal-width" : this.voteModalWidth,
+
                 "--all-heart-left" : this.allHeartLeft
             }
         }
     },
     data() {
-        return {
-            startEvent: false,
-            heartTen: false,
-            heartfift: false,
-            heartHund: false,
-            restEvent: false,
-
-            allHeartLeft: '',
-
-            restModal: false,
-            moderator: false,
-            team: false,
-            all: false,
-            
-            position : '',
-
-            debateCenterBoxWidth: '',
-            debateCenterBoxHeight: '',
-
-            debateSideBoxWidth: '',
-            debateSideBoxHeight: '',
-
+      return {
+        // 반응형 고려 화면 픽셀 데이터
+            dCenterW: '',
+            dCenterH: '',
+            dSideW: '',
+            dSideH: '',
             videoBox: '',
             chattBox: '',
-
-            debateBackground: '',
-
-            chattTF: true,
-            imgTF:true,
-
-            chattingAllView: false,
-            chattingTeamView: false,
-
-            footerTeam: false,
-            footerModerator: false,
-            footerAll: false,
+            wValue075: '',
 
             callToMDView: '',
             callToMDBlnk: '',
@@ -416,71 +418,158 @@ export default {
             callToMDInW: '',
             callToMDInH: '',
             callToMDINHC: '',
+            modMenusLoc: '',
 
+
+          // 사용자에 따른 boolean
+            moderator: false,
+            team: false,
+            all: false,
+
+          // 토론방 위에 보여지는 효과 관련
+            startEvent: false,
+            heartTen: false,
+            heartfift: false,
+            heartHund: false,
+            restEvent: false,
+            allHeartLeft: '',
+            countingHeart :0,
+
+          //  채팅
+            chattTF: true,
+            chattingAllView: false,
+            chattingTeamView: false,
+
+          // 하단바
+            footerTeam: false,
+            footerModerator: false,
+            footerAll: false,
+
+          // 메뉴 및 모달뷰
+            restModal: false,
+            imgTF:true,
             callToMdModal: false,
-
             message: false,
             file: false,
             out: false,
             menu: false,
             rest: false,
             options: [this.menu, this.out, this.message, this.file],
-            countingHeart :0,
-            modMenusLoc: '',
-            voteViewTF: false,
-            voteModalWidth: '',
             modMenu: false,
-
+            messageFrom: false,
+            voteModalWidth: '',
+            voteTime: 60,
+            voteStatus: null,
+            voteViewTF: false,
             voteTeam: false,
             voteAll: false,
             voteMod: false,
-
-            voteTime: 60,
-            voteStatus: null,
-
             timerTime:null,
             timerTeam:null,
-
             timeList:[], // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
 
-            messageFrom: false
-
+          // 비디오 관련 및 내부로직
+            position : '',
         }
     },
     mounted() {
-        const wVideoValue = document.body.clientWidth
-        const debateBackground = wVideoValue*0.75
+        // 화면 기본 사이즈 받아옴 => 채팅창 있는 화면 로드됨
+        const wValue = document.body.clientWidth
+        const wValue075 = document.body.clientWidth*0.75
         const hValue = document.body.clientHeight
+        
+        this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
+        this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
+        this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
 
+        // 토론방 센터 (.videobox-center)
+        this.dCenterW = `${wValue075*0.4-10}px`
+        this.dCenterH = `${hValue*0.8}px`
+        
+        // 토론방 양쪽 (.videobox-side)
+        this.dSideW = `${wValue075*0.3-10}px`
+        this.dSideH = `${hValue*0.8}px`
 
-        this.debateBackground = `${debateBackground}px`
-        this.chattBox =  `${wVideoValue*0.25}px`
-        this.footerWidth = `${wVideoValue}px`
-
-
-        this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
-        this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
-
-        this.debateCenterBoxHeight = `${hValue*0.8}px`
-        this.debateSideBoxHeight = `${hValue*0.8}px`
-
-        this.callToMDView = `${debateBackground}px`
-        this.callToMDBlnk = `${debateBackground*0.3}px`
-        this.callToMDCt = `${debateBackground*0.4}px`
-        this.callToMDInW = `${debateBackground*0.4}px`
+        // 토론방 추가기능 모달창
+        this.callToMDView = `${wValue075}px`
+        this.callToMDBlnk = `${wValue075*0.3}px`
+        this.callToMDCt = `${wValue075*0.4}px`
+        this.callToMDInW = `${wValue075*0.4}px`
         this.callToMDInH = `${hValue*0.25}px`
         this.callToMDINHC = `${hValue*0.4}px`
 
-        this.modMenusLoc = `${wVideoValue*0.36}px`
-        this.voteModalWidth = `${debateBackground}px`
+        this.modMenusLoc = `${wValue*0.36}px`
+        this.voteModalWidth = `${wValue075}px`
 
         this.allHeartLeft= `${document.body.clientWidth*0.5}px`
 
         window.addEventListener('resize', this.handleResizeHome);
-        
-
     },
     methods: {
+        handleResizeHome() {  // 화면 움직일때 조정 다시함
+            if (this.chattTF === true) {    // 채팅창 열려있을때
+                // 화면 기본 사이즈 받아옴
+                const wValue = document.body.clientWidth
+                const wValue075 = document.body.clientWidth*0.75
+                const hValue = document.body.clientHeight
+                
+                this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
+                this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
+                this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
+
+                // 토론방 센터 (.videobox-center)
+                this.dCenterW = `${wValue075*0.4-10}px`
+                this.dCenterH = `${hValue*0.8}px`
+                
+                // 토론방 양쪽 (.videobox-side)
+                this.dSideW = `${wValue075*0.3-10}px`
+                this.dSideH = `${hValue*0.8}px`
+
+                // 토론방 추가기능 모달창
+                this.callToMDView = `${wValue075}px`
+                this.callToMDBlnk = `${wValue075*0.3}px`
+                this.callToMDCt = `${wValue075*0.4}px`
+                this.callToMDInW = `${wValue075*0.4}px`
+                this.callToMDInH = `${hValue*0.25}px`
+                this.callToMDINHC = `${hValue*0.4}px`
+
+                this.modMenusLoc = `${wValue*0.36}px`
+                this.voteModalWidth = `${wValue075}px`
+
+                this.allHeartLeft= `${document.body.clientWidth*0.5}px`
+            }
+            else {     // 채팅창 닫혀있을때
+                const wValue = document.body.clientWidth
+                const wValue075 = wValue  // 닫혀있으면 전체사이즈로 지정
+                const hValue = document.body.clientHeight
+
+
+                this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
+                this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
+                this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
+
+                // 토론방 센터 (.videobox-center)
+                this.dCenterW = `${wValue075*0.4-10}px`
+                this.dCenterH = `${hValue*0.8}px`
+                
+                // 토론방 양쪽 (.videobox-side)
+                this.dSideW = `${wValue075*0.3-10}px`
+                this.dSideH = `${hValue*0.8}px`
+
+                // 토론방 추가기능 모달창
+                this.callToMDView = `${wValue075}px`
+                this.callToMDBlnk = `${wValue075*0.3}px`
+                this.callToMDCt = `${wValue075*0.4}px`
+                this.callToMDInW = `${wValue075*0.4}px`
+                this.callToMDInH = `${hValue*0.25}px`
+                this.callToMDINHC = `${hValue*0.4}px`
+
+                this.modMenusLoc = `${wValue*0.36}px`
+                this.voteModalWidth = `${wValue075}px`
+
+                this.allHeartLeft= `${document.body.clientWidth*0.5}px`
+            }
+        },
         animation(option) {
             if (option === 'startEvent') { 
                 // this.startEvent = true
@@ -581,63 +670,7 @@ export default {
                 console.log('5개')
             }
         },
-        handleResizeHome() {
-            
-            if (this.chattTF === true) {    // 채팅창 열려있을때
-                const wVideoValue = document.body.clientWidth
-                const debateBackground = wVideoValue*0.75
-                const hValue = document.body.clientHeight
-
-
-                this.debateBackground = `${debateBackground}px`
-                this.chattBox =  `${wVideoValue*0.25}px`
-                this.footerWidth = `${wVideoValue}px`
-
-
-                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
-                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
-
-                this.debateCenterBoxHeight = `${hValue*0.8}px`
-                this.debateSideBoxHeight = `${hValue*0.8}px`
-
-                this.callToMDView = `${debateBackground}px`
-                this.callToMDBlnk = `${debateBackground*0.3}px`
-                this.callToMDCt = `${debateBackground*0.4}px`
-                this.callToMDInW = `${debateBackground*0.4}px`
-                this.callToMDInH = `${hValue*0.31}px`
-                this.modMenusLoc = `${wVideoValue*0.36}px`
-                this.voteModalWidth = `${debateBackground}px`
-
-                this.allHeartLeft= `${document.body.clientWidth*0.5}px`
-            }
-            else {     // 채팅창 닫혀있을때
-                const wVideoValue = document.body.clientWidth
-                const debateBackground = wVideoValue
-                const hValue = document.body.clientHeight
-
-
-                this.debateBackground = `${debateBackground}px`
-                this.chattBox =  `${wVideoValue*0.25}px`
-                this.footerWidth = `${wVideoValue}px`
-
-
-                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
-                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
-
-                this.debateCenterBoxHeight = `${hValue*0.8}px`
-                this.debateSideBoxHeight = `${hValue*0.8}px`
-
-                this.callToMDView = `${debateBackground}px`
-                this.callToMDBlnk = `${debateBackground*0.3}px`
-                this.callToMDCt = `${debateBackground*0.4}px`
-                this.callToMDInW = `${debateBackground*0.4}px`
-                this.callToMDInH = `${hValue*0.31}px`
-                this.modMenusLoc = `${wVideoValue*0.36}px`
-                this.voteModalWidth = `${debateBackground}px`
-
-                this.allHeartLeft= `${document.body.clientWidth*0.5}px`
-            }
-        },
+        
         moderatorView() {
             this.moderator = true,
             this.all = false,
@@ -689,52 +722,52 @@ export default {
         changeChatView() {
             this.chattTF = !this.chattTF
             if (this.chattTF === true) {    // 채팅창 열려있을때
-                const wVideoValue = document.body.clientWidth
-                const debateBackground = wVideoValue*0.75
+                const wValue = document.body.clientWidth
+                const wValue075 = wValue*0.75
                 const hValue = document.body.clientHeight
 
 
-                this.debateBackground = `${debateBackground}px`
-                this.chattBox =  `${wVideoValue*0.25}px`
-                this.footerWidth = `${wVideoValue}px`
+                this.wValue075 = `${wValue075}px`
+                this.chattBox =  `${wValue*0.25}px`
+                this.footerWidth = `${wValue}px`
 
 
-                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
-                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
+                this.dCenterW = `${wValue075*0.4-10}px`
+                this.dSideW = `${wValue075*0.3-10}px`
 
-                this.debateCenterBoxHeight = `${hValue*0.8}px`
-                this.debateSideBoxHeight = `${hValue*0.8}px`
+                this.dCenterH = `${hValue*0.8}px`
+                this.dSideH = `${hValue*0.8}px`
 
-                this.callToMDView = `${debateBackground}px`
-                this.callToMDBlnk = `${debateBackground*0.3}px`
-                this.callToMDCt = `${debateBackground*0.4}px`
-                this.callToMDInW = `${debateBackground*0.4}px`
+                this.callToMDView = `${wValue075}px`
+                this.callToMDBlnk = `${wValue075*0.3}px`
+                this.callToMDCt = `${wValue075*0.4}px`
+                this.callToMDInW = `${wValue075*0.4}px`
                 this.callToMDInH = `${hValue*0.31}px`
-                this.voteModalWidth = `${debateBackground}px`
+                this.voteModalWidth = `${wValue075}px`
             }
             else {     // 채팅창 닫혀있을때
-                const wVideoValue = document.body.clientWidth
-                const debateBackground = wVideoValue
+                const wValue = document.body.clientWidth
+                const wValue075 = wValue
                 const hValue = document.body.clientHeight
 
 
-                this.debateBackground = `${debateBackground}px`
-                this.chattBox =  `${wVideoValue*0.25}px`
-                this.footerWidth = `${wVideoValue}px`
+                this.wValue075 = `${wValue075}px`
+                this.chattBox =  `${wValue*0.25}px`
+                this.footerWidth = `${wValue}px`
 
 
-                this.debateCenterBoxWidth = `${debateBackground*0.4-10}px`
-                this.debateSideBoxWidth = `${debateBackground*0.3-10}px`
+                this.dCenterW = `${wValue075*0.4-10}px`
+                this.dSideW = `${wValue075*0.3-10}px`
 
-                this.debateCenterBoxHeight = `${hValue*0.8}px`
-                this.debateSideBoxHeight = `${hValue*0.8}px`
+                this.dCenterH = `${hValue*0.8}px`
+                this.dSideH = `${hValue*0.8}px`
 
-                this.callToMDView = `${debateBackground}px`
-                this.callToMDBlnk = `${debateBackground*0.3}px`
-                this.callToMDCt = `${debateBackground*0.4}px`
-                this.callToMDInW = `${debateBackground*0.4}px`
+                this.callToMDView = `${wValue075}px`
+                this.callToMDBlnk = `${wValue075*0.3}px`
+                this.callToMDCt = `${wValue075*0.4}px`
+                this.callToMDInW = `${wValue075*0.4}px`
                 this.callToMDInH = `${hValue*0.31}px`
-                this.voteModalWidth = `${debateBackground}px`
+                this.voteModalWidth = `${wValue075}px`
             }
         },
         offCallModal() {
@@ -1088,15 +1121,13 @@ export default {
     height: var(--debate-box-side-height);
     width: var(--debate-box-side-width);
     color: black;
-    /* background-color: rgb(61, 255, 94);
-    outline: 10px #667799 solid; */
+    background-color: rgb(61, 255, 94);
 }
 .videobox-center {
   height: var(--debate-box-center-height);
   width: var(--debate-box-center-width);
   color: black;
-  /* background-color: rgba(121, 193, 255, 0.621); */
-  /* outline: 10px #667799 solid; */
+  background-color: rgba(121, 193, 255, 0.621);
 }
 
 

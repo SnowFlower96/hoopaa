@@ -1,7 +1,7 @@
 <template>
 <div v-if="streamManager">
 	<ov-video :stream-manager="streamManager"/>
-	<div><p>{{ clientData }}</p></div>
+	<!-- <div><p>{{ clientData }}</p></div> -->
 </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
 	methods: {
 		getConnectionData () {
       const { connection } = this.streamManager.stream;
-      console.log(connection)
+      // console.log(connection)
 			return JSON.parse(connection.data);
 		},
 	},
