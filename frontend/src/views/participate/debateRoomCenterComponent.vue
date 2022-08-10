@@ -1,10 +1,10 @@
 <template>
-    <div class="debate-center-wrap" >
+    <!-- <div class="debate-center-wrap" >
         <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle">
             <user-video class="moderatorVideo" :stream-manager="room.host"/>
 
         </div>
-    </div>
+    </div> -->
     <div class="debate-guague" :style="customViewStyle">
         <div class="debate-guague-inner" :style="customViewStyle">
             <span style="font-size: 25px;" v-if="!timeList[1]">반대팀</span>
@@ -13,13 +13,13 @@
             <div class="st-tim-btn" v-if="moderator" @click="startTimer">시작</div>
         </div>
     </div>
-    <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle"></div></div>
-    </div>
+    <!-- <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle"></div></div>
+    </div> -->
 </template>
 
 <script>
 import axios from 'axios';
-import UserVideo from '@/views/openvidu/UserVideo.vue';
+// import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -40,7 +40,7 @@ export default {
         'team',
     ],
     components : {
-        UserVideo,
+        // UserVideo,
     },
     computed : {
       ...mapState(["user","room"]),

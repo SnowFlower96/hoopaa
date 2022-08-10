@@ -1,6 +1,6 @@
 <template id="debate-room-body">
 <!-- 토론진행중 애니메이션 구성 -->
-<div  class="animation-role-background" :style="customCaroselStyle">
+<div  class="animation-role-background" v-if="false" :style="customCaroselStyle">
     <start-letter id="arb" v-if="startEvent"></start-letter>
 </div>
 <!-- 토론진행중 애니메이션 구성 -->
@@ -149,21 +149,41 @@
 <!-------------------------------------------- 여기가 토론방 비디오 들어가는 부분 ------------------------------------------->
 <!-------------------------------------------- 여기가 토론방 비디오 들어가는 부분 ------------------------------------------->
                               <!-- 토론방 왼쪽 -->
-                              <div class="videobox-side" :style="customCaroselStyle">
-                                  
-                              </div>
+                                <div class="videobox-side" :style="customCaroselStyle">
+                                    <debate-room-video></debate-room-video>
+                                </div>
                               <!-- 토론방 왼쪽 -->
                               
                               <!-- 토론방 센터 -->
                                 <div class="videobox-center" :style="customCaroselStyle">
-                                      
+                                  
+                                  <div class="moderator-video">
+                                    <div class="moderator-video-inner" :style="customCaroselStyle">
+                                      <!-- 사회자 비디오 들어갈 곳 -->
+                                    </div>
+                                  </div>
+
+                                  <div class="debateroom-center-timer"> <!-- 이부분 나중에 위로 가져오기-->
+                                      <debate-room-center-component 
+                                      :time-list="timeList" 
+                                      ref="debateRoomSideComponent"
+                                      :moderator="moderator"
+                                      :all="all"
+                                      :team="team"
+                                      ></debate-room-center-component>
+                                  </div>
+
+                                  <div class="share-view">
+
+                                  </div>
+
                                 </div>
                               <!-- 토론방 센터 -->
 
                               <!-- 토론방 오른쪽 -->
-                              <div class="videobox-side" :style="customCaroselStyle">
-                                  
-                              </div>
+                                <div class="videobox-side" :style="customCaroselStyle">
+                                  <debate-room-video></debate-room-video>
+                                </div>
                               <!-- 토론방 오른쪽 -->
 <!-------------------------------------------- 여기가 토론방 비디오 들어가는 부분 ------------------------------------------->
 <!-------------------------------------------- 여기가 토론방 비디오 들어가는 부분 ------------------------------------------->
@@ -232,6 +252,7 @@ import debateRoomSideComponent from './debateRoomSideComponent'
 import debateRoomSideComponentAgree from './debateRoomSideComponentAgree'  // @@ 없앨거
 import debateRoomCenterComponent from './debateRoomCenterComponent'        // @@ 없앨거
 import detailSessionView from './detailSessionView'
+import debateRoomVideo from './debateRoomVideo'
 
 
 //  채팅
@@ -275,6 +296,7 @@ export default {
         debateRoomCenterComponent,
         detailSessionView,
         debateRoomSideComponentAgree,
+        debateRoomVideo,
 
       //  채팅
         chattingAll,
@@ -373,6 +395,10 @@ export default {
                 "--debate-box-center-width": this.dCenterW,  
                 "--debate-box-center-height": this.dCenterH, 
 
+              // 표준 비디오 사이즈
+              "--center-video-height" : this.centerVideoHeight,
+              "--center-video-width" : this.centerVideoWidth,
+
               // 토론방 양쪽 (.videobox-side)
                 "--debate-box-side-width": this.dSideW,   
                 "--debate-box-side-height": this.dSideH, 
@@ -419,6 +445,10 @@ export default {
             callToMDInH: '',
             callToMDINHC: '',
             modMenusLoc: '',
+
+          // 표준 비디오 사이즈
+          centerVideoHeight : '',
+          centerVideoWidth : '',
 
 
           // 사용자에 따른 boolean
@@ -485,6 +515,11 @@ export default {
         // 토론방 센터 (.videobox-center)
         this.dCenterW = `${wValue075*0.4-10}px`
         this.dCenterH = `${hValue*0.8}px`
+
+        //표준 비디오 사이즈
+        const videoSize = document.body.clientWidth*0.75*0.3-20
+        this.centerVideoWidth = `${videoSize}px`
+        this.centerVideoHeight = `${videoSize*0.6}px`
         
         // 토론방 양쪽 (.videobox-side)
         this.dSideW = `${wValue075*0.3-10}px`
@@ -520,6 +555,11 @@ export default {
                 // 토론방 센터 (.videobox-center)
                 this.dCenterW = `${wValue075*0.4-10}px`
                 this.dCenterH = `${hValue*0.8}px`
+
+                //표준 비디오 사이즈
+                const videoSize = document.body.clientWidth*0.75*0.3-20
+                this.centerVideoWidth = `${videoSize}px`
+                this.centerVideoHeight = `${videoSize*0.6}px`
                 
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
@@ -543,7 +583,6 @@ export default {
                 const wValue075 = wValue  // 닫혀있으면 전체사이즈로 지정
                 const hValue = document.body.clientHeight
 
-
                 this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
                 this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
                 this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
@@ -551,6 +590,11 @@ export default {
                 // 토론방 센터 (.videobox-center)
                 this.dCenterW = `${wValue075*0.4-10}px`
                 this.dCenterH = `${hValue*0.8}px`
+
+                //표준 비디오 사이즈
+                const videoSize = document.body.clientWidth*0.75*0.3-20
+                this.centerVideoWidth = `${videoSize}px`
+                this.centerVideoHeight = `${videoSize*0.6}px`
                 
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
@@ -1021,7 +1065,6 @@ export default {
     }
 }
 
-
 .chatt-btn {
     width: 5vh;
     height: 5vh;
@@ -1116,19 +1159,49 @@ export default {
     /* background-color: rgba(146, 227, 153, 0.581); */
 }
 .videobox-side {
-    display: flex;
-    justify-content: center;
     height: var(--debate-box-side-height);
     width: var(--debate-box-side-width);
     color: black;
     background-color: rgb(61, 255, 94);
+    overflow: auto;
 }
+.videobox-side-inner {
+  width: 100px;
+  height: 100px;
+  background-color: aqua;
+  outline: solid 4px yellow;
+}
+.videobox-side::-webkit-scrollbar{width: 8px;}
+.videobox-side::-webkit-scrollbar-thumb {
+  background-color: rgb(156, 156, 156);
+    border-radius: 5px;
+}
+
+
 .videobox-center {
   height: var(--debate-box-center-height);
   width: var(--debate-box-center-width);
   color: black;
   background-color: rgba(121, 193, 255, 0.621);
 }
+.moderator-video {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.moderator-video-inner {
+  height: var(--center-video-height);
+  width: var(--center-video-width);
+  background-color: bisque;
+}
 
+.debateroom-center-timer {
+  background-color: rgb(119, 0, 255);
+}
 
+.share-view {
+  height: var();
+  width: var();
+  background-color: azure;
+}
 </style>
