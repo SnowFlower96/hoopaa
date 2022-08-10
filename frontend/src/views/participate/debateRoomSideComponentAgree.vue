@@ -22,6 +22,10 @@ import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
+const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
+
 export default {
     name : 'debateRoomSideComponentAgree',
     componets : {
@@ -47,7 +51,9 @@ export default {
         }
     },
     props : ['agree','agreesub'],
-
+    created () {
+      console.log("side")
+    },
     mounted() {
         const wValue = document.body.clientWidth*0.75*0.3-20
 
@@ -80,7 +86,10 @@ export default {
 </script>
 
 <style>
-
+video {
+  height: var(--center-video-height);
+  width: var(--center-video-width);
+}
 .debate-room-component-content-side-a {
     color: brown;
 }
@@ -100,6 +109,10 @@ export default {
     height: var(--side-video-height);
     background-color: white;
     border-radius: 10px;
+}
+.moderatorVideo {
+   height: 300px;
+   width: 300px;
 }
 </style>
 

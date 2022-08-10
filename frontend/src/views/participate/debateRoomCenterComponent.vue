@@ -67,7 +67,7 @@ export default {
     },
     props : ['host'],
     created () {
-      console.log("room 확인")
+      console.log("center")
     },
     mounted() {
         console.log(this.timeList)
@@ -125,9 +125,9 @@ export default {
 </script>
 
 <style>
-.moderatorVideo > #local-video-undefined {
-    height: var(--center-video-height);
-    width: var(--center-video-width);
+video {
+  height: var(--center-video-height);
+  width: var(--center-video-width);
 }
 .debate-moderator {
     height: var(--db-mod);

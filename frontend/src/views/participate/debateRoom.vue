@@ -98,15 +98,15 @@
             <div class="debate-room-wrap">
                 <!-- <detail-session :chattOpen="chattTF"></detail-session> -->
                 <div class="videobox-side" :style="customCaroselStyle">
-                    <debate-room-side-component-agree v-bind:agree="agree" :agreesub="agreesub"></debate-room-side-component-agree>
+                    <debate-room-side-component-agree :agree="agree" :agreesub="agreesub"></debate-room-side-component-agree>
                 </div>
 
                 <div class="videobox-center" :style="customCaroselStyle">
-                    <debate-room-center-component v-bind:time-list="timeList" :host="host" ></debate-room-center-component>
+                    <debate-room-center-component :time-list="timeList" :host="host" ></debate-room-center-component>
                 </div>
 
                 <div class="videobox-side" :style="customCaroselStyle">
-                    <debate-room-side-component v-bind:disagree="disagree" :disagreesub="disagreesub"></debate-room-side-component>
+                    <debate-room-side-component :disagree="disagree" :disagreesub="disagreesub"></debate-room-side-component>
 
                 </div>
             </div>
@@ -172,8 +172,14 @@ import LetTeamSpeak from './ModalContent/ModeratorView/LetTeamSpeak'
 import RestTime from './ModalContent/ModeratorView/RestTime'
 import LetVote from './ModalContent/ModeratorView/LetVote'
 
+import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
-import { mapState } from 'vuex';
+import UserVideo from '@/views/openvidu/UserVideo.vue';
+import { mapState} from 'vuex';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
+const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 
 export default {
     name: 'debateRoom',
@@ -326,14 +332,14 @@ export default {
     methods: {
     async joinSession () {
     const token = this.tempToken;
-    console.log(token)
+
     // --- Get an OpenVidu object ---
     this.OV = new OpenVidu();
-    console.log("1")
+
     // --- Init a session ---
     this.session = this.OV.initSession();
     // --- Specify the actions when events take place in the session ---
-    console.log("2")
+
     // On every new Stream received...
     await this.session.on("streamCreated", ({ stream }) => {
       const subscriber = this.session.subscribe(stream);
@@ -350,7 +356,7 @@ export default {
         this.disagreesub.push(subscriber);
       }
     });
-    console.log("3")
+
     // On every Stream destroyed...
     // TODO
     this.session.on("streamDestroyed", ({ stream }) => {
@@ -359,19 +365,19 @@ export default {
         this.subscribers.splice(index, 1);
       }
     });
-    console.log("4")
+
     // On every asynchronous exception...
     this.session.on("exception", ({ exception }) => {
       console.warn(exception);
     });
-    console.log("5")
+
     await this.session
       .connect(token, { clientData: this.user.id + '/' + this.position})
       .then(() => {
         let publisher = this.OV.initPublisher(undefined, {
         audioSource: undefined, // The source of audio. If undefined default microphone
         videoSource: undefined, // The source of video. If undefined default webcam
-        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+        publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
         publishVideo: true, // Whether you want to start publishing with your video enabled or not
         resolution: "680x480", // The resolution of your video
         frameRate: 30, // The frame rate of your video

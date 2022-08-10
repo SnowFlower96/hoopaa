@@ -21,6 +21,10 @@ import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
+const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
+
 export default {
     name : 'debateRoomSideComponent',
     componets : {
@@ -123,7 +127,10 @@ export default {
 </script>
 
 <style>
-
+video {
+  height: var(--center-video-height);
+  width: var(--center-video-width);
+}
 .debate-room-component-content-side {
     color: brown;
 }
