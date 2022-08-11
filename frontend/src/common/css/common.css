@@ -1,0 +1,49 @@
+/* 공통으로 적용되어야할 css */
+html, body {
+  height: 95vh;
+}
+
+body {
+  margin: 0;
+  font-family: Cafe24;
+  font-weight: 400;
+  font-size: large
+}
+
+@media (max-width: 1269px) {
+  .hide-on-small {
+    display: none !important;
+    /* display: block; */
+  }
+  .hide-on-big {
+    display: block;
+  }
+}
+
+@media (min-width: 1270px) {
+  html, body {
+    min-width: 1270px;
+  }
+
+  .hide-on-small {
+    display: block;
+  }
+  .hide-on-big {
+    display: none !important;
+  }
+}
+.v-application {
+  font-family: 'Cafe24', sans-serif !important;
+}
+@font-face {
+  font-family: 'Cafe24';
+  font-weight: 400;
+  src: url('../../assets/fonts/Cafe24Ssurround.ttf') format('truetype');
+}
+/* @font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('../assets/fonts/Pretendard-Medium.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+} */
+
