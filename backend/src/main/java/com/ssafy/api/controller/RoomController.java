@@ -2,22 +2,21 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
-import com.ssafy.api.request.SessionReq;
-import com.ssafy.api.response.JsonRes;
 import com.ssafy.api.response.StringRes;
 import com.ssafy.api.response.VTokenRes;
 import com.ssafy.api.response.VTokensRes;
 import com.ssafy.api.service.RoomInfoService;
+import com.ssafy.api.service.RoomRedisService;
 import com.ssafy.api.service.RoomService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
-import com.ssafy.common.data.UserInfo;
-import com.ssafy.common.data.VSession;
+import com.ssafy.common.data.VUserInfo;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.dto.RoomInfoDto;
-import com.ssafy.common.data.VRoom;
 import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.entity.User;
+import com.ssafy.redis.entity.VRoom;
+import com.ssafy.redis.entity.VSession;
 import io.openvidu.java.client.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RoomController {
 
     @Autowired
-    RoomService roomService;
+    RoomRedisService roomRedisService;
 
     @Autowired
     RoomInfoService roomInfoService;
@@ -47,8 +46,6 @@ public class RoomController {
     UserService userService;
 
     private OpenVidu openVidu;
-    private Map<String, VRoom> mapRooms = new ConcurrentHashMap<>();
-    private Map<String, VSession> mapSessions = new ConcurrentHashMap<>();
     private String OPENVIDU_URL;
     private String SECRET;
 
@@ -72,13 +69,13 @@ public class RoomController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<? extends BaseResponseBody> openRoom(@ApiIgnore Authentication authentication,
-                                                               @RequestBody @ApiParam(value = "방 정보", required = true) RoomOpenReq openInfo) throws OpenViduJavaClientException, OpenViduHttpException {
+                                                               @RequestBody @ApiParam(value = "방 정보", required = true) RoomOpenReq roomOpenReq) throws OpenViduJavaClientException, OpenViduHttpException {
         // Access Token 에서 유저 ID 추출
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         String AToken = userDetails.getUsername();
 
         // 유저 아이디로 생성된 세션이 이미 있으면
-        if (this.mapRooms.get(AToken) != null) {
+        if (roomRedisService.isExist(AToken)) {
             return ResponseEntity.status(405).body(StringRes.of(405, "Session Already Exist"));
         }
         // 세션 생성
@@ -88,23 +85,15 @@ public class RoomController {
             try {
                 SessionProperties sessionProperties = new SessionProperties.Builder().customSessionId(AToken).build();
                 session = this.openVidu.createSession(sessionProperties);
-                this.mapRooms.put(AToken, new VRoom());
-                this.mapRooms.get(AToken).setSession(session);
-                this.mapRooms.get(AToken).setAgree(new UserInfo[openInfo.getMax_num()]);
-                this.mapRooms.get(AToken).setDisagree(new UserInfo[openInfo.getMax_num()]);
-                this.mapRooms.get(AToken).setMapConnections(new ConcurrentHashMap<>());
-                this.mapRooms.get(AToken).setMapParticipants(new ConcurrentHashMap<>());
             } catch (OpenViduJavaClientException | OpenViduHttpException e) {
                 throw new RuntimeException(e);
             }
-            // DB 저장
+            // 정보 저장
             try {
-                RoomInfoDto roomInfoDto = roomService.createRoom(openInfo);
-                this.mapRooms.get(AToken).setRoomInfoDto(roomInfoDto);
+                roomRedisService.createVRoom(roomOpenReq);
             } catch (Exception e) {  // 저장 실패
                 // 생성된 세션 롤백
                 session.close();
-                this.mapRooms.remove(AToken);
                 throw new RuntimeException(e);
             }
 
@@ -131,36 +120,43 @@ public class RoomController {
         else user = new UserInfoDto(User.builder().nnm(AToken).build());
 
         // 해당 세션이 존재하지 않으면
-        if (!this.mapRooms.containsKey(roomEnterReq.getSessionId())) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
+        if (!roomRedisService.isExist(roomEnterReq.getSessionId())) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
-        // 세션 정보
+        // 토론방 정보
         Connection connection;
-        VRoom vRoom = this.mapRooms.get(roomEnterReq.getSessionId());
-        Session session = vRoom.getSession();
+        VRoom vRoom = roomRedisService.readVRoom(roomEnterReq.getSessionId());
 
         // 세션 암호 확인
         String pwd = vRoom.getRoomInfoDto().getPwd();
         if (pwd != null && !pwd.equals(roomEnterReq.getPwd())) return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong Password"));
 
         try {
-            // 유저의 ID와 세션의 ID가 같다면 Moderator 권한
-            OpenViduRole role;
-            if (user.getId().equals(session.getSessionId())) role = OpenViduRole.MODERATOR;
-            else {  // 회원이지만 호스트가 아니거나 비회원인 경우
-                if (user.getId() != null) role = OpenViduRole.PUBLISHER;  // 회원
-                else role = OpenViduRole.SUBSCRIBER;  // 비회원
-            }
+            // 오픈비두 서버의 세션 객체 찾기
+            this.openVidu.fetch();
+            List<Session> sessions = this.openVidu.getActiveSessions();
+            for (Session session : sessions) {
+                if (session.getSessionId().equals(roomEnterReq.getSessionId())) {
+                    // 유저의 ID와 세션의 ID가 같다면 Moderator 권한
+                    OpenViduRole role;
+                    if (user.getId().equals(session.getSessionId())) role = OpenViduRole.MODERATOR;
+                    else {  // 회원이지만 호스트가 아니거나 비회원인 경우
+                        if (user.getId() != null) role = OpenViduRole.PUBLISHER;  // 회원
+                        else role = OpenViduRole.SUBSCRIBER;  // 비회원
+                    }
 
-            // Connection 생성
-            ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
-                    .role(role).build();
-            connection = session.createConnection(connectionProperties);
+                    // Connection 생성
+                    ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
+                            .role(role).build();
+                    connection = session.createConnection(connectionProperties);
+                    break;
+                }
+            }
 
             // 방 정보에 connection 추가
             vRoom.getMapConnections().put(AToken, connection);
 
             //토론방 참가자 관리 Map 에 저장
-            vRoom.getMapParticipants().put(AToken, new UserInfo(user.getId(), user.getEm(), user.getNnm(), 0, false, false, false));
+            vRoom.getMapParticipants().put(AToken,VUserInfo.builder().id(user.getId()).em(user.getEm()).nnm(user.getNnm()).build());
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             // 롤백
             vRoom.getMapConnections().remove(AToken);
@@ -205,10 +201,10 @@ public class RoomController {
         try {
             sessionProperties = new SessionProperties.Builder().customSessionId(AToken + "_agree").build();
             sessionAgree = this.openVidu.createSession(sessionProperties);
-            for (UserInfo userInfo : vRoom.getAgree()) {
-                if (userInfo == null) continue;
+            for (VUserInfo VUserInfo : vRoom.getAgree()) {
+                if (VUserInfo == null) continue;
                 connection = sessionAgree.createConnection(connectionProperties);
-                mapAgree.put(userInfo.getId(), connection);
+                mapAgree.put(VUserInfo.getId(), connection);
             }
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             throw new RuntimeException(e);
@@ -217,10 +213,10 @@ public class RoomController {
         try {
             sessionProperties = new SessionProperties.Builder().customSessionId(AToken + "_disagree").build();
             sessionDisagree = this.openVidu.createSession(sessionProperties);
-            for (UserInfo userInfo : vRoom.getDisagree()) {
-                if (userInfo == null) continue;
+            for (VUserInfo VUserInfo : vRoom.getDisagree()) {
+                if (VUserInfo == null) continue;
                 connection = sessionDisagree.createConnection(connectionProperties);
-                mapDisagree.put(userInfo.getId(), connection);
+                mapDisagree.put(VUserInfo.getId(), connection);
             }
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             // 생성된 찬성 세부세션 롤백
@@ -303,24 +299,24 @@ public class RoomController {
         // 비회원이면
         if (!AToken.chars().allMatch(Character::isDigit)) return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized"));
 
-        // 세션
+        // 토론방
         VRoom vRoom = this.mapRooms.get(sessionId);
 
         // 모집중 단계가 아닐 시
         if (vRoom.getRoomInfoDto().getPhase() != 0) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Cannot select except phase 0"));
 
         int max = vRoom.getRoomInfoDto().getMaxNum();
-        UserInfo[] userInfos;
+        VUserInfo[] VUserInfos;
 
         // 유저가 선택하고자 하는 진영
-        if (pos.equals("agree")) userInfos = vRoom.getAgree();
-        else if (pos.equals("disagree")) userInfos = vRoom.getDisagree();
+        if (pos.equals("agree")) VUserInfos = vRoom.getAgree();
+        else if (pos.equals("disagree")) VUserInfos = vRoom.getDisagree();
         else return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong request"));
 
         // 참여할 수 있으면
         for (int i = 0; i < max; i++) {
-            if (userInfos[i] == null) {
-                userInfos[i] = vRoom.getMapParticipants().get(AToken);
+            if (VUserInfos[i] == null) {
+                VUserInfos[i] = vRoom.getMapParticipants().get(AToken);
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
             }
         }
@@ -354,18 +350,18 @@ public class RoomController {
         if (vRoom.getRoomInfoDto().getPhase() != 0) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Cannot select except phase 0"));
 
         int max = vRoom.getRoomInfoDto().getMaxNum();
-        UserInfo[] userInfos;
+        VUserInfo[] VUserInfos;
 
         // 유저가 나가고자 하는 진영
-        if (pos.equals("agree")) userInfos = vRoom.getAgree();
-        else if (pos.equals("disagree")) userInfos = vRoom.getDisagree();
+        if (pos.equals("agree")) VUserInfos = vRoom.getAgree();
+        else if (pos.equals("disagree")) VUserInfos = vRoom.getDisagree();
         else return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong request"));
 
         // 나갈 수 있는지 확인
         for (int i = 0; i < max; i++) {
             // 나갈 수 있으면
-            if (userInfos[i].getId().equals(AToken)) {
-                userInfos[i] = null;
+            if (VUserInfos[i].getId().equals(AToken)) {
+                VUserInfos[i] = null;
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
             }
         }
@@ -387,14 +383,14 @@ public class RoomController {
 
         VRoom vRoom = this.mapRooms.get(sessionID);
         Map<String, String> connections = new ConcurrentHashMap<>();
-        for (UserInfo userInfo : vRoom.getAgree()) {
-            if (vRoom.getMapConnections().containsKey(userInfo.getId())){
-                Connection conn = vRoom.getMapConnections().get(userInfo.getId());
-                connections.put(userInfo.getId(), conn.getConnectionId());
+        for (VUserInfo VUserInfo : vRoom.getAgree()) {
+            if (vRoom.getMapConnections().containsKey(VUserInfo.getId())){
+                Connection conn = vRoom.getMapConnections().get(VUserInfo.getId());
+                connections.put(VUserInfo.getId(), conn.getConnectionId());
             }
         }
 
-        return ResponseEntity.status(200).body(JsonRes.of(200, "Success", connections.toString()));
+        return ResponseEntity.status(200).body(VTokensRes.of(200, "Success", connections));
     }
 
     @GetMapping("/connections/disagree")
@@ -405,20 +401,20 @@ public class RoomController {
             @ApiResponse(code = 404, message = "해당 세션 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> getDisagreeConnections(String sessionId) {
+    public ResponseEntity<? extends BaseResponseBody> getDisagreeConnections(String sessionID) {
         // 해당 세션이 존재하지 않으면
-        if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
+        if (!this.mapRooms.containsKey(sessionID)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
-        VRoom vRoom = this.mapRooms.get(sessionId);
+        VRoom vRoom = this.mapRooms.get(sessionID);
         Map<String, String> connections = new ConcurrentHashMap<>();
-        for (UserInfo userInfo : vRoom.getDisagree()) {
-            if (vRoom.getMapConnections().containsKey(userInfo.getEm())){
-                Connection conn = vRoom.getMapConnections().get(userInfo.getEm());
-                connections.put(userInfo.getEm(), conn.getConnectionId());
+        for (VUserInfo VUserInfo : vRoom.getDisagree()) {
+            if (vRoom.getMapConnections().containsKey(VUserInfo.getEm())){
+                Connection conn = vRoom.getMapConnections().get(VUserInfo.getEm());
+                connections.put(VUserInfo.getEm(), conn.getConnectionId());
             }
         }
 
-        return ResponseEntity.status(200).body(JsonRes.of(200, "Success", connections.toString()));
+        return ResponseEntity.status(200).body(VTokensRes.of(200, "Success", connections));
     }
 
     @PutMapping("/start")
@@ -432,21 +428,29 @@ public class RoomController {
     })
     public ResponseEntity<? extends BaseResponseBody> startRoom(@ApiIgnore Authentication authentication, @RequestBody String sessionId){
         SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
-        String userId = ssafyUserDetails.getUsername();
+        String AToken = ssafyUserDetails.getUsername();
 
         // 요청한 사람이 호스트가 아니면
-        if (!sessionId.equals(userId)) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Not host"));
+        if (!sessionId.equals(AToken)) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Not host"));
 
         // 해당 세션이 존재하지 않으면
         if (!this.mapRooms.containsKey(sessionId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
-        VRoom vRoom = this.mapRooms.get(sessionId);
-        vRoom.getRoomInfoDto().setPhase(1);
+        // 서버 상태 변경
+        this.mapRooms.get(sessionId).getRoomInfoDto().setPhase(1);
+
+        // DB 변경
+        try {
+            roomService.updatePhaseByRoomId(this.mapRooms.get(sessionId).getRoomInfoDto().getId(), 1);
+        } catch (Exception e) {
+            this.mapRooms.get(sessionId).getRoomInfoDto().setPhase(0);
+            throw new RuntimeException(e);
+        }
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Debate start"));
     }
 
-    @PutMapping("/cheer/{session}/{side}")
+    @PutMapping("/cheer/{sessionID}/{side}")
     @ApiOperation(value = "응원수 카운트", notes = "응원수 카운트 기능")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -455,20 +459,20 @@ public class RoomController {
             @ApiResponse(code = 404, message = "세션 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> updateCheerCnt(@ApiIgnore Authentication authentication, @PathVariable String session, @PathVariable String side) {
+    public ResponseEntity<? extends BaseResponseBody> updateCheerCnt(@ApiIgnore Authentication authentication, @PathVariable String sessionID, @PathVariable String side) {
         SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
         String id = ssafyUserDetails.getUsername();
 
         // 해당 세션이 없으면
-        if (this.mapRooms.containsKey(session)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session Not Exists"));
+        if (this.mapRooms.containsKey(sessionID)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session Not Exists"));
 
         // 해당 세션에 참가하지 않았으면
-        if (this.mapRooms.get(session).getMapParticipants().containsKey(id)) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Not Participant"));
+        if (this.mapRooms.get(sessionID).getMapParticipants().containsKey(id)) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Not Participant"));
 
         if (side.equals("agree"))
-            this.mapRooms.get(session).setCheer_agree(this.mapRooms.get(session).getCheer_agree() + 1);
+            this.mapRooms.get(sessionID).setCheer_agree(this.mapRooms.get(sessionID).getCheer_agree() + 1);
         else if (side.equals("disagree"))
-            this.mapRooms.get(session).setCheer_agree(this.mapRooms.get(session).getCheer_agree() + 1);
+            this.mapRooms.get(sessionID).setCheer_agree(this.mapRooms.get(sessionID).getCheer_agree() + 1);
         else
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Side parameter should be agree or disagree"));
 
@@ -488,31 +492,31 @@ public class RoomController {
         //해당 토론방에 유저가 참가하지 않았다면
         if(!vRoom.getMapParticipants().containsKey(userId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "User not exists"));
 
-        UserInfo userInfo = vRoom.getMapParticipants().get(userId);
+        VUserInfo VUserInfo = vRoom.getMapParticipants().get(userId);
 
         if(vote.equals("agree")){
-            if(userInfo.isHasDisagree()){ //기존에 반대였다면
-                userInfo.setHasDisagree(false);
+            if(VUserInfo.isHasDisagree()){ //기존에 반대였다면
+                VUserInfo.setHasDisagree(false);
                 //반대표 1 감소
                 vRoom.setVote_disagree(vRoom.getVote_disagree()-1);
             }
             //이미 찬성한 상태가 아니라면
-            if(!userInfo.isHasAgree()) {
+            if(!VUserInfo.isHasAgree()) {
                 //참가자의 중간 투표 현황 업데이트
-                userInfo.setHasAgree(true);
+                VUserInfo.setHasAgree(true);
                 //찬성표 1 증가
                 vRoom.setVote_agree(vRoom.getVote_agree() + 1);
             }
         }else if(vote.equals("disagree")){
-            if(userInfo.isHasAgree()){ //기존에 찬성이었다면
-                userInfo.setHasAgree(false);
+            if(VUserInfo.isHasAgree()){ //기존에 찬성이었다면
+                VUserInfo.setHasAgree(false);
                 //찬성표 1 감소
                 vRoom.setVote_agree(vRoom.getVote_agree()-1);
             }
             //이미 찬성한 상태가 아니라면
-            if(!userInfo.isHasDisagree()) {
+            if(!VUserInfo.isHasDisagree()) {
                 //참가자의 중간 투표 현황 업데이트
-                userInfo.setHasDisagree(true);
+                VUserInfo.setHasDisagree(true);
                 //반대표 1 증가
                 vRoom.setVote_disagree(vRoom.getVote_disagree() + 1);
             }
@@ -559,11 +563,11 @@ public class RoomController {
         //해당 토론방에 유저가 참가하지 않았다면
         if(!vRoom.getMapParticipants().containsKey(userId)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "User not exists"));
 
-        UserInfo userInfo = vRoom.getMapParticipants().get(userId);
+        VUserInfo VUserInfo = vRoom.getMapParticipants().get(userId);
 
         //아직 마지막 투표를 하지 않았다면
-        if(!userInfo.isHasFinalVote()){
-            userInfo.setHasFinalVote(true);
+        if(!VUserInfo.isHasFinalVote()){
+            VUserInfo.setHasFinalVote(true);
             if(vote.equals("agree")){
                 vRoom.setVote_final_agree(vRoom.getVote_final_agree()+1);
             }else{
@@ -574,7 +578,7 @@ public class RoomController {
         //토론왕 업데이트
 //        if(!vRoom.getMapParticipants().containsKey(kingUserEm)) return ResponseEntity.status(404).body(BaseResponseBody.of(404, "User not exists"));
         //토론왕 투표 받은 유저
-        UserInfo kingUser = vRoom.getMapParticipants().get(kingUserEm);
+        VUserInfo kingUser = vRoom.getMapParticipants().get(kingUserEm);
         //토론왕 득표 수 업데이트
         kingUser.setKingCnt(kingUser.getKingCnt()+1);
 

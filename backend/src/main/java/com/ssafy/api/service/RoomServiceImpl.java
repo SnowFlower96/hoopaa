@@ -1,8 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.RoomOpenReq;
-import com.ssafy.common.data.UserInfo;
-import com.ssafy.common.data.VRoom;
+import com.ssafy.common.data.VUserInfo;
 import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
@@ -84,21 +83,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Boolean updatePhaseByRoomId(Long id, int phase) {
+    public void updatePhaseByRoomId(Long id, int phase) {
         Optional<RoomInfo> roomInfo = roomInfoRepository.findById(id);
-        if (!roomInfo.isPresent()) return null;
-
-        if (phase == 1) {
-            if (roomInfo.get().getPhase() >= 1) {
-                return false;
-            }
-        } else if (phase == 2) {
-            if (roomInfo.get().getPhase() >= 2) {
-                return false;
-            }
+        if (roomInfo.isPresent()) {
+            roomInfo.get().setPhase(phase);
+            roomInfoRepository.save(roomInfo.get());
         }
-        roomInfo.get().setPhase(phase);
-        return true;
     }
 
     @Override
@@ -121,11 +111,11 @@ public class RoomServiceImpl implements RoomService {
         Long kingId = -1L;
         //user history 업데이트
         //찬성 진영 업데이트
-        for (UserInfo userInfo : vRoom.getAgree()) {
-            if (userInfo == null) continue; //
-            kingCntMax = userInfo.getKingCnt();
-            kingId = Long.valueOf(userInfo.getId());
-            User user = userRepository.findUserById(Long.parseLong(userInfo.getId())).get();
+        for (VUserInfo VUserInfo : vRoom.getAgree()) {
+            if (VUserInfo == null) continue; //
+            kingCntMax = VUserInfo.getKingCnt();
+            kingId = Long.valueOf(VUserInfo.getId());
+            User user = userRepository.findUserById(Long.parseLong(VUserInfo.getId())).get();
             UserHistory userHistory = UserHistory.builder()
                     .userId(user.getId()) //id
                     .roomId(roomInfo.getId()) //roomId
@@ -152,13 +142,13 @@ public class RoomServiceImpl implements RoomService {
         }
 
         //반대 진영 업데이트
-        for (UserInfo userInfo : vRoom.getDisagree()) {
-            if (userInfo == null) continue; //
-            if (userInfo.getKingCnt() > kingCntMax) {
-                kingCntMax = userInfo.getKingCnt();
-                kingId = Long.valueOf(userInfo.getId());
+        for (VUserInfo VUserInfo : vRoom.getDisagree()) {
+            if (VUserInfo == null) continue; //
+            if (VUserInfo.getKingCnt() > kingCntMax) {
+                kingCntMax = VUserInfo.getKingCnt();
+                kingId = Long.valueOf(VUserInfo.getId());
             }
-            User user = userRepository.findUserById(Long.valueOf(userInfo.getId())).get();
+            User user = userRepository.findUserById(Long.valueOf(VUserInfo.getId())).get();
             UserHistory userHistory = UserHistory.builder()
                     .userId(user.getId()) //id
                     .roomId(roomInfo.getId()) //roomId
