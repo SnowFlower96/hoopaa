@@ -31,7 +31,7 @@
 </div>
 <!-- 뷰바꾸는 임시버튼 -->
 
-    
+
 
     <!-- 쉬는시간 모달 -->
     <div class="vote-modal-container" v-if="restModal" :style="customCaroselStyle">
@@ -73,7 +73,7 @@
                     </div>
                     <div v-if="voteAll" class="all-view">
                         <div class="all-view-wrap">
-                            <p>당신의 최종 의견을 투표하세요</p> 
+                            <p>당신의 최종 의견을 투표하세요</p>
                             <p>제한시간안에 투표하지 않으면 무효 처리됩니다</p>
                             <p>타이머가 끝나면 자동으로 제출됩니다</p>
                             <div class="vote-btn-wrap">
@@ -81,8 +81,8 @@
                                 <div class="vote-btn" @click="voteFunction(0)">반대</div>
                             </div>
                             <p>
-                                <span v-if="voteStatus">찬성</span> 
-                                <span v-if="!voteStatus">반대</span> 
+                                <span v-if="voteStatus">찬성</span>
+                                <span v-if="!voteStatus">반대</span>
                                 을(를) 선택하셨습니다</p>
                         </div>
                     </div>
@@ -119,12 +119,12 @@
 
                 <upload-file v-if="file"></upload-file>
 
-                <let-team-speak 
+                <let-team-speak
                 v-if="menu"
                 @emit-time="EmitTime"
                 ></let-team-speak>
 
-                <rest-time 
+                <rest-time
                 v-if="rest"
                 @emit-rest="EmitRest"
                 ></rest-time>
@@ -158,10 +158,10 @@
                                     </div>
                                 </div>
                               <!-- 토론방 왼쪽 -->
-                              
+
                               <!-- 토론방 센터 -->
                                 <div class="videobox-center" :style="customCaroselStyle">
-                                  
+
                                   <div class="moderator-video">
                                     <div class="moderator-video-inner" :style="customCaroselStyle">
                                       <!-- 사회자 비디오 하나 들어갈 곳 -->
@@ -170,8 +170,8 @@
                                   </div>
 
                                   <div class="debateroom-center-timer" :style="customCaroselStyle"> <!-- 이부분 나중에 위로 가져오기-->
-                                      <debate-room-center-component 
-                                      :time-list="timeList" 
+                                      <debate-room-center-component
+                                      :time-list="timeList"
                                       ref="debateRoomSideComponent"
                                       :moderator="moderator"
                                       :all="all"
@@ -206,8 +206,9 @@
 
                 <!-- 채팅창 -->
                     <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
-                        <chatting-all v-if="chattingAllView" @close-chat="changeChatView"></chatting-all>
-                        <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
+                        <chatting-all v-if="chattingAllView" :messagesAll="messagesAll" @close-chat="changeChatView" @chat-all="sendAllMessage"></chatting-all>
+                        <chatting-team v-if="chattingTeamView && position=='agree'" :messagesTeam="messagesAgree" @close-chat="changeChatView" @chat-team="sendTeamMessage"></chatting-team>
+                        <chatting-team v-if="chattingTeamView && position!='agree'" :messagesTeam="messagesDisagree" @close-chat="changeChatView" @chat-team="sendTeamMessage"></chatting-team>
                     </div>
                 <!-- 채팅창 -->
 
@@ -365,6 +366,42 @@ export default {
       console.warn(exception);
     });
 
+    this.session.on("signal:chat-all",(event)=>{
+      let eventData = JSON.parse(event.data);
+      let data = new Object()
+      let time = new Date()
+      data.writer = eventData.writer
+      data.message = eventData.content
+      data.time = moment(time).format('HH:mm')
+      console.log("메세지 : "+message);
+      this.messagesAll.push(data)
+      console.log(this.messagesAll);
+    } )
+
+    this.session.on("signal:chat-agree",(event)=>{
+      let eventData = JSON.parse(event.data);
+      let data = new Object()
+      let time = new Date()
+      data.writer = eventData.writer
+      data.message = eventData.content
+      data.time = moment(time).format('HH:mm')
+      console.log("메세지 : "+message);
+      this.messagesAgree.push(data)
+      console.log(this.messagesAll);
+    } )
+
+    this.session.on("signal:chat-disagree",(event)=>{
+     let eventData = JSON.parse(event.data);
+      let data = new Object()
+      let time = new Date()
+      data.writer = eventData.writer
+      data.message = eventData.content
+      data.time = moment(time).format('HH:mm')
+      console.log("메세지 : "+message);
+      this.messagesDisAgree.push(data)
+      console.log(this.messagesAll);
+    } )
+
     await this.room.session
       .connect(token, { clientData: this.user.em })
       .then(() => {
@@ -404,8 +441,8 @@ export default {
             return {
 
               // 토론방 센터 (.videobox-center)
-                "--debate-box-center-width": this.dCenterW,  
-                "--debate-box-center-height": this.dCenterH, 
+                "--debate-box-center-width": this.dCenterW,
+                "--debate-box-center-height": this.dCenterH,
                 "--dct-height" : this.dtcHeight,
 
               // 표준 비디오 사이즈
@@ -413,15 +450,15 @@ export default {
               "--center-video-width" : this.centerVideoWidth,
 
               // 토론방 양쪽 (.videobox-side)
-                "--debate-box-side-width": this.dSideW,   
-                "--debate-box-side-height": this.dSideH, 
+                "--debate-box-side-width": this.dSideW,
+                "--debate-box-side-height": this.dSideH,
                 "--vsi-blank" : this.vsiBlank,
 
               // 하단바 (.debate-room-footer-class)
                 "--footer-width": this.footerWidth,
 
               // 채팅창 (.chatting-box)
-                "--chatt-box": this.chattBox,  
+                "--chatt-box": this.chattBox,
 
               // 메인화면 wrap (.debate-background)
                 "--db-bg" : this.wValue075,
@@ -442,7 +479,7 @@ export default {
                 "--share-view-height": this.shareViewH,
                 "--share-view-width": this.shareViewW,
 
-                
+
             }
         }
     },
@@ -536,7 +573,7 @@ export default {
         const wValue = document.body.clientWidth
         const wValue075 = document.body.clientWidth*0.75
         const hValue = document.body.clientHeight
-        
+
         this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
         this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
         this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
@@ -549,7 +586,7 @@ export default {
         // 토론방 센터 (.videobox-center)
         this.dCenterW = `${wValue075*0.4-10}px`
         this.dCenterH = `${hValue*0.8}px`
-        
+
         const debateTimer = (hValue - (videoSize*0.6))
         this.dtcHeight = `${debateTimer*0.1}px`
 
@@ -584,7 +621,7 @@ export default {
                 const wValue = document.body.clientWidth
                 const wValue075 = document.body.clientWidth*0.75
                 const hValue = document.body.clientHeight
-                
+
                 this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
                 this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
                 this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
@@ -597,7 +634,7 @@ export default {
                 // 토론방 센터 (.videobox-center)
                 this.dCenterW = `${wValue075*0.4-10}px`
                 this.dCenterH = `${hValue*0.8}px`
-                
+
                 const debateTimer = (hValue - (videoSize*0.6))
                 this.dtcHeight = `${debateTimer*0.1}px`
 
@@ -639,7 +676,7 @@ export default {
                 // 토론방 센터 (.videobox-center)
                 this.dCenterW = `${wValue075*0.4-10}px`
                 this.dCenterH = `${hValue*0.8}px`
-                
+
                 const debateTimer = (hValue - (videoSize*0.6))
                 this.dtcHeight = `${debateTimer*0.1}px`
 
@@ -666,7 +703,7 @@ export default {
             }
         },
         animation(option) {
-            if (option === 'startEvent') { 
+            if (option === 'startEvent') {
                 // this.startEvent = true
                 this.startEvent = !this.startEvent
                 this.heartTen = false
@@ -765,7 +802,7 @@ export default {
                 console.log('5개')
             }
         },
-        
+
         moderatorView() {
             this.moderator = true,
             this.all = false,
@@ -821,7 +858,7 @@ export default {
                 const wValue = document.body.clientWidth
                 const wValue075 = document.body.clientWidth*0.75
                 const hValue = document.body.clientHeight
-                
+
                 this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
                 this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
                 this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
@@ -834,7 +871,7 @@ export default {
                 // 토론방 센터 (.videobox-center)
                 this.dCenterW = `${wValue075*0.4-10}px`
                 this.dCenterH = `${hValue*0.8}px`
-                
+
                 const debateTimer = (hValue - (videoSize*0.6))
                 this.dtcHeight = `${debateTimer*0.1}px`
 
@@ -876,7 +913,7 @@ export default {
                 // 토론방 센터 (.videobox-center)
                 this.dCenterW = `${wValue075*0.4-10}px`
                 this.dCenterH = `${hValue*0.8}px`
-                
+
                 const debateTimer = (hValue - (videoSize*0.6))
                 this.dtcHeight = `${debateTimer*0.1}px`
 
@@ -902,6 +939,54 @@ export default {
                 this.allHeartLeft= `${document.body.clientWidth*0.5}px`
             }
         },
+
+
+
+
+
+
+        //채팅 추가
+        sendAllMessage(message){
+          console.log("메세지 배열에 삽입");
+          console.log(this.user.nnm)
+          var messageData = {
+            writer : this.user.nnm,
+            content: message
+          }
+
+          this.session.signal({
+            type: "chat-all",
+            data:JSON.stringify(messageData),
+            to:[]
+          })
+          // this.messagesAll.push(message)
+        },
+        sendTeamMessage(message){
+          var messageData = {
+            writer : this.user.nnm,
+            content: message
+          }
+          if(this.position ==="agree"){
+            this.session.signal({
+              type : "chat-agree",
+              data : JSON.stringify(messageData),
+              to : []
+            })
+          }else{
+            this.session.signal({
+              type : "chat-disagree",
+              data : JSON.stringify(messageData),
+              to : []
+            })
+          }
+            console.log("팀 메세지")
+        },
+
+
+
+
+
+
         offCallModal() {
             this.callToMdModal = false
         },

@@ -3,31 +3,17 @@
         <div class="chatting-team-view">
             <div class="chat-close-btn" @click="EmitChatClose"><i class="fas fa-times"></i></div>
             <h1>팀 채팅창</h1>
-            <div class="chatting-team-view-inner">
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
+            <div
+              class="mt-2 text-left message"
+              v-for="(message, i) of messagesTeam"
+              :key="i"
+            >
+              <div>
+                {{message.writer}}
+              </div>
+              <div>
+                {{ message.content}} {{message.time}}
+              </div>
             </div>
         </div>
         <div class="chatting-team-write">
@@ -38,10 +24,36 @@
 
 <script>
 export default {
+    props:{
+    messagesTeam:[]
+  }
+  ,
+  data(){
+      return {
+        message: "",
+        chatHeight: "33vh"
+      }
+    },
+
+  watch:{
+
+  },
+  computed:{
+    messagesTeam(){
+      return this.messagesTeam
+    }
+  }
+  ,
     methods: {
         EmitChatClose() {
             this.$emit('close-chat')
+        },
+        clickSendMessages(){
+          console.log("메세지 보내기");
+          this.$emit('chat-all', this.message)
+          this.message=''
         }
+
     }
 }
 </script>
@@ -57,7 +69,7 @@ export default {
 }
 .chatting-team-view {
     padding: 5%;
-    
+
 }
 .chatting-team-view-inner {
     height:55vh;

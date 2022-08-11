@@ -3,45 +3,62 @@
         <div class="chatting-all-view">
             <div class="chat-close-btn" @click="EmitChatClose"><i class="fas fa-times"></i></div>
             <h1>전체 채팅창</h1>
-            <div class="chatting-all-view-inner">
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
-                <p>안뇽</p>
+            <div
+              class="mt-2 text-left message"
+              v-for="(message, i) of messagesAll"
+              :key="i"
+            >
+              <div>
+                {{message.writer}}
+              </div>
+              <div>
+                {{ message.content}} {{message.time}}
+              </div>
             </div>
         </div>
         <div class="chatting-all-write">
-            <textarea placeholder="여기에 메세지를 입력하세요" class="chatting-all-ta" cols="30" rows="10"></textarea>
+            <input type="text" v-model="message" placeholder="여기에 메세지를 입력하세요">
+        </div>
+        <div>
+          <button class="send-btn" @click="clickSendMessages">
+          전송
+          </button>
         </div>
     </div>
 </template>
 
 <script>
 export default {
+    props:{
+    messagesAll:[]
+  }
+  ,
+  data(){
+      return {
+        message: "",
+        chatHeight: "33vh"
+      }
+    },
+
+  watch:{
+
+  },
+  computed:{
+    messagesAll(){
+      return this.messagesAll
+    }
+  }
+  ,
     methods: {
         EmitChatClose() {
             this.$emit('close-chat')
+        },
+        clickSendMessages(){
+          console.log("메세지 보내기");
+          this.$emit('chat-all', this.message)
+          this.message=''
         }
+
     }
 }
 </script>
@@ -57,7 +74,7 @@ export default {
 }
 .chatting-all-view {
     padding: 5%;
-    
+
 }
 .chatting-all-view-inner {
     height:55vh;

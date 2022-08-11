@@ -94,7 +94,7 @@ export default {
     }
   },
    computed : {
-    ...mapState(["userStat"])
+    ...mapState(["user"])
   },
   created() {
     this.menus = this.menuData;
@@ -115,7 +115,7 @@ export default {
         hash_1 : this.hashTag1,
         hash_2 : this.hashTag2,
         hash_3 : this.hashTag3,
-        host_em : this.host,
+        host_em : this.user.em,
         is_sys : this.isSys,
         max_num : this.maxNum,
         pwd : this.roomPwd,
@@ -124,7 +124,7 @@ export default {
       }
         let data = {
           pwd : room["pwd"],
-          sessionId : room["host_em"],
+          sessionId : this.user.id,
         }
       await this.$store.dispatch("makeRoom",room);
       this.$store.dispatch("enterRoom", data);
