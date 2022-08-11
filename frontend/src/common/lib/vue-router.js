@@ -8,15 +8,23 @@ import reSign from '@/views/user/resign'
 import mainPage from '@/views/main-page/main-page'
 import Participate from '@/views/participate/participating-code'
 import participatingPage from '@/views/participate/participating-page'
+import homeToParticipate from '@/views/home/homeToParticipate'
 
 import debateRoom from '@/views/participate/debateRoom'
+import detailSessionView from '@/views/participate/detailSessionView'
+import resultPage from '@/views/participate/end/resultPage'
+
 import detailSession from '@/views/participate/detailSession'
+import test from '@/views/participate/test'
+
+import endDebate from '@/views/participate/end/endDebate'
 
 import signUpEmail from '@/views/user/email'
 import gameSetPage from '@/views/debate-hosting/game-set-page'
 import makeRoom from '@/views/debate-hosting/make-room'
 import store from '@/store'
 // const routerComponent = require('@/views/main/router-components.json')
+
 
 import myPage from '@/views/user/mypage'
 import checkPwd from '@/views/user/checkPwd'
@@ -83,7 +91,6 @@ function makeRoutesFromMenu () {
 
   },
 
-
   {
   path : '/myPage/info',
   name : 'myPage-info',
@@ -103,7 +110,8 @@ function makeRoutesFromMenu () {
 {
   path: '/startWithCode',
   name: 'Participate',
-  component: Participate
+  component: Participate,
+  beforeEnter: checkLogin(),
 },
 {
   path: '/debateRoom',
@@ -132,12 +140,43 @@ function makeRoutesFromMenu () {
   component : reSign
 },
 {
+  path : '/detailSessionView',
+  name: 'detailSessionView',
+  component: detailSessionView
+},
+{
+  path : '/homeToParticipate',
+  name: 'homeToParticipate',
+  component: homeToParticipate
+},
+{
   path : '/detailSession',
   name: 'detailSession',
   component: detailSession
+},
+{
+  path : '/test',
+  name: 'test',
+  component: test,
+},
+{
+  path : '/detailSession',
+  name: 'detailSession',
+  component: detailSession,
+},
+{
+  path : '/endDebate',
+  name: 'endDebate',
+  component: endDebate,
+},
+{
+  path : '/resultPage',
+  name: 'resultPage',
+  component: resultPage,
 }
 
   )
+
   return routes
 }
 

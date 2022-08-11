@@ -2,14 +2,36 @@
     <div class="debate-room-component-content-side">
         <!-- <div>여기에 패널 화면 넣으면 됨</div> -->
         <div class="blank-space-video" :style="customViewStyle"></div>
-        <div class="panel-video" :style="customViewStyle"><div class="panel-video-inner"></div></div>
-        <div class="panel-video" :style="customViewStyle"><div class="panel-video-inner"></div></div>
+        <div class="panel-video" :style="customViewStyle">
+          <div class="panel-video-inner">
+            <user-video  class="moderatorVideo" :stream-manager="publisher"/>
+          </div>
+        </div>
+        <div v-for="(item, index) in subscribers" :key="index" class="panel-video" :style="customViewStyle">
+          <div class="panel-video-inner">
+            <user-video class="moderatorVideo" :stream-manager="item"/>
+          </div>
+        </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+import { OpenVidu } from 'openvidu-browser';
+import UserVideo from '@/views/openvidu/UserVideo.vue';
+import { mapState} from 'vuex';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
+const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
+
 export default {
+    name : 'detailSessionSideComponent',
+    componets : {
+      UserVideo
+    },
     computed : {
+       ...mapState(["user", "position"]),
         customViewStyle() {
             return {
                 "--side-video-width" : this.sideVideoWidth,
@@ -24,9 +46,11 @@ export default {
             sideVideoWidth: '',
             sideVideoHeight: '',
             sideVideoHeightInner: '',
-            blankSpaceVideo: ''
+            blankSpaceVideo: '',
         }
     },
+    props : ['publisher','subscribers'],
+
     mounted() {
         const wValue = document.body.clientWidth*0.75*0.3-20
 
@@ -52,12 +76,15 @@ export default {
             this.sideVideoHeightInner = `${hValue}px`
             this.blankSpaceVideo = `${hBlankValue}px`
         },
-    }
+}
 }
 </script>
 
 <style>
-
+video {
+  height: var(--center-video-height);
+  width: var(--center-video-width);
+}
 .debate-room-component-content-side {
     color: brown;
 }
