@@ -1,9 +1,8 @@
 package com.ssafy.common.data;
 
-import com.ssafy.redis.entity.ConnectionDTO;
+import com.ssafy.db.entity.User;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -11,23 +10,21 @@ import lombok.ToString;
  */
 @Data
 @ToString
-public class VUserInfo {
+public class UserInfo {
 
     String id;
     String em;
     String nnm;
-    ConnectionDTO connectionDTO;
     int kingCnt;
     boolean hasAgree;
     boolean hasDisagree;
     boolean hasFinalVote;
 
     @Builder
-    public VUserInfo(String id, String em, String nnm, ConnectionDTO connectionDTO, int kingCnt, boolean hasAgree, boolean hasDisagree, boolean hasFinalVote) {
+    public UserInfo(String id, String em, String nnm, int kingCnt, boolean hasAgree, boolean hasDisagree, boolean hasFinalVote) {
         this.id = id;
         this.em = em;
         this.nnm = nnm;
-        this.connectionDTO = connectionDTO;
         this.kingCnt = kingCnt;
         this.hasAgree = hasAgree;
         this.hasDisagree = hasDisagree;

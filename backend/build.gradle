@@ -126,9 +126,6 @@ dependencies {
     implementation('org.kurento:kurento-client:6.16.0')
     implementation('org.kurento:kurento-utils-js:6.15.0')
 
-    // Redis 의존성 추가
-    implementation('org.springframework.boot:spring-boot-starter-data-redis')
-
 
     //IntelliJ용
     //IntelliJ에서는 하기 annotationProcessor를 쓰면 별도의 querydsl 플러그인 및 플러그인 설정이 불필요.
@@ -158,7 +155,7 @@ dependencies {
 
     implementation("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.projectlombok:lombok:1.18.20")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
     // OpenVidu
     implementation("io.openvidu:openvidu-java-client:2.22.0")
