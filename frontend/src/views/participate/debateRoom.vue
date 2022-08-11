@@ -154,7 +154,7 @@
                                     <div class="vsi-wrap">
                                         <!-- <div class="videobox-side-inner" :style="customCaroselStyle"></div> -->
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
-                                        <debate-room-video></debate-room-video>
+                                        <debate-room-video v-for="(item, index) in agree" :key="index" :stream="item.data"></debate-room-video>
                                     </div>
                                 </div>
                               <!-- 토론방 왼쪽 -->
@@ -165,7 +165,7 @@
                                   <div class="moderator-video">
                                     <div class="moderator-video-inner" :style="customCaroselStyle">
                                       <!-- 사회자 비디오 하나 들어갈 곳 -->
-                                      <debate-room-video></debate-room-video>
+                                      <debate-room-video :stream="host"></debate-room-video>
                                     </div>
                                   </div>
 
@@ -193,7 +193,7 @@
                                     <div class="vsi-blank"></div>
                                     <div class="vsi-wrap">
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
-                                        <debate-room-video></debate-room-video>
+                                        <debate-room-video v-for="(item, index) in disagree" :key="index" :stream="item.data"></debate-room-video>
                                     </div>
                                 </div>
                               <!-- 토론방 오른쪽 -->
@@ -261,12 +261,9 @@ import startLetter from './animation-view/start-letter.vue'
 
 
 // 토론방 관련
-import debateRoomSideComponent from './debateRoomSideComponent'
-import debateRoomSideComponentAgree from './debateRoomSideComponentAgree'  // @@ 없앨거
-import debateRoomCenterComponent from './debateRoomCenterComponent'        // @@ 없앨거
 import detailSessionView from './detailSessionView'
 import debateRoomVideo from './debateRoomVideo'
-
+import debateRoomCenterComponent from './debateRoomCenterComponent'
 
 //  채팅
 import chattingAll from './ChattingComponents/chatting-all'
@@ -305,10 +302,8 @@ export default {
         startLetter,
 
       // 토론방 관련
-        debateRoomSideComponent,
         debateRoomCenterComponent,
         detailSessionView,
-        debateRoomSideComponentAgree,
         debateRoomVideo,
 
       //  채팅
@@ -366,42 +361,6 @@ export default {
       console.warn(exception);
     });
 
-    this.session.on("signal:chat-all",(event)=>{
-      let eventData = JSON.parse(event.data);
-      let data = new Object()
-      let time = new Date()
-      data.writer = eventData.writer
-      data.message = eventData.content
-      data.time = moment(time).format('HH:mm')
-      console.log("메세지 : "+message);
-      this.messagesAll.push(data)
-      console.log(this.messagesAll);
-    } )
-
-    this.session.on("signal:chat-agree",(event)=>{
-      let eventData = JSON.parse(event.data);
-      let data = new Object()
-      let time = new Date()
-      data.writer = eventData.writer
-      data.message = eventData.content
-      data.time = moment(time).format('HH:mm')
-      console.log("메세지 : "+message);
-      this.messagesAgree.push(data)
-      console.log(this.messagesAll);
-    } )
-
-    this.session.on("signal:chat-disagree",(event)=>{
-     let eventData = JSON.parse(event.data);
-      let data = new Object()
-      let time = new Date()
-      data.writer = eventData.writer
-      data.message = eventData.content
-      data.time = moment(time).format('HH:mm')
-      console.log("메세지 : "+message);
-      this.messagesDisAgree.push(data)
-      console.log(this.messagesAll);
-    } )
-
     await this.room.session
       .connect(token, { clientData: this.user.em })
       .then(() => {
@@ -436,7 +395,7 @@ export default {
     }
   },
     computed : {
-      ...mapState(["user", "room"]),
+      ...mapState(["user", "position", "tempToken"]),
         customCaroselStyle() {
             return {
 
@@ -565,7 +524,14 @@ export default {
             timeList:[], // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
 
           // 비디오 관련 및 내부로직
-            position : '',
+            OV: undefined,
+            session: undefined,
+            host: undefined,
+            agree: [],
+            disagree: [],
+
+
+
         }
     },
     mounted() {
@@ -615,6 +581,103 @@ export default {
         window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
+      // 세션 연결
+       async joinSession() {
+      const token = this.tempToken;
+
+      // --- Get an OpenVidu object ---
+      this.OV = new OpenVidu();
+
+      // --- Init a session ---
+      this.session = this.OV.initSession();
+      // --- Specify the actions when events take place in the session ---
+
+      // On every new Stream received...
+      this.session.on("streamCreated", ({ stream }) => {
+        const subscriber = this.session.subscribe(stream);
+        let connectionData = JSON.parse(subscriber.stream.connection.data);
+        var clientData = connectionData.clientData.split("/");
+        console.log(clientData);
+        let sub = {
+            id : clientData[0],
+            stream : 'subscriber',
+            data : subscriber
+        };
+        if (clientData[0] == this.session.sessionId) {
+          console.log("host video connected");
+          this.host = subscriber;
+        } else if (clientData[1] == "agree") {
+          console.log("agree video connected");
+          this.agree.push(sub);
+        } else if (clientData[1] == "disagree") {
+          console.log("disagree video connected");
+          this.disagree.push(sub);
+        }
+      });
+
+      // On every Stream destroyed...
+      // TODO
+      this.session.on("streamDestroyed", ({ stream }) => {
+        const index = this.subscribers.indexOf(stream.streamManager, 0);
+        if (index >= 0) {
+          this.subscribers.splice(index, 1);
+        }
+      });
+
+      // On every asynchronous exception...
+      this.session.on("exception", ({ exception }) => {
+        console.warn(exception);
+      });
+
+      await this.session
+        .connect(token, { clientData: this.user.id + "/" + this.position })
+        .then(() => {
+          let publisher = this.OV.initPublisher(undefined, {
+            audioSource: undefined, // The source of audio. If undefined default microphone
+            videoSource: undefined, // The source of video. If undefined default webcam
+            publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+            publishVideo: true, // Whether you want to start publishing with your video enabled or not
+            resolution: "680x480", // The resolution of your video
+            frameRate: 30, // The frame rate of your video
+            insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+            mirror: false // Whether to mirror your local video or not
+          });
+          let sub = {
+            id : this.user.id,
+            stream : 'publisher',
+            data : publisher
+        };
+          if (this.user.id == this.session.sessionId) {
+            this.host = publisher;
+            console.log("호스트래");
+          } else if (this.position == "agree") {
+
+            this.agree.push(sub);
+            console.log("찬성이래");
+          } else if (this.position == "disagree") {
+            this.disagree.push(sub);
+            console.log("반대래");
+          }
+          console.log("Connected!!!");
+          this.session.publish(publisher);
+        })
+        .catch(error => {
+          console.log(
+            "There was an error connecting to the session:",
+            error.code,
+            error.message
+          );
+        });
+
+      if (this.user.id == this.session.sessionId) {
+        console.log("you are host");
+      } else {
+        console.log("you are pannel");
+        console.log(this.agree);
+      }
+
+        },
+
         handleResizeHome() {  // 화면 움직일때 조정 다시함
             if (this.chattTF === true) {    // 채팅창 열려있을때
                 // 화면 기본 사이즈 받아옴
@@ -1049,15 +1112,14 @@ export default {
         leaveSession() {
           this.$refs.debateRoomSideComponent.leaveSession();
         },
-      // 찬성 참여
-      positionAgree() {
-        this.position = 'agree',
-        console.log(this.$refs);
-        this.$refs.debateRoomSideComponent.joinPannel()
-      },
-      positionDisagree() {
+        // 세부세션 보내기 시그널
+        sendSession() {
+          let index = "/room/session/" + this.session.sessionId;
+          this.$store.dispatch("makeSessionRoom", index).then((response) => {
+          console.log(response.data);
+      })
+    },
 
-      },
     }
 }
 </script>
