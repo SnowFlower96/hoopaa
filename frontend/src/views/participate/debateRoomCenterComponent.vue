@@ -1,23 +1,25 @@
 <template>
-    <div class="debate-center-wrap" >
-        <div class="debate-moderator" :style="customViewStyle">
-        <div class="debate-moderator-inner" :style="customViewStyle">
-            <user-video class="moderatorVideo" :stream-manager="host"/>
+    <!-- <div class="debate-center-wrap" >
+        <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle">
+            <user-video class="moderatorVideo" :stream-manager="room.host"/>
 
         </div>
-    </div>
+    </div> -->
     <div class="debate-guague" :style="customViewStyle">
         <div class="debate-guague-inner" :style="customViewStyle">
+            <span style="font-size: 25px;" v-if="!timeList[1]">반대팀</span>
+            <span style="font-size: 25px;" v-if="timeList[0]">찬성팀</span>
+            <div id="speaktimer">0분0초</div>
+            <div class="st-tim-btn" v-if="moderator" @click="startTimer">시작</div>
         </div>
     </div>
-    <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle">자료화면</div></div>
-    </div>
+    <!-- <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle"></div></div>
+    </div> -->
 </template>
 
 <script>
 import axios from 'axios';
-import { OpenVidu } from 'openvidu-browser';
-import UserVideo from '@/views/openvidu/UserVideo.vue';
+// import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -25,14 +27,23 @@ const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
 const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 
 export default {
-    props: {
-
+    data() {
+        return {
+            timerMin: this.timeList[0]/60,
+            timerSec: 0
+        }
     },
-  components : {
-    UserVideo,
-  },
+    props: [
+        'timeList',
+        'moderator',
+        'all',
+        'team',
+    ],
+    components : {
+        // UserVideo,
+    },
     computed : {
-      ...mapState(["user"]),
+      ...mapState(["user","room"]),
         customViewStyle() {
             return {
                 "--center-video-height" : this.centerVideoHeight,
@@ -66,9 +77,8 @@ export default {
             resol_h: 200
         }
     },
-    props : ['host'],
     created () {
-      console.log("center")
+
     },
     mounted() {
         console.log(this.timeList)
@@ -90,6 +100,24 @@ export default {
         window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
+        startTimer() {
+            let time = this.timeList[0];
+            let min = this.timerMin;
+            let sec = this.timerSec;
+            let x = setInterval(function() {
+            min = parseInt(time/60);
+            sec = time%60;
+
+            document.getElementById("speaktimer").innerHTML = min + "분" + sec + "초";
+            time--;
+
+            if (time < 0) {
+                clearInterval(x);
+                document.getElementById("speaktimer").innerHTML = "0분 0초";
+            }
+            }, 1000);
+
+        },
         handleResizeHome() {
             const wValue = document.body.clientWidth*0.75*0.3-20  // 사회자 비디오
             const wValueNotVid = document.body.clientWidth*0.75*0.4 // 게이지 + 컨텐츠
@@ -126,9 +154,28 @@ export default {
 </script>
 
 <style>
-video {
-  height: var(--center-video-height);
-  width: var(--center-video-width);
+.st-tim-btn {
+    width: 80px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(0, 0, 0);
+    border-radius: 10px;
+    outline: 1px solid rgba(168, 168, 168, 0.753);
+    color: rgb(182, 182, 182);
+}
+.st-tim-btn:hover {
+    outline: 1px solid white;
+    cursor: pointer;
+    color: white;
+}
+#speaktimer {
+    font-size: 45px;
+}
+.moderatorVideo > #local-video-undefined {
+    height: var(--center-video-height);
+    width: var(--center-video-width);
 }
 .debate-moderator {
     height: var(--db-mod);
@@ -150,16 +197,18 @@ video {
 
 
 .debate-guague {
-    height: var(--db-gg);
+    /* height: var(--db-gg); */
     /* background-color: rgb(255, 255, 24); */
     display: flex;
     justify-content: center;
     align-items: flex-end;
 }
 .debate-guague-inner {
-    height: var(--db-gg-in-h);
-    width: var(--db-gg-in-w);
-    background-color: rgb(23, 139, 32);
+    /* background-color: rgb(23, 139, 32); */
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    color: white;
 }
 
 
@@ -173,7 +222,8 @@ video {
 .debate-content-inner {
     height: var(--db-ct-in-h);
     width: var(--db-ct-in-w);
-    background-color: rgb(255, 255, 24);
+    background-color: rgb(44, 44, 44);
+    border-radius: 10px;
 }
 </style>
 
