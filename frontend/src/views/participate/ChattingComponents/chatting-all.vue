@@ -12,12 +12,12 @@
                 {{message.writer}}
               </div>
               <div>
-                {{ message.content}} {{message.time}}
+                {{ message.message}} {{message.time}}
               </div>
             </div>
         </div>
         <div class="chatting-all-write">
-            <input type="text" v-model="message" placeholder="여기에 메세지를 입력하세요">
+            <textarea placeholder="여기에 메세지를 입력하세요"  v-model="message" class="chatting-team-ta" cols="30" rows="10"></textarea>
         </div>
         <div>
           <button class="send-btn" @click="clickSendMessages">

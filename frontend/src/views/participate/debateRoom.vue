@@ -290,6 +290,7 @@ import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+import moment from 'moment';
 
 
 const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
@@ -324,76 +325,9 @@ export default {
         RestTime,
 
     },
-    async created() {
-    var token = this.$store.state.tempToken;
-
-    // --- Get an OpenVidu object ---
-    this.room.OV = new OpenVidu();
-
-    // --- Init a session ---
-    this.room.session = this.room.OV.initSession();
-    // --- Specify the actions when events take place in the session ---
-
-    // On every new Stream received...
-    this.room.session.on("streamCreated", ({ stream }) => {
-      const subscriber = this.room.session.subscribe(stream);
-      subscriber.stream.connection.dataObject = JSON.parse(
-        subscriber.stream.connection.data
-      );
-      var clientData = subscriber.stream.connection.dataObject.clientData;
-      console.log(clientData.split("/"));
-      if (clientData[0] == this.room.session.sessionId)
-        this.room.host = subscriber;
-      else this.room.agrees.push(subscriber);
-    });
-
-    // On every Stream destroyed...
-    // TODO
-    this.room.session.on("streamDestroyed", ({ stream }) => {
-      const index = this.subscribers.indexOf(stream.streamManager, 0);
-      if (index >= 0) {
-        this.subscribers.splice(index, 1);
-      }
-    });
-
-    // On every asynchronous exception...
-    this.room.session.on("exception", ({ exception }) => {
-      console.warn(exception);
-    });
-
-    await this.room.session
-      .connect(token, { clientData: this.user.em })
-      .then(() => {
-        console.log("Connected!!!");
-      })
-      .catch(error => {
-        console.log(
-          "There was an error connecting to the session:",
-          error.code,
-          error.message
-        );
-      });
-
-    if (this.user.em == this.room.session.sessionId) {
-      console.log("you are host");
-      let publisher = this.room.OV.initPublisher(undefined, {
-        audioSource: undefined, // The source of audio. If undefined default microphone
-        videoSource: undefined, // The source of video. If undefined default webcam
-        publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
-        publishVideo: true, // Whether you want to start publishing with your video enabled or not
-        resolution: "680x480", // The resolution of your video
-        frameRate: 30, // The frame rate of your video
-        insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-        mirror: true, // Whether to mirror your local video or not
-      });
-
-      this.room.publisher = publisher;
-      this.room.host = publisher;
-
-      // --- Publish your stream ---
-      this.room.session.publish(publisher);
-    }
-  },
+    created() {
+      this.joinSession();
+    },
     computed : {
       ...mapState(["user", "position", "tempToken"]),
         customCaroselStyle() {
@@ -530,6 +464,11 @@ export default {
             agree: [],
             disagree: [],
 
+          //채팅
+            messagesAll:[],
+            messagesAgree:[],
+            messagesDisagree:[]
+
 
 
         }
@@ -628,6 +567,41 @@ export default {
       this.session.on("exception", ({ exception }) => {
         console.warn(exception);
       });
+
+      this.session.on("signal:chat-all",(event)=>{
+      console.log("전체 메세지");
+      let eventData = JSON.parse(event.data);
+      let data = new Object()
+      let time = new Date()
+      data.writer = eventData.writer
+      data.message = eventData.content
+      data.time = moment(time).format('HH:mm')
+
+      this.messagesAll.push(data)
+      console.log(this.messagesAll);
+    } )
+
+    this.session.on("signal:chat-agree",(event)=>{
+      let eventData = JSON.parse(event.data);
+      let data = new Object()
+      let time = new Date()
+      data.writer = eventData.writer
+      data.message = eventData.content
+      data.time = moment(time).format('HH:mm')
+      this.messagesAgree.push(data)
+      console.log(this.messagesAll);
+    } )
+
+    this.session.on("signal:chat-disagree",(event)=>{
+     let eventData = JSON.parse(event.data);
+      let data = new Object()
+      let time = new Date()
+      data.writer = eventData.writer
+      data.message = eventData.content
+      data.time = moment(time).format('HH:mm')
+      this.messagesDisagree.push(data)
+      console.log(this.messagesAll);
+    } )
 
       await this.session
         .connect(token, { clientData: this.user.id + "/" + this.position })
@@ -1003,11 +977,6 @@ export default {
             }
         },
 
-
-
-
-
-
         //채팅 추가
         sendAllMessage(message){
           console.log("메세지 배열에 삽입");
@@ -1044,11 +1013,6 @@ export default {
           }
             console.log("팀 메세지")
         },
-
-
-
-
-
 
         offCallModal() {
             this.callToMdModal = false

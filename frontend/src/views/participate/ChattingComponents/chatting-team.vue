@@ -12,12 +12,17 @@
                 {{message.writer}}
               </div>
               <div>
-                {{ message.content}} {{message.time}}
+                {{ message.message}} {{message.time}}
               </div>
             </div>
         </div>
-        <div class="chatting-team-write">
-            <textarea placeholder="여기에 메세지를 입력하세요" class="chatting-team-ta" cols="30" rows="10"></textarea>
+        <div class="chatting-all-write">
+            <textarea placeholder="여기에 메세지를 입력하세요"  v-model="message" class="chatting-team-ta" cols="30" rows="10"></textarea>
+        </div>
+        <div>
+          <button class="send-btn" @click="clickSendMessages">
+          전송
+          </button>
         </div>
     </div>
 </template>
@@ -50,7 +55,7 @@ export default {
         },
         clickSendMessages(){
           console.log("메세지 보내기");
-          this.$emit('chat-all', this.message)
+          this.$emit('chat-team', this.message)
           this.message=''
         }
 
