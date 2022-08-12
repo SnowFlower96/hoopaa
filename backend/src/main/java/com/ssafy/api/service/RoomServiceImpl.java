@@ -280,7 +280,9 @@ public class RoomServiceImpl implements RoomService {
         else return "400";
 
         // 참여할 수 있으면
+        System.out.println("In checkPos : Length = " + VUserInfos.length);
         for (int i = 0; i < max; i++) {
+            System.out.println("In checkPos : " + VUserInfos[i]);
             if (VUserInfos[i] == null) {
                 VUserInfos[i] = isSelect ? vRoom.getMapParticipants().get(AToken) : null;
                 return "Success";
@@ -395,7 +397,7 @@ public class RoomServiceImpl implements RoomService {
             VUserInfo.setHasFinalVote(true);
             if (vote.equals("agree")) {
                 vRoom.setVote_final_agree(vRoom.getVote_final_agree() + 1);
-            } else if (vote.equals("disagree")){
+            } else if (vote.equals("disagree")) {
                 vRoom.setVote_final_disagree(vRoom.getVote_final_disagree() + 1);
             } else return "400";
         }
@@ -446,7 +448,7 @@ public class RoomServiceImpl implements RoomService {
             roomInfo.setWinner(winner);
             roomInfo.setAgree(roomInfo.getAgree());
             roomInfo.setDisagree(roomInfo.getDisagree());
-            roomInfo.setKingID(kingID != null ? Long.parseLong(kingID) : null);
+            roomInfo.setKingId(kingID != null ? Long.parseLong(kingID) : null);
 
             // user history 업데이트
             // 찬성 진영 업데이트

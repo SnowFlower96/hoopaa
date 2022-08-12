@@ -189,7 +189,7 @@ public class RoomController {
             case "Success":
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
             default:
-                return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Fail"));
+                return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
         }
     }
 
@@ -215,7 +215,7 @@ public class RoomController {
         if (!userService.isUser(AToken))
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized"));
 
-        String result = roomService.checkPos(AToken, sessionID, pos, true);
+        String result = roomService.checkPos(AToken, sessionID, pos, false);
         switch (result) {
             case "400":
                 return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong request"));
@@ -224,7 +224,7 @@ public class RoomController {
             case "Success":
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
             default:
-                return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Fail"));
+                return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
         }
     }
 

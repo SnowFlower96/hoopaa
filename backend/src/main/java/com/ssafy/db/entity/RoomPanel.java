@@ -18,20 +18,20 @@ public class RoomPanel {
     @Id
     Long id;
 
-    Integer agree1;
-    Integer agree2;
-    Integer agree3;
-    Integer agree4;
-    Integer agree5;
+    Long agree1;
+    Long agree2;
+    Long agree3;
+    Long agree4;
+    Long agree5;
 
-    Integer disagree1;
-    Integer disagree2;
-    Integer disagree3;
-    Integer disagree4;
-    Integer disagree5;
+    Long disagree1;
+    Long disagree2;
+    Long disagree3;
+    Long disagree4;
+    Long disagree5;
 
     @Builder
-    public RoomPanel(Long id, Integer agree1, Integer agree2, Integer agree3, Integer agree4, Integer agree5, Integer disagree1, Integer disagree2, Integer disagree3, Integer disagree4, Integer disagree5) {
+    public RoomPanel(Long id, Long agree1, Long agree2, Long agree3, Long agree4, Long agree5, Long disagree1, Long disagree2, Long disagree3, Long disagree4, Long disagree5) {
         this.id = id;
         this.agree1 = agree1;
         this.agree2 = agree2;

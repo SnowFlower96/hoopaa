@@ -27,7 +27,7 @@ public class UserHistoryDto {
     public UserHistoryDto(UserHistory userHistory) {
         this.start_time = userHistory.getRoomInfo().getStartTime();
         this.end_time = userHistory.getRoomInfo().getEndTime();
-        this.host_name = userHistory.getRoomInfo().getUser().getNnm();
+        this.host_name = userHistory.getRoomInfo().getUserHost().getNnm();
         this.title = userHistory.getRoomInfo().getRoomDescription().getTitle();
         this.position = ColumnConfig.getUserPosition(userHistory.getUserPos());
         this.max_num = userHistory.getRoomInfo().getMaxNum();
