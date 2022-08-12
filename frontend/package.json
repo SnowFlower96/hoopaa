@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "element-plus": "^1.0.2-beta.44",
     "install": "^0.13.0",
+    "moment": "^2.29.4",
     "node-sass": "^6.0.0",
     "npm": "^8.16.0",
     "openvidu-browser": "^2.21.0",

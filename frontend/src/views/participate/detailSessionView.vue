@@ -5,7 +5,7 @@
                 화면공유부분 => 컴포넌트를 분리할까 생각중
             </div>
             <div class="detail-box-video">
-                <detail-session-side-component :publisher="publisher" :subscribers="subscribers"></detail-session-side-component>
+                <debate-room-side-component></debate-room-side-component>
             </div>
         </div>
         <div v-if="chattTF" class="chatting-box" :style="customDetailSessionSize">
@@ -16,26 +16,18 @@
         <footer-team @call-modal="changeChatView"></footer-team>
         <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
     </div>
-
+    
 </template>
 <script>
 import FooterTeam from "./debateRoomFooter/FooterTeam"
-import detailSessionSideComponent from './detailSessionSideComponent'
+import debateRoomSideComponent from './debateRoomSideComponent'
 import chattingTeam from './ChattingComponents/chatting-team.vue'
-import axios from 'axios';
-import { OpenVidu } from 'openvidu-browser';
-import UserVideo from '@/views/openvidu/UserVideo.vue';
-import { mapState} from 'vuex';
-axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
-const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 export default {
     components: {
         FooterTeam,
-        detailSessionSideComponent,
-        chattingTeam,
-        UserVideo,
+        debateRoomSideComponent,
+        chattingTeam
     },
     computed: {
         customDetailSessionSize() {
@@ -53,11 +45,7 @@ export default {
             chattTF: true,
             chattBox : '',
             viewShare : '',
-            videoBox : '',
-            OV: undefined,
-            session: undefined,
-            publisher : undefined,
-            subscribers : [],
+            videoBox : ''
         }
     },
     mounted() {
@@ -116,66 +104,11 @@ export default {
                 this.viewShare = `${exceptChatting*0.7}px`
                 this.videoBox = `${exceptChatting*0.3}px`
             }
-
+            
         },
         EmitcallModal(option) {
             this.chattTF = !this.chattTF
-        },
-        async joinSession () {
-    const token = this.tempToken;
-
-    // --- Get an OpenVidu object ---
-    this.OV = new OpenVidu();
-
-    // --- Init a session ---
-    this.session = this.OV.initSession();
-    // --- Specify the actions when events take place in the session ---
-
-    // On every new Stream received...
-    this.session.on("streamCreated", ({ stream }) => {
-      const subscriber = this.session.subscribe(stream);
-      this.subscribers.push(subscriber);
-    });
-
-    // On every Stream destroyed...
-    // TODO
-    this.session.on("streamDestroyed", ({ stream }) => {
-      const index = this.subscribers.indexOf(stream.streamManager, 0);
-      if (index >= 0) {
-        this.subscribers.splice(index, 1);
-      }
-    });
-
-    // On every asynchronous exception...
-    this.session.on("exception", ({ exception }) => {
-      console.warn(exception);
-    });
-
-    await this.session
-      .connect(token, { clientData: this.user.id })
-      .then(() => {
-        let publisher = this.OV.initPublisher(undefined, {
-        audioSource: undefined, // The source of audio. If undefined default microphone
-        videoSource: undefined, // The source of video. If undefined default webcam
-        publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
-        publishVideo: true, // Whether you want to start publishing with your video enabled or not
-        resolution: "680x480", // The resolution of your video
-        frameRate: 30, // The frame rate of your video
-        insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-        mirror: true, // Whether to mirror your local video or not
-      });
-        this.publisher = publisher;
-        console.log("Connected!!!");
-        this.session.publish(publisher);
-      })
-      .catch(error => {
-        console.log(
-          "There was an error connecting to the session:",
-          error.code,
-          error.message
-        );
-      });
-    },
+        }
     },
 
 }

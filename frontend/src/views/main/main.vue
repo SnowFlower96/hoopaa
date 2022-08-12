@@ -1,9 +1,9 @@
 <template>
-  <div class="main-wrapper">
+  <el-container class="main-wrapper">
     <main-header v-if="visibleMainHeader" class="main-header-class" />
       <router-view></router-view>
     <main-footer v-if="visibleMainFooter" class="main-footer-class"/>
-  </div>
+  </el-container>
 </template>
 <style scoped>
   @import "https://unpkg.com/element-plus/lib/theme-chalk/index.css";
@@ -61,7 +61,7 @@ export default {
         this.location = to.name
         this.visibleMainHeader = false
         document.addEventListener('scroll', this.zeroLocation)
-        }
+        } 
       else if (to.name === 'debateRoom'|| to.name === 'make-room' || to.name === 'homeToParticipate' || to.name === 'detailSessionView' || to.name === 'endDebate' || to.name === 'resultPage') {
         this.visibleMainHeader = false
         this.visibleMainFooter = false
@@ -73,7 +73,8 @@ export default {
       }
     }
   },
-
+  mounted() {
+  }
 }
 </script>
 
