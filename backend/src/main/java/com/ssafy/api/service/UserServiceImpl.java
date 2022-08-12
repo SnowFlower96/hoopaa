@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
 
-        userRepository.save(user); //user table에 삽입
+        userRepository.save(user); // user table 에 삽입
 
         UserStat userStat = UserStat.builder().id(user.getId()).build();
         userStatRepository.save(userStat);

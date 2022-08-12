@@ -171,7 +171,6 @@ public class RoomServiceImpl implements RoomService {
             vRoom.getMapConnections().put(userInfoDto.getId(), connection);
 
             // 방 정보에 UserInfo 추가
-
             VUserInfo vUserInfo = VUserInfo.builder()
                     .id(userInfoDto.getId()).em(userInfoDto.getEm()).em(userInfoDto.getEm())
                     .build();

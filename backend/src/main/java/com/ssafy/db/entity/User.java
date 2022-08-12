@@ -47,6 +47,10 @@ public class User {
 
     String refresh_tk;
 
+    @OneToOne
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    UserStat userStat;
+
     @Builder
     public User(Long id, String em, String pwd, String nnm, int level, boolean em_auth, LocalDateTime join_dt, LocalDateTime modify_dt, LocalDateTime leave_dt, String refresh_tk) {
         this.id = id;
