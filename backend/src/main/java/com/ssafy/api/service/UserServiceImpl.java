@@ -1,6 +1,6 @@
 package com.ssafy.api.service;
 
-import com.ssafy.common.data.UserDupl;
+import com.ssafy.db.dto.UserDupl;
 import com.ssafy.common.util.MailUtil;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserInfoDto;
@@ -20,9 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
@@ -43,6 +41,11 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     JavaMailSender mailSender;
+
+    @Override
+    public boolean isUser(String AToken) {
+        return AToken.chars().allMatch(Character::isDigit);
+    }
 
     @Override
     @Transactional
