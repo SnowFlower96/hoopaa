@@ -14,6 +14,7 @@
         
         <div id="barChart" class="barChart">
             <div id="chartValue">{{initial}}</div>
+            <div>agree</div>
         </div>
         <div id="barChart2" class="barChart2">
             <div id="chartValue2">{{initial}}</div>
@@ -27,39 +28,22 @@ export default {
         return {
             initial: 0,
             // 받아온 데이터 넣을 예정
-            agree: 20,
-            disagree: 55,
+            agree: 35,
+            disagree: 25,
         }
     },
     mounted() {
         
-        // let tmpH;
-        // setInterval(()=>{
-        // tmpH = (Math.random()*150+50);
-        // document.getElementById("barChart").style.height = tmpH + "px";
-        // document.getElementById("chartValue").innerText = Math.round(tmpH);
-
-        // document.getElementById("barChart2").style.height = tmpH + "px";
-        // document.getElementById("chartValue2").innerText = Math.round(tmpH);
-        // }, 4000 );
     },
     methods: {
-        // showResult() {
-        //     document.getElementById("barChart").style.height = this.agree*12 + "px";
-        //     document.getElementById("chartValue").innerText = Math.round(this.agree);
-
-        //     document.getElementById("barChart2").style.height = this.disagree*12 + "px";
-        //     document.getElementById("chartValue2").innerText = Math.round(this.disagree);
-            
-        // },
         resultBtn() {
             let element = document.getElementById("resultWrap");
             element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
 
-            document.getElementById("barChart").style.height = this.agree*12 + "px";
+            document.getElementById("barChart").style.height = this.agree*17 + "px";
             document.getElementById("chartValue").innerText = Math.round(this.agree);
 
-            document.getElementById("barChart2").style.height = this.disagree*12 + "px";
+            document.getElementById("barChart2").style.height = this.disagree*17 + "px";
             document.getElementById("chartValue2").innerText = Math.round(this.disagree);
         }
     }
@@ -95,7 +79,7 @@ export default {
     .barChart{
         position: absolute;
         left:65%; 
-        bottom:-100vh;  
+        bottom:-90vh;  
         width:30px;
         height:20px;
         perspective-origin: center bottom ;
@@ -128,12 +112,12 @@ export default {
     .barChart2{
         position: absolute;
         left:80%; 
-        bottom:-100vh; 
+        bottom:-90vh; 
         width:30px;
         height:20px;
         perspective-origin: center bottom ;
         transform: translate(-50%) scaleX(2);
-        background-color:#9999ff;
+        background-color:#40b854;
         border-radius:15px;
         transition:height 3s;
     }
