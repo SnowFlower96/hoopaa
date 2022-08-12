@@ -20,14 +20,15 @@
   font-size: 8em;
   padding: 0;
   color: whitesmoke;
-  text-shadow: 0 0.1em 20px #c9ae55, 0.05em -0.03em 0 #c9ae55,
-    0.05em 0.005em 0 #c9ae55, 0em 0.08em 0 #c9ae55,
-    0.05em 0.08em 0 #c9ae55, 0px -0.03em 0 #c9ae55,
-    -0.03em -0.03em 0 #c9ae55, -0.03em 0.08em 0 #c9ae55, -0.03em 0 0 #c9ae55;
+  text-shadow: 0 0.1em 20px #4583ff, 0.05em -0.03em 0 #4583ff,
+    0.05em 0.005em 0 #4583ff, 0em 0.08em 0 #4583ff,
+    0.05em 0.08em 0 #4583ff, 0px -0.03em 0 #4583ff,
+    -0.03em -0.03em 0 #4583ff, -0.03em 0.08em 0 #4583ff, -0.03em 0 0 #4583ff;
 }
 .ssb-span {
     transform: scale(0.9);
     display: inline-block;
+    -webkit-text-stroke: 1px #44c933;
   }
 .ssb-span:first-child {
 animation: bop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards infinite

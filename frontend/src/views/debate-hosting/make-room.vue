@@ -98,8 +98,8 @@ export default {
   },
   created() {
     this.menus = this.menuData;
-    this.host = this.$store.state.userStat.em;
-    this.myUserName = this.$store.state.userStat.nnm;
+    this.host = this.$store.state.user.em;
+    this.myUserName = this.$store.state.user.nnm;
   },
   methods : {
      dropdownSortBtnTF() {

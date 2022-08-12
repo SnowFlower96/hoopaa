@@ -48,11 +48,11 @@ export default new Vuex.Store({
       state.user = data.user;
     },
     // 로그아웃
-    USER_LOGOUT() {
+    USER_LOGOUT(state) {
+      state.isLogin = false;
       sessionStorage.removeItem("accessToken");
       api.defaults.headers["accessToken"] = "";
       alert("로그아웃 됐습니다.");
-
     },
     USER_HISTORY(state, data) {
       state.userHistory = JSON.parse(data);
@@ -282,7 +282,6 @@ export default new Vuex.Store({
       router.push("/participatingPage")
     })
   },
-
   makeSessionRoom({commit}, index) {
     return new Promise ((resolve, reject) => {
     api({
@@ -338,4 +337,3 @@ export default new Vuex.Store({
   }
 }
 })
-

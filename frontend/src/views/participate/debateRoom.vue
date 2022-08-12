@@ -1,7 +1,9 @@
 <template id="debate-room-body">
 <!-- 토론진행중 애니메이션 구성 -->
-<div  class="animation-role-background" v-if="false" :style="customCaroselStyle">
+<div  class="animation-role-background" v-if="animationBG" :style="customCaroselStyle">
     <start-letter id="arb" v-if="startEvent"></start-letter>
+    <heart-hund :props-heart="propsHeart" id="arb" v-if="heartHund"></heart-hund>
+    <rest-time-event v-if="restEvent"></rest-time-event>
 </div>
 <!-- 토론진행중 애니메이션 구성 -->
 
@@ -10,10 +12,7 @@
 <!-- 곧 없어질 버튼 -->
 <div class="animation-control-btns">
     <button @click="animation('startEvent')">시작 이벤트</button>
-    <button @click="animation('heartTen')" v-if="heartTen">하트갯수 10개 됐을때</button>
-    <button @click="animation('heartfift')" v-if="heartfift">하트갯수 50개 됐을때</button>
-    <button @click="animation('heartHund')" v-if="heartHund">하트갯수 100개 됐을때</button>
-    <button @click="animation('restEvent')" v-if="restEvent">쉬는시간일때</button>
+    <button @click="animation('restEvent')" >쉬는시간일때</button>
 </div>
 <!-- 곧 없어질 버튼 -->
 
@@ -68,24 +67,52 @@
                             <p>방청객이 투표중입니다 ...</p>
                             <p>타이머가 끝나면 종료버튼을 눌러 토론을 종료하세요</p>
                             <div class="vote-btn-wrap">
-                                <router-link style="text-decoration: none;" to="/endDebate"><div class="vote-btn">결과화면으로</div></router-link>
+                                <router-link style="text-decoration: none;" to="/endDebate"><div class="sub-vote-btn">결과화면으로</div></router-link>
                             </div>
                         </div>
                     </div>
                     <div v-if="voteAll" class="all-view">
-                        <div class="all-view-wrap">
-                            <p>당신의 최종 의견을 투표하세요</p>
-                            <p>제한시간안에 투표하지 않으면 무효 처리됩니다</p>
-                            <p>타이머가 끝나면 자동으로 제출됩니다</p>
-                            <div class="vote-btn-wrap">
-                                <div class="vote-btn" @click="voteFunction(1)">찬성</div>
-                                <div class="vote-btn" @click="voteFunction(0)">반대</div>
+                        <!-- 방청객  => 1. 투표하기 뷰 -->
+                            <div class="all-view-wrap" v-if="allVoteView">
+                                <p>당신의 최종 의견을 투표하세요</p>
+                                <p style="color: tomato;">제한시간안에 투표를 꼭 해주시기 바랍니다</p>
+                                <div class="vote-btn-wrap">
+                                    <div :class="{'vote-btn-selected': voteStatus === 1, 'vote-btn': voteStatus === 0}" @click="voteFunction(1)">찬성</div>
+                                    <div :class="{'vote-btn-selected': voteStatus === 0, 'vote-btn': voteStatus === 1}" @click="voteFunction(0)">반대</div>
+                                </div>
+                                <p>타이머가 끝나면 자동으로 제출됩니다</p>
+                                <div class="displayFlex">
+                                    <div class="sub-vote-btn" @click="submitVote('vote')">제출</div>
+                                </div>
                             </div>
-                            <p>
-                                <span v-if="voteStatus">찬성</span>
-                                <span v-if="!voteStatus">반대</span>
-                                을(를) 선택하셨습니다</p>
-                        </div>
+                        <!-- 방청객  => 투표하기 뷰 -->
+
+                        <!-- 방청객 => 2. MVP 선택 뷰 -->
+                            <div class="all-view-wrap" v-if="selMVPView">
+                                <div style="font-size: 20px;">이번 토론의 MVP를 선택해주세요</div>
+                                <div class="mvp-list displayFlex" style="flex-wrap: wrap;">
+                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
+                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
+                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
+                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
+                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
+                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
+                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
+                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
+                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
+                                </div>
+                                <div class="displayFlex">
+                                    <div class="sub-vote-btn" @click="submitVote('mvp')">제출</div>
+                                </div>
+                            </div>
+                        <!-- 방청객 => MVP 선택 뷰 -->
+
+                        <!-- 방청객 => 3. 집계 대기 뷰 -->
+                            <div class="all-view-wrap" v-if="waitVoteView">
+                                <p>잠시 대기해주세요</p>
+                                <p>다른 방청객들이 대기중입니다 ..</p>
+                            </div>
+                        <!-- 방청객 => 집계 대기 뷰 -->
                     </div>
                 </div>
             </div>
@@ -265,12 +292,17 @@
 <script>
 // 토론방 위에 보여지는 효과 관련
 import startLetter from './animation-view/start-letter.vue'
+import heartHund from './animation-view/heartHund.vue'
+import restTimeEvent from './animation-view/rest-time-event.vue'
 
 
 // 토론방 관련
+import debateRoomSideComponent from './debateRoomSideComponent'
+import debateRoomSideComponentAgree from './debateRoomSideComponentAgree'  // @@ 없앨거
+import debateRoomCenterComponent from './debateRoomCenterComponent'        // @@ 없앨거
 import detailSessionView from './detailSessionView'
 import debateRoomVideo from './debateRoomVideo'
-import debateRoomCenterComponent from './debateRoomCenterComponent'
+
 
 //  채팅
 import chattingAll from './ChattingComponents/chatting-all'
@@ -305,32 +337,40 @@ const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 export default {
     name: 'debateRoom',
     components: {
-    // 토론방 위에 보여지는 효과 관련
-    startLetter,
-    // 토론방 관련
-    debateRoomCenterComponent,
-    detailSessionView,
-    debateRoomVideo,
-    //  채팅
-    chattingAll,
-    chattingTeam,
-    // 하단바
-    FooterTeam,
-    FooterModerator,
-    FooterAll,
-    // 메뉴 및 모달뷰
-    callToModerator,
-    UserOut,
-    MessageFromTeam,
-    UploadFile,
-    LetTeamSpeak,
-    RestTime,
-    UserVideo,
-        UserVideo
-},
+      // 토론방 위에 보여지는 효과 관련
+        startLetter,
+        heartHund,
+        restTimeEvent,
+
+      // 토론방 관련
+        debateRoomSideComponent,
+        debateRoomCenterComponent,
+        detailSessionView,
+        debateRoomSideComponentAgree,
+        debateRoomVideo,
+
+      //  채팅
+        chattingAll,
+        chattingTeam,
+
+      // 하단바
+        FooterTeam,
+        FooterModerator,
+        FooterAll,
+
+      // 메뉴 및 모달뷰
+        callToModerator,
+        UserOut,
+        MessageFromTeam,
+        UploadFile,
+        LetTeamSpeak,
+        RestTime,
+      // 영상
+        UserVideo,
+    },
     created() {
       this.joinSession();
-    },
+  },
     computed : {
       ...mapState(["user", "position", "tempToken"]),
         customCaroselStyle() {
@@ -419,6 +459,7 @@ export default {
             all: false,
 
           // 토론방 위에 보여지는 효과 관련
+            animationBG: false,
             startEvent: false,
             heartTen: false,
             heartfift: false,
@@ -426,6 +467,7 @@ export default {
             restEvent: false,
             allHeartLeft: '',
             countingHeart :0,
+            propsHeart: 1,
 
           //  채팅
             chattTF: true,
@@ -451,7 +493,7 @@ export default {
             messageFrom: false,
             voteModalWidth: '',
             voteTime: 60,
-            voteStatus: null,
+            voteStatus: 1,
             voteViewTF: false,
             voteTeam: false,
             voteAll: false,
@@ -459,6 +501,11 @@ export default {
             timerTime:null,
             timerTeam:null,
             timeList:[], // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
+
+            // 토론끝나고 방청잭 투표뷰 3개
+            allVoteView: true,
+            selMVPView: false,
+            waitVoteView: false,
 
           // 비디오 관련 및 내부로직
             OV: undefined,
@@ -474,7 +521,6 @@ export default {
 			      publisherScreen: undefined,
 			      subscribersScreen:[],
             screensharing: false,
-
         }
     },
     mounted() {
@@ -524,8 +570,22 @@ export default {
         window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
+        submitVote(option) {
+            if(option === 'vote') {
+                console.log(this.voteStatus)
+                this.allVoteView = false
+                this.selMVPView = true
+                this.waitVoteView = false
+            }
+            else if (option === 'mvp') {
+                console.log('mvp')
+                this.allVoteView = false
+                this.selMVPView = false
+                this.waitVoteView = true
+            }
+        },
       // 세션 연결
-       async joinSession() {
+      async joinSession() {
       const token = this.tempToken;
 
       // --- Get an OpenVidu object ---
@@ -755,7 +815,6 @@ export default {
 	});
 		},
 
-
         handleResizeHome() {  // 화면 움직일때 조정 다시함
             if (this.chattTF === true) {    // 채팅창 열려있을때
                 // 화면 기본 사이즈 받아옴
@@ -844,6 +903,7 @@ export default {
             }
         },
         animation(option) {
+            this.animationBG = !this.animationBG
             if (option === 'startEvent') {
                 // this.startEvent = true
                 this.startEvent = !this.startEvent
@@ -852,10 +912,20 @@ export default {
                 this.heartHund = false
                 this.restEvent = false
                 }
-            else if (option === 'heartTen') {}
-            else if (option === 'heartfift') {}
-            else if (option === 'heartHund') {}
-            else if (option === 'restEvent') {}
+            else if (option === 'heartHund') {
+                this.startEvent = false
+                this.heartTen = false
+                this.heartfift = false
+                this.heartHund = !this.heartHund
+                this.restEvent = false
+            }
+            else if (option === 'restEvent') {
+                this.startEvent = false
+                this.heartTen = false
+                this.heartfift = false
+                this.heartHund = false
+                this.restEvent = !this.restEvent
+            }
         },
         messageFromTeam() {
             this.callToMdModal = !this.callToMdModal
@@ -896,6 +966,9 @@ export default {
         },
         voteFunction(status) {
             this.voteStatus = status
+            if (status === 'name') {
+                console.log('name')
+            }
         },
         voteVisible() {
             // this.voteViewTF = true
@@ -928,6 +1001,17 @@ export default {
                 stripe.classList.remove('animate');
             }, 500);
             stripe.classList.add('animate');
+            this.countingHeart += 1
+            console.log(this.countingHeart % 50)
+            if(this.countingHeart % 50 === 0) {
+                    this.propsHeart = this.countingHeart /50
+                    this.animationBG = true
+                    this.heartHund = true
+                const x = setTimeout(() => {
+                    this.animationBG = false
+                    this.heartHund = false
+                }, 2000)
+            }
         },
         voteView() {
             this.voteViewTF = !this.voteViewTF
@@ -939,8 +1023,15 @@ export default {
             }, 500);
             stripe.classList.add('animate');
             this.countingHeart += 1
-            if(this.countingHeart === 5) {
-                console.log('5개')
+            console.log(this.countingHeart % 50)
+            if(this.countingHeart % 50 === 0) {
+                    this.propsHeart = this.countingHeart /50
+                    this.animationBG = true
+                    this.heartHund = true
+                const x = setTimeout(() => {
+                    this.animationBG = false
+                    this.heartHund = false
+                }, 2000)
             }
         },
 
@@ -1139,6 +1230,18 @@ export default {
                 this.messageFrom = false
             }
         },
+        leaveSession() {
+          this.$refs.debateRoomSideComponent.leaveSession();
+        },
+      // 찬성 참여
+      positionAgree() {
+        this.position = 'agree',
+        console.log(this.$refs);
+        this.$refs.debateRoomSideComponent.joinPannel()
+      },
+      positionDisagree() {
+
+      },
         // 세부세션 보내기 시그널
         sendSession() {
       //     let index = "/room/session/" + this.session.sessionId;
@@ -1199,7 +1302,25 @@ export default {
 </script>
 
 <style>
-
+.mvp-list {
+    width: 300px;
+    height: 200px;
+    margin: 10px;
+    border-radius: 10px;
+    outline: 1px solid rgba(168, 168, 168, 0.753);
+    /* background-color: beige; */
+    overflow: auto;
+}
+.mvp-list::-webkit-scrollbar{width: 4px;}
+.mvp-list::-webkit-scrollbar-thumb {
+  background-color: rgba(39, 39, 39, 0.712);
+    border-radius: 5px;
+}
+.displayFlex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .animation-control-btns {
     position: absolute;
     top: 50px;
@@ -1208,7 +1329,7 @@ export default {
 }
 .animation-role-background {
     position: absolute;
-    height: 100vh;
+    height: 90vh;
     width: var(--footer-width);
     display: flex;
     justify-content: center;
@@ -1244,17 +1365,36 @@ export default {
 }
 .common-vote-view {
     width: 100%;
-    height: 35%;
+    height: 25%;
     /* background: blue; */
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+.sub-vote-btn {
+    font-size: 25px;
+    margin: 10px;
+    width: 170px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(0, 0, 0);
+    border-radius: 10px;
+    outline: 1px solid rgba(168, 168, 168, 0.753);
+    color: rgb(182, 182, 182);
+}
+.sub-vote-btn:hover {
+    outline: 1px solid white;
+    cursor: pointer;
+    color: white;
+}
 .vote-btn {
     margin: 10px;
-    width: 150px;
-    height: 50px;
+    width: 100px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1267,6 +1407,18 @@ export default {
     outline: 1px solid white;
     cursor: pointer;
     color: white;
+}
+.vote-btn-selected {
+    margin: 10px;
+    width: 100px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(120, 120, 120, 0.521);
+    border-radius: 10px;
+    outline: 3px solid rgba(255, 255, 255, 0.753);
+    color: rgb(255, 255, 255);
 }
 #demo {
     color: white;
@@ -1286,7 +1438,7 @@ export default {
 .team-view, .all-view, .mod-view {
     margin-top: 20px;
     width: 100%;
-    height: 60%;
+    height: 65%;
     /* background: rgb(0, 255, 179); */
     text-align: center;
     display: flex;

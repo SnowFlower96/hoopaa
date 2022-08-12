@@ -11,7 +11,7 @@
             <input type="password" placeholder="password" v-model="infoPwd1">
             <p>비밀번호를 입력하세요</p>
           </div>
-          <div class="mypage-info-item">
+          <div class="mypage-info-item"> 
             <input type="password" placeholder="confirm password" v-model="infoPwd2">
             <p :class="{'info-item-p-false': pwTheme === false, 'info-item-p-true': pwTheme === true }">{{displayPwStatus}}</p>
           </div>
@@ -19,7 +19,7 @@
             <input placeholder="change nickname" v-model="infoNickName">
             <p >닉네임을 입력하세요</p>
           </div>
-          <div class="info-item-btn"><button @click="changeInfo">수정</button></div>
+          <div class="info-item-btn"><button>수정</button></div>
         </form>
     <!-- <div>pwd1 : {{ infoPwd1 }}</div>
     <div>pwd2 : {{ infoPwd2 }}</div>
@@ -30,24 +30,16 @@
 </template>
 
 <script>
-import { mapState} from 'vuex';
 export default {
   data() {
     return {
-      userEmail: '',
+      userEmail: 'OOOO@naver.com',
       infoPwd1: null,
       infoPwd2: null,
       infoNickName: null,
       displayPwStatus: '비밀번호를 한번 더 입력하세요',
       pwTheme: false
     }
-  },
-  created () {
-    this.userEmail = this.user.em;
-    this.infoNickName = this.user.nnm;
-  },
-  computed : {
-    ...mapState(["user"]),
   },
   watch: {
     infoPwd2: function(infoPwd2) {
@@ -68,11 +60,6 @@ export default {
         this.pwTheme = true
       }
     }
-  },
-  methods : {
-    changeInfo () {
-      this.$store.dispatch("")
-    },
   }
 }
 </script>

@@ -1,6 +1,32 @@
 <template>
   <!-- <div> -->
     <div>
+      <div class="home-modal-wrap displayFlex" v-if="homeCheckInModal">
+        <div class="home-check-in">
+            <div style="display: flex; justify-content: end;" @click="offModal"><i class="fas fa-times"></i></div>
+          <div class="home-check-in-inner displayFlex">
+            <div style="text-align:center;">
+              <div v-if="ppSet">
+                <div style="font-size:30px;">참여 설정</div>
+                <div class="displayFlex">
+                  <router-link to="/login" style=text-decoration:none;><div class="home-modal-btn displayFlex">로그인</div></router-link>
+                  <div class="home-modal-btn displayFlex" @click="changePpSet">비회원</div>
+                </div>
+              </div>
+              <div class="pp-set" v-if="!ppSet">
+                <div style="font-size:30px;">비회원 참여</div>
+                <div class="displayFlex pp-set-inner">
+                  <div>닉네임 입력</div>
+                  <input type="text">
+                </div>
+                <div class="displayFlex">
+                  <router-link to="/debateRoom" style=text-decoration:none;><div class="home-modal-btn displayFlex">참여</div></router-link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="list-page-black-space"></div>
       <search></search>
       <div class="left-main-wrap">
@@ -80,7 +106,52 @@
 </template>
 
 <style>
-
+.pp-set-inner > input {
+  margin: 10px;
+}
+.pp-set-inner {
+  margin-top: 10px;
+}
+.home-modal-btn {
+  margin: 20px;
+  padding: 10px;
+  outline: 1px solid #d4b4ff;
+  width:60px;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px 1px #9747ff9f;
+  background-color: #9747ffa8;
+  color: white;
+}
+.home-modal-btn:hover {
+  cursor: pointer;
+  background-color: #9747FF;
+}
+.home-modal-btn:active {
+  cursor: pointer;
+  box-shadow: 0px 0px 0px 0px #9747ff9f;
+}
+.fa-times:hover {
+  cursor: pointer;
+}
+.home-check-in-inner {
+  width: 100%;
+  height: 90%;
+}
+.home-modal-wrap {
+  z-index: 5;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.home-check-in{
+  padding: 10px;
+  width: 350px;
+  height: 200px;
+  background-color: whitesmoke;
+  outline: 1px rgb(153, 153, 153) solid;
+  border-radius: 10px;
+  box-shadow: 3px 10px 10px 3px  rgba(0, 0, 0, 0.589);
+}
 .list-page-black-space {
   height: 61px;
 }
@@ -176,10 +247,12 @@ ul {
 }
 .room-info-carosel:hover {
   background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+  cursor: pointer;
   /* filter: brightness(80%);
   transition: filter .3s; */
 }
 .room-info-carosel:hover #title-carosel {
+  cursor: pointer;
   opacity: 100%;
   color: white;
 }
@@ -241,9 +314,11 @@ ul {
   width: var(--carosel-item-width);
 }
 .room-info:hover {
+  cursor: pointer;
   background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('../../assets/images/room.jpg');
 }
 .room-info:hover #title-room {
+  cursor: pointer;
   opacity: 100%;
   color: white;
 }
@@ -284,7 +359,9 @@ export default {
       caroselWidth: '',
       caroselHeight: '',
       caoselWrapperOverTF: false,
-      dropdownSortTF: false
+      dropdownSortTF: false,
+      homeCheckInModal : false,
+      ppSet: true
     }
   },
   computed : {
@@ -319,6 +396,15 @@ export default {
   },
    methods: {
     ...mapMutations(["GET_ROOM_LIST"]),
+    changePpSet() {
+      this.ppSet = false
+    },
+    offModal() {
+      this.homeCheckInModal = false
+    },
+    gotoRoom() {
+      this.homeCheckInModal = true
+    },
     goCate(index)  {
       this.checkbox = false;
       this.$store.dispatch("getRoomInfoCate", index);
