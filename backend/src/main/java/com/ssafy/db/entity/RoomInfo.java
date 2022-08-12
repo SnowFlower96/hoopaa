@@ -16,7 +16,7 @@ public class RoomInfo {
     private Long id;
     private String pwd;
     @Column(insertable = false, updatable = false)
-    private Long hostId;
+    private Long hostID;
 
     private String thumbUrl;
     private int maxNum;
@@ -29,6 +29,8 @@ public class RoomInfo {
     private LocalDateTime endTime;
 
     private String log;
+    @Column(insertable = false, updatable = false)
+    private Long kingID;
     private Short winner;
     private Short agree;
     private Short disagree;
@@ -47,10 +49,10 @@ public class RoomInfo {
     User user;
 
     @Builder
-    public RoomInfo(Long id, String pwd, Long hostId, String thumbUrl, int maxNum, int curNum, int phase, LocalDateTime startTime, LocalDateTime endTime, String log, Short winner, Short agree, Short disagree, Short invalid) {
+    public RoomInfo(Long id, String pwd, Long hostID, String thumbUrl, int maxNum, int curNum, int phase, LocalDateTime startTime, LocalDateTime endTime, String log, Long kingID, Short winner, Short agree, Short disagree, Short invalid) {
         this.id = id;
         this.pwd = pwd;
-        this.hostId = hostId;
+        this.hostID = hostID;
         this.thumbUrl = thumbUrl;
         this.maxNum = maxNum;
         this.curNum = curNum;
@@ -58,6 +60,7 @@ public class RoomInfo {
         this.startTime = startTime;
         this.endTime = endTime;
         this.log = log;
+        this.kingID = kingID;
         this.winner = winner;
         this.agree = agree;
         this.disagree = disagree;

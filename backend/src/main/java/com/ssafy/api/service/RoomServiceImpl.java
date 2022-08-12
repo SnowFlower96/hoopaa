@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -84,7 +83,7 @@ public class RoomServiceImpl implements RoomService {
         // DB 저장
         RoomInfo roomInfo = RoomInfo.builder()
                 .pwd(roomOpenReq.getPwd())
-                .hostId(Long.parseLong(sessionID))
+                .hostID(Long.parseLong(sessionID))
                 .maxNum(roomOpenReq.getMax_num())
                 .build();
         roomInfo = roomInfoRepository.save(roomInfo);
@@ -144,8 +143,6 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public boolean checkPwd(String sessionID, String pwd) {
-        System.out.println(this.mapRooms.get(sessionID).getRoomInfoDto().getPwd());
-        System.out.println(pwd);
         return pwd.equals(this.mapRooms.get(sessionID).getRoomInfoDto().getPwd());
     }
 
@@ -413,7 +410,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public Map<String, String> finishRoom(String userID) throws OpenViduJavaClientException, OpenViduHttpException {
+    public Map<String, String> finishRoom(String userID) {
         // 해당 유저가 만든 토론방의 VRoom 객체
         VRoom vRoom = this.mapRooms.get(userID);
 
@@ -427,13 +424,9 @@ public class RoomServiceImpl implements RoomService {
             short winner = -1;  // 무승부
             if (vRoom.getVote_final_agree() > vRoom.getVote_final_disagree()) winner = 1;
             else if (vRoom.getVote_final_agree() < vRoom.getVote_final_disagree()) winner = 2;
-            roomInfo.setWinner(winner);
-            roomInfo.setAgree(roomInfo.getAgree());
-            roomInfo.setDisagree(roomInfo.getDisagree());
-
             // 토론왕 확인
             int kingCntMax = -1;
-            String kingID;
+            String kingID = null;
             for (int i = 0; i < vRoom.getRoomInfoDto().getMaxNum(); i++) {
                 VUserInfo vUserInfo = vRoom.getAgree()[i];
                 if (vUserInfo != null && vUserInfo.getKingCnt() > kingCntMax) {
@@ -447,11 +440,17 @@ public class RoomServiceImpl implements RoomService {
                 }
             }
 
+            // room_info 업데이트
+            roomInfo.setWinner(winner);
+            roomInfo.setAgree(roomInfo.getAgree());
+            roomInfo.setDisagree(roomInfo.getDisagree());
+            roomInfo.setKingID(kingID != null ? Long.parseLong(kingID) : null);
+
             // user history 업데이트
             // 찬성 진영 업데이트
             for (VUserInfo VUserInfo : vRoom.getAgree()) {
                 if (VUserInfo == null) continue;
-                boolean isHost = Objects.equals(roomInfo.getHostId(), Long.parseLong(VUserInfo.getId()));
+                boolean isHost = Objects.equals(roomInfo.getHostID(), Long.parseLong(VUserInfo.getId()));
                 boolean isKing = false;
 
                 User user = userRepository.findUserById(Long.parseLong(VUserInfo.getId())).get();
@@ -472,7 +471,7 @@ public class RoomServiceImpl implements RoomService {
                     userStat.setWin(userStat.getWin() + 1);
                 } else if (winner == 2) {
                     userStat.setLose(userStat.getLose() + 1);
-                } else if (winner == -1){
+                } else {
                     userStat.setDraw(userStat.getDraw() + 1);
                 }
                 userStatRepository.save(userStat);
@@ -481,7 +480,7 @@ public class RoomServiceImpl implements RoomService {
             //반대 진영 업데이트
             for (VUserInfo VUserInfo : vRoom.getDisagree()) {
                 if (VUserInfo == null) continue;
-                boolean isHost = Objects.equals(roomInfo.getHostId(), Long.parseLong(VUserInfo.getId()));
+                boolean isHost = Objects.equals(roomInfo.getHostID(), Long.parseLong(VUserInfo.getId()));
                 boolean isKing = false;
 
                 User user = userRepository.findUserById(Long.parseLong(VUserInfo.getId())).get();
@@ -509,16 +508,18 @@ public class RoomServiceImpl implements RoomService {
                 if (isHost) userStat.setKing(userStat.getKing() + 1);
                 userStatRepository.save(userStat);
             }
+            // openVidu 세션 종료
+            Session session = vRoom.getSession();
+            session.close();
+
+            Map<String, String> result = new HashMap<>();
+            result.put("agree", String.valueOf(vRoom.getVote_final_agree()));
+            result.put("disagree", String.valueOf(vRoom.getVote_final_disagree()));
+            result.put("king", kingID);
+            return result;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        // openVidu 세션 종료
-        Session session = vRoom.getSession();
-        session.close();
-
-        Map<String, String> result = new HashMap<>();
-        return result;
     }
 
     @Override
@@ -549,7 +550,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void initServer() throws OpenViduJavaClientException, OpenViduHttpException {
-        // openvidu 초기화
+        // 서버 초기화
         this.openVidu.fetch();
         List<Session> list = this.openVidu.getActiveSessions();
         for (Session s : list) s.close();

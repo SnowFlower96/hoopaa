@@ -93,13 +93,9 @@ public class RoomController {
         // 해당 세션이 존재하지 않으면
         if (!roomService.isExistRoom(roomEnterReq.getSessionId()))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
-        System.out.println("--------------");
-        System.out.println(roomEnterReq.getSessionId());
-        System.out.println(roomEnterReq.getPwd());
-        System.out.println("--------------");
 
         // 비밀번호 오류
-        if (roomService.checkPwd(roomEnterReq.getSessionId(), roomEnterReq.getPwd()))
+        if (!roomService.checkPwd(roomEnterReq.getSessionId(), roomEnterReq.getPwd()))
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong Password"));
 
         String token = roomService.enterRoom(roomEnterReq, user);
@@ -240,14 +236,14 @@ public class RoomController {
             @ApiResponse(code = 404, message = "해당 세션 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> getAgreeConnections(String sessionID) {
+    public ResponseEntity<? extends BaseResponseBody> getAgreeConnections(String sessionID) throws JsonProcessingException {
         // 해당 세션이 존재하지 않으면
         if (!roomService.isExistRoom(sessionID))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
         Map<String, String> connections = roomService.getAgreeConnections(sessionID);
-
-        return ResponseEntity.status(200).body(JsonRes.of(200, "Success", connections.toString()));
+        String json = mapper.writeValueAsString(connections);
+        return ResponseEntity.status(200).body(JsonRes.of(200, "Success", json));
     }
 
     @GetMapping("/connections/disagree")
@@ -258,13 +254,13 @@ public class RoomController {
             @ApiResponse(code = 404, message = "해당 세션 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> getDisagreeConnections(String sessionID) {
+    public ResponseEntity<? extends BaseResponseBody> getDisagreeConnections(String sessionID) throws JsonProcessingException {
         // 해당 세션이 존재하지 않으면
         if (!roomService.isExistRoom(sessionID))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
         Map<String, String> connections = roomService.getAgreeConnections(sessionID);
-
+        String json = mapper.writeValueAsString(connections);
         return ResponseEntity.status(200).body(JsonRes.of(200, "Success", connections.toString()));
     }
 
@@ -398,7 +394,7 @@ public class RoomController {
             @ApiResponse(code = 411, message = "종료 불가"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> closeRoom(@ApiIgnore Authentication authentication) throws OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity<? extends BaseResponseBody> closeRoom(@ApiIgnore Authentication authentication) throws OpenViduJavaClientException, OpenViduHttpException, JsonProcessingException {
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         String AToken = userDetails.getUsername();
 
@@ -407,9 +403,10 @@ public class RoomController {
 
         roomService.updatePhaseBySessionID(AToken, 3);
 
-        roomService.finishRoom(AToken);
+        Map<String, String> result = roomService.finishRoom(AToken);
+        String json = mapper.writeValueAsString(result);
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        return ResponseEntity.status(200).body(JsonRes.of(200, "Success", json));
     }
 
     @PostMapping("/sync")
