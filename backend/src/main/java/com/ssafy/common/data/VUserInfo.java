@@ -1,6 +1,5 @@
 package com.ssafy.common.data;
 
-import com.ssafy.db.entity.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
@@ -10,7 +9,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
-public class UserInfo {
+public class VUserInfo {
 
     String id;
     String em;
@@ -21,7 +20,7 @@ public class UserInfo {
     boolean hasFinalVote;
 
     @Builder
-    public UserInfo(String id, String em, String nnm, int kingCnt, boolean hasAgree, boolean hasDisagree, boolean hasFinalVote) {
+    public VUserInfo(String id, String em, String nnm, int kingCnt, boolean hasAgree, boolean hasDisagree, boolean hasFinalVote) {
         this.id = id;
         this.em = em;
         this.nnm = nnm;

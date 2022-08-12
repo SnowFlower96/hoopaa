@@ -241,8 +241,9 @@
 
                 <!-- 채팅창 -->
                     <div v-if="chattTF" class="chatting-box" :style="customCaroselStyle">
-                        <chatting-all v-if="chattingAllView" @close-chat="changeChatView"></chatting-all>
-                        <chatting-team v-if="chattingTeamView" @close-chat="changeChatView"></chatting-team>
+                        <chatting-all v-if="chattingAllView" :messagesAll="messagesAll" @close-chat="changeChatView" @chat-all="sendAllMessage"></chatting-all>
+                        <chatting-team v-if="chattingTeamView && position=='agree'" :messagesTeam="messagesAgree" @close-chat="changeChatView" @chat-team="sendTeamMessage"></chatting-team>
+                        <chatting-team v-if="chattingTeamView && position!='agree'" :messagesTeam="messagesDisagree" @close-chat="changeChatView" @chat-team="sendTeamMessage"></chatting-team>
                     </div>
                 <!-- 채팅창 -->
 
@@ -329,6 +330,7 @@ import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+import moment from 'moment';
 
 const OPENVIDU_SERVER_URL = "https://hoopaa.site:8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
@@ -521,6 +523,12 @@ export default {
 			      publisherScreen: undefined,
 			      subscribersScreen:[],
             screensharing: false,
+
+          //채팅
+            messagesAll:[],
+            messagesAgree:[],
+            messagesDisagree:[]
+
         }
     },
     mounted() {
@@ -652,6 +660,42 @@ export default {
           this.publisher.publishAudio(false);
         }
     });
+
+      this.session.on("signal:chat-all",(event)=>{
+      console.log("전체 메세지");
+      let eventData = JSON.parse(event.data);
+      let data = new Object()
+      let time = new Date()
+      data.writer = eventData.writer
+      data.message = eventData.content
+      data.time = moment(time).format('HH:mm')
+
+      this.messagesAll.push(data)
+      console.log(this.messagesAll);
+    } )
+
+    this.session.on("signal:chat-agree",(event)=>{
+      let eventData = JSON.parse(event.data);
+      let data = new Object()
+      let time = new Date()
+      data.writer = eventData.writer
+      data.message = eventData.content
+      data.time = moment(time).format('HH:mm')
+      this.messagesAgree.push(data)
+      console.log(this.messagesAll);
+    } )
+
+    this.session.on("signal:chat-disagree",(event)=>{
+     let eventData = JSON.parse(event.data);
+      let data = new Object()
+      let time = new Date()
+      data.writer = eventData.writer
+      data.message = eventData.content
+      data.time = moment(time).format('HH:mm')
+      this.messagesDisagree.push(data)
+      console.log(this.messagesAll);
+    } )
+
       await this.session
         .connect(token, { clientData: this.user.id + "/" + this.position })
         .then(() => {
@@ -1171,6 +1215,44 @@ export default {
                 this.allHeartLeft= `${document.body.clientWidth*0.5}px`
             }
         },
+
+        //채팅 추가
+        sendAllMessage(message){
+          console.log("메세지 배열에 삽입");
+          console.log(this.user.nnm)
+          var messageData = {
+            writer : this.user.nnm,
+            content: message
+          }
+
+          this.session.signal({
+            type: "chat-all",
+            data:JSON.stringify(messageData),
+            to:[]
+          })
+          // this.messagesAll.push(message)
+        },
+        sendTeamMessage(message){
+          var messageData = {
+            writer : this.user.nnm,
+            content: message
+          }
+          if(this.position ==="agree"){
+            this.session.signal({
+              type : "chat-agree",
+              data : JSON.stringify(messageData),
+              to : []
+            })
+          }else{
+            this.session.signal({
+              type : "chat-disagree",
+              data : JSON.stringify(messageData),
+              to : []
+            })
+          }
+            console.log("팀 메세지")
+        },
+
         offCallModal() {
             this.callToMdModal = false
         },
