@@ -184,9 +184,9 @@
                                   <div class="share-view-wrap" :style="customCaroselStyle">
                                     <div class="share-view">
                                         <!-- 화면공유 여기에 넣으면 됨 -->
-
-				                                <div v-for="sub in subscribersScreen" :key="sub.stream.connection.connectionId">
-					                                <user-video :stream-manager="sub" >{{sub.stream.typeOfVideo}}</user-video>
+                                        <!-- <user-video :stream-manager="publisherScreen"></user-video> -->
+				                                <div v-for="(sub, index) in subscribersScreen" :key="index">
+					                                <user-video v-if="sub.stream.typeOfVideo == 'SCREEN'" :stream-manager="sub" ></user-video>
 				                                </div>
 
 
@@ -325,7 +325,8 @@ export default {
     UploadFile,
     LetTeamSpeak,
     RestTime,
-    UserVideo
+    UserVideo,
+        UserVideo
 },
     created() {
       this.joinSession();
@@ -744,6 +745,8 @@ export default {
 			this.sessionScreen.unpublish(publisherScreen);
 			this.screensharing = false;
 		});
+    this.publisherScreen = publisherScreen;
+    this.subscribersScreen.push(publisherScreen);
 		this.sessionScreen.publish(publisherScreen);
 	});
 		},
