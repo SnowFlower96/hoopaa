@@ -24,9 +24,10 @@
     <button @click="moderatorView">사회자뷰</button>
     <button @click="allView">방청객뷰</button>
     <button @click="teamView">패널뷰</button>
-    <router-link to="/detailSessionView"><button>세부세션 가기</button></router-link>
+    <button @click="sendSession">세부세션 가기</button>
     <button @click="positionAgree">찬성</button>
     <button @click="messageFromTeam">팀에서 사회자한테 주는 메세지</button>
+    <button @click="publishScreenShare">화면공유</button>
     <!-- <div id="demo">넨</div> -->
 </div>
 <!-- 뷰바꾸는 임시버튼 -->
@@ -122,6 +123,7 @@
                 <let-team-speak
                 v-if="menu"
                 @emit-time="EmitTime"
+                @sendAudioMute="audioMute"
                 ></let-team-speak>
 
                 <rest-time
@@ -182,6 +184,12 @@
                                   <div class="share-view-wrap" :style="customCaroselStyle">
                                     <div class="share-view">
                                         <!-- 화면공유 여기에 넣으면 됨 -->
+
+				                                <div v-for="sub in subscribersScreen" :key="sub.stream.connection.connectionId">
+					                                <user-video :stream-manager="sub" >{{sub.stream.typeOfVideo}}</user-video>
+				                                </div>
+
+
                                     </div>
                                   </div>
 
@@ -290,39 +298,35 @@ import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
+const OPENVIDU_SERVER_URL = "https://hoopaa.site:8443";
+const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
-const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
-const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 
 export default {
     name: 'debateRoom',
     components: {
-      // 토론방 위에 보여지는 효과 관련
-        startLetter,
-
-      // 토론방 관련
-        debateRoomCenterComponent,
-        detailSessionView,
-        debateRoomVideo,
-
-      //  채팅
-        chattingAll,
-        chattingTeam,
-
-      // 하단바
-        FooterTeam,
-        FooterModerator,
-        FooterAll,
-
-      // 메뉴 및 모달뷰
-        callToModerator,
-        UserOut,
-        MessageFromTeam,
-        UploadFile,
-        LetTeamSpeak,
-        RestTime,
-
-    },
+    // 토론방 위에 보여지는 효과 관련
+    startLetter,
+    // 토론방 관련
+    debateRoomCenterComponent,
+    detailSessionView,
+    debateRoomVideo,
+    //  채팅
+    chattingAll,
+    chattingTeam,
+    // 하단바
+    FooterTeam,
+    FooterModerator,
+    FooterAll,
+    // 메뉴 및 모달뷰
+    callToModerator,
+    UserOut,
+    MessageFromTeam,
+    UploadFile,
+    LetTeamSpeak,
+    RestTime,
+    UserVideo
+},
     created() {
       this.joinSession();
     },
@@ -461,8 +465,14 @@ export default {
             host: undefined,
             agree: [],
             disagree: [],
+            publisher : undefined,
 
-
+          // 화면 공유
+            OVScreen : undefined,
+			      sessionScreen: undefined,
+			      publisherScreen: undefined,
+			      subscribersScreen:[],
+            screensharing: false,
 
         }
     },
@@ -545,6 +555,7 @@ export default {
           console.log("disagree video connected");
           this.disagree.push(sub);
         }
+
       });
 
       // On every Stream destroyed...
@@ -561,6 +572,23 @@ export default {
         console.warn(exception);
       });
 
+      // Hearing Signal
+
+      // 세부세션 signal
+     this.session.on('signal:Go-SebuSession', (event) => {
+      console.log(event.data); // Message
+      console.log(event.from); // Connection object of the sender
+      console.log(event.type); // The type of message ("my-chat")
+    });
+      // 발언권 signal
+      this.session.on('signal:Set-Audio', (event) => {
+        console.log(event.data); // Message
+        if (event.data == 'On') {
+          this.publisher.publishAudio(true);
+        } else {
+          this.publisher.publishAudio(false);
+        }
+    });
       await this.session
         .connect(token, { clientData: this.user.id + "/" + this.position })
         .then(() => {
@@ -574,10 +602,11 @@ export default {
             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
             mirror: false // Whether to mirror your local video or not
           });
+          this.publisher = publisher;
           let sub = {
             id : this.user.id,
             stream : 'publisher',
-            data : publisher
+            data : this.publisher
         };
           if (this.user.id == this.session.sessionId) {
             this.host = publisher;
@@ -591,6 +620,7 @@ export default {
             console.log("반대래");
           }
           console.log("Connected!!!");
+          console.log(this.session.connection)
           this.session.publish(publisher);
         })
         .catch(error => {
@@ -607,8 +637,117 @@ export default {
         console.log("you are pannel");
         console.log(this.agree);
       }
+      this.joinScreen();
+      },
 
-        },
+      async joinScreen(){
+			this.OVScreen = new OpenVidu();
+			this.sessionScreen = this.OVScreen.initSession();
+
+			this.sessionScreen.on('streamCreated', ({ stream }) => {
+					const subscriberScreen = this.sessionScreen.subscribe(stream);
+					this.subscribersScreen.push(subscriberScreen);
+					console.log(this.subscribersScreen.length + "!!!!!!!!!!!!!!!!")
+			});
+
+			await this.getToken(this.session.sessionId).then(tokenScreen => {
+				this.sessionScreen.connect(tokenScreen, { clientData: this.user.id })
+				.then(() => {
+					console.log("Session screen connected");
+				})
+				.catch(error => {
+					console.log('There was an error connecting to the session for screen share:', error.code, error.message);
+				});
+			});
+		},
+		leaveSession () {
+			// --- Leave the session by calling 'disconnect' method over the Session object ---
+			if (this.session) this.session.disconnect();
+			if (this.sessionScreen) this.sessionScreen.disconnect();
+
+			this.session = undefined;
+			this.sessionScreen = undefined;
+			this.publisher = undefined;
+			this.publisherScreen = undefined;
+      this.host = undefined;
+      this.agree = undefined;
+      this.disagree = undefined;
+			this.subscribersScreen = [];
+			this.OV= undefined;
+			this.OVScreen = undefined;
+
+			if(this.screensharing)
+				this.screensharing=false;
+
+			window.removeEventListener('beforeunload', this.leaveSession);
+		},
+
+
+    getToken (mySessionId) {
+			return this.createSession(mySessionId).then(sessionId => this.createToken(sessionId));
+		},
+
+		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-session
+		createSession (sessionId) {
+			return new Promise((resolve, reject) => {
+				axios
+					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions`, JSON.stringify({
+						customSessionId: sessionId,
+					}), {
+						auth: {
+							username: 'OPENVIDUAPP',
+							password: OPENVIDU_SERVER_SECRET,
+						},
+					})
+					.then(response => response.data)
+					.then(data => resolve(data.id))
+					.catch(error => {
+						if (error.response.status === 409) {
+							resolve(sessionId);
+						} else {
+							console.warn(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`);
+							if (window.confirm(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`)) {
+								location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
+							}
+							reject(error.response);
+						}
+					});
+			});
+		},
+
+		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
+		createToken (sessionId) {
+			return new Promise((resolve, reject) => {
+				axios
+					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`, {}, {
+						auth: {
+							username: 'OPENVIDUAPP',
+							password: OPENVIDU_SERVER_SECRET,
+						},
+					})
+					.then(response => response.data)
+					.then(data => resolve(data.token))
+					.catch(error => reject(error.response));
+			});
+		},
+
+
+		publishScreenShare(){
+      console.log("들어오지");
+			let publisherScreen = this.OVScreen.initPublisher("container-screens", {videoSource: "screen"});
+      console.log("여기오냐?")
+			publisherScreen.once('accessAllowed', () => {
+		this.screensharing = true;
+		// It is very important to define what to do when the stream ends.
+		publisherScreen.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+			console.log('User pressed the "Stop sharing" button');
+			this.sessionScreen.unpublish(publisherScreen);
+			this.screensharing = false;
+		});
+		this.sessionScreen.publish(publisherScreen);
+	});
+		},
+
 
         handleResizeHome() {  // 화면 움직일때 조정 다시함
             if (this.chattTF === true) {    // 채팅창 열려있을때
@@ -993,19 +1132,63 @@ export default {
                 this.messageFrom = false
             }
         },
-        leaveSession() {
-          this.$refs.debateRoomSideComponent.leaveSession();
-        },
         // 세부세션 보내기 시그널
         sendSession() {
-          let index = "/room/session/" + this.session.sessionId;
-          this.$store.dispatch("makeSessionRoom", index).then((response) => {
-          console.log(response.data);
+      //     let index = "/room/session/" + this.session.sessionId;
+      //     this.$store.dispatch("makeSessionRoom", index).then((response) => {
+      //     console.log(response.data);
+      // })
+      this.session.signal({
+        data: 'Go SebuSession !!!',
+        to: [],
+        type: 'Go-SebuSession'
+      });
+    },
+
+    // 찬성 반대 connectId 얻기
+    getAgreePosition () {
+      this.$store.dispatch("getConnectionAgree",this.session.sessionId).then((response) => {
+        console.log(response.data)
+        return response.data;
+      })
+    },
+    getDisagreePosition() {
+      this.$store.dispatch("getConnectionDisagree",this.session.sessionId).then((response) => {
+        console.log(response.data)
+        return response.data;
       })
     },
 
+    // 음소거 컨트롤 시그널
+    audioMute(status) {
+      let agreeArr = this.getAgreePosition();
+      let disagreeArr = this.getDisagreePosition();
+      if (status == 0) {
+        for (var i in agreeArr) {
+          this.sendAudioSignal('On', i)
+        }
+        for (var j in disagreeArr) {
+          this.sendAudioSignal('Off', j)
+        }
+      } else if (status == 1) {
+        for (var k in agreeArr) {
+          this.sendAudioSignal('Off', k)
+        }
+        for (var z in disagreeArr) {
+          this.sendAudioSignal('On', z)
+        }
+      }
+    },
+    sendAudioSignal(order, who) {
+      this.session.signal({
+        data: order,
+        to: who,
+        type: 'Set-Audio'
+      });
+    },
     }
-}
+  }
+
 </script>
 
 <style>

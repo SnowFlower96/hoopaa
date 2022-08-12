@@ -298,6 +298,34 @@ export default new Vuex.Store({
     })
   })
 },
+  getConnectionAgree({commit}, sessionId) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/connections/agree?sessionID=' + sessionId ,
+      method : "GET",
+    }).then((res) => {
+      resolve(res);
+      commit();
+    }).catch((error) => {
+      reject(error);
+    })
+  })
+  },
+  getConnectionDisagree({commit}, sessionId) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/connections/disagree?sessionId=' + sessionId ,
+      method : "GET",
+    }).then((res) => {
+      resolve(res);
+      commit();
+    }).catch((error) => {
+      reject(error);
+    })
+  })
+  },
 
 }
 })
