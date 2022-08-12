@@ -7,29 +7,27 @@ import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.api.response.JsonRes;
 import com.ssafy.api.response.StringRes;
 import com.ssafy.api.response.VTokenRes;
-import com.ssafy.api.response.VTokensRes;
 import com.ssafy.api.service.RoomInfoService;
 import com.ssafy.api.service.RoomService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
-import com.ssafy.common.data.VUserInfo;
 import com.ssafy.common.model.response.BaseResponseBody;
-import com.ssafy.common.data.VRoom;
 import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.entity.User;
-import io.openvidu.java.client.*;
-import io.swagger.annotations.*;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RequestMapping("/api/v1/room")
 @RestController
@@ -407,24 +405,6 @@ public class RoomController {
         String json = mapper.writeValueAsString(result);
 
         return ResponseEntity.status(200).body(JsonRes.of(200, "Success", json));
-    }
-
-    @PostMapping("/sync")
-    @ApiOperation(value = "동기화", notes = "OpenVidu 서버와의 동기화")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "성공"),
-            @ApiResponse(code = 500, message = "서버 오류류")
-    })
-    public ResponseEntity<? extends BaseResponseBody> syncServer() {
-        roomService.syncServer();
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
-    }
-
-    @PostMapping("/init")
-    @ApiOperation(value = "초기화")
-    public ResponseEntity<? extends BaseResponseBody> initServer() throws OpenViduJavaClientException, OpenViduHttpException {
-        roomService.initServer();
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
 }
