@@ -296,6 +296,7 @@ public class RoomServiceImpl implements RoomService {
         for (String key : vRoom.getMapConnections().keySet()) System.out.println(key);
         Map<String, String> connections = new ConcurrentHashMap<>();
         for (VUserInfo VUserInfo : vRoom.getAgree()) {
+            System.out.println(VUserInfo);
             if (vRoom.getMapConnections().containsKey(VUserInfo.getId())) {
                 Connection conn = vRoom.getMapConnections().get(VUserInfo.getId());
                 connections.put(VUserInfo.getId(), conn.getConnectionId());

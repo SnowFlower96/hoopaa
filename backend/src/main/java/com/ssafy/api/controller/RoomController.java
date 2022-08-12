@@ -158,7 +158,7 @@ public class RoomController {
     }
 
 
-    @PostMapping("/enter/select")
+    @PostMapping("/enter/select/{sessionID}")
     @ApiOperation(value = "진영 선택", notes = "원하는 진영에 들어갈 수 있는지 여부에 대한 응답")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -168,7 +168,7 @@ public class RoomController {
             @ApiResponse(code = 404, message = "해당 세션 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> enterPos(@ApiIgnore Authentication authentication, String sessionID, String pos) {
+    public ResponseEntity<? extends BaseResponseBody> enterPos(@ApiIgnore Authentication authentication, @PathVariable String sessionID, String pos) {
         SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
         String AToken = ssafyUserDetails.getUsername();
 
@@ -193,7 +193,7 @@ public class RoomController {
         }
     }
 
-    @DeleteMapping("/enter/select")
+    @DeleteMapping("/enter/select/{sessionID}")
     @ApiOperation(value = "진영 나가기", notes = "해당 진영에서 나가기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -203,7 +203,7 @@ public class RoomController {
             @ApiResponse(code = 404, message = "해당 세션 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> leavePos(@ApiIgnore Authentication authentication, String sessionID, String pos) {
+    public ResponseEntity<? extends BaseResponseBody> leavePos(@ApiIgnore Authentication authentication, @PathVariable String sessionID, String pos) {
         SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
         String AToken = ssafyUserDetails.getUsername();
 
@@ -259,7 +259,7 @@ public class RoomController {
         if (!roomService.isExistRoom(sessionID))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
-        Map<String, String> connections = roomService.getAgreeConnections(sessionID);
+        Map<String, String> connections = roomService.getDisagreeConnections(sessionID);
         String json = mapper.writeValueAsString(connections);
         return ResponseEntity.status(200).body(JsonRes.of(200, "Success", connections.toString()));
     }
