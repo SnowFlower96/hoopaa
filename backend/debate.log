@@ -599,8 +599,8 @@ Caused by: java.sql.SQLException: Cannot add foreign key constraint
 2022-08-12 15:09:50.233 DEBUG 8624 --- [restartedMain] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
 2022-08-12 15:09:50.584  INFO 8624 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (https) with context path ''
 2022-08-12 15:09:51.556  INFO 8624 --- [restartedMain] com.ssafy.GroupCallApplication           : Started GroupCallApplication in 7.926 seconds (JVM running for 8.41)
-2022-08-12 15:48:20.859  INFO 12972 --- [Test worker] com.ssafy.UserTest                       : Starting UserTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 12972 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
-2022-08-12 15:48:20.862  INFO 12972 --- [Test worker] com.ssafy.UserTest                       : No active profile set, falling back to default profiles: default
+2022-08-12 15:48:20.859  INFO 12972 --- [Test worker] com.ssafy.InsertDummyUser                       : Starting UserTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 12972 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-12 15:48:20.862  INFO 12972 --- [Test worker] com.ssafy.InsertDummyUser                       : No active profile set, falling back to default profiles: default
 2022-08-12 15:48:20.904 DEBUG 12972 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@2f3dbdae
 2022-08-12 15:48:22.202  INFO 12972 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 2022-08-12 15:48:22.304  INFO 12972 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 94 ms. Found 7 JPA repository interfaces.
@@ -624,14 +624,14 @@ Caused by: java.sql.SQLException: Cannot add foreign key constraint
 2022-08-12 15:48:28.000 DEBUG 12972 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
 2022-08-12 15:48:28.675 DEBUG 12972 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
 2022-08-12 15:48:28.707 DEBUG 12972 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
-2022-08-12 15:48:29.515  INFO 12972 --- [Test worker] com.ssafy.UserTest                       : Started UserTest in 8.966 seconds (JVM running for 10.757)
+2022-08-12 15:48:29.515  INFO 12972 --- [Test worker] com.ssafy.InsertDummyUser                       : Started UserTest in 8.966 seconds (JVM running for 10.757)
 2022-08-12 15:48:29.931 DEBUG 12972 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@2f3dbdae, started on Fri Aug 12 15:48:20 KST 2022
 2022-08-12 15:48:29.935  INFO 12972 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
 2022-08-12 15:48:29.944  INFO 12972 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2022-08-12 15:48:29.947  INFO 12972 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2022-08-12 15:48:29.958  INFO 12972 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2022-08-12 16:03:33.385  INFO 13780 --- [Test worker] com.ssafy.UserTest                       : Starting UserTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 13780 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
-2022-08-12 16:03:33.387  INFO 13780 --- [Test worker] com.ssafy.UserTest                       : No active profile set, falling back to default profiles: default
+2022-08-12 16:03:33.385  INFO 13780 --- [Test worker] com.ssafy.InsertDummyUser                       : Starting UserTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 13780 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-12 16:03:33.387  INFO 13780 --- [Test worker] com.ssafy.InsertDummyUser                       : No active profile set, falling back to default profiles: default
 2022-08-12 16:03:33.422 DEBUG 13780 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619
 2022-08-12 16:03:34.612  INFO 13780 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 2022-08-12 16:03:34.721  INFO 13780 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 99 ms. Found 7 JPA repository interfaces.
@@ -655,14 +655,14 @@ Caused by: java.sql.SQLException: Cannot add foreign key constraint
 2022-08-12 16:03:40.285 DEBUG 13780 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
 2022-08-12 16:03:40.828 DEBUG 13780 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
 2022-08-12 16:03:40.852 DEBUG 13780 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
-2022-08-12 16:03:42.140  INFO 13780 --- [Test worker] com.ssafy.UserTest                       : Started UserTest in 9.024 seconds (JVM running for 10.467)
+2022-08-12 16:03:42.140  INFO 13780 --- [Test worker] com.ssafy.InsertDummyUser                       : Started UserTest in 9.024 seconds (JVM running for 10.467)
 2022-08-12 16:03:43.049 DEBUG 13780 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619, started on Fri Aug 12 16:03:33 KST 2022
 2022-08-12 16:03:43.052  INFO 13780 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
 2022-08-12 16:03:43.063  INFO 13780 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2022-08-12 16:03:43.066  INFO 13780 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2022-08-12 16:03:43.077  INFO 13780 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2022-08-12 16:05:04.790  INFO 18068 --- [Test worker] com.ssafy.UserTest                       : Starting UserTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 18068 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
-2022-08-12 16:05:04.792  INFO 18068 --- [Test worker] com.ssafy.UserTest                       : No active profile set, falling back to default profiles: default
+2022-08-12 16:05:04.790  INFO 18068 --- [Test worker] com.ssafy.InsertDummyUser                       : Starting UserTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 18068 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-12 16:05:04.792  INFO 18068 --- [Test worker] com.ssafy.InsertDummyUser                       : No active profile set, falling back to default profiles: default
 2022-08-12 16:05:04.828 DEBUG 18068 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619
 2022-08-12 16:05:06.062  INFO 18068 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 2022-08-12 16:05:06.175  INFO 18068 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 105 ms. Found 7 JPA repository interfaces.
@@ -690,7 +690,7 @@ Caused by: java.sql.SQLException: Cannot add foreign key constraint
 2022-08-12 16:05:11.546 DEBUG 18068 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
 2022-08-12 16:05:12.042 DEBUG 18068 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
 2022-08-12 16:05:12.062 DEBUG 18068 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
-2022-08-12 16:05:12.805  INFO 18068 --- [Test worker] com.ssafy.UserTest                       : Started UserTest in 8.286 seconds (JVM running for 9.824)
+2022-08-12 16:05:12.805  INFO 18068 --- [Test worker] com.ssafy.InsertDummyUser                       : Started UserTest in 8.286 seconds (JVM running for 9.824)
 2022-08-12 16:05:13.303 DEBUG 18068 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619, started on Fri Aug 12 16:05:04 KST 2022
 2022-08-12 16:05:13.305  INFO 18068 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
 2022-08-12 16:05:13.310  INFO 18068 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
