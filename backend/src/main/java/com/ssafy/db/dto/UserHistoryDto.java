@@ -26,15 +26,15 @@ public class UserHistoryDto {
 
     public UserHistoryDto(UserHistory userHistory) {
         this.start_time = userHistory.getRoomInfo().getStartTime();
-        this.end_time = userHistory.getRoomInfo().getRoomHistory().getEnd_time();
+        this.end_time = userHistory.getRoomInfo().getEndTime();
         this.host_name = userHistory.getRoomInfo().getUser().getNnm();
-        this.title = userHistory.getRoomInfo().getTitle();
+        this.title = userHistory.getRoomInfo().getRoomDescription().getTitle();
         this.position = ColumnConfig.getUserPosition(userHistory.getUserPos());
         this.max_num = userHistory.getRoomInfo().getMaxNum();
-        this.agree = userHistory.getRoomInfo().getRoomHistory().getAgree();
-        this.disagree = userHistory.getRoomInfo().getRoomHistory().getDisagree();
-        this.invalid = userHistory.getRoomInfo().getRoomHistory().getInvalid();
-        this.is_win = ColumnConfig.getUserWin(userHistory.getUserPos(), userHistory.getRoomInfo().getRoomHistory().getWinner());
+        this.agree = userHistory.getRoomInfo().getAgree();
+        this.disagree = userHistory.getRoomInfo().getDisagree();
+        this.invalid = userHistory.getRoomInfo().getInvalid();
+        this.is_win = ColumnConfig.getUserWin(userHistory.getUserPos(), userHistory.getRoomInfo().getWinner());
     }
 
 }

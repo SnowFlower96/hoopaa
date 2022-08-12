@@ -3,6 +3,7 @@ package com.ssafy.common.data;
 import com.ssafy.db.dto.RoomInfoDto;
 import io.openvidu.java.client.Connection;
 import io.openvidu.java.client.Session;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Map;
@@ -20,12 +21,12 @@ public class VRoom {
     private Map<String, Connection> mapConnections;
 
     // 세션에 접속한 모든 사람 정보
-    private Map<String, UserInfo> mapParticipants;
+    private Map<String, VUserInfo> mapParticipants;
 
     private RoomInfoDto roomInfoDto;  // 방 정보
 
-    private UserInfo[] agree;  // 찬성측 유저 정보 배열
-    private UserInfo[] disagree;  // 반대측 유저 정보 배열
+    private VUserInfo[] agree;  // 찬성측 유저 정보 배열
+    private VUserInfo[] disagree;  // 반대측 유저 정보 배열
 
     private int cheer_agree;  // 찬성측 응원수
     private int cheer_disagree;  // 반대측 응원수
@@ -37,4 +38,21 @@ public class VRoom {
     private boolean agree_voice;  // 찬성측 발언권 유무
     private boolean disagree_voice;  // 반대측 발언권 유무
 
+    @Builder
+    public VRoom(Session session, Map<String, Connection> mapConnections, Map<String, VUserInfo> mapParticipants, RoomInfoDto roomInfoDto, VUserInfo[] agree, VUserInfo[] disagree, int cheer_agree, int cheer_disagree, int vote_agree, int vote_disagree, int vote_final_agree, int vote_final_disagree, boolean agree_voice, boolean disagree_voice) {
+        this.session = session;
+        this.mapConnections = mapConnections;
+        this.mapParticipants = mapParticipants;
+        this.roomInfoDto = roomInfoDto;
+        this.agree = agree;
+        this.disagree = disagree;
+        this.cheer_agree = cheer_agree;
+        this.cheer_disagree = cheer_disagree;
+        this.vote_agree = vote_agree;
+        this.vote_disagree = vote_disagree;
+        this.vote_final_agree = vote_final_agree;
+        this.vote_final_disagree = vote_final_disagree;
+        this.agree_voice = agree_voice;
+        this.disagree_voice = disagree_voice;
+    }
 }

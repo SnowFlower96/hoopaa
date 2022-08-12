@@ -1,18 +1,54 @@
 package com.ssafy.api.service;
 
 
+import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.common.data.VRoom;
-import com.ssafy.db.dto.RoomInfoDto;
+import com.ssafy.db.dto.UserInfoDto;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
+
+import java.util.Map;
 
 public interface RoomService {
 
-    RoomInfoDto createRoom(RoomOpenReq roomOpenInfo);
+    void createRoom(String sessionID, RoomOpenReq roomOpenReq);
 
-    Boolean updatePhaseByRoomId(Long id, int phase);
+    boolean isExistRoom(String sessionID);
 
-    void finishRoom(VRoom session);
+    boolean isExistSession(String sessionID);
+
+    boolean isParticipate(String sessionID, String userID);
+
+    void deleteRoom(String sessionID) throws OpenViduJavaClientException, OpenViduHttpException;
+
+    boolean checkPwd(String sessionID, String pwd);
+
+    String enterRoom(RoomEnterReq roomEnterReq, UserInfoDto userInfoDto);
+
+    Map<String, Map<String, String>> createSession(String sessionID) throws OpenViduJavaClientException, OpenViduHttpException;
+    void deleteSession(String sessionID) throws OpenViduJavaClientException, OpenViduHttpException;
+
+    String checkPos(String sessionID, String AToken, String pos, boolean isSelect);
+
+    Map<String, String> getAgreeConnections(String sessionID);
+
+    Map<String, String> getDisagreeConnections(String sessionID);
+
+    Boolean updatePhaseBySessionID(String sessionID, int phase);
+
+    String updateCheerCnt(String sessionID, String pos);
+
+    String updateVoteMiddle(String sessionID, String userID, String vote);
+
+    String updateVoteFinal(String sessionID, String userID, String vote, String kingUserID);
+
+    Map<String, String> finishRoom(String userID) throws OpenViduJavaClientException, OpenViduHttpException;
 
     int findHashtagId(String nm);
+
+    void syncServer();
+
+    void initServer() throws OpenViduJavaClientException, OpenViduHttpException;
 
 }

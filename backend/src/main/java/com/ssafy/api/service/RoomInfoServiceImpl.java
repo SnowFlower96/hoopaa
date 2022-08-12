@@ -20,7 +20,7 @@ public class RoomInfoServiceImpl implements RoomInfoService{
         List<RoomInfoDto> roomInfo= new LinkedList<>();
         List<RoomInfo> room=roomInfoRepositorySupport.findAll();
         for(RoomInfo r:room)
-            roomInfo.add(new RoomInfoDto(r));
+            roomInfo.add(null);
         return roomInfo;
     }
 
@@ -29,7 +29,7 @@ public class RoomInfoServiceImpl implements RoomInfoService{
         List<RoomInfoDto> searchBy=new LinkedList<>();
         List<RoomInfo> room = roomInfoRepositorySupport.searchBy(keyword);
         for(RoomInfo r:room)
-            searchBy.add(new RoomInfoDto(r));
+            searchBy.add(null);
         return searchBy;
     }
 
@@ -38,7 +38,7 @@ public class RoomInfoServiceImpl implements RoomInfoService{
         List<RoomInfoDto> findByCate=new LinkedList<>();
         List<RoomInfo> room = roomInfoRepositorySupport.findByCate(cate);
         for(RoomInfo r:room)
-            findByCate.add(new RoomInfoDto(r));
+            findByCate.add(null);
         return findByCate;
     }
 }
