@@ -10,9 +10,7 @@
     </div>
 
     <div id="resultWrap" class="graphWrap">
-        <div class=""></div>
-        <div class="result-btn" @click="showResult">확인?</div>
-        <p style="font-size: 100px">결과</p>
+        <p style="font-size: 100px; margin:0px;">결과</p>
         
         <div id="barChart" class="barChart">
             <div id="chartValue">{{initial}}</div>
@@ -46,22 +44,34 @@ export default {
         // }, 4000 );
     },
     methods: {
-        showResult() {
+        // showResult() {
+        //     document.getElementById("barChart").style.height = this.agree*12 + "px";
+        //     document.getElementById("chartValue").innerText = Math.round(this.agree);
+
+        //     document.getElementById("barChart2").style.height = this.disagree*12 + "px";
+        //     document.getElementById("chartValue2").innerText = Math.round(this.disagree);
+            
+        // },
+        resultBtn() {
+            let element = document.getElementById("resultWrap");
+            element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+
             document.getElementById("barChart").style.height = this.agree*12 + "px";
             document.getElementById("chartValue").innerText = Math.round(this.agree);
 
             document.getElementById("barChart2").style.height = this.disagree*12 + "px";
             document.getElementById("chartValue2").innerText = Math.round(this.disagree);
-        },
-        resultBtn() {
-            let element = document.getElementById("resultWrap");
-            element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
         }
     }
 }
 </script>
 
 <style>
+    #resultWrap {
+        background-color: aquamarine;
+        background-size: 100% 100%;
+        background-image: url('../../../assets/images/resultBackground.png')
+    }
     .result-btn {
         margin: 10px;
         width: 70px;
