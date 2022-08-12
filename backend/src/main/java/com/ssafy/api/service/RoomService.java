@@ -43,7 +43,7 @@ public interface RoomService {
 
     String updateVoteFinal(String sessionID, String userID, String vote, String kingUserID);
 
-    void finishRoom(String userID) throws OpenViduJavaClientException, OpenViduHttpException;
+    Map<String, String> finishRoom(String userID) throws OpenViduJavaClientException, OpenViduHttpException;
 
     int findHashtagId(String nm);
 

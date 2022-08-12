@@ -20,6 +20,7 @@ import com.ssafy.db.entity.User;
 import io.openvidu.java.client.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -86,12 +87,16 @@ public class RoomController {
         UserInfoDto user;
         // 회원
         if (AToken.chars().allMatch(Character::isDigit)) user = userService.getUserInfoDtoById(Long.parseLong(AToken));
-            // 비회원
+        // 비회원
         else user = new UserInfoDto(User.builder().nnm(AToken).build());
 
         // 해당 세션이 존재하지 않으면
         if (!roomService.isExistRoom(roomEnterReq.getSessionId()))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
+        System.out.println("--------------");
+        System.out.println(roomEnterReq.getSessionId());
+        System.out.println(roomEnterReq.getPwd());
+        System.out.println("--------------");
 
         // 비밀번호 오류
         if (roomService.checkPwd(roomEnterReq.getSessionId(), roomEnterReq.getPwd()))
@@ -399,6 +404,8 @@ public class RoomController {
 
         if (!roomService.isExistRoom(AToken))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
+
+        roomService.updatePhaseBySessionID(AToken, 3);
 
         roomService.finishRoom(AToken);
 

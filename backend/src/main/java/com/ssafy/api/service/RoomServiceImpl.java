@@ -15,11 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -146,6 +144,8 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public boolean checkPwd(String sessionID, String pwd) {
+        System.out.println(this.mapRooms.get(sessionID).getRoomInfoDto().getPwd());
+        System.out.println(pwd);
         return pwd.equals(this.mapRooms.get(sessionID).getRoomInfoDto().getPwd());
     }
 
@@ -412,102 +412,113 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void finishRoom(String userID) throws OpenViduJavaClientException, OpenViduHttpException {
-//        VRoom vRoom = this.mapRooms.get(userID);
-//        Session session = vRoom.getSession();
-//        session.close();
-//        RoomInfo roomInfo = roomInfoRepository.findById(vRoom.getRoomInfoDto().getId()).get();
-//        int winner = 0;
-//        if (vRoom.getVote_final_agree() > vRoom.getVote_final_disagree()) winner = 1;
-//        else if (vRoom.getVote_final_agree() < vRoom.getVote_final_disagree()) winner = 2;
-//        RoomHistory roomHistory = RoomHistory.builder()
-//                .id(vRoom.getRoomInfoDto().getId())
-//                .end_time(LocalDateTime.now())
-//                .winner(winner)
-//                .agree(vRoom.getVote_final_agree())
-//                .disagree(vRoom.getVote_final_disagree())
-//                .build();
-//        roomInfo.setPhase(3);
-//
-//        // 토론왕 확인하기 위한 변수 설정정
-//        int kingCntMax = 0;
-//        Long kingId = -1L;
-//        //user history 업데이트
-//        //찬성 진영 업데이트
-//        for (VUserInfo VUserInfo : vRoom.getAgree()) {
-//            if (VUserInfo == null) continue; //
-//            kingCntMax = VUserInfo.getKingCnt();
-//            kingId = Long.valueOf(VUserInfo.getId());
-//            User user = userRepository.findUserById(Long.parseLong(VUserInfo.getId())).get();
-//            UserHistory userHistory = UserHistory.builder()
-//                    .userId(user.getId()) //id
-//                    .roomId(roomInfo.getId()) //roomId
-//                    .userPos(1)//userPos
-//                    .build();
-//            if (roomInfo.getHostId() == user.getId()) { //host라면
-//                userHistory.setHost(true); //isHost
-//            }
-//            userHistory.setRoomInfo(roomInfo);
-//            userHistoryRepository.save(userHistory);
-//
-//            //user stat 업데이트
-//            UserStat userStat = userStatRepository.findStatById(user.getId()).get();
-//            userStat.setTotal(userStat.getTotal() + 1);
-//            //승 , 패 , 무
-//            if (vRoom.getVote_final_agree() > vRoom.getVote_final_disagree()) {
-//                userStat.setWin(userStat.getWin() + 1);
-//            } else if (vRoom.getVote_final_agree() < vRoom.getVote_final_disagree()) {
-//                userStat.setLose(userStat.getLose() + 1);
-//            } else {
-//                userStat.setDraw(userStat.getDraw() + 1);
-//            }
-//            userStatRepository.save(userStat);
-//        }
-//
-//        //반대 진영 업데이트
-//        for (VUserInfo VUserInfo : vRoom.getDisagree()) {
-//            if (VUserInfo == null) continue; //
-//            if (VUserInfo.getKingCnt() > kingCntMax) {
-//                kingCntMax = VUserInfo.getKingCnt();
-//                kingId = Long.valueOf(VUserInfo.getId());
-//            }
-//            User user = userRepository.findUserById(Long.valueOf(VUserInfo.getId())).get();
-//            UserHistory userHistory = UserHistory.builder()
-//                    .userId(user.getId()) //id
-//                    .roomId(roomInfo.getId()) //roomId
-//                    .userPos(2)//userPos
-//                    .build();
-//            if (roomInfo.getHostId() == user.getId()) { //host라면
-//                userHistory.setHost(true); //isHost
-//            }
-//            userHistory.setRoomInfo(roomInfo);
-//            userHistoryRepository.save(userHistory);
-//
-//            //user stat 업데이트
-//            UserStat userStat = userStatRepository.findStatById(user.getId()).get();
-//            userStat.setTotal(userStat.getTotal() + 1);
-//            //승 , 패 , 무
-//            if (vRoom.getVote_final_agree() < vRoom.getVote_final_disagree()) {
-//                userStat.setWin(userStat.getWin() + 1);
-//            } else if (vRoom.getVote_final_agree() > vRoom.getVote_final_disagree()) {
-//                userStat.setLose(userStat.getLose() + 1);
-//            } else {
-//                userStat.setDraw(userStat.getDraw() + 1);
-//            }
-//            userStatRepository.save(userStat);
-//
-//        }
-//        //토론왕 설정
-//        if (kingId != -1L) {
-//            UserStat userStat = userStatRepository.findStatById(kingId).get();
-//            UserHistory userHistory = userHistoryRepository.findUserHistoryByUserIdAndRoomId(kingId, vRoom.getRoomInfoDto().getId()).get();
-//            userStat.setKing(userStat.getKing() + 1);
-//            userHistory.setKing(true);
-//            userStatRepository.save(userStat);
-//            userHistoryRepository.save(userHistory);
-//        }
-//        roomInfo.setRoomHistory(roomHistory);
-//        roomInfoRepository.save(roomInfo);
+    @Transactional
+    public Map<String, String> finishRoom(String userID) throws OpenViduJavaClientException, OpenViduHttpException {
+        // 해당 유저가 만든 토론방의 VRoom 객체
+        VRoom vRoom = this.mapRooms.get(userID);
+
+        this.mapSessions.remove(userID);  // 세부세션 제거
+
+        // DB에 저장
+        try {
+            RoomInfo roomInfo = roomInfoRepository.findById(vRoom.getRoomInfoDto().getId()).get();
+
+            // 승패 설정
+            short winner = -1;  // 무승부
+            if (vRoom.getVote_final_agree() > vRoom.getVote_final_disagree()) winner = 1;
+            else if (vRoom.getVote_final_agree() < vRoom.getVote_final_disagree()) winner = 2;
+            roomInfo.setWinner(winner);
+            roomInfo.setAgree(roomInfo.getAgree());
+            roomInfo.setDisagree(roomInfo.getDisagree());
+
+            // 토론왕 확인
+            int kingCntMax = -1;
+            String kingID;
+            for (int i = 0; i < vRoom.getRoomInfoDto().getMaxNum(); i++) {
+                VUserInfo vUserInfo = vRoom.getAgree()[i];
+                if (vUserInfo != null && vUserInfo.getKingCnt() > kingCntMax) {
+                    kingCntMax = vUserInfo.getKingCnt();
+                    kingID = vUserInfo.getId();
+                }
+                vUserInfo = vRoom.getDisagree()[i];
+                if (vUserInfo != null && vUserInfo.getKingCnt() > kingCntMax) {
+                    kingCntMax = vUserInfo.getKingCnt();
+                    kingID = vUserInfo.getId();
+                }
+            }
+
+            // user history 업데이트
+            // 찬성 진영 업데이트
+            for (VUserInfo VUserInfo : vRoom.getAgree()) {
+                if (VUserInfo == null) continue;
+                boolean isHost = Objects.equals(roomInfo.getHostId(), Long.parseLong(VUserInfo.getId()));
+                boolean isKing = false;
+
+                User user = userRepository.findUserById(Long.parseLong(VUserInfo.getId())).get();
+                UserHistory userHistory = UserHistory.builder()
+                        .userId(user.getId())
+                        .roomId(roomInfo.getId())
+                        .isHost(isHost)
+                        .isKing(isKing)
+                        .userPos(1)
+                        .build();
+                userHistoryRepository.save(userHistory);
+
+                //user stat 업데이트
+                UserStat userStat = userStatRepository.findStatById(user.getId()).get();
+                userStat.setTotal(userStat.getTotal() + 1);
+                //승 , 패 , 무
+                if (winner == 1) {
+                    userStat.setWin(userStat.getWin() + 1);
+                } else if (winner == 2) {
+                    userStat.setLose(userStat.getLose() + 1);
+                } else if (winner == -1){
+                    userStat.setDraw(userStat.getDraw() + 1);
+                }
+                userStatRepository.save(userStat);
+            }
+
+            //반대 진영 업데이트
+            for (VUserInfo VUserInfo : vRoom.getDisagree()) {
+                if (VUserInfo == null) continue;
+                boolean isHost = Objects.equals(roomInfo.getHostId(), Long.parseLong(VUserInfo.getId()));
+                boolean isKing = false;
+
+                User user = userRepository.findUserById(Long.parseLong(VUserInfo.getId())).get();
+                UserHistory userHistory = UserHistory.builder()
+                        .userId(user.getId())
+                        .roomId(roomInfo.getId())
+                        .isHost(isHost)
+                        .isKing(isKing)
+                        .userPos(1)
+                        .build();
+                userHistoryRepository.save(userHistory);
+
+                //user stat 업데이트
+                UserStat userStat = userStatRepository.findStatById(user.getId()).get();
+                userStat.setTotal(userStat.getTotal() + 1);
+                //승 , 패 , 무
+                if (winner == 1) {
+                    userStat.setWin(userStat.getWin() + 1);
+                } else if (winner == 2) {
+                    userStat.setLose(userStat.getLose() + 1);
+                } else {
+                    userStat.setDraw(userStat.getDraw() + 1);
+                }
+                // 토론왕
+                if (isHost) userStat.setKing(userStat.getKing() + 1);
+                userStatRepository.save(userStat);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // openVidu 세션 종료
+        Session session = vRoom.getSession();
+        session.close();
+
+        Map<String, String> result = new HashMap<>();
+        return result;
     }
 
     @Override

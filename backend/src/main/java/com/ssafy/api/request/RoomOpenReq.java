@@ -10,6 +10,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class RoomOpenReq {
+
     @ApiModelProperty(name = "방 패스워드", example = "abcd")
     String pwd;
 
