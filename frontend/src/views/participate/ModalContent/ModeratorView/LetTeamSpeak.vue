@@ -22,7 +22,7 @@
                 <div class="ts-submit-btn" @click="EmitTime">
                     <p v-if="speakStatus">찬성</p>
                     <p v-if="!speakStatus">반대</p>
-                    팀 에게 
+                    팀 에게
                     <p> {{timeSpeak}}</p> 분 부여
                 </div>
             </div>
@@ -40,12 +40,14 @@ export default {
     },
     methods: {
         speakFunction(status) {
-            this.speakStatus = status
+            this.speakStatus = status;
+
         },
         EmitTime() {
             this.$emit('emit-time', [parseInt(this.timeSpeak), this.speakStatus])
+            this.$emit('sendAudioMute', this.speakStatus);
         }
-        
+
     }
 }
 </script>

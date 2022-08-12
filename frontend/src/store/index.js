@@ -282,4 +282,49 @@ export default new Vuex.Store({
       router.push("/participatingPage")
     })
   },
-}})
+  makeSessionRoom({commit}, index) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : index,
+      method : "POST",
+    }).then((res) => {
+      console.log(res.data);
+      resolve(res);
+      commit();
+    }).catch((error) => {
+      reject(error);
+    })
+  })
+},
+  getConnectionAgree({commit}, sessionId) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/connections/agree?sessionID=' + sessionId ,
+      method : "GET",
+    }).then((res) => {
+      resolve(res);
+      commit();
+    }).catch((error) => {
+      reject(error);
+    })
+  })
+  },
+  getConnectionDisagree({commit}, sessionId) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/connections/disagree?sessionId=' + sessionId ,
+      method : "GET",
+    }).then((res) => {
+      resolve(res);
+      commit();
+    }).catch((error) => {
+      reject(error);
+    })
+  })
+  },
+
+}
+})

@@ -13,7 +13,6 @@ import homeToParticipate from '@/views/home/homeToParticipate'
 import debateRoom from '@/views/participate/debateRoom'
 import detailSessionView from '@/views/participate/detailSessionView'
 
-import detailSession from '@/views/participate/detailSession'
 import test from '@/views/participate/test'
 
 import endDebate from '@/views/participate/end/endDebate'
@@ -147,21 +146,13 @@ function makeRoutesFromMenu () {
   name: 'homeToParticipate',
   component: homeToParticipate
 },
-{
-  path : '/detailSession',
-  name: 'detailSession',
-  component: detailSession
-},
+
 {
   path : '/test',
   name: 'test',
   component: test,
 },
-{
-  path : '/detailSession',
-  name: 'detailSession',
-  component: detailSession,
-},
+
 {
   path : '/endDebate',
   name: 'endDebate',

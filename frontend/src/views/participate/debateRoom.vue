@@ -23,9 +23,10 @@
     <button @click="moderatorView">사회자뷰</button>
     <button @click="allView">방청객뷰</button>
     <button @click="teamView">패널뷰</button>
-    <router-link to="/detailSessionView"><button>세부세션 가기</button></router-link>
+    <button @click="sendSession">세부세션 가기</button>
     <button @click="positionAgree">찬성</button>
     <button @click="messageFromTeam">팀에서 사회자한테 주는 메세지</button>
+    <button @click="publishScreenShare">화면공유</button>
     <!-- <div id="demo">넨</div> -->
 </div>
 <!-- 뷰바꾸는 임시버튼 -->
@@ -149,6 +150,7 @@
                 <let-team-speak 
                 v-if="menu"
                 @emit-time="EmitTime"
+                @sendAudioMute="audioMute"
                 ></let-team-speak>
 
                 <rest-time 
@@ -209,6 +211,12 @@
                                   <div class="share-view-wrap" :style="customCaroselStyle">
                                     <div class="share-view">
                                         <!-- 화면공유 여기에 넣으면 됨 -->
+                                        <!-- <user-video :stream-manager="publisherScreen"></user-video> -->
+				                                <div v-for="(sub, index) in subscribersScreen" :key="index">
+					                                <user-video v-if="sub.stream.typeOfVideo == 'SCREEN'" :stream-manager="sub" ></user-video>
+				                                </div>
+
+
                                     </div>
                                   </div>
 
@@ -322,9 +330,9 @@ import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
+const OPENVIDU_SERVER_URL = "https://hoopaa.site:8443";
+const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
-const OPENVIDU_SERVER_URL = process.env.OPENVIDU_SERVER_URL;
-const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 
 export default {
     name: 'debateRoom',
@@ -566,7 +574,19 @@ export default {
             waitVoteView: false,
 
           // 비디오 관련 및 내부로직
-            position : '',
+            OV: undefined,
+            session: undefined,
+            host: undefined,
+            agree: [],
+            disagree: [],
+            publisher : undefined,
+
+          // 화면 공유
+            OVScreen : undefined,
+			      sessionScreen: undefined,
+			      publisherScreen: undefined,
+			      subscribersScreen:[],
+            screensharing: false,
         }
     },
     mounted() {
@@ -630,7 +650,233 @@ export default {
                 this.waitVoteView = true
             }
         },
-        
+      // 세션 연결
+       async joinSession() {
+      const token = this.tempToken;
+
+      // --- Get an OpenVidu object ---
+      this.OV = new OpenVidu();
+
+      // --- Init a session ---
+      this.session = this.OV.initSession();
+      // --- Specify the actions when events take place in the session ---
+
+      // On every new Stream received...
+      this.session.on("streamCreated", ({ stream }) => {
+        const subscriber = this.session.subscribe(stream);
+        let connectionData = JSON.parse(subscriber.stream.connection.data);
+        var clientData = connectionData.clientData.split("/");
+        console.log(clientData);
+        let sub = {
+            id : clientData[0],
+            stream : 'subscriber',
+            data : subscriber
+        };
+        if (clientData[0] == this.session.sessionId) {
+          console.log("host video connected");
+          this.host = subscriber;
+        } else if (clientData[1] == "agree") {
+          console.log("agree video connected");
+          this.agree.push(sub);
+        } else if (clientData[1] == "disagree") {
+          console.log("disagree video connected");
+          this.disagree.push(sub);
+        }
+
+      });
+
+      // On every Stream destroyed...
+      // TODO
+      this.session.on("streamDestroyed", ({ stream }) => {
+        const index = this.subscribers.indexOf(stream.streamManager, 0);
+        if (index >= 0) {
+          this.subscribers.splice(index, 1);
+        }
+      });
+
+      // On every asynchronous exception...
+      this.session.on("exception", ({ exception }) => {
+        console.warn(exception);
+      });
+
+      // Hearing Signal
+
+      // 세부세션 signal
+     this.session.on('signal:Go-SebuSession', (event) => {
+      console.log(event.data); // Message
+      console.log(event.from); // Connection object of the sender
+      console.log(event.type); // The type of message ("my-chat")
+    });
+      // 발언권 signal
+      this.session.on('signal:Set-Audio', (event) => {
+        console.log(event.data); // Message
+        if (event.data == 'On') {
+          this.publisher.publishAudio(true);
+        } else {
+          this.publisher.publishAudio(false);
+        }
+    });
+      await this.session
+        .connect(token, { clientData: this.user.id + "/" + this.position })
+        .then(() => {
+          let publisher = this.OV.initPublisher(undefined, {
+            audioSource: undefined, // The source of audio. If undefined default microphone
+            videoSource: undefined, // The source of video. If undefined default webcam
+            publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+            publishVideo: true, // Whether you want to start publishing with your video enabled or not
+            resolution: "680x480", // The resolution of your video
+            frameRate: 30, // The frame rate of your video
+            insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+            mirror: false // Whether to mirror your local video or not
+          });
+          this.publisher = publisher;
+          let sub = {
+            id : this.user.id,
+            stream : 'publisher',
+            data : this.publisher
+        };
+          if (this.user.id == this.session.sessionId) {
+            this.host = publisher;
+            console.log("호스트래");
+          } else if (this.position == "agree") {
+
+            this.agree.push(sub);
+            console.log("찬성이래");
+          } else if (this.position == "disagree") {
+            this.disagree.push(sub);
+            console.log("반대래");
+          }
+          console.log("Connected!!!");
+          console.log(this.session.connection)
+          this.session.publish(publisher);
+        })
+        .catch(error => {
+          console.log(
+            "There was an error connecting to the session:",
+            error.code,
+            error.message
+          );
+        });
+
+      if (this.user.id == this.session.sessionId) {
+        console.log("you are host");
+      } else {
+        console.log("you are pannel");
+        console.log(this.agree);
+      }
+      this.joinScreen();
+      },
+
+      async joinScreen(){
+			this.OVScreen = new OpenVidu();
+			this.sessionScreen = this.OVScreen.initSession();
+
+			this.sessionScreen.on('streamCreated', ({ stream }) => {
+					const subscriberScreen = this.sessionScreen.subscribe(stream);
+					this.subscribersScreen.push(subscriberScreen);
+					console.log(this.subscribersScreen.length + "!!!!!!!!!!!!!!!!")
+			});
+
+			await this.getToken(this.session.sessionId).then(tokenScreen => {
+				this.sessionScreen.connect(tokenScreen, { clientData: this.user.id })
+				.then(() => {
+					console.log("Session screen connected");
+				})
+				.catch(error => {
+					console.log('There was an error connecting to the session for screen share:', error.code, error.message);
+				});
+			});
+		},
+		leaveSession () {
+			// --- Leave the session by calling 'disconnect' method over the Session object ---
+			if (this.session) this.session.disconnect();
+			if (this.sessionScreen) this.sessionScreen.disconnect();
+
+			this.session = undefined;
+			this.sessionScreen = undefined;
+			this.publisher = undefined;
+			this.publisherScreen = undefined;
+      this.host = undefined;
+      this.agree = undefined;
+      this.disagree = undefined;
+			this.subscribersScreen = [];
+			this.OV= undefined;
+			this.OVScreen = undefined;
+
+			if(this.screensharing)
+				this.screensharing=false;
+
+			window.removeEventListener('beforeunload', this.leaveSession);
+		},
+
+
+    getToken (mySessionId) {
+			return this.createSession(mySessionId).then(sessionId => this.createToken(sessionId));
+		},
+
+		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-session
+		createSession (sessionId) {
+			return new Promise((resolve, reject) => {
+				axios
+					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions`, JSON.stringify({
+						customSessionId: sessionId,
+					}), {
+						auth: {
+							username: 'OPENVIDUAPP',
+							password: OPENVIDU_SERVER_SECRET,
+						},
+					})
+					.then(response => response.data)
+					.then(data => resolve(data.id))
+					.catch(error => {
+						if (error.response.status === 409) {
+							resolve(sessionId);
+						} else {
+							console.warn(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`);
+							if (window.confirm(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`)) {
+								location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
+							}
+							reject(error.response);
+						}
+					});
+			});
+		},
+
+		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
+		createToken (sessionId) {
+			return new Promise((resolve, reject) => {
+				axios
+					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`, {}, {
+						auth: {
+							username: 'OPENVIDUAPP',
+							password: OPENVIDU_SERVER_SECRET,
+						},
+					})
+					.then(response => response.data)
+					.then(data => resolve(data.token))
+					.catch(error => reject(error.response));
+			});
+		},
+
+
+		publishScreenShare(){
+      console.log("들어오지");
+			let publisherScreen = this.OVScreen.initPublisher("container-screens", {videoSource: "screen"});
+      console.log("여기오냐?")
+			publisherScreen.once('accessAllowed', () => {
+		this.screensharing = true;
+		// It is very important to define what to do when the stream ends.
+		publisherScreen.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+			console.log('User pressed the "Stop sharing" button');
+			this.sessionScreen.unpublish(publisherScreen);
+			this.screensharing = false;
+		});
+    this.publisherScreen = publisherScreen;
+    this.subscribersScreen.push(publisherScreen);
+		this.sessionScreen.publish(publisherScreen);
+	});
+		},
+
         handleResizeHome() {  // 화면 움직일때 조정 다시함
             if (this.chattTF === true) {    // 채팅창 열려있을때
                 // 화면 기본 사이즈 받아옴
@@ -1058,8 +1304,63 @@ export default {
       positionDisagree() {
 
       },
+        // 세부세션 보내기 시그널
+        sendSession() {
+      //     let index = "/room/session/" + this.session.sessionId;
+      //     this.$store.dispatch("makeSessionRoom", index).then((response) => {
+      //     console.log(response.data);
+      // })
+      this.session.signal({
+        data: 'Go SebuSession !!!',
+        to: [],
+        type: 'Go-SebuSession'
+      });
+    },
+
+    // 찬성 반대 connectId 얻기
+    getAgreePosition () {
+      this.$store.dispatch("getConnectionAgree",this.session.sessionId).then((response) => {
+        console.log(response.data)
+        return response.data;
+      })
+    },
+    getDisagreePosition() {
+      this.$store.dispatch("getConnectionDisagree",this.session.sessionId).then((response) => {
+        console.log(response.data)
+        return response.data;
+      })
+    },
+
+    // 음소거 컨트롤 시그널
+    audioMute(status) {
+      let agreeArr = this.getAgreePosition();
+      let disagreeArr = this.getDisagreePosition();
+      if (status == 0) {
+        for (var i in agreeArr) {
+          this.sendAudioSignal('On', i)
+        }
+        for (var j in disagreeArr) {
+          this.sendAudioSignal('Off', j)
+        }
+      } else if (status == 1) {
+        for (var k in agreeArr) {
+          this.sendAudioSignal('Off', k)
+        }
+        for (var z in disagreeArr) {
+          this.sendAudioSignal('On', z)
+        }
+      }
+    },
+    sendAudioSignal(order, who) {
+      this.session.signal({
+        data: order,
+        to: who,
+        type: 'Set-Audio'
+      });
+    },
     }
-}
+  }
+
 </script>
 
 <style>
