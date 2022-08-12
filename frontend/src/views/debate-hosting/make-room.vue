@@ -48,7 +48,7 @@
             <div class="inner-wrap">
                 <div class="label-container"><p>토론인원</p></div>
               <div class="input-container">
-                <div>1<input type="radio" name="maxNum" value="1" @change="getNum($event)"/></div>
+                <div>1<input type="radio" name="maxNum" value="1" @change="getNum($event)" checked="checked" /></div>
                 <div>2<input type="radio" name="maxNum" value="2" @change="getNum($event)"/></div>
                 <div>3<input type="radio" name="maxNum" value="3" @change="getNum($event)"/></div>
                 <div>4<input type="radio" name="maxNum" value="4" @change="getNum($event)"/></div>
@@ -88,7 +88,7 @@ export default {
       hashTag1 : '',
       hashTag2 : '',
       hashTag3 : '',
-      maxNum : '',
+      maxNum : '1',
       isSys : '0',
       selectedMenu: null
     }
@@ -112,16 +112,13 @@ export default {
     async makeRoom() {
       var room = {
         cate : this.roomCate,
-        hash_1 : this.hashTag1,
-        hash_2 : this.hashTag2,
-        hash_3 : this.hashTag3,
-        host_em : this.user.em,
-        is_sys : this.isSys,
+        hashtags : '#' + this.hashTag1 + '#' + this.hashTag2 + '#' + this.hashTag3,
         max_num : this.maxNum,
         pwd : this.roomPwd,
         subtitle : this.roomName,
         title : this.roomTitle
       }
+      console.log(room.hashtags)
         let data = {
           pwd : room["pwd"],
           sessionId : this.user.id,

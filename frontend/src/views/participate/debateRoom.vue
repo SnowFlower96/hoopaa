@@ -186,7 +186,7 @@
                                         <!-- 화면공유 여기에 넣으면 됨 -->
                                         <!-- <user-video :stream-manager="publisherScreen"></user-video> -->
 				                                <div v-for="(sub, index) in subscribersScreen" :key="index">
-					                                <user-video v-if="sub.stream.typeOfVideo == 'SCREEN'" :stream-manager="sub" ></user-video>
+					                                <user-video :stream-manager="sub" ></user-video>
 				                                </div>
 
 
@@ -538,23 +538,25 @@ export default {
       // On every new Stream received...
       this.session.on("streamCreated", ({ stream }) => {
         const subscriber = this.session.subscribe(stream);
-        let connectionData = JSON.parse(subscriber.stream.connection.data);
-        var clientData = connectionData.clientData.split("/");
-        console.log(clientData);
-        let sub = {
-            id : clientData[0],
-            stream : 'subscriber',
-            data : subscriber
-        };
-        if (clientData[0] == this.session.sessionId) {
-          console.log("host video connected");
-          this.host = subscriber;
-        } else if (clientData[1] == "agree") {
-          console.log("agree video connected");
-          this.agree.push(sub);
-        } else if (clientData[1] == "disagree") {
-          console.log("disagree video connected");
-          this.disagree.push(sub);
+        if (subscriber.stream.typeOfVideo == 'CAMERA') {
+          let connectionData = JSON.parse(subscriber.stream.connection.data);
+          var clientData = connectionData.clientData.split("/");
+          console.log(clientData);
+          let sub = {
+              id : clientData[0],
+              stream : 'subscriber',
+              data : subscriber
+          };
+          if (clientData[0] == this.session.sessionId) {
+            console.log("host video connected");
+            this.host = subscriber;
+          } else if (clientData[1] == "agree") {
+            console.log("agree video connected");
+            this.agree.push(sub);
+          } else if (clientData[1] == "disagree") {
+            console.log("disagree video connected");
+            this.disagree.push(sub);
+          }
         }
 
       });
@@ -647,7 +649,9 @@ export default {
 
 			this.sessionScreen.on('streamCreated', ({ stream }) => {
 					const subscriberScreen = this.sessionScreen.subscribe(stream);
-					this.subscribersScreen.push(subscriberScreen);
+          if (subscriberScreen.stream.typeOfVideo == 'SCREEN') {
+            this.subscribersScreen.push(subscriberScreen);
+          }
 					console.log(this.subscribersScreen.length + "!!!!!!!!!!!!!!!!")
 			});
 
