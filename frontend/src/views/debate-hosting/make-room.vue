@@ -6,8 +6,9 @@
         <div class="make-room-label">방 만들기</div>
           <div class="select-wrap">
             <div class="select-inner">
-              <div><img :class="{'select-activate':isSys === '0', 'select-deactivate':isSys === '1'}" @click="isSysStatus0" src="https://user-images.githubusercontent.com/87743473/182767796-d6da026b-e704-4870-828e-acfaa287a18d.png" alt=""></div>
-              <div><img :class="{'select-activate':isSys === '1', 'select-deactivate':isSys === '0'}" @click="isSysStatus1" src="https://user-images.githubusercontent.com/87743473/182761383-205f241e-0fad-4d7e-bf74-544966eb2570.png" alt=""></div>
+              <!-- 추가 -->
+              <div v-if="preview==''|| preview==null"><img class="thumbnail" @click="isSysStatus0" src="https://user-images.githubusercontent.com/87743473/182767796-d6da026b-e704-4870-828e-acfaa287a18d.png" alt=""></div>
+              <div v-else><img :src="preview" img class="thumbnail"></div>
             </div>
           </div>
       <div class="select-status" v-if="isSys == '0'">👨‍⚖️사회자모드👩‍⚖️</div>
@@ -27,6 +28,16 @@
                 <div class="pw-check" ><input class="pw-check" type="checkbox"></div>
                 <div class="pw-input"><input class="pw-input" v-model="roomPwd" placeholder="비밀번호를 정해주세요" /></div>
               </div>
+            </div>
+
+            <div class="inner-wrap">
+                <div class="label-container "><p>썸네일</p></div>
+                <div class="input-container">
+                  <div class="thumbnail-input">
+                    <input @change="fileChange" type="file" id="file" class="inputfile" accept="image/*" />
+                    <label for="file" class="input-plus">+</label>
+                  </div>
+                </div>
             </div>
 
             <div class="inner-wrap">
@@ -90,7 +101,9 @@ export default {
       hashTag3 : '',
       maxNum : '',
       isSys : '0',
-      selectedMenu: null
+      selectedMenu: null,
+      file : '',
+      preview : ''
     }
   },
    computed : {
@@ -120,7 +133,8 @@ export default {
         max_num : this.maxNum,
         pwd : this.roomPwd,
         subtitle : this.roomName,
-        title : this.roomTitle
+        title : this.roomTitle,
+        thumbnail: this.file,
       }
         let data = {
           pwd : room["pwd"],
@@ -136,6 +150,43 @@ export default {
     isSysStatus1() {
       this.isSys = '1'
     },
+     fileChange(e) {
+      console.log(e.target.files);
+      const file = e.target.files;
+      if(file.length!=0){
+
+        console.log(file[0].size);
+        let validation = true;
+        let message = '';
+
+        if(file.length > 1){
+          validation = false;
+          message = `하나의 이미지 파일만 업로드 가능합니다.`;
+        }
+
+        if(file[0].size > 1024 * 1024 * 3){
+          validation = false;
+          message = `3MB이하의 파일만 업로드 가능합니다.`;
+        }
+
+        if(file[0].type.indexOf('image') < 0) {
+          validation = false;
+          message = `이미지 파일만 업로드 가능합니다.`;
+        }
+
+        if(validation) {
+          this.file = file;
+          console.log("타입"+typeof(file));
+          this.preview = URL.createObjectURL(this.file[0])
+        }else{
+          this.file = '';
+          alert(message);
+        }
+      }else{
+        this.preview='';
+      }
+    }
+  //추가 끝
   }
 }
 
@@ -331,5 +382,14 @@ export default {
 }
 input:focus {
   outline:none
+}
+.thumbnail{
+  border: 2px solid #FFDB65;
+  width: 180px;
+  height: 180px;
+  outline: 4px solid #FFDB65;
+  cursor: pointer;
+  border-radius: 10px;
+  filter: brightness(100%);
 }
 </style>
