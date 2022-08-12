@@ -83,7 +83,7 @@ public class RoomServiceImpl implements RoomService {
         // DB 저장
         RoomInfo roomInfo = RoomInfo.builder()
                 .pwd(roomOpenReq.getPwd())
-                .hostID(Long.parseLong(sessionID))
+                .hostId(Long.parseLong(sessionID))
                 .maxNum(roomOpenReq.getMax_num())
                 .build();
         roomInfo = roomInfoRepository.save(roomInfo);
@@ -293,6 +293,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Map<String, String> getAgreeConnections(String sessionID) {
         VRoom vRoom = this.mapRooms.get(sessionID);
+        for (String key : vRoom.getMapConnections().keySet()) System.out.println(key);
         Map<String, String> connections = new ConcurrentHashMap<>();
         for (VUserInfo VUserInfo : vRoom.getAgree()) {
             if (vRoom.getMapConnections().containsKey(VUserInfo.getId())) {
@@ -450,7 +451,7 @@ public class RoomServiceImpl implements RoomService {
             // 찬성 진영 업데이트
             for (VUserInfo VUserInfo : vRoom.getAgree()) {
                 if (VUserInfo == null) continue;
-                boolean isHost = Objects.equals(roomInfo.getHostID(), Long.parseLong(VUserInfo.getId()));
+                boolean isHost = Objects.equals(roomInfo.getHostId(), Long.parseLong(VUserInfo.getId()));
                 boolean isKing = false;
 
                 User user = userRepository.findUserById(Long.parseLong(VUserInfo.getId())).get();
@@ -480,7 +481,7 @@ public class RoomServiceImpl implements RoomService {
             //반대 진영 업데이트
             for (VUserInfo VUserInfo : vRoom.getDisagree()) {
                 if (VUserInfo == null) continue;
-                boolean isHost = Objects.equals(roomInfo.getHostID(), Long.parseLong(VUserInfo.getId()));
+                boolean isHost = Objects.equals(roomInfo.getHostId(), Long.parseLong(VUserInfo.getId()));
                 boolean isKing = false;
 
                 User user = userRepository.findUserById(Long.parseLong(VUserInfo.getId())).get();
