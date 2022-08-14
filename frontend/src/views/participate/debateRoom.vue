@@ -1312,18 +1312,7 @@ export default {
                 this.messageFrom = false
             }
         },
-        leaveSession() {
-          this.$refs.debateRoomSideComponent.leaveSession();
-        },
-      // 찬성 참여
-      positionAgree() {
-        this.position = 'agree',
-        console.log(this.$refs);
-        this.$refs.debateRoomSideComponent.joinPannel()
-      },
-      positionDisagree() {
 
-      },
         // 세부세션 보내기 시그널
         sendSession() {
       //     let index = "/room/session/" + this.session.sessionId;
@@ -1338,36 +1327,64 @@ export default {
     },
 
     // 찬성 반대 connectId 얻기
-    getAgreePosition () {
-      this.$store.dispatch("getConnectionAgree",this.session.sessionId).then((response) => {
-        console.log(response.data)
-        return response.data;
+    async getAgreePosition () {
+      let result = [];
+      await this.$store.dispatch("getConnectionAgree",this.session.sessionId).then((response) => {
+        let data = JSON.parse(response.data.json)
+        for (var key in data) {
+          result.push(data[key])
+        }
       })
+        console.log(result)
+        return result;
     },
-    getDisagreePosition() {
-      this.$store.dispatch("getConnectionDisagree",this.session.sessionId).then((response) => {
-        console.log(response.data)
-        return response.data;
+    async getDisagreePosition() {
+        let result = [];
+      await this.$store.dispatch("getConnectionDisagree",this.session.sessionId).then((response) => {
+        let data = JSON.parse(response.data.json)
+        for (var key in data) {
+          result.push(data[key])
+        }
       })
+      console.log(result)
+        return result.data;
     },
 
     // 음소거 컨트롤 시그널
-    audioMute(status) {
-      let agreeArr = this.getAgreePosition();
-      let disagreeArr = this.getDisagreePosition();
-      if (status == 0) {
+    async audioMute(status) {
+      let agreeArr = [];
+      let disagreeArr = [];
+      await this.getAgreePosition().then((res) => { agreeArr = res});
+      await this.getDisagreePosition().then((res) => { disagreeArr = res});
+      console.log(agreeArr)
+      console.log(disagreeArr)
+      let temp = {
+        connectionId : '',
+      }
+      if (status == 1) {
         for (var i in agreeArr) {
-          this.sendAudioSignal('On', i)
+          console.log(agreeArr[i])
+          temp.connectionId = agreeArr[i]
+          this.sendAudioSignal('On', temp)
         }
         for (var j in disagreeArr) {
-          this.sendAudioSignal('Off', j)
+          //this.sendAudioSignal('Off', disagreeArr[j])
+          console.log(disagreeArr[j])
+          temp.connectionId = disagreeArr[j]
+          this.sendAudioSignal('Off', temp)
         }
-      } else if (status == 1) {
+      } else if (status == 0) {
         for (var k in agreeArr) {
-          this.sendAudioSignal('Off', k)
+          //this.sendAudioSignal('Off', agreeArr[k])
+          console.log(agreeArr[k])
+          temp.connectionId = agreeArr[k]
+          this.sendAudioSignal('Off', temp)
         }
         for (var z in disagreeArr) {
-          this.sendAudioSignal('On', z)
+          //this.sendAudioSignal('On', disagreeArr[z])
+          console.log(disagreeArr[z])
+          temp.connectionId = disagreeArr[z]
+          this.sendAudioSignal('On', temp)
         }
       }
     },
