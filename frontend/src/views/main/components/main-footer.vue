@@ -11,12 +11,14 @@
 @media (max-width: 700px) {
   .footer-contents > img {
     width: 70px;
+   
   }
 
   .footer-contents {
     line-height: 50px;
     text-align: center;
     font-size: small;
+     background-color: white;
   }
 }
 /* 반응형 - 모바일 화면 */
@@ -30,6 +32,7 @@
   .footer-contents {
     line-height: 50px;
     text-align: center;
+    background-color: white;
   }
 
 }

@@ -591,7 +591,7 @@ export default {
                 console.log(this.voteStatus)
                 this.allVoteView = false
                 this.selMVPView = true
-                this.waitVoteView = false
+                this.waitVoteView =  false
             }
             else if (option === 'mvp') {
                 console.log('mvp')
