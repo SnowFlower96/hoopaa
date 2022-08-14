@@ -84,7 +84,7 @@ function makeRoutesFromMenu () {
     path: '/myPage',
     name: 'myPage',
     component : myPage,
-    // beforeEnter: checkLogin(),
+    beforeEnter: checkLogin(),
 
   },
 
