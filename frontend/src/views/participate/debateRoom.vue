@@ -206,6 +206,7 @@
                                       :moderator="moderator"
                                       :all="all"
                                       :team="team"
+                                      :timer-min="timerMin"
                                       ></debate-room-center-component>
                                   </div>
 
@@ -508,6 +509,7 @@ export default {
             timerTime:null,
             timerTeam:null,
             timeList:[], // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
+            timerMin: 0,
 
             // 토론끝나고 방청잭 투표뷰 3개
             allVoteView: true,
@@ -1015,6 +1017,7 @@ export default {
             this.timeList = [this.timerTime, this.timerTeam]
             console.log(this.timeList)
             this.callToMdModal = false
+            this.timerMin = Array[0]
         },
         voteFunction(status) {
             this.voteStatus = status

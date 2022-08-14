@@ -3,8 +3,8 @@
     <div class="debate-guague" :style="customViewStyle">
         <div class="debate-guague-inner" :style="customViewStyle">
             <span style="font-size: 25px;" v-if="!timeList[1]">반대팀</span>
-            <span style="font-size: 25px;" v-if="timeList[0]">찬성팀</span>
-            <div id="speaktimer">0분0초</div>
+            <span style="font-size: 25px;" v-if="timeList[1]">찬성팀</span>
+            <div id="speaktimer">{{timerMin}}분0초</div>
             <div class="st-tim-btn" v-if="moderator" @click="startTimer">시작</div>
         </div>
     </div>
@@ -23,7 +23,7 @@ const OPENVIDU_SERVER_SECRET = process.env.OPENVIDU_SERVER_SECRET;
 export default {
     data() {
         return {
-            timerMin: this.timeList[0]/60,
+            timerMin: 0,
             timerSec: 0
         }
     },
@@ -32,6 +32,7 @@ export default {
         'moderator',
         'all',
         'team',
+        'timerMin'
     ],
     components : {
         // UserVideo,
