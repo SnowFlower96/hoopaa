@@ -200,13 +200,13 @@ public class RoomServiceImpl implements RoomService {
             connection = session.createConnection(connectionProperties);
 
             // 방 정보에 connection 추가
-            vRoom.getMapParticipants().get(userInfoDto.getId()).setConnectionDto(new ConnectionDto(connection));
 
             // 방 정보에 UserInfo 추가
             VUserInfo vUserInfo = VUserInfo.builder()
                     .id(userInfoDto.getId()).em(userInfoDto.getEm()).em(userInfoDto.getEm())
                     .build();
             vRoom.getMapParticipants().put(userInfoDto.getId(), vUserInfo);
+            vRoom.getMapParticipants().get(userInfoDto.getId()).setConnectionDto(new ConnectionDto(connection));
 
             return connection.getToken();
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
