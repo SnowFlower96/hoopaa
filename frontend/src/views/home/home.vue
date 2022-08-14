@@ -49,11 +49,13 @@
                 <div class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
-                    <div class="carosel-room-card" @click="gotoRoom">
-                      <div class="room-info-carosel" :style="customCaroselStyle">
+                     <div class="carosel-room-card" @click="gotoRoom">
+                      <!-- <div class="room-info-carosel" :style="customCaroselStyle">
                         <p class="room-phase-tip">{{phase[room.phase]}}</p>
-                        <p id="title-carosel">{{room.title}}</p>
-                      </div>
+
+                      </div> -->
+                    <room-card :room ="room"></room-card>
+                    <p id="title-carosel">{{room.subtitle}}</p>
                     </div>
                     </li>
                   </ul>
@@ -238,7 +240,7 @@ ul {
   margin: 10px;
 }
 .room-info-carosel {
-  background-image: url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+
   height: var(--carosel-item-height);
   background-size:100% 100%;
   width: var(--carosel-item-width);
@@ -246,7 +248,7 @@ ul {
   border-radius: 10px;
 }
 .room-info-carosel:hover {
-  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+  /* background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg'); */
   cursor: pointer;
   /* filter: brightness(80%);
   transition: filter .3s; */
@@ -337,6 +339,7 @@ ul {
 <script >
 import Search from '@/views/common/search'
 import Conference from './components/conference'
+import RoomCard from './components/room-card'
 import 'vue3-carousel/dist/carousel.css';
 import { mapState , mapMutations} from "vuex";
 
@@ -346,6 +349,7 @@ export default {
 
   components: {
     Conference,
+    RoomCard,
     Search,
   },
   data () {
