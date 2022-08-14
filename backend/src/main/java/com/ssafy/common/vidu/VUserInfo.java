@@ -1,4 +1,4 @@
-package com.ssafy.common.data;
+package com.ssafy.common.vidu;
 
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +14,9 @@ public class VUserInfo {
     String id;
     String em;
     String nnm;
+
+    ConnectionDto connectionDto;
+
     int kingCnt;
     boolean hasAgree;
     boolean hasDisagree;

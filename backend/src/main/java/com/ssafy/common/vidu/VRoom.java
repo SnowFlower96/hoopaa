@@ -1,7 +1,6 @@
-package com.ssafy.common.data;
+package com.ssafy.common.vidu;
 
 import com.ssafy.db.dto.RoomInfoDto;
-import io.openvidu.java.client.Connection;
 import io.openvidu.java.client.Session;
 import lombok.Builder;
 import lombok.Data;
@@ -17,8 +16,8 @@ public class VRoom {
     // OpenVidu 세션
     private Session session;
 
-    // 세션에 접속한 모든 사람 Connection
-    private Map<String, Connection> mapConnections;
+    // 세부세션
+    private VSession VSession;
 
     // 세션에 접속한 모든 사람 정보
     private Map<String, VUserInfo> mapParticipants;
@@ -39,9 +38,9 @@ public class VRoom {
     private boolean disagree_voice;  // 반대측 발언권 유무
 
     @Builder
-    public VRoom(Session session, Map<String, Connection> mapConnections, Map<String, VUserInfo> mapParticipants, RoomInfoDto roomInfoDto, VUserInfo[] agree, VUserInfo[] disagree, int cheer_agree, int cheer_disagree, int vote_agree, int vote_disagree, int vote_final_agree, int vote_final_disagree, boolean agree_voice, boolean disagree_voice) {
+    public VRoom(Session session, VSession VSession, Map<String, VUserInfo> mapParticipants, RoomInfoDto roomInfoDto, VUserInfo[] agree, VUserInfo[] disagree, int cheer_agree, int cheer_disagree, int vote_agree, int vote_disagree, int vote_final_agree, int vote_final_disagree, boolean agree_voice, boolean disagree_voice) {
         this.session = session;
-        this.mapConnections = mapConnections;
+        this.VSession = VSession;
         this.mapParticipants = mapParticipants;
         this.roomInfoDto = roomInfoDto;
         this.agree = agree;
@@ -55,4 +54,5 @@ public class VRoom {
         this.agree_voice = agree_voice;
         this.disagree_voice = disagree_voice;
     }
+
 }

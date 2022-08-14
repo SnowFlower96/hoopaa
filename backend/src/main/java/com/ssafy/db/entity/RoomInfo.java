@@ -53,7 +53,7 @@ public class RoomInfo {
     User userKing;
 
     @Builder
-    public RoomInfo(Long id, String pwd, Long hostId, String thumbUrl, int maxNum, int curNum, int phase, LocalDateTime startTime, LocalDateTime endTime, String log, Long kingId, Short winner, Short agree, Short disagree, Short invalid) {
+    public RoomInfo(Long id, String pwd,  hostId, String thumbUrl, int maxNum, int curNum, int phase, LocalDateTime startTime, LocalDateTime endTime, String log, Long kingId, Short winner, Short agree, Short disagree, Short invalid) {
         this.id = id;
         this.pwd = pwd;
         this.hostId = hostId;

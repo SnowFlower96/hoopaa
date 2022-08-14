@@ -3,7 +3,6 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
-import com.ssafy.common.data.VRoom;
 import com.ssafy.db.dto.UserInfoDto;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
@@ -45,9 +44,7 @@ public interface RoomService {
 
     Map<String, String> finishRoom(String userID) throws OpenViduJavaClientException, OpenViduHttpException;
 
-    int findHashtagId(String nm);
-
-    void syncServer();
+    void syncServer() throws OpenViduJavaClientException, OpenViduHttpException;
 
     void initServer() throws OpenViduJavaClientException, OpenViduHttpException;
 

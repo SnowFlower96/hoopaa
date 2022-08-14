@@ -29,7 +29,7 @@ public class ServerController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> syncServer() {
+    public ResponseEntity<? extends BaseResponseBody> syncServer() throws OpenViduJavaClientException, OpenViduHttpException {
         roomService.syncServer();
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }

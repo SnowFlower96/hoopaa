@@ -2,9 +2,10 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
-import com.ssafy.common.data.VRoom;
-import com.ssafy.common.data.VSession;
-import com.ssafy.common.data.VUserInfo;
+import com.ssafy.common.vidu.ConnectionDto;
+import com.ssafy.common.vidu.VRoom;
+import com.ssafy.common.vidu.VSession;
+import com.ssafy.common.vidu.VUserInfo;
 import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.entity.*;
@@ -23,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RoomServiceImpl implements RoomService {
 
     private Map<String, VRoom> mapRooms;
-    private Map<String, VSession> mapSessions;
+//    private Map<String, VSession> mapSessions;
 
     private OpenVidu openVidu;
     @Value("${openvidu.url}")
@@ -42,7 +43,6 @@ public class RoomServiceImpl implements RoomService {
         }
 
         this.mapRooms = new ConcurrentHashMap<>();
-        this.mapSessions = new ConcurrentHashMap<>();
     }
 
     @Autowired
@@ -81,26 +81,51 @@ public class RoomServiceImpl implements RoomService {
         }
 
         // DB 저장
+        // 해시태그
+        StringTokenizer st = new StringTokenizer(roomOpenReq.getHashtags(), "#");
+        String[] hashtagNms = new String[3];
+        Integer[] hashtagIds = new Integer[3];
+        for (int i = 0; i < 3; i++) {
+            if (st.hasMoreTokens()) {
+                String hashtag = st.nextToken();
+                Optional<RoomHashtag> hashtagOptional = hashtagRepository.findHashtagByNm(hashtag);
+                RoomHashtag roomHashtag;
+                if (hashtagOptional.isPresent()) {  // 이미 존재 한다면
+                    roomHashtag = hashtagOptional.get();
+                    roomHashtag.setCnt(roomHashtag.getCnt() + 1);
+                } else {  //존재하지 않던 해시태그라면
+                    roomHashtag = RoomHashtag.builder()
+                            .nm(hashtag)
+                            .cnt(0L)
+                            .build();
+                }
+                roomHashtag = hashtagRepository.save(roomHashtag);
+                hashtagNms[i] = hashtag;
+                hashtagIds[i] = roomHashtag.getId();
+            }
+        }
+
+        // room_info
         RoomInfo roomInfo = RoomInfo.builder()
                 .pwd(roomOpenReq.getPwd())
                 .hostId(Long.parseLong(sessionID))
                 .maxNum(roomOpenReq.getMax_num())
                 .build();
         roomInfo = roomInfoRepository.save(roomInfo);
-
+        // room_panel
         RoomPanel roomPanel = RoomPanel.builder()
                 .id(roomInfo.getId())
                 .build();
+        roomPanelRepository.save(roomPanel);
+        // room_description
         RoomDescription roomDescription = RoomDescription.builder()
                 .id(roomInfo.getId())
                 .title(roomOpenReq.getTitle())
                 .subtitle(roomOpenReq.getSubtitle())
                 .cate(roomOpenReq.getCate())
+                .hash1(hashtagIds[0]).hash2(hashtagIds[1]).hash3(hashtagIds[2])
                 .build();
-        roomPanelRepository.save(roomPanel);
         roomDescriptionRepository.save(roomDescription);
-        // 해시태그 검색
-        // TODO StringTokenizer("#") 사용
 
         // 서버에 저장
         RoomInfoDto roomInfoDto = RoomInfoDto.builder()
@@ -109,10 +134,11 @@ public class RoomServiceImpl implements RoomService {
                 .maxNum(roomInfo.getMaxNum()).curNum(roomInfo.getCurNum())
                 .startTime(roomInfo.getStartTime())
                 .cate(roomOpenReq.getCate())
+                .hash1(hashtagNms[0]).hash2(hashtagNms[1]).hash3(hashtagNms[2])
                 .title(roomOpenReq.getTitle()).subtitle(roomOpenReq.getSubtitle())
                 .build();
-        VRoom vRoom = VRoom.builder().session(session)
-                .mapConnections(new ConcurrentHashMap<>()).mapParticipants(new ConcurrentHashMap<>())
+        VRoom vRoom = VRoom.builder().session(session).VSession(null)
+                .mapParticipants(new ConcurrentHashMap<>())
                 .roomInfoDto(roomInfoDto)
                 .agree(new VUserInfo[roomOpenReq.getMax_num()]).disagree(new VUserInfo[roomOpenReq.getMax_num()])
                 .build();
@@ -126,7 +152,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public boolean isExistSession(String sessionID) {
-        return this.mapSessions.containsKey(sessionID);
+        return this.mapRooms.get(sessionID).getVSession() != null;
     }
 
     @Override
@@ -138,7 +164,6 @@ public class RoomServiceImpl implements RoomService {
     public void deleteRoom(String sessionID) throws OpenViduJavaClientException, OpenViduHttpException {
         this.mapRooms.get(sessionID).getSession().close();
         this.mapRooms.remove(sessionID);
-        this.mapSessions.remove(sessionID);
     }
 
     @Override
@@ -168,7 +193,7 @@ public class RoomServiceImpl implements RoomService {
             connection = session.createConnection(connectionProperties);
 
             // 방 정보에 connection 추가
-            vRoom.getMapConnections().put(userInfoDto.getId(), connection);
+            vRoom.getMapParticipants().get(userInfoDto.getId()).setConnectionDto(new ConnectionDto(connection));
 
             // 방 정보에 UserInfo 추가
             VUserInfo vUserInfo = VUserInfo.builder()
@@ -179,7 +204,6 @@ public class RoomServiceImpl implements RoomService {
             return connection.getToken();
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             // 롤백
-            vRoom.getMapConnections().remove(userInfoDto.getId());
             vRoom.getMapParticipants().remove(userInfoDto.getId());
             throw new RuntimeException(e);
         }
@@ -195,8 +219,8 @@ public class RoomServiceImpl implements RoomService {
         ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC)
                 .role(OpenViduRole.PUBLISHER).build();
         Connection connection;
-        Map<String, Connection> mapAgree = new ConcurrentHashMap<>();
-        Map<String, Connection> mapDisagree = new ConcurrentHashMap<>();
+        Map<String, ConnectionDto> mapAgree = new ConcurrentHashMap<>();
+        Map<String, ConnectionDto> mapDisagree = new ConcurrentHashMap<>();
 
         // 찬성 세션 생성 및 토큰 생성
         try {
@@ -205,7 +229,7 @@ public class RoomServiceImpl implements RoomService {
             for (VUserInfo VUserInfo : vRoom.getAgree()) {
                 if (VUserInfo == null) continue;
                 connection = sessionAgree.createConnection(connectionProperties);
-                mapAgree.put(VUserInfo.getId(), connection);
+                mapAgree.put(VUserInfo.getId(), new ConnectionDto(connection));
             }
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             throw new RuntimeException(e);
@@ -217,7 +241,7 @@ public class RoomServiceImpl implements RoomService {
             for (VUserInfo VUserInfo : vRoom.getDisagree()) {
                 if (VUserInfo == null) continue;
                 connection = sessionDisagree.createConnection(connectionProperties);
-                mapDisagree.put(VUserInfo.getId(), connection);
+                mapDisagree.put(VUserInfo.getId(), new ConnectionDto(connection));
             }
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             // 생성된 찬성 세부세션 롤백
@@ -231,7 +255,7 @@ public class RoomServiceImpl implements RoomService {
                 .sessionAgree(sessionAgree).sessionDisagree(sessionDisagree)
                 .mapAgree(mapAgree).mapDisagree(mapDisagree)
                 .build();
-        mapSessions.put(sessionID, vSession);
+        mapRooms.get(sessionID).setVSession(vSession);
 
         // 각 유저별로 토큰을 반환하기 위한 객체 생성
         Map<String, Map<String, String>> mapTokens = new ConcurrentHashMap<>();
@@ -255,11 +279,11 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void deleteSession(String sessionID) throws OpenViduJavaClientException, OpenViduHttpException {
         // 세션 종료
-        this.mapSessions.get(sessionID).getSessionAgree().close();
-        this.mapSessions.get(sessionID).getSessionDisagree().close();
+        this.mapRooms.get(sessionID).getVSession().getSessionAgree().close();
+        this.mapRooms.get(sessionID).getVSession().getSessionDisagree().close();
 
         // 세션 정보 삭제
-        this.mapSessions.remove(sessionID);
+        this.mapRooms.get(sessionID).setVSession(null);
     }
 
     @Override
@@ -279,9 +303,7 @@ public class RoomServiceImpl implements RoomService {
         else return "400";
 
         // 참여할 수 있으면
-        System.out.println("In checkPos : Length = " + VUserInfos.length);
         for (int i = 0; i < max; i++) {
-            System.out.println("In checkPos : " + VUserInfos[i]);
             if (VUserInfos[i] == null) {
                 VUserInfos[i] = isSelect ? vRoom.getMapParticipants().get(AToken) : null;
                 return "Success";
@@ -294,13 +316,11 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Map<String, String> getAgreeConnections(String sessionID) {
         VRoom vRoom = this.mapRooms.get(sessionID);
-        for (String key : vRoom.getMapConnections().keySet()) System.out.println(key);
         Map<String, String> connections = new ConcurrentHashMap<>();
         for (VUserInfo VUserInfo : vRoom.getAgree()) {
-            System.out.println(VUserInfo);
-            if (vRoom.getMapConnections().containsKey(VUserInfo.getId())) {
-                Connection conn = vRoom.getMapConnections().get(VUserInfo.getId());
-                connections.put(VUserInfo.getId(), conn.getConnectionId());
+            if (vRoom.getMapParticipants().containsKey(VUserInfo.getId())) {
+                ConnectionDto vConn = vRoom.getMapParticipants().get(VUserInfo.getId()).getConnectionDto();
+                connections.put(VUserInfo.getId(), vConn.getConnectionId());
             }
         }
 
@@ -312,9 +332,9 @@ public class RoomServiceImpl implements RoomService {
         VRoom vRoom = this.mapRooms.get(sessionID);
         Map<String, String> connections = new ConcurrentHashMap<>();
         for (VUserInfo VUserInfo : vRoom.getDisagree()) {
-            if (vRoom.getMapConnections().containsKey(VUserInfo.getEm())) {
-                Connection conn = vRoom.getMapConnections().get(VUserInfo.getEm());
-                connections.put(VUserInfo.getEm(), conn.getConnectionId());
+            if (vRoom.getMapParticipants().containsKey(VUserInfo.getId())) {
+                ConnectionDto vConn = vRoom.getMapParticipants().get(VUserInfo.getId()).getConnectionDto();
+                connections.put(VUserInfo.getId(), vConn.getConnectionId());
             }
         }
 
@@ -416,8 +436,6 @@ public class RoomServiceImpl implements RoomService {
     public Map<String, String> finishRoom(String userID) {
         // 해당 유저가 만든 토론방의 VRoom 객체
         VRoom vRoom = this.mapRooms.get(userID);
-
-        this.mapSessions.remove(userID);  // 세부세션 제거
 
         // DB에 저장
         try {
@@ -526,29 +544,41 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public int findHashtagId(String nm) {
-        hashtagRepository.findHashtagByNm(nm);
+    public void syncServer() throws OpenViduJavaClientException, OpenViduHttpException {
+        // openVidu 서버 최신화
+        this.openVidu.fetch();
 
-        Optional<RoomHashtag> hash = hashtagRepository.findHashtagByNm(nm);
-        if (hash.isPresent()) { //이미 존재 한다면
-            RoomHashtag roomHashtag = hash.get();
-            roomHashtag.setCnt(roomHashtag.getCnt() + 1);
-            hashtagRepository.save(roomHashtag);
-            return roomHashtag.getId();
+        List<Session> sessionList = this.openVidu.getActiveSessions();
+        Map<String, Session> activeSessions = new ConcurrentHashMap<>();
+        for (Session session : sessionList) {
+            activeSessions.put(session.getSessionId(), session);
         }
-        //존재하지 않던 해시태그라면
-        RoomHashtag roomHashtag = RoomHashtag.builder()
-                .nm(nm)
-                .cnt(0L)
-                .build();
-        hashtagRepository.save(roomHashtag);
 
-        return findHashtagId(roomHashtag.getNm());
-    }
+        for (String key : this.mapRooms.keySet()) {
+            if (!activeSessions.containsKey(key)) {
+                this.mapRooms.remove(key);
+            } else {
+                VRoom vRoom = mapRooms.get(key);
 
-    @Override
-    public void syncServer() {
+                // DB 저장
+                RoomInfo roomInfo = roomInfoRepository.findRoomInfoById(vRoom.getRoomInfoDto().getId()).get();
+                roomInfo.setCurNum(vRoom.getRoomInfoDto().getCurNum());
+                roomInfo.setPhase(vRoom.getRoomInfoDto().getPhase());
+                roomInfoRepository.save(roomInfo);
 
+                vRoom.setSession(activeSessions.get(key));  // 세션 정보 갱신
+                List<Connection> connectionList = activeSessions.get(key).getActiveConnections();
+                for (Connection conn : connectionList) {
+                    for (String id : vRoom.getMapParticipants().keySet()) {
+                        if (vRoom.getMapParticipants().get(id).getConnectionDto().getConnectionId().equals(conn.getConnectionId())) {
+                            // Connection 정보 갱신
+                            vRoom.getMapParticipants().get(id).setConnectionDto(new ConnectionDto(conn));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -560,6 +590,5 @@ public class RoomServiceImpl implements RoomService {
 
         // 정보 초기화
         mapRooms.clear();
-        mapSessions.clear();
     }
 }
