@@ -197,12 +197,9 @@ created () {
 
 .my-page-info-space {
   /* background-color: pink; */
-  height: 94vh;
+  height: calc(94vh - 8px);
   width: var(--info-space);
   box-shadow: 6px -1px 5px -1px #e0e0e09e;
-}
-.my-page-inner-wrap {
-  /* width: 70%; */
 }
 .justifyEnd {
   display: flex;
@@ -219,7 +216,7 @@ created () {
   border-width: 0px 0px 0px 1px ;
   border-style: solid;
   border-color:rgba(219, 219, 219, 0.63);
-  height: 94vh;
+  height: calc(94vh - 8px);
 }
 .my-page-btn {
   width: 130px;

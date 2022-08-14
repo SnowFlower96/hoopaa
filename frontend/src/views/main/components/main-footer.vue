@@ -19,6 +19,7 @@
     text-align: center;
     font-size: small;
      background-color: white;
+     z-index: 250 !important;
   }
 }
 /* 반응형 - 모바일 화면 */
@@ -33,6 +34,7 @@
     line-height: 50px;
     text-align: center;
     background-color: white;
+    z-index: 250 !important;
   }
 
 }
