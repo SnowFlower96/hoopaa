@@ -48,4 +48,6 @@ public interface RoomService {
 
     void initServer() throws OpenViduJavaClientException, OpenViduHttpException;
 
+    String saveImage(String fileBase64, String roomName);
+
 }

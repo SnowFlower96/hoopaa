@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -106,10 +110,13 @@ public class RoomServiceImpl implements RoomService {
         }
 
         // room_info
+        User user = userRepository.findUserById(Long.parseLong(sessionID)).get();
+        String thumbUrl = saveImage(roomOpenReq.getFile(), roomOpenReq.getSubtitle());
         RoomInfo roomInfo = RoomInfo.builder()
                 .pwd(roomOpenReq.getPwd())
-                .hostId(Long.parseLong(sessionID))
+                .userHost(user)
                 .maxNum(roomOpenReq.getMax_num())
+                .thumbUrl(thumbUrl)
                 .build();
         roomInfo = roomInfoRepository.save(roomInfo);
         // room_panel
@@ -591,4 +598,26 @@ public class RoomServiceImpl implements RoomService {
         // 정보 초기화
         mapRooms.clear();
     }
+
+    @Override
+    public String saveImage(String fileBase64, String roomName) {
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            Date now = new Date();
+            UUID uuid = UUID.randomUUID();
+            String date = sdf.format(now);
+            String fileName = uuid+"_"+date;
+            File file = new File(/**/"C:/Users/multicampus/Desktop/workspace/S07P12B302/thumbnail/"+fileName+".jpg");
+            Base64.Decoder decoder = Base64.getDecoder();
+            byte[] decodeBytes = decoder.decode(fileBase64.getBytes());
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(decodeBytes);
+            fileOutputStream.close();
+            return fileName+".jpg";
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
