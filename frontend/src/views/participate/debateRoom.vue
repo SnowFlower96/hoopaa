@@ -632,7 +632,13 @@ export default {
       // On every Stream destroyed...
       // TODO
       this.session.on("streamDestroyed", ({ stream }) => {
-        const index = this.subscribers.indexOf(stream.streamManager, 0);
+        const index = this.agree.indexOf(stream.streamManager, 0);
+        if (index >= 0) {
+          this.subscribers.splice(index, 1);
+        }
+      });
+      this.session.on("streamDestroyed", ({ stream }) => {
+        const index = this.disagree.indexOf(stream.streamManager, 0);
         if (index >= 0) {
           this.subscribers.splice(index, 1);
         }
@@ -758,6 +764,13 @@ export default {
           }
 					console.log(this.subscribersScreen.length + "!!!!!!!!!!!!!!!!")
 			});
+
+       this.sessionScreen.on("streamDestroyed", ({ stream }) => {
+        const index = this.subscriberScreen.indexOf(stream.streamManager, 0);
+        if (index >= 0) {
+          this.subscribers.splice(index, 1);
+        }
+      });
 
 			await this.getToken(this.session.sessionId).then(tokenScreen => {
 				this.sessionScreen.connect(tokenScreen, { clientData: this.user.id })
