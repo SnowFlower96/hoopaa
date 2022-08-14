@@ -315,7 +315,7 @@ export default new Vuex.Store({
     return new Promise ((resolve, reject) => {
     api({
       headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
-      url : '/room/connections/disagree?sessionId=' + sessionId ,
+      url : '/room/connections/disagree?sessionID=' + sessionId ,
       method : "GET",
     }).then((res) => {
       resolve(res);
@@ -325,6 +325,15 @@ export default new Vuex.Store({
     })
   })
   },
-
+  setPosition({commit}, index) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : index,
+      method : "POST",
+    }).then((res) => {
+      console.log(res.data)
+      // commit();
+    })
+  }
 }
 })

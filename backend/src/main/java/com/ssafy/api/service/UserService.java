@@ -1,7 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.UserRegisterPostReq;
-import com.ssafy.common.data.UserDupl;
+import com.ssafy.db.dto.UserDupl;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.dto.UserStatDto;
@@ -13,6 +13,9 @@ import java.util.List;
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 인터페이스 정의.
  */
 public interface UserService {
+
+	boolean isUser(String AToken);
+
 	// Create
 	UserDupl createUser(UserRegisterPostReq userRegisterInfo);
 	// Read

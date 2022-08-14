@@ -1,4 +1,4 @@
-package com.ssafy.common.data;
+package com.ssafy.db.dto;
 
 import lombok.Data;
 import lombok.ToString;

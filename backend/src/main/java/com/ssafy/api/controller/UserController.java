@@ -5,7 +5,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.api.response.*;
-import com.ssafy.common.data.UserDupl;
+import com.ssafy.db.dto.UserDupl;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.dto.UserStatDto;

@@ -19,14 +19,16 @@ public class RoomInfoRepositorySupport {
     QRoomInfo qRoomInfo = QRoomInfo.roomInfo;
 
     public List<RoomInfo> findAll(){
-        List<RoomInfo> roomInfo= jpaQueryFactory.selectFrom(qRoomInfo).where(qRoomInfo.phase.in(0,1))
+        List<RoomInfo> roomInfo= jpaQueryFactory.selectFrom(qRoomInfo)
+                .where(qRoomInfo.phase.in(0, 1))
                 .orderBy(qRoomInfo.curNum.desc()).fetch();
        return roomInfo;
     }
 
     public List<RoomInfo> searchBy (String keyword){
         List<RoomInfo> searchBy = jpaQueryFactory.selectFrom(qRoomInfo)
-                .where((qRoomInfo.subtitle.like("%"+keyword+"%").or(qRoomInfo.title.like("%"+keyword+"%")))
+                .where((qRoomInfo.roomDescription.subtitle.like("%"+keyword+"%")
+                        .or(qRoomInfo.roomDescription.title.like("%"+keyword+"%")))
                         .and(qRoomInfo.phase.in(0,1)))
                 .orderBy(qRoomInfo.curNum.desc()).fetch();
         return searchBy;
@@ -34,7 +36,8 @@ public class RoomInfoRepositorySupport {
 
     public List<RoomInfo> findByCate(int cate){
         List<RoomInfo> findByCate=jpaQueryFactory.selectFrom(qRoomInfo)
-                .where(qRoomInfo.cate.eq(cate).and(qRoomInfo.phase.in(0,1)))
+                .where(qRoomInfo.roomDescription.cate.eq(cate)
+                        .and(qRoomInfo.phase.in(0,1)))
                 .orderBy(qRoomInfo.curNum.desc()).fetch();
         return findByCate;
     }
