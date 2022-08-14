@@ -6,48 +6,56 @@
     "children" : []
   },
   "1" : {
+    "idx" : 1,
     "name" : "유머",
     "hidden" : false,
     "path" : "/list/1",
     "children" : []
   },
   "2" : {
+    "idx" : 2,
     "name" : "정치",
     "hidden" : false,
     "path" : "/list/2",
     "children" : []
   },
   "3" : {
+    "idx" : 3,
     "name" : "경제",
     "hidden" : false,
     "path" : "/list/3",
     "children" : []
   },
   "4" : {
+    "idx" : 4,
     "name" : "사회",
     "hidden" : false,
     "path" : "/list/4",
     "children" : []
   },
   "5" : {
+    "idx" : 5,
     "name" : "문화",
     "hidden" : false,
     "path" : "/list/5",
     "children" : []
   },
   "6" : {
+    "idx" : 6,
     "name" : "교육",
     "hidden" : false,
     "path" : "/list/6",
     "children" : []
   },
   "7" : {
+    "idx" : 7,
     "name" : "과학",
     "hidden" : false,
     "path" : "/list/7",
     "children" : []
   },
   "8" : {
+    "idx" : 8,
     "name" : "스포츠",
     "hidden" : false,
     "path" : "/list/8",
