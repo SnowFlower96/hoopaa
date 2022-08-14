@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .httpBasic().disable()
+                .cors().and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 하지않음
                 .and()
@@ -62,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 인증이 필요하지 않은 URL
                 .antMatchers("/api/v1/users/register","/api/v1/users/temp/**","/api/v1/users/login", "/api/v1/users/certification/**",
-                        "/api/v1/room/connections/**", "/api/v1/sync/**").permitAll()
+                        "/api/v1/room/connections/**", "/api/v1/sync/**", "/api/v1/list/**").permitAll()
     	        	    .anyRequest().authenticated()
                 .and().cors();
     }
