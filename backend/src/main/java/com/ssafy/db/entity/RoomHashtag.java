@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class RoomHashtag {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
     String nm;
