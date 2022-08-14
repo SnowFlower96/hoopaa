@@ -183,7 +183,11 @@
                                     <div class="vsi-wrap">
                                         <!-- <div class="videobox-side-inner" :style="customCaroselStyle"></div> -->
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
-                                        <debate-room-video v-for="(item, index) in agree" :key="index" :stream="item.data"></debate-room-video>
+                                        <!-- <debate-room-video v-for="(item, index) in agree" :key="index" :stream="item.data" class="debate-room-side-vido"></debate-room-video> -->
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
                                     </div>
                                 </div>
                               <!-- 토론방 왼쪽 -->
@@ -228,7 +232,11 @@
                                     <div class="vsi-blank"></div>
                                     <div class="vsi-wrap">
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
-                                        <debate-room-video v-for="(item, index) in disagree" :key="index" :stream="item.data"></debate-room-video>
+                                        <!-- <debate-room-video v-for="(item, index) in disagree" :key="index" :stream="item.data" class="debate-room-side-vido"></debate-room-video> -->
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
                                     </div>
                                 </div>
                               <!-- 토론방 오른쪽 -->
@@ -861,7 +869,7 @@ export default {
 
         handleResizeHome() {  // 화면 움직일때 조정 다시함
             if (this.chattTF === true) {    // 채팅창 열려있을때
-                // 화면 기본 사이즈 받아옴
+               // 화면 기본 사이즈 받아옴 => 채팅창 있는 화면 로드됨
                 const wValue = document.body.clientWidth
                 const wValue075 = document.body.clientWidth*0.75
                 const hValue = document.body.clientHeight
@@ -889,6 +897,7 @@ export default {
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -902,6 +911,7 @@ export default {
                 this.voteModalWidth = `${wValue075}px`
 
                 this.allHeartLeft= `${document.body.clientWidth*0.5}px`
+
             }
             else {     // 채팅창 닫혀있을때
                 const wValue = document.body.clientWidth
@@ -931,6 +941,7 @@ export default {
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -1130,7 +1141,7 @@ export default {
         changeChatView() {
             this.chattTF = !this.chattTF
             if (this.chattTF === true) {    // 채팅창 열려있을때
-                // 화면 기본 사이즈 받아옴
+               // 화면 기본 사이즈 받아옴 => 채팅창 있는 화면 로드됨
                 const wValue = document.body.clientWidth
                 const wValue075 = document.body.clientWidth*0.75
                 const hValue = document.body.clientHeight
@@ -1152,12 +1163,13 @@ export default {
                 this.dtcHeight = `${debateTimer*0.1}px`
 
                 // 토론방 화면공유 (.share-view)
-                // this.shareViewH = `${debateTimer*0.6-20}px`
-                // this.shareViewW = `${wValue075*0.4-40}px`
+                this.shareViewH = `${debateTimer*0.6-20}px`
+                this.shareViewW = `${wValue075*0.4-40}px`
 
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -1171,6 +1183,7 @@ export default {
                 this.voteModalWidth = `${wValue075}px`
 
                 this.allHeartLeft= `${document.body.clientWidth*0.5}px`
+
             }
             else {     // 채팅창 닫혀있을때
                 const wValue = document.body.clientWidth
@@ -1194,12 +1207,13 @@ export default {
                 this.dtcHeight = `${debateTimer*0.1}px`
 
                 // 토론방 화면공유 (.share-view)
-                // this.shareViewH = `${debateTimer*0.6-20}px`
-                // this.shareViewW = `${wValue075*0.4-40}px`
+                this.shareViewH = `${debateTimer*0.6-20}px`
+                this.shareViewW = `${wValue075*0.4-40}px`
 
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -1710,9 +1724,9 @@ export default {
     height: var(--vsi-blank);
 }
 .vsi-wrap {
-    height: 100%;
+    height: calc(100% - var(--vsi-blank));
     width: 100%;
-    background-color: rgb(61, 255, 94);
+    /* background-color: rgb(61, 255, 94); */
     overflow: auto;
 }
 .videobox-side-inner {
@@ -1723,8 +1737,12 @@ export default {
 }
 .vsi-wrap::-webkit-scrollbar{width: 4px;}
 .vsi-wrap::-webkit-scrollbar-thumb {
-  background-color: rgba(39, 39, 39, 0.712);
+  background-color: rgba(102, 102, 102, 0.853);
     border-radius: 5px;
+}
+.debate-room-side-vido {
+  margin-top:10px;
+  margin-bottom: 10px;
 }
 .videobox-center {
   height: var(--debate-box-center-height);
@@ -1741,15 +1759,19 @@ export default {
 .moderator-video-inner {
   height: var(--center-video-height);
   width: var(--center-video-width);
-  background-color: aquamarine;
+  /* background-color: aquamarine; */
 }
 
 .debateroom-center-timer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
   /* background-color: rgb(119, 0, 255); */
-  height: var(--dct-height);
+  height: calc(var(--dct-height) + 10px);
 }
 .share-view-wrap {
-    height: calc(var(--share-view-height) + 40px);
+    /* background-color: aquamarine; */
+    height: calc(var(--share-view-height) + 20px);
     display: flex;
     justify-content: center;
     align-items: center;

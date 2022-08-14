@@ -1,10 +1,5 @@
 <template>
-    <!-- <div class="debate-center-wrap" >
-        <div class="debate-moderator" :style="customViewStyle"><div class="debate-moderator-inner" :style="customViewStyle">
-            <user-video class="moderatorVideo" :stream-manager="room.host"/>
-
-        </div>
-    </div> -->
+<!-- 타이머 컴포넌트 -->
     <div class="debate-guague" :style="customViewStyle">
         <div class="debate-guague-inner" :style="customViewStyle">
             <span style="font-size: 25px;" v-if="!timeList[1]">반대팀</span>
@@ -13,8 +8,7 @@
             <div class="st-tim-btn" v-if="moderator" @click="startTimer">시작</div>
         </div>
     </div>
-    <!-- <div class="debate-content" :style="customViewStyle"><div class="debate-content-inner" :style="customViewStyle"></div></div>
-    </div> -->
+<!-- 타이머 컴포넌트 -->
 </template>
 
 <script>
@@ -199,9 +193,6 @@ export default {
 .debate-guague {
     /* height: var(--db-gg); */
     /* background-color: rgb(255, 255, 24); */
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
 }
 .debate-guague-inner {
     /* background-color: rgb(23, 139, 32); */
