@@ -3,16 +3,26 @@
 <div  class="animation-role-background" v-if="animationBG" :style="customCaroselStyle">
     <start-letter id="arb" v-if="startEvent"></start-letter>
     <heart-hund :props-heart="propsHeart" id="arb" v-if="heartHund"></heart-hund>
-    <rest-time-event v-if="restEvent"></rest-time-event>
 </div>
 <!-- 토론진행중 애니메이션 구성 -->
+<!-- 쉬는시간 모달 -->
+<div class="vote-modal-container displayFlex" v-if="restModal" :style="customCaroselStyle">
+    <div>
+      <div class="rest-timer displayFlex">
+          <p id="restTimerDemo">0분0초</p>
+      </div>
+      <div class="rest-animation">
+          <rest-time-event v-if="restEvent"></rest-time-event>
+      </div>
+    </div>
+</div>
+<!-- 쉬는시간 모달 -->
 
 
 
 <!-- 곧 없어질 버튼 -->
 <div class="animation-control-btns">
     <button @click="animation('startEvent')">시작 이벤트</button>
-    <button @click="animation('restEvent')" >쉬는시간일때</button>
 </div>
 <!-- 곧 없어질 버튼 -->
 
@@ -32,21 +42,8 @@
 <!-- 뷰바꾸는 임시버튼 -->
 
 
-
-    <!-- 쉬는시간 모달 -->
-    <div class="vote-modal-container" v-if="restModal" :style="customCaroselStyle">
-        <div class="rest-timer">
-            <p id="restTimerDemo">0분0초</p>
-        </div>
-        <div class="rest-animation">
-            여기 애니메이션 들어갈곳
-        </div>
-    </div>
-    <!-- 쉬는시간 모달 -->
-
-
     <!-- 투표 받는 창 -->
-    <div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">
+    <div class="vote-modal-container displayFlex" v-if="voteViewTF" :style="customCaroselStyle">
         <div>
             <div class="vote-view">
                 <div class="vote-view-inner">
@@ -974,13 +971,6 @@ export default {
                 this.heartHund = !this.heartHund
                 this.restEvent = false
             }
-            else if (option === 'restEvent') {
-                this.startEvent = false
-                this.heartTen = false
-                this.heartfift = false
-                this.heartHund = false
-                this.restEvent = !this.restEvent
-            }
         },
         messageFromTeam() {
             this.callToMdModal = !this.callToMdModal
@@ -992,6 +982,7 @@ export default {
             this.rest = false
         },
         EmitRest(timeRest) {
+          console.log(timeRest)
             this.restModal = true
             this.callToMdModal = false
 
@@ -1004,12 +995,18 @@ export default {
 
             document.getElementById("restTimerDemo").innerHTML = min + "분" + sec + "초";
             time--;
-
-            if (time < 0) {
-                clearInterval(z);
-                this.restModal = false
-            }
-            }, 1000);
+            console.log('네')
+            // if (time < 0) {
+            //     clearInterval(z);
+            // }
+        }, 1000);
+        setTimeout(() => {
+          this.rest = false
+          this.animationBG = false
+          this.restEvent = false
+          this.restModal = false
+          clearInterval(z);
+        }, (timeRest*1000) + 2000)
 
         },
         EmitTime(Array) {
@@ -1318,12 +1315,18 @@ export default {
                 this.messageFrom = false
             }
             else if (option == 'rest') {
+                this.animationBG = !this.animationBG
                 this.menu = false
                 this.out = false
                 this.message = false
                 this.file = false
                 this.rest = true
                 this.messageFrom = false
+                this.startEvent = false
+                this.heartTen = false
+                this.heartfift = false
+                this.heartHund = false
+                this.restEvent = !this.restEvent
             }
         },
         leaveSession() {
@@ -1545,10 +1548,7 @@ export default {
     position: absolute;
     height: 93vh;
     width: var(--vote-modal-width);
-    background-color: rgba(255, 255, 255, 0.295);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: rgba(54, 54, 54, 0.699);
 }
 .moderator-menus {
     color: white;
@@ -1781,5 +1781,12 @@ export default {
   width: var(--share-view-width);
   background-color: rgb(56, 56, 56);
   border-radius: 10px;
+}
+.rest-timer > p{
+  position: absolute;
+  left: 43%;
+  top: 5%;
+  color: white;
+  font-size: 30px;
 }
 </style>

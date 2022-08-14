@@ -2,6 +2,7 @@
 <div class="rest-sign-bg">
     <img :src="require(`@/assets/images/restTimeEventFront.png`)" style="position: absolute;width:900px; z-index: 25;" class="text-pop-up-top ">
     <h1 style="position: absolute; z-index: 13;" class="rsb-h1"><span class="rsb-span">rest</span>  <span class="rsb-span">time</span></h1>
+    <h1 style="position: absolute; z-index: 13;" class="rsb-h1"><span class="rsb-span">rest</span>  <span class="rsb-span">time</span></h1>
     <img :src="require(`@/assets/images/restTimeEvent.png`)" style="width:900px; z-index: 3;" class="text-pop-up-top ">
 </div>
 </template>
