@@ -9,20 +9,36 @@
         </div>
     </div>
 
+    <div class="mvp-view displayFlex" v-if="mvpView">
+        <div class="mvp-box">
+            <p style="font-size: 40px; color:white;" class="displayFlex">👑 이번 토론의 MVP 👑</p>
+            <div class="displayFlex">
+                <div class="mvp-menber-box displayFlex">
+                    <p style="color:white; font-size: 40px; margin:15px;">김현주</p>
+                    <p style="color:white; font-size: 40px; margin:15px;">김현주</p>
+                </div>
+            </div>
+            <div class="displayFlex">
+                <router-link to="/"><div class="mvp-btn">홈으로</div></router-link>
+            </div>
+        </div>
+    </div>
     <div id="resultWrap" class="graphWrap">
-        <p style="font-size: 100px; margin:0px;">결과</p>
+        <p class="result-title">토론 결과</p>
         
         <div id="barChart" class="barChart">
             <div id="chartValue">{{initial}}</div>
-            <div>agree</div>
         </div>
+        <div class="barChart-t1">찬성</div>
         <div id="barChart2" class="barChart2">
             <div id="chartValue2">{{initial}}</div>
         </div>
+        <div class="barChart-t2">반대</div>
     </div>
 </template>
 
 <script>
+
 export default {
     data() {
         return {
@@ -30,10 +46,10 @@ export default {
             // 받아온 데이터 넣을 예정
             agree: 35,
             disagree: 25,
+            mvpView: false
         }
     },
     mounted() {
-        
     },
     methods: {
         resultBtn() {
@@ -45,6 +61,9 @@ export default {
 
             document.getElementById("barChart2").style.height = this.disagree*17 + "px";
             document.getElementById("chartValue2").innerText = Math.round(this.disagree);
+            setTimeout(() => {
+                this.mvpView = true
+            }, 5000)
         }
     }
 }
@@ -107,8 +126,30 @@ export default {
         font-weight:bold; font-size:24px; color:#000000;
         filter:drop-shadow(0px 5px 3px rgba(0,0,0,0.25));
     }
-
-
+    .barChart-t1{
+        transform: translate(-29%, 0%);
+        width: 100px;
+        position: absolute;
+        left: 65%;
+        bottom:-95vh; 
+        font-size: 30px;
+    } 
+    .barChart-t2{
+        transform: translate(-27%, 0%);
+        width: 100px;
+        position: absolute;
+        left:  80%;
+        bottom:-95vh; 
+        font-size: 30px;
+    } 
+    
+    .result-title {
+        position: absolute;
+        font-size: 100px; 
+        margin:0px;
+        top: 125%;
+        left: 13%;
+    }
     .barChart2{
         position: absolute;
         left:80%; 
@@ -141,6 +182,13 @@ export default {
         filter:drop-shadow(0px 5px 3px rgba(0,0,0,0.25));
     }
 
+.mvp-view {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.452);
+    position: absolute;
+    z-index: 3;
+}
 
 .end-debate-background {
     height: 100vh;
@@ -173,5 +221,35 @@ export default {
     cursor: pointer;
     color: white;
     background-color: rgba(43, 43, 43, 0.781);
+}
+.mvp-box{
+    width: 600px;
+    height: 470px;
+    background: #000000a1;
+    border: 1px solid #8a8a8aaf;
+    border-radius: 20px;
+}
+.mvp-btn {
+    margin-top: 20px;
+    width: 150px;
+    height: 70px;
+    border-radius: 10px;
+    color: rgb(161, 161, 161);
+    border: rgb(161, 161, 161) 1px solid;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mvp-btn:hover {
+    border: rgb(255, 255, 255) 1px solid;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+.mvp-menber-box {
+    width: 400px;
+    height: 200px;
+    border-radius: 20px;
+    border: 1px solid #8a8a8aaf;
 }
 </style>

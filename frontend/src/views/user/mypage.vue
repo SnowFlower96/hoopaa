@@ -212,7 +212,7 @@ created () {
 }
 .my-page-info-space-inner {
   width: var(--info-space-inner);
-  /* background-color: aqua; */
+  background-color: whitesmoke;
   border-width: 0px 0px 0px 1px ;
   border-style: solid;
   border-color:rgba(219, 219, 219, 0.63);
@@ -240,6 +240,7 @@ created () {
   border-radius: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
+  box-shadow: 2px 2px 2px 2px rgb(187, 187, 187);
 }
 .my-stat-ele-closed{
   width: 100%;
@@ -251,6 +252,11 @@ created () {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  box-shadow: 1px 1px 1px 1px rgb(187, 187, 187);
+}
+.my-stat-ele-closed:hover {
+ background: linear-gradient(to bottom right, #2fad6a, #b276ff);
+ cursor: pointer;
 }
 .my-stat-ele-closed:hover {
   cursor: pointer;
@@ -270,6 +276,7 @@ created () {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  
 }
 
 .my-stat-ele-title{
