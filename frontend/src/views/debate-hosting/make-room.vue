@@ -7,12 +7,16 @@
           <div class="select-wrap">
             <div class="select-inner">
               <!-- 추가 -->
-              <div v-if="preview==''|| preview==null"><img class="thumbnail" @click="isSysStatus0" src="https://user-images.githubusercontent.com/87743473/182767796-d6da026b-e704-4870-828e-acfaa287a18d.png" alt=""></div>
+              <div v-if="preview==''|| preview==null" class="displayFlex">
+                <div>
+                  <div style="font-size: 30px;">썸네일 미리보기</div>
+                  <div style="margin: 10px;">썸네일을 넣어주세요</div>
+                </div>
+              </div>
               <div v-else><img :src="preview" img class="thumbnail"></div>
             </div>
           </div>
       <div class="select-status" v-if="isSys == '0'">👨‍⚖️사회자모드👩‍⚖️</div>
-      <div class="select-status" v-if="isSys == '1'">🤖시스템모드🤖</div>
 
           <div class="options-wrap">
             <div class="inner-wrap">
@@ -215,10 +219,7 @@ export default {
   font-size: 30px;
   margin: 20px;
 }
-.select-inner {
-  display: flex;
-  justify-content: center;
-}
+
 .select-deactivate {
   filter: brightness(40%);
   width: 180px;
@@ -278,6 +279,7 @@ export default {
   animation: select-status 1s ease-in-out;
   font-size: 30px;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 @keyframes select-status{
   0% {
@@ -387,13 +389,21 @@ export default {
 input:focus {
   outline:none
 }
-.thumbnail{
-  border: 2px solid #FFDB65;
-  width: 180px;
+.select-inner {
+  width: auto;
   height: 180px;
-  outline: 4px solid #FFDB65;
-  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  border: 2px solid #FFDB65;
+  outline: 2px solid #FFDB65;
+  margin-left: 10px;
+  margin-right: 10px;
   border-radius: 10px;
-  filter: brightness(100%);
+}
+.thumbnail{
+  margin: 0px !important;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 </style>
