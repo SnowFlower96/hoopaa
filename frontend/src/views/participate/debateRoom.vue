@@ -181,10 +181,7 @@
                                         <!-- <div class="videobox-side-inner" :style="customCaroselStyle"></div> -->
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
                                         <!-- <debate-room-video v-for="(item, index) in agree" :key="index" :stream="item.data" class="debate-room-side-vido"></debate-room-video> -->
-                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
-                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
-                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
-                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" v-for="(item, index) in agree" :key="index" :stream="item.data"></debate-room-video>
                                     </div>
                                 </div>
                               <!-- 토론방 왼쪽 -->
@@ -214,8 +211,8 @@
                                     <div class="share-view">
                                         <!-- 화면공유 여기에 넣으면 됨 -->
                                         <!-- <user-video :stream-manager="publisherScreen"></user-video> -->
-				                                <div v-for="(sub, index) in subscribersScreen" :key="index">
-					                                <user-video :stream-manager="sub" ></user-video>
+				                                <div v-for="(sub, index) in subscribersScreen" :key="index" >
+					                                <user-video :stream-manager="sub" v-if="sub"></user-video>
 				                                </div>
 
 
@@ -231,10 +228,7 @@
                                     <div class="vsi-wrap">
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
                                         <!-- <debate-room-video v-for="(item, index) in disagree" :key="index" :stream="item.data" class="debate-room-side-vido"></debate-room-video> -->
-                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
-                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
-                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
-                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" v-for="(item, index) in disagree" :key="index" :stream="item.data"></debate-room-video>
                                     </div>
                                 </div>
                               <!-- 토론방 오른쪽 -->
