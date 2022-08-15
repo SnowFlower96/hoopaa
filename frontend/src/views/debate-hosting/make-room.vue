@@ -48,12 +48,14 @@
               <div class="label-container "><p>주제 설정</p></div>
               <div class="input-container">
                 <div class="hash-combo">
-                  <select v-model="roomCate">
-                    <option v-for="(item, index) in menus" :key="index" :value="item.idx">{{item.name}}</option>
+                  <select v-model="selectedMenu">
+                    <option v-for="(item, index) in menus" :key="index" :value="item">{{item.name}}</option>
                   </select>
                 </div>
                 <div class="hash-wrap-inner">
-                  <div class="hash"><input class="hash" v-model="hashTags" type="text" placeholder="#태그1태그2#태그3"></div>
+                  <div class="hash"><input class="hash" v-model="hashTag1" type="text" placeholder="해쉬태그1"></div>
+                  <div class="hash"><input class="hash hash-center" v-model="hashTag2" type="text" placeholder="해쉬태그2"></div>
+                  <div class="hash"><input class="hash hash-end" v-model="hashTag3" type="text" placeholder="해쉬태그3"></div>
                 </div>
               </div>
             </div>
@@ -98,9 +100,12 @@ export default {
       meuns : '',
       roomTitle : '',
       roomCate : '',
-      hashTags : '',
-      maxNum : '',
+      hashTag1 : '',
+      hashTag2 : '',
+      hashTag3 : '',
+      maxNum : '1',
       isSys : '0',
+      selectedMenu: null,
       file : '',
       preview : ''
     }
@@ -110,8 +115,8 @@ export default {
   },
   created() {
     this.menus = this.menuData;
-    this.host = this.$store.state.userStat.em;
-    this.myUserName = this.$store.state.userStat.nnm;
+    this.host = this.$store.state.user.em;
+    this.myUserName = this.$store.state.user.nnm;
   },
   methods : {
      dropdownSortBtnTF() {
@@ -124,15 +129,14 @@ export default {
     async makeRoom() {
       var room = {
         cate : this.roomCate,
-        hashtags : this.hashTags,
-        host_em : this.user.em,
-        is_sys : this.isSys,
+        hashtags : '#' + this.hashTag1 + '#' + this.hashTag2 + '#' + this.hashTag3,
         max_num : this.maxNum,
         pwd : this.roomPwd,
         subtitle : this.roomName,
         title : this.roomTitle,
-        file: this.file,
+        thumbnail: this.file,
       }
+      console.log(room.hashtags)
         let data = {
           pwd : room["pwd"],
           sessionId : this.user.id,
@@ -147,45 +151,34 @@ export default {
     isSysStatus1() {
       this.isSys = '1'
     },
-    fileChange(e) {
-      const files = e.target.files;
-      if(files.length>0){
+     fileChange(e) {
+      console.log(e.target.files);
+      const file = e.target.files;
+      if(file.length!=0){
 
-        console.log(files[0].size);
+        console.log(file[0].size);
         let validation = true;
         let message = '';
 
-        if(files.length > 1){
+        if(file.length > 1){
           validation = false;
           message = `하나의 이미지 파일만 업로드 가능합니다.`;
         }
 
-        if(files[0].size > 1024 * 1024 * 3){
+        if(file[0].size > 1024 * 1024 * 3){
           validation = false;
           message = `3MB이하의 파일만 업로드 가능합니다.`;
         }
 
-        if(files[0].type.indexOf('image') < 0) {
+        if(file[0].type.indexOf('image') < 0) {
           validation = false;
           message = `이미지 파일만 업로드 가능합니다.`;
         }
 
         if(validation) {
-          const reader = new FileReader();
-          //reader가 이미지 로드할 시 이벤트
-          reader.addEventListener("load", ()=>{
-            const dataIndex = reader.result.indexOf(',')+1
-            const base64 = reader.result.substring(
-              dataIndex,
-              reader.result.length
-            )
-
-            this.file = base64
-            console.log("base64"+base64);
-          })
-          reader.readAsDataURL(files[0])
-          this.file = this.encodedFile;
-          this.preview = URL.createObjectURL(files[0])
+          this.file = file;
+          console.log("타입"+typeof(file));
+          this.preview = URL.createObjectURL(this.file[0])
         }else{
           this.file = '';
           alert(message);
@@ -383,7 +376,7 @@ export default {
   height: 100%;
 }
 .hash {
-  width: 100%;
+  width: 73px;
   height: 100%;
 }
 input:focus {
