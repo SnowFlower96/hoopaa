@@ -640,7 +640,7 @@ export default {
 
       // On every Stream destroyed...
       // TODO
-      this.session.on("streamDestroyed", ({ event: StreamEvent}) => {
+      this.session.on("streamDestroyed", ({stream}) => {
         console.log(this.agree)
         console.log(stream)
 
