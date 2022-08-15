@@ -641,21 +641,19 @@ export default {
       // On every Stream destroyed...
       // TODO
       this.session.on("streamDestroyed", ({stream}) => {
-        console.log(this.agree)
-        console.log(stream)
 
         for (var i = 0; i < this.agree.length; i++) {
-          let index = this.agree[i].data.indexOf(stream.streamManager, 0);
-          if (index >= 0) {
+          if (this.agree[i].data == stream.streamManager) {
           this.agree.splice(i, 1);
         }
         }
+
         for (var i = 0; i < this.disagree.length; i++) {
-          let index = this.disagree[i].data.indexOf(stream.streamManager, 0);
-          if (index >= 0) {
+          if (this.disagree[i].data == stream.streamManager) {
           this.disagree.splice(i, 1);
         }
         }
+
       });
       // on session destroyed...
       this.session.on("sessionDestroyed", () => {
@@ -790,9 +788,10 @@ export default {
 			});
 
        this.sessionScreen.on("streamDestroyed", ({ stream }) => {
-        const index = this.subscriberScreen.indexOf(stream.streamManager, 0);
-        if (index >= 0) {
-          this.subscribers.splice(index, 1);
+        for (let i = 0; i < this.subscribersScreen.length; i++) {
+          if (this.subscriberScreen[i] == stream.streamManager) {
+            this.subscriberScreen.splice(i, 1);
+          }
         }
       });
 
