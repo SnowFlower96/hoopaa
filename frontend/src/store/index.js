@@ -166,14 +166,14 @@ export default new Vuex.Store({
      },
 
      // User Info 수정
-      putUserStat({commit},data) {
+     changeInfo({commit}, data) {
       api({
         headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/info`,
         method : "PUT",
         data : data,
-      }).then((res) => {
-        commit("USER_INFO",res.data);
+      }).then(() => {
+        commit();
       })
      },
 
