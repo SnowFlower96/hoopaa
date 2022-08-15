@@ -134,7 +134,7 @@ export default {
         pwd : this.roomPwd,
         subtitle : this.roomName,
         title : this.roomTitle,
-        thumbnail: this.file,
+        file: this.file,
       }
       console.log(room.hashtags)
         let data = {

@@ -1,9 +1,9 @@
 <template>
 
     <div class="room-info" :style="{backgroundImage: 'url('+backurl+')'}">
-     <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
-     <p class="room-desc">
-      <span class="room-phase">{{phase[room.phase]}}</span><span>     </span><span class="room-cate">{{this.menus[room.cate].name}}</span></p>
+     <p class="room-phase-tip">{{phase[room.phase]}}</p>
+     <!-- <p class="room-desc">
+      <span class="room-phase">{{phase[room.phase]}}</span><span>     </span><span class="room-cate">{{this.menus[room.cate].name}}</span></p> -->
     <p class="room-title"> {{room.subtitle}}</P>
     </div>
 
