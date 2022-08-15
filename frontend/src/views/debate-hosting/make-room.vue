@@ -284,17 +284,9 @@ export default {
     transform: none;
   }
 }
-.make-room-outer-sys {
-  height: 100vh;
-  /* background-image: url(https://user-images.githubusercontent.com/87743473/182767796-d6da026b-e704-4870-828e-acfaa287a18d.png); */
-  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(https://user-images.githubusercontent.com/87743473/182761383-205f241e-0fad-4d7e-bf74-544966eb2570.png);
-  animation: outer-bg 1s ease-in-out;
-  background-size : cover;
-}
 .make-room-outer-mod {
   height: 100vh;
-  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(https://user-images.githubusercontent.com/87743473/182767796-d6da026b-e704-4870-828e-acfaa287a18d.png);
-  /* background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(https://user-images.githubusercontent.com/87743473/182761383-205f241e-0fad-4d7e-bf74-544966eb2570.png); */
+  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(../../assets/images/makeroombg.jpg);
   animation: outer-bg 1s ease-in-out;
   background-size : cover;
 
