@@ -48,8 +48,10 @@
                     <li  v-for="(room, index) in roomList" :key="index">
                     <div class="carosel-room-card" @click="gotoRoom">
                       <div class="room-info-carosel" :style="customCaroselStyle">
-                        <p class="room-phase-tip">{{phase[room.phase]}}</p>
-                        <p id="title-carosel">{{room.title}}</p>
+                        <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
+
+                        <room-card :room="room">
+                        </room-card>
                       </div>
                     </div>
                     </li>
@@ -235,7 +237,7 @@ ul {
   margin: 10px;
 }
 .room-info-carosel {
-  background-image: url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+
   height: var(--carosel-item-height);
   background-size:100% 100%;
   width: var(--carosel-item-width);
@@ -243,7 +245,7 @@ ul {
   border-radius: 10px;
 }
 .room-info-carosel:hover {
-  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+  /* background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg'); */
   cursor: pointer;
   /* filter: brightness(80%);
   transition: filter .3s; */
@@ -334,6 +336,7 @@ ul {
 <script >
 import Search from '@/views/common/search'
 import Conference from './components/conference'
+import RoomCard from './components/room-card'
 import 'vue3-carousel/dist/carousel.css';
 import { mapState , mapMutations} from "vuex";
 
@@ -343,6 +346,7 @@ export default {
 
   components: {
     Conference,
+     RoomCard,
     Search,
   },
   data () {
@@ -362,19 +366,11 @@ export default {
       //  - - - - - - 여기고침 - - - - - -  ⬇//
       // 0815 곧 지울
       // roomList : [
-      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
-      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
-      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-      //   {phase: 'hi01', title: 'dlrjwl', subtitle: 'no0101'},  
+      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'},
+      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'},
+      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},
       //   ],
+
       // // 0815 곧 지울
       viewCaroselLenghth : null
       //  - - - - - - 여기고침 - - - - - -  ⬆//
@@ -403,7 +399,7 @@ export default {
     else {
       this.viewCaroselLenghth = this.roomList.length - 4
     }
-    this.clickCaroselNext = setInterval(this.next, 1000)
+    this.clickCaroselNext = setInterval(this.next, 3000)
     const value = document.body.clientWidth*0.8*0.25
     this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
     this.caroselHeight = `${(value-20)*0.62}px`
