@@ -207,7 +207,7 @@ public class RoomServiceImpl implements RoomService {
                     .role(role).build();
             connection = session.createConnection(connectionProperties);
 
-            // 방 정보에 connection 추가
+            vRoom.getRoomInfoDto().setCurNum(vRoom.getRoomInfoDto().getCurNum() + 1);
 
             // 방 정보에 UserInfo 추가
             VUserInfo vUserInfo = VUserInfo.builder()
@@ -575,12 +575,6 @@ public class RoomServiceImpl implements RoomService {
             } else {
                 VRoom vRoom = mapRooms.get(key);
 
-                // DB 저장
-                RoomInfo roomInfo = roomInfoRepository.findRoomInfoById(vRoom.getRoomInfoDto().getId()).get();
-                roomInfo.setCurNum(vRoom.getRoomInfoDto().getCurNum());
-                roomInfo.setPhase(vRoom.getRoomInfoDto().getPhase());
-                roomInfoRepository.save(roomInfo);
-
                 vRoom.setSession(activeSessions.get(key));  // 세션 정보 갱신
                 List<Connection> connectionList = activeSessions.get(key).getActiveConnections();
                 for (Connection conn : connectionList) {
@@ -592,6 +586,13 @@ public class RoomServiceImpl implements RoomService {
                         }
                     }
                 }
+                vRoom.getRoomInfoDto().setCurNum(connectionList.size());
+
+                // DB 저장
+                RoomInfo roomInfo = roomInfoRepository.findRoomInfoById(vRoom.getRoomInfoDto().getId()).get();
+                roomInfo.setCurNum(vRoom.getRoomInfoDto().getCurNum());
+                roomInfo.setPhase(vRoom.getRoomInfoDto().getPhase());
+                roomInfoRepository.save(roomInfo);
             }
         }
     }
