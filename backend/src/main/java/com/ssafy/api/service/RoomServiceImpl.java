@@ -610,6 +610,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public String saveImage(String fileBase64, String sessionID) {
+        if (fileBase64 == null) return null;
         File path = new File(thumbPath);
         if (!path.exists()) path.mkdirs();
         try{
