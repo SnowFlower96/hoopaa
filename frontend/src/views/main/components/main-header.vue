@@ -11,16 +11,15 @@
           <router-link class="tool-wrapper-span-login" style=text-decoration:none; to="/list">
             <span>모든 토론보기</span>
           </router-link>
-          <router-link class="el-menu-item button-purple" style=text-decoration:none; to="/makeRoomPage">
+          <router-link class="el-menu-item button-purple" style=text-decoration:none; to="/makeRoomPage" v-if="widthValue">
             <span>미팅 시작하기</span>
           </router-link>
-          <router-link class="el-menu-item button-green" style=text-decoration:none; to="/startWithCode">
+          <router-link class="el-menu-item button-green" style=text-decoration:none; to="/startWithCode" v-if="widthValue">
             <span>미팅 참여하기</span>
           </router-link>
         </div>
 
         <div class="tool-wrapper">
-          <router-link style=text-decoration:none; to="/test"><span>session</span></router-link>
             <router-link style=text-decoration:none; to="/login" v-if="!isLogin"><span class="tool-wrapper-span-login">Log in</span></router-link>
             <router-link style=text-decoration:none; to="" v-if="isLogin" @click="logout"><span class="tool-wrapper-span-login">Log out</span></router-link>
             <router-link style=text-decoration:none; to="/signUp" v-if="!isLogin"><span class="tool-wrapper-span-signup">Sign up</span></router-link>
@@ -48,9 +47,6 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
 import { mapState , mapMutations} from "vuex";
 
 export default {
@@ -61,7 +57,8 @@ export default {
   },
   data() {
     return {
-      dropDownMenu: false
+      dropDownMenu: false,
+      widthValue: false
     }
   },
   props: {
@@ -82,7 +79,26 @@ export default {
     },
     mypage() {
       this.$router.push('/myPage')
+    },
+    handleResizeHome () {
+      const wValue = document.body.clientWidth
+      if(wValue > 1300) {
+        this.widthValue = true
+      }
+      else {
+        this.widthValue = false
+      }
     }
+  },
+  mounted() {
+    const wValue = document.body.clientWidth
+    if(wValue > 1300) {
+      this.widthValue = true
+    }
+    else {
+      this.widthValue = false
+    }
+    window.addEventListener('resize', this.handleResizeHome);
   }
 }
 </script>

@@ -10,7 +10,7 @@ body {
   font-size: large
 }
 
-@media (max-width: 1269px) {
+@media (max-width: 1000px) {
   .hide-on-small {
     display: none !important;
     /* display: block; */
@@ -20,7 +20,7 @@ body {
   }
 }
 
-@media (min-width: 1270px) {
+@media (min-width: 1000px) {
   html, body {
     min-width: 1270px;
   }

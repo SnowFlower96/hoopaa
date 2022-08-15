@@ -3,16 +3,26 @@
 <div  class="animation-role-background" v-if="animationBG" :style="customCaroselStyle">
     <start-letter id="arb" v-if="startEvent"></start-letter>
     <heart-hund :props-heart="propsHeart" id="arb" v-if="heartHund"></heart-hund>
-    <rest-time-event v-if="restEvent"></rest-time-event>
 </div>
 <!-- 토론진행중 애니메이션 구성 -->
+<!-- 쉬는시간 모달 -->
+<div class="vote-modal-container displayFlex" v-if="restModal" :style="customCaroselStyle">
+    <div>
+      <div class="rest-timer displayFlex">
+          <p id="restTimerDemo">0분0초</p>
+      </div>
+      <div class="rest-animation">
+          <rest-time-event v-if="restEvent"></rest-time-event>
+      </div>
+    </div>
+</div>
+<!-- 쉬는시간 모달 -->
 
 
 
 <!-- 곧 없어질 버튼 -->
 <div class="animation-control-btns">
     <button @click="animation('startEvent')">시작 이벤트</button>
-    <button @click="animation('restEvent')" >쉬는시간일때</button>
 </div>
 <!-- 곧 없어질 버튼 -->
 
@@ -32,21 +42,8 @@
 <!-- 뷰바꾸는 임시버튼 -->
 
 
-
-    <!-- 쉬는시간 모달 -->
-    <div class="vote-modal-container" v-if="restModal" :style="customCaroselStyle">
-        <div class="rest-timer">
-            <p id="restTimerDemo">0분0초</p>
-        </div>
-        <div class="rest-animation">
-            여기 애니메이션 들어갈곳
-        </div>
-    </div>
-    <!-- 쉬는시간 모달 -->
-
-
     <!-- 투표 받는 창 -->
-    <div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">
+    <div class="vote-modal-container displayFlex" v-if="voteViewTF" :style="customCaroselStyle">
         <div>
             <div class="vote-view">
                 <div class="vote-view-inner">
@@ -183,7 +180,11 @@
                                     <div class="vsi-wrap">
                                         <!-- <div class="videobox-side-inner" :style="customCaroselStyle"></div> -->
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
-                                        <debate-room-video v-for="(item, index) in agree" :key="index" :stream="item.data"></debate-room-video>
+                                        <!-- <debate-room-video v-for="(item, index) in agree" :key="index" :stream="item.data" class="debate-room-side-vido"></debate-room-video> -->
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
                                     </div>
                                 </div>
                               <!-- 토론방 왼쪽 -->
@@ -205,6 +206,7 @@
                                       :moderator="moderator"
                                       :all="all"
                                       :team="team"
+                                      :timer-min="timerMin"
                                       ></debate-room-center-component>
                                   </div>
 
@@ -228,7 +230,11 @@
                                     <div class="vsi-blank"></div>
                                     <div class="vsi-wrap">
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
-                                        <debate-room-video v-for="(item, index) in disagree" :key="index" :stream="item.data"></debate-room-video>
+                                        <!-- <debate-room-video v-for="(item, index) in disagree" :key="index" :stream="item.data" class="debate-room-side-vido"></debate-room-video> -->
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
+                                        <debate-room-video class="debate-room-side-vido" :stream="host"></debate-room-video>
                                     </div>
                                 </div>
                               <!-- 토론방 오른쪽 -->
@@ -504,6 +510,7 @@ export default {
             timerTime:null,
             timerTeam:null,
             timeList:[], // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
+            timerMin: 0,
 
             // 토론끝나고 방청잭 투표뷰 3개
             allVoteView: true,
@@ -584,7 +591,7 @@ export default {
                 console.log(this.voteStatus)
                 this.allVoteView = false
                 this.selMVPView = true
-                this.waitVoteView = false
+                this.waitVoteView =  false
             }
             else if (option === 'mvp') {
                 console.log('mvp')
@@ -880,7 +887,7 @@ export default {
 
         handleResizeHome() {  // 화면 움직일때 조정 다시함
             if (this.chattTF === true) {    // 채팅창 열려있을때
-                // 화면 기본 사이즈 받아옴
+               // 화면 기본 사이즈 받아옴 => 채팅창 있는 화면 로드됨
                 const wValue = document.body.clientWidth
                 const wValue075 = document.body.clientWidth*0.75
                 const hValue = document.body.clientHeight
@@ -908,6 +915,7 @@ export default {
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -921,6 +929,7 @@ export default {
                 this.voteModalWidth = `${wValue075}px`
 
                 this.allHeartLeft= `${document.body.clientWidth*0.5}px`
+
             }
             else {     // 채팅창 닫혀있을때
                 const wValue = document.body.clientWidth
@@ -950,6 +959,7 @@ export default {
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -982,13 +992,6 @@ export default {
                 this.heartHund = !this.heartHund
                 this.restEvent = false
             }
-            else if (option === 'restEvent') {
-                this.startEvent = false
-                this.heartTen = false
-                this.heartfift = false
-                this.heartHund = false
-                this.restEvent = !this.restEvent
-            }
         },
         messageFromTeam() {
             this.callToMdModal = !this.callToMdModal
@@ -1000,6 +1003,7 @@ export default {
             this.rest = false
         },
         EmitRest(timeRest) {
+          console.log(timeRest)
             this.restModal = true
             this.callToMdModal = false
 
@@ -1012,12 +1016,18 @@ export default {
 
             document.getElementById("restTimerDemo").innerHTML = min + "분" + sec + "초";
             time--;
-
-            if (time < 0) {
-                clearInterval(z);
-                this.restModal = false
-            }
-            }, 1000);
+            console.log('네')
+            // if (time < 0) {
+            //     clearInterval(z);
+            // }
+        }, 1000);
+        setTimeout(() => {
+          this.rest = false
+          this.animationBG = false
+          this.restEvent = false
+          this.restModal = false
+          clearInterval(z);
+        }, (timeRest*1000) + 2000)
 
         },
         EmitTime(Array) {
@@ -1026,6 +1036,7 @@ export default {
             this.timeList = [this.timerTime, this.timerTeam]
             console.log(this.timeList)
             this.callToMdModal = false
+            this.timerMin = Array[0]
         },
         voteFunction(status) {
             this.voteStatus = status
@@ -1149,7 +1160,7 @@ export default {
         changeChatView() {
             this.chattTF = !this.chattTF
             if (this.chattTF === true) {    // 채팅창 열려있을때
-                // 화면 기본 사이즈 받아옴
+               // 화면 기본 사이즈 받아옴 => 채팅창 있는 화면 로드됨
                 const wValue = document.body.clientWidth
                 const wValue075 = document.body.clientWidth*0.75
                 const hValue = document.body.clientHeight
@@ -1171,12 +1182,13 @@ export default {
                 this.dtcHeight = `${debateTimer*0.1}px`
 
                 // 토론방 화면공유 (.share-view)
-                // this.shareViewH = `${debateTimer*0.6-20}px`
-                // this.shareViewW = `${wValue075*0.4-40}px`
+                this.shareViewH = `${debateTimer*0.6-20}px`
+                this.shareViewW = `${wValue075*0.4-40}px`
 
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -1190,6 +1202,7 @@ export default {
                 this.voteModalWidth = `${wValue075}px`
 
                 this.allHeartLeft= `${document.body.clientWidth*0.5}px`
+
             }
             else {     // 채팅창 닫혀있을때
                 const wValue = document.body.clientWidth
@@ -1213,12 +1226,13 @@ export default {
                 this.dtcHeight = `${debateTimer*0.1}px`
 
                 // 토론방 화면공유 (.share-view)
-                // this.shareViewH = `${debateTimer*0.6-20}px`
-                // this.shareViewW = `${wValue075*0.4-40}px`
+                this.shareViewH = `${debateTimer*0.6-20}px`
+                this.shareViewW = `${wValue075*0.4-40}px`
 
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -1323,12 +1337,18 @@ export default {
                 this.messageFrom = false
             }
             else if (option == 'rest') {
+                this.animationBG = !this.animationBG
                 this.menu = false
                 this.out = false
                 this.message = false
                 this.file = false
                 this.rest = true
                 this.messageFrom = false
+                this.startEvent = false
+                this.heartTen = false
+                this.heartfift = false
+                this.heartHund = false
+                this.restEvent = !this.restEvent
             }
         },
 
@@ -1599,10 +1619,7 @@ export default {
     position: absolute;
     height: 93vh;
     width: var(--vote-modal-width);
-    background-color: rgba(255, 255, 255, 0.295);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: rgba(54, 54, 54, 0.699);
 }
 .moderator-menus {
     color: white;
@@ -1778,9 +1795,9 @@ export default {
     height: var(--vsi-blank);
 }
 .vsi-wrap {
-    height: 100%;
+    height: calc(100% - var(--vsi-blank));
     width: 100%;
-    background-color: rgb(61, 255, 94);
+    /* background-color: rgb(61, 255, 94); */
     overflow: auto;
 }
 .videobox-side-inner {
@@ -1791,8 +1808,12 @@ export default {
 }
 .vsi-wrap::-webkit-scrollbar{width: 4px;}
 .vsi-wrap::-webkit-scrollbar-thumb {
-  background-color: rgba(39, 39, 39, 0.712);
+  background-color: rgba(102, 102, 102, 0.853);
     border-radius: 5px;
+}
+.debate-room-side-vido {
+  margin-top:10px;
+  margin-bottom: 10px;
 }
 .videobox-center {
   height: var(--debate-box-center-height);
@@ -1809,15 +1830,19 @@ export default {
 .moderator-video-inner {
   height: var(--center-video-height);
   width: var(--center-video-width);
-  background-color: aquamarine;
+  /* background-color: aquamarine; */
 }
 
 .debateroom-center-timer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
   /* background-color: rgb(119, 0, 255); */
-  height: var(--dct-height);
+  height: calc(var(--dct-height) + 10px);
 }
 .share-view-wrap {
-    height: calc(var(--share-view-height) + 40px);
+    /* background-color: aquamarine; */
+    height: calc(var(--share-view-height) + 20px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1827,5 +1852,12 @@ export default {
   width: var(--share-view-width);
   background-color: rgb(56, 56, 56);
   border-radius: 10px;
+}
+.rest-timer > p{
+  position: absolute;
+  left: 43%;
+  top: 5%;
+  color: white;
+  font-size: 30px;
 }
 </style>
