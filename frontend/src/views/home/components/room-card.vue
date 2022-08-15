@@ -1,6 +1,12 @@
 <template>
-  <div class="room-info-carosel" :style="{backgroundImage: 'url('+backurl+')'}">
-  </div>
+
+    <div class="room-info" :style="{backgroundImage: 'url('+backurl+')'}">
+     <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
+     <p class="room-desc">
+      <span class="room-phase">{{phase[room.phase]}}</span><span>     </span><span class="room-cate">{{this.menus[room.cate].name}}</span></p>
+    <p class="room-title"> {{room.subtitle}}</P>
+    </div>
+
 </template>
 <script>
 export default {
@@ -18,7 +24,8 @@ export default {
       dropdownSortTF: false,
       homeCheckInModal: false,
       backurl: '',
-      ppSet: true
+      ppSet: true,
+      menus : '',
     };
   },
   created() {
@@ -27,8 +34,9 @@ export default {
     }else{
       this.backurl="data:image/png;base64,"+this.room.thumbUrl;
     }
+    const menuData = require('@/views/main/menu.json')
+    this.menus = menuData;
 
-    // console.log(this.backurl);
   },
   updated() {
      if(this.room.thumbUrl==null){
@@ -63,16 +71,35 @@ export default {
 </script>
 
 <style>
-.room-info-carosel:hover {
+.room-info:hover {
   -webkit-transform: scale(1.2);
-  filter: brightness(100%);
+  filter: brightness(80%);
 }
-
-.room-info-carosel {
+.room-desc{
+  text-align: end;
+}
+.room-phase{
+  background-color: rgb(167, 234, 255);
+}
+.room-cate{
+  background-color : rgb(223, 230, 26);
+}
+.room-title{
+  text-align: left;
+}
+.room-info {
   height: 100%;
   background-size:100% 100%;
   width: 100%;
-  filter: brightness(80%);
+  filter: brightness(100%);
   border-radius: 10px;
+}
+.room-title{
+  background-color: rgb(216, 24, 165);
+  position : fixed;
+  bottom:0;
+  text-align: left;
+  font-size: 20px;
+  border-radius: 5px;
 }
 </style>

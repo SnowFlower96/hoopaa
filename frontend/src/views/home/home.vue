@@ -46,13 +46,13 @@
                 <div class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
-                     <div class="carosel-room-card" @click="gotoRoom">
+                    <div class="carosel-room-card" @click="gotoRoom">
                       <div class="room-info-carosel" :style="customCaroselStyle">
-                        <room-card :room ="room"></room-card>
-                        <p class="room-description"><span class="room-phase-tip">{{phase[room.phase]}}</span><span class="room-cate-tip">  {{menus[room.cate].name}}  </span> </p>
-                        <p><span>&nbsp;</span><span>{{room.subtitle}}</span></p>
+                        <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
+
+                        <room-card :room="room">
+                        </room-card>
                       </div>
-                    <p id="title-carosel">{{room.subtitle}}</p>
                     </div>
                     </li>
                   </ul>
@@ -158,7 +158,7 @@
   display: flex;
 }
 .room-phase-tip {
-  width: 100px;
+  width: 45px;
   text-align: end;
   background-color: rgb(167, 234, 255);
   font-size: 15px;
@@ -167,16 +167,7 @@
   border-radius: 3px;
   /* margin-left: var(--room-phase-tip-margin-left); */
 }
-.room-cate-tip{
-   background-color: rgb(34, 225, 28);
-   font-size: 15px;
-  padding: 3px;
-  z-index: 3;
-  border-radius: 3px;
-}
-.room-description{
-  text-align: left;
-}
+
 /* 카테고리 style */
 ul {
   display: flex;
@@ -355,7 +346,7 @@ export default {
 
   components: {
     Conference,
-    RoomCard,
+     RoomCard,
     Search,
   },
   data () {
@@ -372,10 +363,8 @@ export default {
       dropdownSortTF: false,
       homeCheckInModal : false,
       ppSet: true,
-      menuData : require('@/views/main/menu.json'),
       //  - - - - - - 여기고침 - - - - - -  ⬇//
       // 0815 곧 지울
-
       // roomList : [
       //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'},
       //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'},
