@@ -371,8 +371,15 @@ export default {
       // 영상
         UserVideo,
     },
-    created() {
-      this.joinSession();
+    async created() {
+      await this.joinSession();
+      if (this.session.sessionId == this.user.id) {
+        this.moderatorView();
+      } else if (this.position == 'agree' || this.position == 'disagree') {
+        this.teamView();
+      } else {
+        this.allView();
+      }
   },
     computed : {
       ...mapState(["user", "position", "tempToken"]),
@@ -638,13 +645,16 @@ export default {
         if (index >= 0) {
           this.subscribers.splice(index, 1);
         }
-      });
-      this.session.on("streamDestroyed", ({ stream }) => {
-        const index = this.disagree.indexOf(stream.streamManager, 0);
-        if (index >= 0) {
-          this.subscribers.splice(index, 1);
+        const index2 = this.disagree.indexOf(stream.streamManager, 0);
+        if (index2 >= 0) {
+          this.subscribers.splice(index2, 1);
         }
       });
+      // on session destroyed...
+      this.session.on("sessionDestroyed", () => {
+        router.push('/')
+      });
+
 
       // On every asynchronous exception...
       this.session.on("exception", ({ exception }) => {
