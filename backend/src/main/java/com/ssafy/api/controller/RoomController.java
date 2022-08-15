@@ -7,29 +7,28 @@ import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.api.response.JsonRes;
 import com.ssafy.api.response.StringRes;
 import com.ssafy.api.response.VTokenRes;
-import com.ssafy.api.response.VTokensRes;
 import com.ssafy.api.service.RoomInfoService;
 import com.ssafy.api.service.RoomService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
-import com.ssafy.common.data.VUserInfo;
 import com.ssafy.common.model.response.BaseResponseBody;
-import com.ssafy.common.data.VRoom;
 import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.entity.User;
-import io.openvidu.java.client.*;
-import io.swagger.annotations.*;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.List;
+import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RequestMapping("/api/v1/room")
 @RestController
@@ -56,7 +55,7 @@ public class RoomController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<? extends BaseResponseBody> openRoom(@ApiIgnore Authentication authentication,
-                                                               @RequestBody @ApiParam(value = "방 정보", required = true) RoomOpenReq roomOpenReq) {
+                                                               @RequestBody @ApiParam(value = "방 정보", required = true) RoomOpenReq roomOpenReq) throws IOException {
         // Access Token 에서 유저 ID 추출
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         String AToken = userDetails.getUsername();
@@ -158,7 +157,7 @@ public class RoomController {
     }
 
 
-    @PostMapping("/enter/select")
+    @PostMapping("/enter/select/{sessionID}")
     @ApiOperation(value = "진영 선택", notes = "원하는 진영에 들어갈 수 있는지 여부에 대한 응답")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -168,7 +167,7 @@ public class RoomController {
             @ApiResponse(code = 404, message = "해당 세션 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> enterPos(@ApiIgnore Authentication authentication, String sessionID, String pos) {
+    public ResponseEntity<? extends BaseResponseBody> enterPos(@ApiIgnore Authentication authentication, @PathVariable String sessionID, String pos) {
         SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
         String AToken = ssafyUserDetails.getUsername();
 
@@ -189,11 +188,11 @@ public class RoomController {
             case "Success":
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
             default:
-                return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Fail"));
+                return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
         }
     }
 
-    @DeleteMapping("/enter/select")
+    @DeleteMapping("/enter/select/{sessionID}")
     @ApiOperation(value = "진영 나가기", notes = "해당 진영에서 나가기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -203,7 +202,7 @@ public class RoomController {
             @ApiResponse(code = 404, message = "해당 세션 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> leavePos(@ApiIgnore Authentication authentication, String sessionID, String pos) {
+    public ResponseEntity<? extends BaseResponseBody> leavePos(@ApiIgnore Authentication authentication, @PathVariable String sessionID, String pos) {
         SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
         String AToken = ssafyUserDetails.getUsername();
 
@@ -215,7 +214,7 @@ public class RoomController {
         if (!userService.isUser(AToken))
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized"));
 
-        String result = roomService.checkPos(AToken, sessionID, pos, true);
+        String result = roomService.checkPos(AToken, sessionID, pos, false);
         switch (result) {
             case "400":
                 return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong request"));
@@ -224,7 +223,7 @@ public class RoomController {
             case "Success":
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
             default:
-                return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Fail"));
+                return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
         }
     }
 
@@ -259,7 +258,7 @@ public class RoomController {
         if (!roomService.isExistRoom(sessionID))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
-        Map<String, String> connections = roomService.getAgreeConnections(sessionID);
+        Map<String, String> connections = roomService.getDisagreeConnections(sessionID);
         String json = mapper.writeValueAsString(connections);
         return ResponseEntity.status(200).body(JsonRes.of(200, "Success", connections.toString()));
     }
@@ -407,24 +406,6 @@ public class RoomController {
         String json = mapper.writeValueAsString(result);
 
         return ResponseEntity.status(200).body(JsonRes.of(200, "Success", json));
-    }
-
-    @PostMapping("/sync")
-    @ApiOperation(value = "동기화", notes = "OpenVidu 서버와의 동기화")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "성공"),
-            @ApiResponse(code = 500, message = "서버 오류류")
-    })
-    public ResponseEntity<? extends BaseResponseBody> syncServer() {
-        roomService.syncServer();
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
-    }
-
-    @PostMapping("/init")
-    @ApiOperation(value = "초기화")
-    public ResponseEntity<? extends BaseResponseBody> initServer() throws OpenViduJavaClientException, OpenViduHttpException {
-        roomService.initServer();
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
 }

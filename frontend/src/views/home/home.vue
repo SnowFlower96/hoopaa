@@ -46,11 +46,13 @@
                 <div class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
-                    <div class="carosel-room-card" @click="gotoRoom">
+                     <div class="carosel-room-card" @click="gotoRoom">
                       <div class="room-info-carosel" :style="customCaroselStyle">
-                        <p class="room-phase-tip">{{phase[room.phase]}}</p>
-                        <p id="title-carosel">{{room.title}}</p>
+                        <room-card :room ="room"></room-card>
+                        <p class="room-description"><span class="room-phase-tip">{{phase[room.phase]}}</span><span class="room-cate-tip">  {{menus[room.cate].name}}  </span> </p>
+                        <p><span>&nbsp;</span><span>{{room.subtitle}}</span></p>
                       </div>
+                    <p id="title-carosel">{{room.subtitle}}</p>
                     </div>
                     </li>
                   </ul>
@@ -156,7 +158,7 @@
   display: flex;
 }
 .room-phase-tip {
-  width: 45px;
+  width: 100px;
   text-align: end;
   background-color: rgb(167, 234, 255);
   font-size: 15px;
@@ -165,7 +167,16 @@
   border-radius: 3px;
   /* margin-left: var(--room-phase-tip-margin-left); */
 }
-
+.room-cate-tip{
+   background-color: rgb(34, 225, 28);
+   font-size: 15px;
+  padding: 3px;
+  z-index: 3;
+  border-radius: 3px;
+}
+.room-description{
+  text-align: left;
+}
 /* 카테고리 style */
 ul {
   display: flex;
@@ -235,7 +246,7 @@ ul {
   margin: 10px;
 }
 .room-info-carosel {
-  background-image: url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+
   height: var(--carosel-item-height);
   background-size:100% 100%;
   width: var(--carosel-item-width);
@@ -243,7 +254,7 @@ ul {
   border-radius: 10px;
 }
 .room-info-carosel:hover {
-  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+  /* background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg'); */
   cursor: pointer;
   /* filter: brightness(80%);
   transition: filter .3s; */
@@ -334,6 +345,7 @@ ul {
 <script >
 import Search from '@/views/common/search'
 import Conference from './components/conference'
+import RoomCard from './components/room-card'
 import 'vue3-carousel/dist/carousel.css';
 // import { mapState , mapMutations} from "vuex";
 
@@ -343,6 +355,7 @@ export default {
 
   components: {
     Conference,
+    RoomCard,
     Search,
   },
   data () {
@@ -359,13 +372,16 @@ export default {
       dropdownSortTF: false,
       homeCheckInModal : false,
       ppSet: true,
+      menuData : require('@/views/main/menu.json'),
       //  - - - - - - 여기고침 - - - - - -  ⬇//
       // 0815 곧 지울
-      roomList : [
-        {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
-        {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
-        {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-        ],
+
+      // roomList : [
+      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'},
+      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'},
+      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},
+      //   ],
+
       // // 0815 곧 지울
       viewCaroselLenghth : 4
       //  - - - - - - 여기고침 - - - - - -  ⬆//

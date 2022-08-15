@@ -29,12 +29,12 @@ public class RoomInfo {
     private LocalDateTime endTime;
 
     private String log;
-    @Column(insertable = false, updatable = false)
-    private Long kingID;
     private Short winner;
     private Short agree;
     private Short disagree;
     private Short invalid;
+    @Column(insertable = false, updatable = false)
+    private Long kingId;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
@@ -46,10 +46,14 @@ public class RoomInfo {
 
     @OneToOne
     @JoinColumn(name = "hostId", referencedColumnName = "id")
-    User user;
+    User userHost;
+
+    @OneToOne
+    @JoinColumn(name = "kingId", referencedColumnName = "id")
+    User userKing;
 
     @Builder
-    public RoomInfo(Long id, String pwd, Long hostId, String thumbUrl, int maxNum, int curNum, int phase, LocalDateTime startTime, LocalDateTime endTime, String log, Long kingID, Short winner, Short agree, Short disagree, Short invalid) {
+    public RoomInfo(Long id, String pwd, Long hostId, String thumbUrl, int maxNum, int curNum, int phase, LocalDateTime startTime, LocalDateTime endTime, String log, Long kingId, Short winner, Short agree, Short disagree, Short invalid, User userHost) {
         this.id = id;
         this.pwd = pwd;
         this.hostId = hostId;
@@ -60,10 +64,12 @@ public class RoomInfo {
         this.startTime = startTime;
         this.endTime = endTime;
         this.log = log;
-        this.kingID = kingID;
+        this.kingId = kingId;
         this.winner = winner;
         this.agree = agree;
         this.disagree = disagree;
         this.invalid = invalid;
+        this.userHost = userHost;
     }
+
 }

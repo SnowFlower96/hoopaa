@@ -30,11 +30,7 @@
 <!-- 뷰바꾸는 임시버튼 -->
 <div v-if="imgTF" class="startImg">
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
-    <button @click="moderatorView">사회자뷰</button>
-    <button @click="allView">방청객뷰</button>
-    <button @click="teamView">패널뷰</button>
-    <button @click="sendSession">세부세션 가기</button>
-    <button @click="positionAgree">찬성</button>
+    <button v-if="session.sessionId == user.id" @click="sendSession">세부세션 보내기</button>
     <button @click="messageFromTeam">팀에서 사회자한테 주는 메세지</button>
     <button @click="publishScreenShare">화면공유</button>
     <!-- <div id="demo">넨</div> -->
@@ -371,8 +367,18 @@ export default {
       // 영상
         UserVideo,
     },
-    created() {
-      this.joinSession();
+    async created() {
+      await this.joinSession();
+      if (this.session.sessionId = this.$store.state.user.id) {
+        this.moderatorView();
+        console.log('!!1111111111111111111111')
+      } else if (this.$store.state.position == 'agree' || this.$store.state.position == 'disagree') {
+        this.teamView();
+        console.log('!!11222222222222222222222221')
+      } else {
+        this.allView();
+        console.log('!!3333333333333333333333333333')
+      }
   },
     computed : {
       ...mapState(["user", "position", "tempToken"]),
