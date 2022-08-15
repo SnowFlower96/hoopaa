@@ -361,7 +361,17 @@ export default {
       caoselWrapperOverTF: false,
       dropdownSortTF: false,
       homeCheckInModal : false,
-      ppSet: true
+      ppSet: true,
+      //  - - - - - - 여기고침 - - - - - -  ⬇//
+      // 0815 곧 지울
+      // roomList : [
+      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
+      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
+      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
+      //   ],
+      // // 0815 곧 지울
+      viewCaroselLenghth : 4
+      //  - - - - - - 여기고침 - - - - - -  ⬆//
     }
   },
   computed : {
@@ -379,13 +389,21 @@ export default {
       console.log(to)
     }
   },
+ //  - - - - - - 여기고침 - - - - - -  ⬇//
   mounted() {
-    this.clickCaroselNext = setInterval(this.next, 5000)
+    if (this.roomList.length < 8) {
+      const ceroselLet = this.roomList.length
+      for(let i = 1; i < 9-ceroselLet; i++) {
+        this.roomList.push({phase: '', title: '', subtitle: ''})
+      }
+    }
+    this.clickCaroselNext = setInterval(this.next, 3000)
     const value = document.body.clientWidth*0.8*0.25
     this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
     this.caroselHeight = `${(value-20)*0.62}px`
     window.addEventListener('resize', this.handleResizeHome);
   },
+//  - - - - - - 여기고침 - - - - - -  ⬆//
   beforeRouteLeave() {
     clearInterval(this.clickCaroselNext)
   },
@@ -471,9 +489,10 @@ export default {
       const value = document.body.clientWidth*0.8*0.25
       carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
     },
+    //  - - - - - - 여기고침 - - - - - -  ⬇//
     next() {
         const carousel = document.querySelector('.carousel-ul');
-        if (this.c_index === 10) {
+        if (this.c_index === this.viewCaroselLenghth) {
           carousel.style.transform = `translate3d(0, 0, 0)`;
           this.c_index = 0
         } else {
@@ -482,6 +501,7 @@ export default {
           carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
         }
     }
+    //  - - - - - - 여기고침 - - - - - -  ⬆//
   }
   // setup () {
   //   const router = useRouter()
