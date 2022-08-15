@@ -7,11 +7,13 @@ import com.ssafy.db.dto.UserInfoDto;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 public interface RoomService {
 
-    void createRoom(String sessionID, RoomOpenReq roomOpenReq);
+    void createRoom(String sessionID, RoomOpenReq roomOpenReq) throws IOException;
 
     boolean isExistRoom(String sessionID);
 

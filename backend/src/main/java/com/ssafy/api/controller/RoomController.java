@@ -27,6 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RequestMapping("/api/v1/room")
@@ -54,7 +55,7 @@ public class RoomController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<? extends BaseResponseBody> openRoom(@ApiIgnore Authentication authentication,
-                                                               @RequestBody @ApiParam(value = "방 정보", required = true) RoomOpenReq roomOpenReq) {
+                                                               @RequestBody @ApiParam(value = "방 정보", required = true) RoomOpenReq roomOpenReq) throws IOException {
         // Access Token 에서 유저 ID 추출
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         String AToken = userDetails.getUsername();

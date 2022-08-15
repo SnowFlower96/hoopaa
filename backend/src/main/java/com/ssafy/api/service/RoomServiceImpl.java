@@ -10,17 +10,23 @@ import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
+import io.netty.handler.codec.base64.Base64Decoder;
 import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.swing.filechooser.FileSystemView;
 import javax.transaction.Transactional;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.FileSystem;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,6 +41,8 @@ public class RoomServiceImpl implements RoomService {
     private String OPENVIDU_URL;
     @Value("${openvidu.secret}")
     private String SECRET;
+    @Value("${upload.path}")
+    private String thumbPath;
 
     @PostConstruct
     void init() throws OpenViduJavaClientException, OpenViduHttpException {
@@ -74,7 +82,7 @@ public class RoomServiceImpl implements RoomService {
     UserStatRepository userStatRepository;
 
     @Override
-    public void createRoom(String sessionID, RoomOpenReq roomOpenReq) {
+    public void createRoom(String sessionID, RoomOpenReq roomOpenReq) throws IOException {
         // 세션 생성
         Session session;
         try {
@@ -600,14 +608,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public String saveImage(String fileBase64, String roomName) {
+    public String saveImage(String fileBase64, String sessionID) {
+        File path = new File(thumbPath);
+        if (!path.exists()) path.mkdirs();
         try{
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-            Date now = new Date();
-            UUID uuid = UUID.randomUUID();
-            String date = sdf.format(now);
-            String fileName = uuid+"_"+date;
-            File file = new File(/**/"C:/Users/multicampus/Desktop/workspace/S07P12B302/thumbnail/"+fileName+".jpg");
+            String fileName = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_" + sessionID;
+            File file = new File(thumbPath + fileName + ".jpg");
             Base64.Decoder decoder = Base64.getDecoder();
             byte[] decodeBytes = decoder.decode(fileBase64.getBytes());
             FileOutputStream fileOutputStream = new FileOutputStream(file);
