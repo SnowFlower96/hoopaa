@@ -3,16 +3,26 @@
 <div  class="animation-role-background" v-if="animationBG" :style="customCaroselStyle">
     <start-letter id="arb" v-if="startEvent"></start-letter>
     <heart-hund :props-heart="propsHeart" id="arb" v-if="heartHund"></heart-hund>
-    <rest-time-event v-if="restEvent"></rest-time-event>
 </div>
 <!-- 토론진행중 애니메이션 구성 -->
+<!-- 쉬는시간 모달 -->
+<div class="vote-modal-container displayFlex" v-if="restModal" :style="customCaroselStyle">
+    <div>
+      <div class="rest-timer displayFlex">
+          <p id="restTimerDemo">0분0초</p>
+      </div>
+      <div class="rest-animation">
+          <rest-time-event v-if="restEvent"></rest-time-event>
+      </div>
+    </div>
+</div>
+<!-- 쉬는시간 모달 -->
 
 
 
 <!-- 곧 없어질 버튼 -->
 <div class="animation-control-btns">
     <button @click="animation('startEvent')">시작 이벤트</button>
-    <button @click="animation('restEvent')" >쉬는시간일때</button>
 </div>
 <!-- 곧 없어질 버튼 -->
 
@@ -20,11 +30,7 @@
 <!-- 뷰바꾸는 임시버튼 -->
 <div v-if="imgTF" class="startImg">
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
-    <button @click="moderatorView">사회자뷰</button>
-    <button @click="allView">방청객뷰</button>
-    <button @click="teamView">패널뷰</button>
-    <button @click="sendSession">세부세션 가기</button>
-    <button @click="positionAgree">찬성</button>
+    <button v-if="session.sessionId == user.id" @click="sendSession">세부세션 보내기</button>
     <button @click="messageFromTeam">팀에서 사회자한테 주는 메세지</button>
     <button @click="publishScreenShare">화면공유</button>
     <!-- <div id="demo">넨</div> -->
@@ -32,21 +38,8 @@
 <!-- 뷰바꾸는 임시버튼 -->
 
 
-
-    <!-- 쉬는시간 모달 -->
-    <div class="vote-modal-container" v-if="restModal" :style="customCaroselStyle">
-        <div class="rest-timer">
-            <p id="restTimerDemo">0분0초</p>
-        </div>
-        <div class="rest-animation">
-            여기 애니메이션 들어갈곳
-        </div>
-    </div>
-    <!-- 쉬는시간 모달 -->
-
-
     <!-- 투표 받는 창 -->
-    <div class="vote-modal-container" v-if="voteViewTF" :style="customCaroselStyle">
+    <div class="vote-modal-container displayFlex" v-if="voteViewTF" :style="customCaroselStyle">
         <div>
             <div class="vote-view">
                 <div class="vote-view-inner">
@@ -183,7 +176,8 @@
                                     <div class="vsi-wrap">
                                         <!-- <div class="videobox-side-inner" :style="customCaroselStyle"></div> -->
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
-                                        <debate-room-video v-for="(item, index) in agree" :key="index" :stream="item.data"></debate-room-video>
+                                        <!-- <debate-room-video v-for="(item, index) in agree" :key="index" :stream="item.data" class="debate-room-side-vido"></debate-room-video> -->
+                                        <debate-room-video class="debate-room-side-vido" v-for="(item, index) in agree" :key="index" :stream="item.data"></debate-room-video>
                                     </div>
                                 </div>
                               <!-- 토론방 왼쪽 -->
@@ -205,6 +199,7 @@
                                       :moderator="moderator"
                                       :all="all"
                                       :team="team"
+                                      :timer-min="timerMin"
                                       ></debate-room-center-component>
                                   </div>
 
@@ -212,8 +207,8 @@
                                     <div class="share-view">
                                         <!-- 화면공유 여기에 넣으면 됨 -->
                                         <!-- <user-video :stream-manager="publisherScreen"></user-video> -->
-				                                <div v-for="(sub, index) in subscribersScreen" :key="index">
-					                                <user-video :stream-manager="sub" ></user-video>
+				                                <div v-for="(sub, index) in subscribersScreen" :key="index" >
+					                                <user-video :stream-manager="sub" v-if="sub"></user-video>
 				                                </div>
 
 
@@ -228,7 +223,8 @@
                                     <div class="vsi-blank"></div>
                                     <div class="vsi-wrap">
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
-                                        <debate-room-video v-for="(item, index) in disagree" :key="index" :stream="item.data"></debate-room-video>
+                                        <!-- <debate-room-video v-for="(item, index) in disagree" :key="index" :stream="item.data" class="debate-room-side-vido"></debate-room-video> -->
+                                        <debate-room-video class="debate-room-side-vido" v-for="(item, index) in disagree" :key="index" :stream="item.data"></debate-room-video>
                                     </div>
                                 </div>
                               <!-- 토론방 오른쪽 -->
@@ -331,6 +327,7 @@ import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 import moment from 'moment';
+import router from '../../common/lib/vue-router'
 
 const OPENVIDU_SERVER_URL = "https://hoopaa.site:8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
@@ -370,8 +367,18 @@ export default {
       // 영상
         UserVideo,
     },
-    created() {
-      this.joinSession();
+    async created() {
+      await this.joinSession();
+      if (this.session.sessionId = this.$store.state.user.id) {
+        this.moderatorView();
+        console.log('!!1111111111111111111111')
+      } else if (this.$store.state.position == 'agree' || this.$store.state.position == 'disagree') {
+        this.teamView();
+        console.log('!!11222222222222222222222221')
+      } else {
+        this.allView();
+        console.log('!!3333333333333333333333333333')
+      }
   },
     computed : {
       ...mapState(["user", "position", "tempToken"]),
@@ -503,6 +510,7 @@ export default {
             timerTime:null,
             timerTeam:null,
             timeList:[], // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
+            timerMin: 0,
 
             // 토론끝나고 방청잭 투표뷰 3개
             allVoteView: true,
@@ -583,7 +591,7 @@ export default {
                 console.log(this.voteStatus)
                 this.allVoteView = false
                 this.selMVPView = true
-                this.waitVoteView = false
+                this.waitVoteView =  false
             }
             else if (option === 'mvp') {
                 console.log('mvp')
@@ -632,7 +640,13 @@ export default {
       // On every Stream destroyed...
       // TODO
       this.session.on("streamDestroyed", ({ stream }) => {
-        const index = this.subscribers.indexOf(stream.streamManager, 0);
+        const index = this.agree.indexOf(stream.streamManager, 0);
+        if (index >= 0) {
+          this.subscribers.splice(index, 1);
+        }
+      });
+      this.session.on("streamDestroyed", ({ stream }) => {
+        const index = this.disagree.indexOf(stream.streamManager, 0);
         if (index >= 0) {
           this.subscribers.splice(index, 1);
         }
@@ -646,10 +660,15 @@ export default {
       // Hearing Signal
 
       // 세부세션 signal
-     this.session.on('signal:Go-SebuSession', (event) => {
+     this.session.on('signal:Go-SebuSession-Agree', (event) => {
+      this.$store.commit("CREATE_TEMP_TOKEN", event.data);
       console.log(event.data); // Message
-      console.log(event.from); // Connection object of the sender
-      console.log(event.type); // The type of message ("my-chat")
+      router.push('/detailSessionView')
+    });
+     this.session.on('signal:Go-SebuSession-Disagree', (event) => {
+      this.$store.commit("CREATE_TEMP_TOKEN", event.data);
+      console.log(event.data); // Message
+      router.push('/detailSessionView')
     });
       // 발언권 signal
       this.session.on('signal:Set-Audio', (event) => {
@@ -759,6 +778,13 @@ export default {
 					console.log(this.subscribersScreen.length + "!!!!!!!!!!!!!!!!")
 			});
 
+       this.sessionScreen.on("streamDestroyed", ({ stream }) => {
+        const index = this.subscriberScreen.indexOf(stream.streamManager, 0);
+        if (index >= 0) {
+          this.subscribers.splice(index, 1);
+        }
+      });
+
 			await this.getToken(this.session.sessionId).then(tokenScreen => {
 				this.sessionScreen.connect(tokenScreen, { clientData: this.user.id })
 				.then(() => {
@@ -861,7 +887,7 @@ export default {
 
         handleResizeHome() {  // 화면 움직일때 조정 다시함
             if (this.chattTF === true) {    // 채팅창 열려있을때
-                // 화면 기본 사이즈 받아옴
+               // 화면 기본 사이즈 받아옴 => 채팅창 있는 화면 로드됨
                 const wValue = document.body.clientWidth
                 const wValue075 = document.body.clientWidth*0.75
                 const hValue = document.body.clientHeight
@@ -889,6 +915,7 @@ export default {
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -902,6 +929,7 @@ export default {
                 this.voteModalWidth = `${wValue075}px`
 
                 this.allHeartLeft= `${document.body.clientWidth*0.5}px`
+
             }
             else {     // 채팅창 닫혀있을때
                 const wValue = document.body.clientWidth
@@ -931,6 +959,7 @@ export default {
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -963,13 +992,6 @@ export default {
                 this.heartHund = !this.heartHund
                 this.restEvent = false
             }
-            else if (option === 'restEvent') {
-                this.startEvent = false
-                this.heartTen = false
-                this.heartfift = false
-                this.heartHund = false
-                this.restEvent = !this.restEvent
-            }
         },
         messageFromTeam() {
             this.callToMdModal = !this.callToMdModal
@@ -981,6 +1003,7 @@ export default {
             this.rest = false
         },
         EmitRest(timeRest) {
+          console.log(timeRest)
             this.restModal = true
             this.callToMdModal = false
 
@@ -993,12 +1016,18 @@ export default {
 
             document.getElementById("restTimerDemo").innerHTML = min + "분" + sec + "초";
             time--;
-
-            if (time < 0) {
-                clearInterval(z);
-                this.restModal = false
-            }
-            }, 1000);
+            console.log('네')
+            // if (time < 0) {
+            //     clearInterval(z);
+            // }
+        }, 1000);
+        setTimeout(() => {
+          this.rest = false
+          this.animationBG = false
+          this.restEvent = false
+          this.restModal = false
+          clearInterval(z);
+        }, (timeRest*1000) + 2000)
 
         },
         EmitTime(Array) {
@@ -1007,6 +1036,7 @@ export default {
             this.timeList = [this.timerTime, this.timerTeam]
             console.log(this.timeList)
             this.callToMdModal = false
+            this.timerMin = Array[0]
         },
         voteFunction(status) {
             this.voteStatus = status
@@ -1130,7 +1160,7 @@ export default {
         changeChatView() {
             this.chattTF = !this.chattTF
             if (this.chattTF === true) {    // 채팅창 열려있을때
-                // 화면 기본 사이즈 받아옴
+               // 화면 기본 사이즈 받아옴 => 채팅창 있는 화면 로드됨
                 const wValue = document.body.clientWidth
                 const wValue075 = document.body.clientWidth*0.75
                 const hValue = document.body.clientHeight
@@ -1152,12 +1182,13 @@ export default {
                 this.dtcHeight = `${debateTimer*0.1}px`
 
                 // 토론방 화면공유 (.share-view)
-                // this.shareViewH = `${debateTimer*0.6-20}px`
-                // this.shareViewW = `${wValue075*0.4-40}px`
+                this.shareViewH = `${debateTimer*0.6-20}px`
+                this.shareViewW = `${wValue075*0.4-40}px`
 
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -1171,6 +1202,7 @@ export default {
                 this.voteModalWidth = `${wValue075}px`
 
                 this.allHeartLeft= `${document.body.clientWidth*0.5}px`
+
             }
             else {     // 채팅창 닫혀있을때
                 const wValue = document.body.clientWidth
@@ -1194,12 +1226,13 @@ export default {
                 this.dtcHeight = `${debateTimer*0.1}px`
 
                 // 토론방 화면공유 (.share-view)
-                // this.shareViewH = `${debateTimer*0.6-20}px`
-                // this.shareViewW = `${wValue075*0.4-40}px`
+                this.shareViewH = `${debateTimer*0.6-20}px`
+                this.shareViewW = `${wValue075*0.4-40}px`
 
                 // 토론방 양쪽 (.videobox-side)
                 this.dSideW = `${wValue075*0.3-10}px`
                 this.dSideH = `${hValue*0.8}px`
+                this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
                 this.callToMDView = `${wValue075}px`
@@ -1304,70 +1337,125 @@ export default {
                 this.messageFrom = false
             }
             else if (option == 'rest') {
+                this.animationBG = !this.animationBG
                 this.menu = false
                 this.out = false
                 this.message = false
                 this.file = false
                 this.rest = true
                 this.messageFrom = false
+                this.startEvent = false
+                this.heartTen = false
+                this.heartfift = false
+                this.heartHund = false
+                this.restEvent = !this.restEvent
             }
         },
-        leaveSession() {
-          this.$refs.debateRoomSideComponent.leaveSession();
-        },
-      // 찬성 참여
-      positionAgree() {
-        this.position = 'agree',
-        console.log(this.$refs);
-        this.$refs.debateRoomSideComponent.joinPannel()
-      },
-      positionDisagree() {
 
-      },
         // 세부세션 보내기 시그널
-        sendSession() {
-      //     let index = "/room/session/" + this.session.sessionId;
-      //     this.$store.dispatch("makeSessionRoom", index).then((response) => {
-      //     console.log(response.data);
-      // })
-      this.session.signal({
-        data: 'Go SebuSession !!!',
-        to: [],
-        type: 'Go-SebuSession'
-      });
+        async sendSession() {
+          let agreeArr = [];
+          let disagreeArr = [];
+          let index = "/room/session/" + this.session.sessionId;
+          await this.$store.dispatch("makeSessionRoom", index).then((response) => {
+          let data = JSON.parse(response.data.json)
+          for (var key in data) {
+            if (data[key].token.includes('agree')) {
+              // agreeArr.push(
+              //   {
+              //     connectionId : data[key].connectionID,
+              //     token : data[key].token
+              //   }
+              // )
+              this.sendSessionAgreeFunc({connectionId : data[key].connectionID}, data[key].token)
+            } else {
+              // disagreeArr.push(
+              //   {
+              //     connectionId : data[key].connectionID,
+              //     token : data[key].token
+              //   }
+              // )
+              this.sendSessionDisagreeFunc({connectionId : data[key].connectionID}, data[key].token)
+            }
+          }
+        })
+
     },
+    // 세부세션 보내기 시그널 함수
+     sendSessionAgreeFunc(connectionId, token) {
+       this.session.signal({
+          data: token,
+          to: connectionId,
+          type: 'Go-SebuSession-Agree'
+        });
+     },
+     sendSessionDisagreeFunc(connectionId, token) {
+       this.session.signal({
+          data: token,
+          to: connectionId,
+          type: 'Go-SebuSession-Disagree'
+        });
+     },
 
     // 찬성 반대 connectId 얻기
-    getAgreePosition () {
-      this.$store.dispatch("getConnectionAgree",this.session.sessionId).then((response) => {
-        console.log(response.data)
-        return response.data;
+    async getAgreePosition () {
+      let result = [];
+      await this.$store.dispatch("getConnectionAgree",this.session.sessionId).then((response) => {
+        let data = JSON.parse(response.data.json)
+        for (var key in data) {
+          result.push(data[key])
+        }
       })
+        console.log(result)
+        return result;
     },
-    getDisagreePosition() {
-      this.$store.dispatch("getConnectionDisagree",this.session.sessionId).then((response) => {
-        console.log(response.data)
-        return response.data;
+    async getDisagreePosition() {
+        let result = [];
+      await this.$store.dispatch("getConnectionDisagree",this.session.sessionId).then((response) => {
+        let data = JSON.parse(response.data.json)
+        for (var key in data) {
+          result.push(data[key])
+        }
       })
+      console.log(result)
+        return result.data;
     },
 
     // 음소거 컨트롤 시그널
-    audioMute(status) {
-      let agreeArr = this.getAgreePosition();
-      let disagreeArr = this.getDisagreePosition();
-      if (status == 0) {
+    async audioMute(status) {
+      let agreeArr = [];
+      let disagreeArr = [];
+      await this.getAgreePosition().then((res) => { agreeArr = res});
+      await this.getDisagreePosition().then((res) => { disagreeArr = res});
+      console.log(agreeArr)
+      console.log(disagreeArr)
+      let temp = {
+        connectionId : '',
+      }
+      if (status == 1) {
         for (var i in agreeArr) {
-          this.sendAudioSignal('On', i)
+          console.log(agreeArr[i])
+          temp.connectionId = agreeArr[i]
+          this.sendAudioSignal('On', temp)
         }
         for (var j in disagreeArr) {
-          this.sendAudioSignal('Off', j)
+          //this.sendAudioSignal('Off', disagreeArr[j])
+          console.log(disagreeArr[j])
+          temp.connectionId = disagreeArr[j]
+          this.sendAudioSignal('Off', temp)
         }
-      } else if (status == 1) {
+      } else if (status == 0) {
         for (var k in agreeArr) {
-          this.sendAudioSignal('Off', k)
+          //this.sendAudioSignal('Off', agreeArr[k])
+          console.log(agreeArr[k])
+          temp.connectionId = agreeArr[k]
+          this.sendAudioSignal('Off', temp)
         }
         for (var z in disagreeArr) {
-          this.sendAudioSignal('On', z)
+          //this.sendAudioSignal('On', disagreeArr[z])
+          console.log(disagreeArr[z])
+          temp.connectionId = disagreeArr[z]
+          this.sendAudioSignal('On', temp)
         }
       }
     },
@@ -1531,10 +1619,7 @@ export default {
     position: absolute;
     height: 93vh;
     width: var(--vote-modal-width);
-    background-color: rgba(255, 255, 255, 0.295);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: rgba(54, 54, 54, 0.699);
 }
 .moderator-menus {
     color: white;
@@ -1710,9 +1795,9 @@ export default {
     height: var(--vsi-blank);
 }
 .vsi-wrap {
-    height: 100%;
+    height: calc(100% - var(--vsi-blank));
     width: 100%;
-    background-color: rgb(61, 255, 94);
+    /* background-color: rgb(61, 255, 94); */
     overflow: auto;
 }
 .videobox-side-inner {
@@ -1723,8 +1808,12 @@ export default {
 }
 .vsi-wrap::-webkit-scrollbar{width: 4px;}
 .vsi-wrap::-webkit-scrollbar-thumb {
-  background-color: rgba(39, 39, 39, 0.712);
+  background-color: rgba(102, 102, 102, 0.853);
     border-radius: 5px;
+}
+.debate-room-side-vido {
+  margin-top:10px;
+  margin-bottom: 10px;
 }
 .videobox-center {
   height: var(--debate-box-center-height);
@@ -1741,15 +1830,19 @@ export default {
 .moderator-video-inner {
   height: var(--center-video-height);
   width: var(--center-video-width);
-  background-color: aquamarine;
+  /* background-color: aquamarine; */
 }
 
 .debateroom-center-timer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
   /* background-color: rgb(119, 0, 255); */
-  height: var(--dct-height);
+  height: calc(var(--dct-height) + 10px);
 }
 .share-view-wrap {
-    height: calc(var(--share-view-height) + 40px);
+    /* background-color: aquamarine; */
+    height: calc(var(--share-view-height) + 20px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1759,5 +1852,12 @@ export default {
   width: var(--share-view-width);
   background-color: rgb(56, 56, 56);
   border-radius: 10px;
+}
+.rest-timer > p{
+  position: absolute;
+  left: 43%;
+  top: 5%;
+  color: white;
+  font-size: 30px;
 }
 </style>

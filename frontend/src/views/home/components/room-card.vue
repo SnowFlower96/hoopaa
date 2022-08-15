@@ -1,12 +1,6 @@
 <template>
-  <div class="room-info-carosel" :style="customCaroselStyle">
-    <img class="img-thumbnail" :src="getPic(room.thumbUrl)" />
-
-    <h1>{{ room.subtitle }}</h1>
-    <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p>
-      <p id="title-carosel">{{room.subtitle}}</p> -->
-
-    <!-- <img :src ="require(this.backurl)"> -->
+<!-- <div class="background" :style="{backgroundImage: 'url('+backurl+')'}"> -->
+  <div class="room-info-carosel" :style="{backgroundImage: 'url('+backurl+')'}">
   </div>
 </template>
 <script>
@@ -24,24 +18,31 @@ export default {
       caoselWrapperOverTF: false,
       dropdownSortTF: false,
       homeCheckInModal: false,
-      backurl: null,
-      // litt: '../../../assets/thumbnail/14dcc40e-285b-48a2-a104-1c2c7e90fa24_20220814211735.jpg',
+      backurl: '',
       ppSet: true
     };
   },
   created() {
-    // this.backurl=require("../../../assets/thumbnail/"+room.thumbUrl)
-    console.log(this.room.thumbUrl);
-    // this.backurl ="../../../assets/thumbnail/"+ this.room.thumbUrl;
-    console.log(this.backurl);
+     if(this.room.thumbUrl==null){
+      this.backurl="https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg";
+    }else{
+      this.backurl="data:image/png;base64,"+this.room.thumbUrl;
+    }
+
     // console.log(this.backurl);
+  },
+  updated() {
+     if(this.room.thumbUrl==null){
+      this.backurl="https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg";
+    }else{
+      this.backurl="data:image/png;base64,"+this.room.thumbUrl;
+    }
   },
   computed: {
     customCaroselStyle() {
       return {
         "--carosel-item-width": this.caroselWidth,
-        "--carosel-item-height": this.caroselHeight,
-        "--carosel-item-back": this.backurl
+        "--carosel-item-height": this.caroselHeight
         // "--room-phase-tip-margin-left": `${this.caroselWidth}-200px`
       };
     }
@@ -51,18 +52,9 @@ export default {
       console.log(to);
     }
   },
-  methods: {
-    // getPic(name) {
-    //   return require("../../../assets/thumbnail/" + name);
-    // },
-    // geturl(name) {
-    //   return `url(../../../assets/thumbnail/` + name + `)`;
-    // }
-  },
   mounted() {
-    console.log(this.room.thumbUrl);
-    // var str = "../../assets/thumbnail/" + this.room.thumbUrl;
-    // this.backurl=require("../../assets/thumbnail/"+this.room.thumbUrl)
+
+
     const value = document.body.clientWidth * 0.8 * 0.25;
     this.caroselWidth = `${value - 20}px`; // margin buffer 10px 고려한 계산
     (this.caroselHeight = `${(value - 20) * 0.62}px`),
@@ -80,6 +72,16 @@ export default {
 }
 
 .room-info-carosel:hover {
-  -webkit-transform: scale(1.4);
+  -webkit-transform: scale(1.2);
+  filter: brightness(100%);
+}
+
+.room-info-carosel {
+  /* width: 80px; */
+  height: 100%;
+  background-size:100% 100%;
+  width: 100%;
+  filter: brightness(80%);
+  border-radius: 10px;
 }
 </style>

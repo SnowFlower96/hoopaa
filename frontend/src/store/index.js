@@ -289,7 +289,6 @@ export default new Vuex.Store({
       url : index,
       method : "POST",
     }).then((res) => {
-      console.log(res.data);
       resolve(res);
       commit();
     }).catch((error) => {

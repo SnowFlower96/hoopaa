@@ -42,19 +42,16 @@
 
             <div class="main-container">
               <div class="main-inner-container">
-                <!-- 곧 지우는 코드 -->
-                  <router-link style="position: absolute;" to="/homeToParticipate"><button>모든토론보기 썸네일 누르면 가게되는 페이지</button></router-link>
-                <!-- 곧 지우는 코드 -->
                 <h1>실시간 인기 토론</h1>
                 <div class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
                      <div class="carosel-room-card" @click="gotoRoom">
-                      <!-- <div class="room-info-carosel" :style="customCaroselStyle">
-                        <p class="room-phase-tip">{{phase[room.phase]}}</p>
-
-                      </div> -->
-                    <room-card :room ="room"></room-card>
+                      <div class="room-info-carosel" :style="customCaroselStyle">
+                        <room-card :room ="room"></room-card>
+                        <p class="room-description"><span class="room-phase-tip">{{phase[room.phase]}}</span><span class="room-cate-tip">  {{menus[room.cate].name}}  </span> </p>
+                        <p><span>&nbsp;</span><span>{{room.subtitle}}</span></p>
+                      </div>
                     <p id="title-carosel">{{room.subtitle}}</p>
                     </div>
                     </li>
@@ -161,7 +158,7 @@
   display: flex;
 }
 .room-phase-tip {
-  width: 45px;
+  width: 100px;
   text-align: end;
   background-color: rgb(167, 234, 255);
   font-size: 15px;
@@ -170,7 +167,16 @@
   border-radius: 3px;
   /* margin-left: var(--room-phase-tip-margin-left); */
 }
-
+.room-cate-tip{
+   background-color: rgb(34, 225, 28);
+   font-size: 15px;
+  padding: 3px;
+  z-index: 3;
+  border-radius: 3px;
+}
+.room-description{
+  text-align: left;
+}
 /* 카테고리 style */
 ul {
   display: flex;
@@ -341,7 +347,7 @@ import Search from '@/views/common/search'
 import Conference from './components/conference'
 import RoomCard from './components/room-card'
 import 'vue3-carousel/dist/carousel.css';
-import { mapState , mapMutations} from "vuex";
+// import { mapState , mapMutations} from "vuex";
 
 
 export default {
@@ -365,11 +371,24 @@ export default {
       caoselWrapperOverTF: false,
       dropdownSortTF: false,
       homeCheckInModal : false,
-      ppSet: true
+      ppSet: true,
+      menuData : require('@/views/main/menu.json'),
+      //  - - - - - - 여기고침 - - - - - -  ⬇//
+      // 0815 곧 지울
+
+      // roomList : [
+      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'},
+      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'},
+      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},
+      //   ],
+
+      // // 0815 곧 지울
+      viewCaroselLenghth : 4
+      //  - - - - - - 여기고침 - - - - - -  ⬆//
     }
   },
   computed : {
-    ...mapState(["roomList"]),
+    // ...mapState(["roomList"]),
     customCaroselStyle() {
       return {
         "--carosel-item-width": this.caroselWidth,
@@ -383,13 +402,21 @@ export default {
       console.log(to)
     }
   },
+ //  - - - - - - 여기고침 - - - - - -  ⬇//
   mounted() {
-    this.clickCaroselNext = setInterval(this.next, 5000)
+    if (this.roomList.length < 8) {
+      const ceroselLet = this.roomList.length
+      for(let i = 1; i < 9-ceroselLet; i++) {
+        this.roomList.push({phase: '', title: '', subtitle: ''})
+      }
+    }
+    this.clickCaroselNext = setInterval(this.next, 3000)
     const value = document.body.clientWidth*0.8*0.25
     this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
     this.caroselHeight = `${(value-20)*0.62}px`
     window.addEventListener('resize', this.handleResizeHome);
   },
+//  - - - - - - 여기고침 - - - - - -  ⬆//
   beforeRouteLeave() {
     clearInterval(this.clickCaroselNext)
   },
@@ -399,12 +426,13 @@ export default {
     this.menus = menuData;
   },
    methods: {
-    ...mapMutations(["GET_ROOM_LIST"]),
+    // ...mapMutations(["GET_ROOM_LIST"]),
     changePpSet() {
       this.ppSet = false
     },
     offModal() {
       this.homeCheckInModal = false
+      this.ppSet = true
     },
     gotoRoom() {
       this.homeCheckInModal = true
@@ -475,9 +503,10 @@ export default {
       const value = document.body.clientWidth*0.8*0.25
       carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
     },
+    //  - - - - - - 여기고침 - - - - - -  ⬇//
     next() {
         const carousel = document.querySelector('.carousel-ul');
-        if (this.c_index === 10) {
+        if (this.c_index === this.viewCaroselLenghth) {
           carousel.style.transform = `translate3d(0, 0, 0)`;
           this.c_index = 0
         } else {
@@ -486,6 +515,7 @@ export default {
           carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
         }
     }
+    //  - - - - - - 여기고침 - - - - - -  ⬆//
   }
   // setup () {
   //   const router = useRouter()

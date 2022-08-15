@@ -53,39 +53,22 @@ export default {
   mounted() {
     console.log(this.timeList);
     const wValue = document.body.clientWidth * 0.75 * 0.3 - 20; // 사회자 비디오
-    const wValueNotVid = document.body.clientWidth * 0.75 * 0.4; // 게이지 + 컨텐츠
     this.centerVideoWidth = `${wValue}px`;
     this.centerVideoHeight = `${wValue * 0.6}px`;
 
-    const hValue = document.body.clientHeight * 0.8 - wValue * 0.6;
 
     this.dbModerator = `${wValue * 0.6}px`;
-    this.dbGuague = `${hValue * 0.15}px`;
-    this.dbContent = `${hValue * 0.85}px`;
 
-    this.dbGuagueInnerWidth = `${wValueNotVid - 30}px`;
-    this.dbContentInnerWidth = `${wValueNotVid - 50}px`;
-    this.dbGuagueInnerHeight = `${hValue * 0.15 - 30}px`;
-    this.dbContentInnerHeight = `${hValue * 0.85 - 50}px`;
     window.addEventListener("resize", this.handleResizeHome);
   },
   methods: {
     handleResizeHome() {
       const wValue = document.body.clientWidth * 0.75 * 0.3 - 20; // 사회자 비디오
-      const wValueNotVid = document.body.clientWidth * 0.75 * 0.4; // 게이지 + 컨텐츠
       this.centerVideoWidth = `${wValue}px`;
       this.centerVideoHeight = `${wValue * 0.6}px`;
 
-      const hValue = document.body.clientHeight * 0.8 - wValue * 0.6;
 
       this.dbModerator = `${wValue * 0.6}px`;
-      this.dbGuague = `${hValue * 0.15}px`;
-      this.dbContent = `${hValue * 0.85}px`;
-
-      this.dbGuagueInnerWidth = `${wValueNotVid - 30}px`;
-      this.dbContentInnerWidth = `${wValueNotVid - 50}px`;
-      this.dbGuagueInnerHeight = `${hValue * 0.15 - 30}px`;
-      this.dbContentInnerHeight = `${hValue * 0.85 - 50}px`;
     }
   }
 };
@@ -104,7 +87,7 @@ video {
   /* outline: aqua solid 3px; */
 }
 .debate-moderator-inner {
-  background-color: white;
+  background-color: rgb(56, 56, 56);
   height: var(--center-video-height);
   width: var(--center-video-width);
   border-radius: 10px;
