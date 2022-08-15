@@ -107,7 +107,9 @@ export default {
       isSys : '0',
       selectedMenu: null,
       file : '',
-      preview : ''
+      preview : '',
+      cate: ''
+
     }
   },
    computed : {
@@ -134,9 +136,9 @@ export default {
         pwd : this.roomPwd,
         subtitle : this.roomName,
         title : this.roomTitle,
+        cate: this.selectedMenu.idx,
         file: this.file,
       }
-      console.log(room.hashtags)
         let data = {
           pwd : room["pwd"],
           sessionId : this.user.id,
