@@ -21,11 +21,10 @@
           </div>
           <div class="info-item-btn"><button>수정</button></div>
         </form>
-    <!-- <div>pwd1 : {{ infoPwd1 }}</div>
-    <div>pwd2 : {{ infoPwd2 }}</div>
-    <div>nickname : {{ infoNickName }}</div> -->
+        <div class="unsubscribe-btn">
+          <div>회원탈퇴</div>
+        </div>
       </div>
-    <div><button>회원탈퇴</button></div>
   </div>
 </template>
 
@@ -65,6 +64,13 @@ export default {
 </script>
 
 <style>
+.unsubscribe-btn {
+  position: relative;
+  left: 150px;
+  font-size: 15px;
+  color: rgb(168, 90, 90);
+  cursor: pointer;
+}
 .mypage-info {
   height: 70vh;
   text-align: center;
