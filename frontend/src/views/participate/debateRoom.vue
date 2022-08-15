@@ -640,14 +640,21 @@ export default {
 
       // On every Stream destroyed...
       // TODO
-      this.session.on("streamDestroyed", ({ stream }) => {
-        const index = this.agree.indexOf(stream.streamManager, 0);
-        if (index >= 0) {
-          this.subscribers.splice(index, 1);
+      this.session.on("streamDestroyed", ({ event: StreamEvent}) => {
+        console.log(this.agree)
+        console.log(stream)
+
+        for (var i = 0; i < this.agree.length; i++) {
+          let index = this.agree[i].data.indexOf(stream.streamManager, 0);
+          if (index >= 0) {
+          this.agree.splice(i, 1);
         }
-        const index2 = this.disagree.indexOf(stream.streamManager, 0);
-        if (index2 >= 0) {
-          this.subscribers.splice(index2, 1);
+        }
+        for (var i = 0; i < this.disagree.length; i++) {
+          let index = this.disagree[i].data.indexOf(stream.streamManager, 0);
+          if (index >= 0) {
+          this.disagree.splice(i, 1);
+        }
         }
       });
       // on session destroyed...
@@ -819,6 +826,7 @@ export default {
 				this.screensharing=false;
 
 			window.removeEventListener('beforeunload', this.leaveSession);
+      router.push('/')
 		},
 
 
