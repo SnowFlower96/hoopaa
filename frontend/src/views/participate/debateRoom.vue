@@ -331,6 +331,7 @@ import UserVideo from '@/views/openvidu/UserVideo.vue';
 import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 import moment from 'moment';
+import router from '../../common/lib/vue-router'
 
 const OPENVIDU_SERVER_URL = "https://hoopaa.site:8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
@@ -652,10 +653,15 @@ export default {
       // Hearing Signal
 
       // 세부세션 signal
-     this.session.on('signal:Go-SebuSession', (event) => {
+     this.session.on('signal:Go-SebuSession-Agree', (event) => {
+      this.$store.commit("CREATE_TEMP_TOKEN", event.data);
       console.log(event.data); // Message
-      console.log(event.from); // Connection object of the sender
-      console.log(event.type); // The type of message ("my-chat")
+      router.push('/detailSessionView')
+    });
+     this.session.on('signal:Go-SebuSession-Disagree', (event) => {
+      this.$store.commit("CREATE_TEMP_TOKEN", event.data);
+      console.log(event.data); // Message
+      router.push('/detailSessionView')
     });
       // 발언권 signal
       this.session.on('signal:Set-Audio', (event) => {
@@ -1327,17 +1333,49 @@ export default {
         },
 
         // 세부세션 보내기 시그널
-        sendSession() {
-      //     let index = "/room/session/" + this.session.sessionId;
-      //     this.$store.dispatch("makeSessionRoom", index).then((response) => {
-      //     console.log(response.data);
-      // })
-      this.session.signal({
-        data: 'Go SebuSession !!!',
-        to: [],
-        type: 'Go-SebuSession'
-      });
+        async sendSession() {
+          let agreeArr = [];
+          let disagreeArr = [];
+          let index = "/room/session/" + this.session.sessionId;
+          await this.$store.dispatch("makeSessionRoom", index).then((response) => {
+          let data = JSON.parse(response.data.json)
+          for (var key in data) {
+            if (data[key].token.includes('agree')) {
+              // agreeArr.push(
+              //   {
+              //     connectionId : data[key].connectionID,
+              //     token : data[key].token
+              //   }
+              // )
+              this.sendSessionAgreeFunc({connectionId : data[key].connectionID}, data[key].token)
+            } else {
+              // disagreeArr.push(
+              //   {
+              //     connectionId : data[key].connectionID,
+              //     token : data[key].token
+              //   }
+              // )
+              this.sendSessionDisagreeFunc({connectionId : data[key].connectionID}, data[key].token)
+            }
+          }
+        })
+
     },
+    // 세부세션 보내기 시그널 함수
+     sendSessionAgreeFunc(connectionId, token) {
+       this.session.signal({
+          data: token,
+          to: connectionId,
+          type: 'Go-SebuSession-Agree'
+        });
+     },
+     sendSessionDisagreeFunc(connectionId, token) {
+       this.session.signal({
+          data: token,
+          to: connectionId,
+          type: 'Go-SebuSession-Disagree'
+        });
+     },
 
     // 찬성 반대 connectId 얻기
     async getAgreePosition () {
