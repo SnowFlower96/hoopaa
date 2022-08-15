@@ -335,7 +335,7 @@ ul {
 import Search from '@/views/common/search'
 import Conference from './components/conference'
 import 'vue3-carousel/dist/carousel.css';
-import { mapState , mapMutations} from "vuex";
+// import { mapState , mapMutations} from "vuex";
 
 
 export default {
@@ -361,18 +361,18 @@ export default {
       ppSet: true,
       //  - - - - - - 여기고침 - - - - - -  ⬇//
       // 0815 곧 지울
-      // roomList : [
-      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
-      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
-      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-      //   ],
+      roomList : [
+        {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
+        {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
+        {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
+        ],
       // // 0815 곧 지울
       viewCaroselLenghth : 4
       //  - - - - - - 여기고침 - - - - - -  ⬆//
     }
   },
   computed : {
-    ...mapState(["roomList"]),
+    // ...mapState(["roomList"]),
     customCaroselStyle() {
       return {
         "--carosel-item-width": this.caroselWidth,
@@ -410,12 +410,13 @@ export default {
     this.menus = menuData;
   },
    methods: {
-    ...mapMutations(["GET_ROOM_LIST"]),
+    // ...mapMutations(["GET_ROOM_LIST"]),
     changePpSet() {
       this.ppSet = false
     },
     offModal() {
       this.homeCheckInModal = false
+      this.ppSet = true
     },
     gotoRoom() {
       this.homeCheckInModal = true
