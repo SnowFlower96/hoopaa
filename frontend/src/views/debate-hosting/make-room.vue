@@ -152,33 +152,44 @@ export default {
       this.isSys = '1'
     },
      fileChange(e) {
-      console.log(e.target.files);
-      const file = e.target.files;
-      if(file.length!=0){
+      const files = e.target.files;
+      if(files.length>0){
 
-        console.log(file[0].size);
+        console.log(files[0].size);
         let validation = true;
         let message = '';
 
-        if(file.length > 1){
+        if(files.length > 1){
           validation = false;
           message = `하나의 이미지 파일만 업로드 가능합니다.`;
         }
 
-        if(file[0].size > 1024 * 1024 * 3){
+        if(files[0].size > 1024 * 1024 * 3){
           validation = false;
           message = `3MB이하의 파일만 업로드 가능합니다.`;
         }
 
-        if(file[0].type.indexOf('image') < 0) {
+        if(files[0].type.indexOf('image') < 0) {
           validation = false;
           message = `이미지 파일만 업로드 가능합니다.`;
         }
 
         if(validation) {
-          this.file = file;
-          console.log("타입"+typeof(file));
-          this.preview = URL.createObjectURL(this.file[0])
+          const reader = new FileReader();
+          //reader가 이미지 로드할 시 이벤트
+          reader.addEventListener("load", ()=>{
+            const dataIndex = reader.result.indexOf(',')+1
+            const base64 = reader.result.substring(
+              dataIndex,
+              reader.result.length
+            )
+
+            this.file = base64
+            console.log("base64"+base64);
+          })
+          reader.readAsDataURL(files[0])
+          this.file = this.encodedFile;
+          this.preview = URL.createObjectURL(files[0])
         }else{
           this.file = '';
           alert(message);
