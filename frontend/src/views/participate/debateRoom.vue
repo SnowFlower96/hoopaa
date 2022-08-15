@@ -1355,20 +1355,8 @@ export default {
           let data = JSON.parse(response.data.json)
           for (var key in data) {
             if (data[key].token.includes('agree')) {
-              // agreeArr.push(
-              //   {
-              //     connectionId : data[key].connectionID,
-              //     token : data[key].token
-              //   }
-              // )
               this.sendSessionAgreeFunc({connectionId : data[key].connectionID}, data[key].token)
             } else {
-              // disagreeArr.push(
-              //   {
-              //     connectionId : data[key].connectionID,
-              //     token : data[key].token
-              //   }
-              // )
               this.sendSessionDisagreeFunc({connectionId : data[key].connectionID}, data[key].token)
             }
           }
