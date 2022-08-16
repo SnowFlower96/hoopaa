@@ -34,3 +34,39 @@
 2022-08-16 08:58:07.741 DEBUG 17552 --- [restartedMain] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
 2022-08-16 08:58:08.318  INFO 17552 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (https) with context path ''
 2022-08-16 08:58:08.714  INFO 17552 --- [restartedMain] com.ssafy.GroupCallApplication           : Started GroupCallApplication in 9.695 seconds (JVM running for 10.394)
+2022-08-16 15:01:58.353  INFO 1732 --- [restartedMain] com.ssafy.GroupCallApplication           : Starting GroupCallApplication using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 1732 (C:\SSAFY\Common_Project_02\backend\build\classes\java\main started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-16 15:01:58.356  INFO 1732 --- [restartedMain] com.ssafy.GroupCallApplication           : No active profile set, falling back to default profiles: default
+2022-08-16 15:01:58.413  INFO 1732 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-08-16 15:01:58.414  INFO 1732 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-08-16 15:01:59.879  INFO 1732 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-16 15:01:59.971  INFO 1732 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 83 ms. Found 7 JPA repository interfaces.
+2022-08-16 15:02:00.333  INFO 1732 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@27c9936c' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-16 15:02:00.338  INFO 1732 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-16 15:02:01.268  INFO 1732 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (https)
+2022-08-16 15:02:01.284  INFO 1732 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-08-16 15:02:01.284  INFO 1732 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.45]
+2022-08-16 15:02:01.455  INFO 1732 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-08-16 15:02:01.455  INFO 1732 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3040 ms
+2022-08-16 15:02:01.751 DEBUG 1732 --- [restartedMain] o.s.web.filter.CharacterEncodingFilter   : Filter 'characterEncodingFilter' configured for use
+2022-08-16 15:02:01.752 DEBUG 1732 --- [restartedMain] o.s.w.f.CommonsRequestLoggingFilter      : Filter 'commonsRequestLoggingFilter' configured for use
+2022-08-16 15:02:01.989  INFO 1732 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-16 15:02:02.082  INFO 1732 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-16 15:02:02.380  INFO 1732 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-16 15:02:02.492  INFO 1732 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-16 15:02:02.746  INFO 1732 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-16 15:02:02.760  INFO 1732 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-16 15:02:03.953  INFO 1732 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-16 15:02:03.970  INFO 1732 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-16 15:02:04.043  INFO 1732 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-08-16 15:02:05.281  INFO 1732 --- [restartedMain] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: []
+2022-08-16 15:02:05.369  WARN 1732 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-16 15:02:05.685 DEBUG 1732 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : 40 mappings in 'requestMappingHandlerMapping'
+2022-08-16 15:02:05.969  INFO 1732 --- [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-16 15:02:06.156  INFO 1732 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@67ff5a58, org.springframework.security.web.context.SecurityContextPersistenceFilter@38f06278, org.springframework.security.web.header.HeaderWriterFilter@45f2dc20, org.springframework.web.filter.CorsFilter@4c018aec, org.springframework.security.web.authentication.logout.LogoutFilter@1474447, com.ssafy.common.auth.JwtAuthenticationFilter@24b56866, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@547613c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@46a0a093, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@51f715af, org.springframework.security.web.session.SessionManagementFilter@558cc2a5, org.springframework.security.web.access.ExceptionTranslationFilter@39f0d67f, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@38d12bdf]
+2022-08-16 15:02:06.222  INFO 1732 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-16 15:02:06.238 DEBUG 1732 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-16 15:02:06.279 DEBUG 1732 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-16 15:02:06.532 DEBUG 1732 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-16 15:02:06.541 DEBUG 1732 --- [restartedMain] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-16 15:02:06.936  INFO 1732 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (https) with context path ''
+2022-08-16 15:02:07.223  INFO 1732 --- [restartedMain] com.ssafy.GroupCallApplication           : Started GroupCallApplication in 9.309 seconds (JVM running for 9.866)

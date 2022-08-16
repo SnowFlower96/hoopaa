@@ -81,13 +81,12 @@ public class RoomController {
     })
     public ResponseEntity<? extends BaseResponseBody> enterRoom(@ApiIgnore Authentication authentication, @RequestBody RoomEnterReq roomEnterReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
-        String AToken = userDetails.getUsername();
 
         UserInfoDto user;
         // 회원
-        if (AToken.chars().allMatch(Character::isDigit)) user = userService.getUserInfoDtoById(Long.parseLong(AToken));
+        if (userDetails.isUser()) user = userService.getUserInfoDtoById(Long.parseLong(userDetails.getUsername()));
         // 비회원
-        else user = new UserInfoDto(User.builder().nnm(AToken).build());
+        else user = new UserInfoDto(User.builder().nnm(userDetails.getNnm()).build());
 
         // 해당 세션이 존재하지 않으면
         if (!roomService.isExistRoom(roomEnterReq.getSessionId()))
