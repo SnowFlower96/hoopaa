@@ -674,14 +674,12 @@ export default {
      this.session.on('signal:Go-SebuSession-Agree', (event) => {
       if (this.session.sessionId != this.user.id) {
         this.$store.commit("CREATE_TEMP_TOKEN", event.data);
-        this.leaveSession();
         this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'agree')
       }
     });
      this.session.on('signal:Go-SebuSession-Disagree', (event) => {
       if (this.session.sessionId != this.user.id) {
       this.$store.commit("CREATE_TEMP_TOKEN", event.data);
-      this.leaveSession();
       this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'disagree')
       }
     });
