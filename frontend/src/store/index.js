@@ -361,6 +361,7 @@ export default new Vuex.Store({
       method : "POST",
     }).then((res) => {
       commit("BUSER_LOGIN", res.data)
+      console.log(data.data)
       this.dispatch("enterRoom", data.data);
     })
   },

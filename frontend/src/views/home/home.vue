@@ -88,7 +88,7 @@
                   <div class="main-all-container">
                     <ul class="main-all-ul">
                       <li  v-for="(room, index) in roomList" :key="index">
-                      <div v-if="index<7" class="carosel-room-card" @click="gotoRoom">
+                      <div v-if="index<7" class="carosel-room-card" @click="gotoRoom(room.hostID)">
                         <div class="room-info-carosel" :style="customCaroselStyle">
                           <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
 
