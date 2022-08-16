@@ -64,7 +64,6 @@ export default {
     const value = document.body.clientWidth * 0.8 * 0.25;
     this.caroselWidth = `${value - 20}px`; // margin buffer 10px 고려한 계산
     (this.caroselHeight = `${(value - 20) * 0.62}px`),
-      console.log(this.backurl);
     window.addEventListener("resize", this.handleResizeHome);
   }
 };
@@ -73,7 +72,7 @@ export default {
 <style>
 .room-info:hover {
   -webkit-transform: scale(1.2);
-  filter: brightness(80%);
+  filter: brightness(100%);
 }
 .room-desc{
   text-align: end;
@@ -91,7 +90,7 @@ export default {
   height: 100%;
   background-size:100% 100%;
   width: 100%;
-  filter: brightness(100%);
+  filter: brightness(80%);
   border-radius: 10px;
 }
 .room-title{
