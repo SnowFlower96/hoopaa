@@ -672,28 +672,34 @@ export default {
 
       // 세부세션 signal
      this.session.on('signal:Go-SebuSession-Agree', (event) => {
-      this.$store.commit("CREATE_TEMP_TOKEN", event.data);
-      console.log(event.data); // Message
-      router.push('/detailSessionView')
+      if (this.session.sessionId != this.user.id) {
+        this.$store.commit("CREATE_TEMP_TOKEN", event.data);
+        this.leaveSession();
+        this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'agree')
+      }
     });
      this.session.on('signal:Go-SebuSession-Disagree', (event) => {
+      if (this.session.sessionId != this.user.id) {
       this.$store.commit("CREATE_TEMP_TOKEN", event.data);
-      console.log(event.data); // Message
-      router.push('/detailSessionView')
+      this.leaveSession();
+      this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'disagree')
+      }
     });
       // 발언권 signal
       this.session.on('signal:Set-Audio', (event) => {
-        console.log(event.data); // Message
+        if (this.session.sessionId != this.user.id) {
         if (event.data == 'On') {
           this.publisher.publishAudio(true);
         } else {
           this.publisher.publishAudio(false);
         }
+        }
     });
     // 투표시작 signal
-      this.session.on('Start-Vote', (event) => {
-        if (this.voteTeam || this.voteAll) {
+      this.session.on('signal:Start-Vote', (event) => {
+        if (this.voteTeam || this.voteAll ) {
           this.voteView();
+          console.log(this.voteViewTF)
         }
       })
 
