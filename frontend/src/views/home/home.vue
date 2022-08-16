@@ -61,7 +61,8 @@
 
 
                 <div>
-                  <h1>전체 카테고리</h1>
+                  <!-- 수정 부분 -->
+                  <h1>{{menus[menusIndex].name}} 카테고리</h1> <!-- 수정 부분 -->
                   <div class="cate-items-wrap">
                     <div class="cate-item">
                       <div>
@@ -371,6 +372,11 @@ h1{
   width:100%;
   flex-wrap: wrap;
   flex-direction: row;
+  list-style:none;
+  padding: 0px;
+}
+.main-all-ul > li {
+  margin: 10px;
 }
 /* room-list */
 
@@ -393,8 +399,8 @@ export default {
   },
   data () {
     return {
-      phase : {0:"모집중", 1:"진행중", 3:"투표중", 4:"종료"},
       menus : '',
+      menusIndex: 0, // < ===== 이거추가
       checkbox : 'false',
       data : '',
       c_index : 0,
@@ -408,18 +414,15 @@ export default {
       b_nnm : '',
       roomId : '',
       allcheck:true,
-
-      //  - - - - - - 여기고침 - - - - - -  ⬇//
-      // 0815 곧 지울
       // roomList : [
-      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'},
-      //   {phase: 'hi01', title: 'yes01', subtitle: 'no0101'},
-      //   {phase: 'hi01', title: '느엥', subtitle: 'no0101'},
+      //   {phase: 0, title: 'yes01', subtitle: 'GMO식품과연안전한가?'},
+      //   {phase: 1, title: 'yes01', subtitle: '가나다라마바사아자차카타퍼ㅏ하'},
+      //   {phase: 1, title: '느엥', subtitle: '1대1하실분 들어오셈'},
+      //   {phase: 1, title: '느엥', subtitle: '배고프다'},
+      //   {phase: 1, title: '느엥', subtitle: '느dfgdfgdfgdfgdfg엥'},
+      //   {phase: 1, title: '느엥', subtitle: '느엥'},
       //   ],
-
-      // // 0815 곧 지울
       viewCaroselLenghth : null
-      //  - - - - - - 여기고침 - - - - - -  ⬆//
     }
   },
   computed : {
@@ -437,7 +440,6 @@ export default {
       console.log(to)
     }
   },
- //  - - - - - - 여기고침 - - - - - -  ⬇//
   mounted() {
     if (this.roomList.length < 4 || this.roomList.length === 4) {
       this.viewCaroselLenghth = 0
@@ -445,13 +447,12 @@ export default {
     else {
       this.viewCaroselLenghth = this.roomList.length - 4
     }
-    this.clickCaroselNext = setInterval(this.next, 3000)
+    this.clickCaroselNext = setInterval(this.next, 4000)
     const value = document.body.clientWidth*0.8*0.25
     this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
     this.caroselHeight = `${(value-20)*0.62}px`
     window.addEventListener('resize', this.handleResizeHome);
   },
-//  - - - - - - 여기고침 - - - - - -  ⬆//
   beforeRouteLeave() {
     clearInterval(this.clickCaroselNext)
   },
@@ -476,10 +477,11 @@ export default {
     goCate(index)  {
       if(index!='/list/all'){
         this.allcheck ='true'
+        this.menusIndex = index.charAt(index.length - 1)  // < ===== 이거추가
       }else{
         this.allcheck='false'
+        this.menusIndex = 0  // < ===== 이거추가
       }
-      console.log(index);
       this.checkbox = false;
       this.$store.dispatch("getRoomInfoCate", index);
     },
@@ -545,7 +547,6 @@ export default {
       const value = document.body.clientWidth*0.8*0.25
       carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
     },
-    //  - - - - - - 여기고침 - - - - - -  ⬇//
     next() {
         const carousel = document.querySelector('.carousel-ul');
         if (this.c_index === this.viewCaroselLenghth) {
@@ -567,7 +568,6 @@ export default {
       }
       await this.$store.dispatch("enterRoom", data)
     }
-    //  - - - - - - 여기고침 - - - - - -  ⬆//
   }
   // setup () {
   //   const router = useRouter()

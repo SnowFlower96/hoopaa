@@ -101,7 +101,7 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      console.log(to.name)
+      // console.log(to.name)
       if (to.name === 'main-page' || to.name === 'login' || to.name === 'sign-up' || to.name === 'checkPwd' || to.name === 'Participate') {
         this.location = to.name
         this.visibleMainHeader = false
