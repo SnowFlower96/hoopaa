@@ -1,23 +1,44 @@
 <template>
+<!-- 세부세션 메인 -->
     <div class="detail-box-background" :style="customDetailSessionSize">
+        
+        <!-- 화면공유 + 사용자비디오 들어가는부분 -->
         <div class="detail-box-outer">
-            <div class="detail-box-file">
-                <div v-for="(sub, index) in subscribersScreen" :key="index" >
-					        <user-video :stream-manager="sub.data" ></user-video>
-				        </div>
-            </div>
-            <div class="detail-box-video">
-                <debate-room-video class="debate-room-side-vido" v-for="(item, index) in subscribers" :key="index" :stream="item.data"></debate-room-video>
-            </div>
+
+            <!-- 화면공유 -->
+                <div class="detail-box-file" :style="customCaroselStyle">
+                    <div v-for="(sub, index) in subscribersScreen" :key="index" >
+                                <user-video :stream-manager="sub.data" ></user-video>
+                            </div>
+                </div>
+            <!-- 화면공유 -->
+
+            <!-- 사용자 비디오  -->
+                <div class="detail-box-video" :style="customCaroselStyle">
+                    <debate-room-video class="detail-session-vido" v-for="(item, index) in subscribers" :key="index" :stream="item.data"></debate-room-video>
+                </div>
+            <!-- 사용자 비디오  -->
         </div>
-        <div v-if="chattTF" class="chatting-box" :style="customDetailSessionSize">
-            <chatting-team @click="changeChatView"></chatting-team>
+        <!-- 화면공유 + 사용자비디오 들어가는부분 -->
+
+
+        <!-- 채팅방 -->
+            <div v-if="chattTF" class="chatting-box" :style="customDetailSessionSize">
+                <chatting-team @click="changeChatView"></chatting-team>
+            </div>
+        <!-- 채팅방 -->
+
+
+    </div>
+<!-- 세부세션 메인 -->
+
+
+    <!-- 세부세션 푸터 -->
+        <div class="debate-room-footer-class-detail">
+            <footer-team @call-modal="changeChatView"></footer-team>
+            <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
         </div>
-    </div>
-    <div class="debate-room-footer-class-detail">
-        <footer-team @call-modal="changeChatView"></footer-team>
-        <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
-    </div>
+    <!-- 세부세션 푸터 -->
 
 </template>
 <script>
@@ -470,11 +491,22 @@ export default {
         width: var(--view-share);
         color: aliceblue;
         height: 93vh;
+        background-color: rgb(97, 140, 179);
     }
     .detail-box-video {
         /* outline: 2px solid yellow; */
         width: var(--video-box);
-        color: aliceblue;
+        background-color: rgb(84, 156, 73);
         height: 93vh;
+        overflow: auto;
+    }
+    .detail-box-video::-webkit-scrollbar{width: 4px;}
+    .detail-box-video::-webkit-scrollbar-thumb {
+        background-color: rgba(102, 102, 102, 0.853);
+        border-radius: 5px;
+    }
+    .detail-session-vido {
+        margin-top:10px;
+        margin-bottom: 10px;
     }
 </style>
