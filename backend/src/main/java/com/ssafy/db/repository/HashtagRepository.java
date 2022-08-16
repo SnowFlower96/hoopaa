@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface HashtagRepository extends JpaRepository<RoomHashtag, Integer> {
     Optional<RoomHashtag> findHashtagByNm(String nm);
+
 }

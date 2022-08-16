@@ -26,7 +26,15 @@ public class SsafyUserDetails implements UserDetails {
     		super();
     		this.user = user;
     }
-    
+
+    public boolean isUser() {
+        return this.user.getId() != null;
+    }
+
+    public String getNnm() {
+        return this.user.getNnm();
+    }
+
     public User getUser() {
     		return this.user;
     }

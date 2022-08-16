@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @Getter
@@ -28,5 +31,8 @@ public class RoomOpenReq {
 
     @ApiModelProperty(name = "방 자세히 설명", example = "subtitle")
     String subtitle;
+
+    @ApiModelProperty(name = "썸네일")
+    String file;
 
 }
