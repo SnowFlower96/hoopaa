@@ -7,7 +7,7 @@
             <div class="displayFlex" style="font-size: 40px; color:white; height: 35%;">토론 입장</div>
 
             <div style="height: 60%;">
-              <div v-if="!isPannel">방청객으로 입장합니다.</div>
+              <div v-if="!isPannel" style="font-size:30px; color:white;">방청객으로 입장합니다.</div>
 
               <div v-if="isPannel" class="displayFlex" >
                 <div :class="{'ppbs-btn' : !isAgree, 'ppbs-btn-selected' : isAgree}" style="margin: 10px; margin-top: 0px;" @click="positionAgree">찬성</div>
@@ -29,7 +29,7 @@ import { mapState } from 'vuex';
 export default {
   data () {
     return {
-      isPannel : true,
+      isPannel : false,
       sessionId : '',
       isAgree: true
     }

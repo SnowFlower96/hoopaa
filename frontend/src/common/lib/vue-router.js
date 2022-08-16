@@ -96,13 +96,13 @@ function makeRoutesFromMenu () {
 {
   path : '/checkPwd',
   name : 'checkPwd',
-  component : checkPwd,
+  component : checkPwd, 
 },
 {
   path: '/participatingPage',
   name: 'participating-page',
   component: participatingPage,
-  beforeEnter: checkLogin(),
+  // beforeEnter: checkLogin(),
 },
 {
   path: '/startWithCode',
