@@ -33,9 +33,10 @@
       <!--수정 부분-->
       <div class="left-main-wrap">
           <div class="left">
+            <div class="cate-title">카테고리</div>
             <ul>
-              <li v-for="(item, index) in menus" :key="index" @click="goCate(item.path)">
-                <div class="cate-li-div-container">{{item.name}}</div>
+              <li v-for="(item, index) in menus" :key="index" @click="goCate(item.path)" :class="{'cldc-highlight': menusIndex == `${index}`, 'cate-li-div-container' : menusIndex != `${index}`}">
+                <div>{{item.name}}</div>
               </li>
             </ul>
           </div> <!--left-->
@@ -206,11 +207,26 @@ ul {
 }
 .left ul {padding: 0px}
 .left ul li { font-size:25px;  height:75px; list-style: none;}
+.cate-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #4b669b;
+  font-weight: bolder;
+  height:75px;
+  margin-top: 20px;
+  font-size:35px;
+}
 .left ul li#logo {font-family: 'Cafe24', cursive; font-size:30px; height: 130px;}
 .left ul li#logo div {line-height: 0.8}
 .cate-li-div-container:hover {
-  color: #667799;
+  color: #88a4dbb9;
   cursor: pointer;
+}
+.cldc-highlight {
+  font-weight: bolder;
+  color: #5c86da;
+  text-shadow: #8a9dc291 1px 0 5px;
 }
 /* 카테고리 style */
 
@@ -414,14 +430,14 @@ export default {
       b_nnm : '',
       roomId : '',
       allcheck:true,
-      // roomList : [
-      //   {phase: 0, title: 'yes01', subtitle: 'GMO식품과연안전한가?'},
-      //   {phase: 1, title: 'yes01', subtitle: '가나다라마바사아자차카타퍼ㅏ하'},
-      //   {phase: 1, title: '느엥', subtitle: '1대1하실분 들어오셈'},
-      //   {phase: 1, title: '느엥', subtitle: '배고프다'},
-      //   {phase: 1, title: '느엥', subtitle: '느dfgdfgdfgdfgdfg엥'},
-      //   {phase: 1, title: '느엥', subtitle: '느엥'},
-      //   ],
+      roomList : [
+        {phase: 0, title: 'yes01', subtitle: 'GMO식품과연안전한가?'},
+        {phase: 1, title: 'yes01', subtitle: '가나다라마바사아자차카타퍼ㅏ하'},
+        {phase: 1, title: '느엥', subtitle: '1대1하실분 들어오셈'},
+        {phase: 1, title: '느엥', subtitle: '배고프다'},
+        {phase: 1, title: '느엥', subtitle: '느dfgdfgdfgdfgdfg엥'},
+        {phase: 1, title: '느엥', subtitle: '느엥'},
+        ],
       viewCaroselLenghth : null
     }
   },
