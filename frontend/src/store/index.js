@@ -284,7 +284,7 @@ export default new Vuex.Store({
       method : "POST",
       data : data,
     }).then((res) => {
-      console.log(res.data);
+      console.log("enterRoom ", res.data);
       commit("CREATE_TEMP_TOKEN",res.data.token);
       router.push("/participatingPage")
     })
@@ -357,10 +357,11 @@ export default new Vuex.Store({
 
   bJoin({commit}, data) {
     api({
-      url : '/users/temp/' + data,
+      url : '/users/temp/' + data.nnm,
       method : "POST",
     }).then((res) => {
       commit("BUSER_LOGIN", res.data)
+      this.dispatch("enterRoom", data.data);
     })
   },
 }
