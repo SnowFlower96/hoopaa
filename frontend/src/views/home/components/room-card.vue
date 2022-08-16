@@ -1,7 +1,7 @@
 <template>
 
     <div class="room-info" :style="{backgroundImage: 'url('+backurl+')'}">
-     <p class="room-phase-tip">{{phase[room.phase]}}</p>
+     <p class="room-phase-tip"  :style="{'background-color' : backcolor}" >{{phase[room.phase]}}</p>
      <!-- <p class="room-desc">
       <span class="room-phase">{{phase[room.phase]}}</span><span>     </span><span class="room-cate">{{this.menus[room.cate].name}}</span></p> -->
     <p class="room-title"> {{room.subtitle}}</P>
@@ -26,9 +26,25 @@ export default {
       backurl: '',
       ppSet: true,
       menus : '',
+      recuruitStyle:'',
+      backcolor:'',
     };
   },
   created() {
+       if(this.room.phase==0){
+         this.backcolor = "rgb(167, 234, 255)"
+
+    }else if(this.room.phase==1){
+
+          this.backcolor = "rgb(109, 229, 45)"
+
+
+    }else if(this.room.phase==2){
+        this.backcolor = "rgb(109, 229, 45)"
+    }else{
+        this.backcolor = "rgb(109, 229, 45)"
+    }
+
      if(this.room.thumbUrl==null){
       this.backurl="https://user-images.githubusercontent.com/87743473/184837786-3b9f1e12-9837-4f8f-be4c-ac12ceceddec.png";
     }else{
@@ -39,6 +55,19 @@ export default {
 
   },
   updated() {
+      if(this.room.phase==0){
+         this.backcolor = "rgb(167, 234, 255)"
+
+    }else if(this.room.phase==1){
+
+          this.backcolor = "rgb(109, 229, 45)"
+
+
+    }else if(this.room.phase==2){
+        this.backcolor = "rgb(247, 168, 59)"
+    }else{
+        this.backcolor = "rgb(235, 22, 22)"
+    }
      if(this.room.thumbUrl==null){
       this.backurl="https://user-images.githubusercontent.com/87743473/184837786-3b9f1e12-9837-4f8f-be4c-ac12ceceddec.png";
     }else{
@@ -119,4 +148,14 @@ export default {
   text-overflow:ellipsis;
   width: calc(100% - 40px);
 }
+.room-phase-tip {
+  width: 45px;
+  text-align: end;
+  font-size: 15px;
+  padding: 3px;
+  z-index: 3;
+  border-radius: 3px;
+  /* margin-left: var(--room-phase-tip-margin-left); */
+}
+
 </style>
