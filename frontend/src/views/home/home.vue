@@ -43,7 +43,7 @@
             <div class="main-container">
               <div class="main-inner-container">
                 <h1 v-if="allcheck!='true'" >실시간 인기 토론</h1>
-                <div v-if="allcheck!='true'" class="carousel-wrapper">
+                <div v-show="allcheck!='true'" class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
                     <div v-if="index<6" class="carosel-room-card" @click="gotoRoom">
@@ -470,7 +470,6 @@ export default {
     },
     goCate(index)  {
       if(index!='/list/all'){
-        console.log("전체 출력 바람");
         this.allcheck ='true'
       }else{
         this.allcheck='false'
