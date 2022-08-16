@@ -692,8 +692,8 @@ export default {
     });
     // 투표시작 signal
       this.session.on('Start-Vote', (event) => {
-        if (this.position == 'audience') {
-          
+        if (this.voteTeam || this.voteAll) {
+          this.voteView();
         }
       })
 
@@ -1086,7 +1086,7 @@ export default {
                 document.getElementById("demo").innerHTML = "투표가 종료되었습니다";
             }
             }, 1000);
-
+            this.startVote();
         // 타이머 로직
         },
         openCloseModMenu() {
