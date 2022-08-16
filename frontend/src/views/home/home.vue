@@ -430,14 +430,14 @@ export default {
       b_nnm : '',
       roomId : '',
       allcheck:true,
-      roomList : [
-        {phase: 0, title: 'yes01', subtitle: 'GMO식품과연안전한가?'},
-        {phase: 1, title: 'yes01', subtitle: '가나다라마바사아자차카타퍼ㅏ하'},
-        {phase: 1, title: '느엥', subtitle: '1대1하실분 들어오셈'},
-        {phase: 1, title: '느엥', subtitle: '배고프다'},
-        {phase: 1, title: '느엥', subtitle: '느dfgdfgdfgdfgdfg엥'},
-        {phase: 1, title: '느엥', subtitle: '느엥'},
-        ],
+      // roomList : [
+      //   {phase: 0, title: 'yes01', subtitle: 'GMO식품과연안전한가?'},
+      //   {phase: 1, title: 'yes01', subtitle: '가나다라마바사아자차카타퍼ㅏ하'},
+      //   {phase: 1, title: '느엥', subtitle: '1대1하실분 들어오셈'},
+      //   {phase: 1, title: '느엥', subtitle: '배고프다'},
+      //   {phase: 1, title: '느엥', subtitle: '느dfgdfgdfgdfgdfg엥'},
+      //   {phase: 1, title: '느엥', subtitle: '느엥'},
+      //   ],
       viewCaroselLenghth : null
     }
   },
