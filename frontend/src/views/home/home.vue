@@ -29,9 +29,9 @@
       </div>
       <div class="list-page-black-space"></div>
       <search></search>
+
+      <!--수정 부분-->
       <div class="left-main-wrap">
-
-
           <div class="left">
             <ul>
               <li v-for="(item, index) in menus" :key="index" @click="goCate(item.path)">
@@ -42,11 +42,11 @@
 
             <div class="main-container">
               <div class="main-inner-container">
-                <h1>실시간 인기 토론</h1>
-                <div class="carousel-wrapper">
+                <h1 v-if="allcheck!='true'" >실시간 인기 토론</h1>
+                <div v-if="allcheck!='true'" class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
-                    <div class="carosel-room-card" @click="gotoRoom">
+                    <div v-if="index<6" class="carosel-room-card" @click="gotoRoom">
                       <div class="room-info-carosel" :style="customCaroselStyle">
                         <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
 
@@ -83,25 +83,49 @@
 
 
                 <!-- <div class="list">여기가 기본 all, 총 방 갯수 : {{roomList.length}}</div> -->
-                <ul class="room-ul">
-                  <li v-for="(indexOut) in (roomList.length/4)" :key="indexOut">
-                    <ul class="card-container-ul">
-                      <li v-for="(indexIn) in 4" :key="indexIn">
-                      <div class="room-card">
-                        <div class="room-info" :style="customCaroselStyle">
-                          <p class="room-phase-tip">{{phase[roomList[(4 * (indexOut-1)) + indexIn-1].phase]}}</p>
-                          <p id="title-room">{{roomList[(4 * (indexOut-1)) + indexIn-1].subtitle}}</p>
+                <div class="main-all-wrapper">
+                  <div class="main-all-container">
+                    <ul class="main-all-ul">
+                      <li  v-for="(room, index) in roomList" :key="index">
+                      <div v-if="index<7" class="carosel-room-card" @click="gotoRoom">
+                        <div class="room-info-carosel" :style="customCaroselStyle">
+                          <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
+
+                          <room-card :room="room">
+                          </room-card>
                         </div>
                       </div>
                       </li>
                     </ul>
+                  </div>
+                </div>
+                <!-- <ul class="room-ul">
+                  <li v-for="(indexOut) in (Math.floor(roomsize/4)+1)" :key="indexOut">
+                  <h1>{{indexOut}}</h1>
+                    <ul class="card-container-ul">
+                      <li v-for="(indexIn) in 4" :key="indexIn">
+                        <h1>{{(4 * (indexOut-1)) + indexIn}}</h1>
+                        <div v-if="(4 * (indexOut-1)) + indexIn <= roomsize" class="room-card">
+                          <div class="room-info" :style="customCaroselStyle">
+                            <room-card :room="roomList[(4 * (indexOut-1)) + indexIn-1]"></room-card>
+                            <p class="room-phase-tip">{{phase[roomList[(4 * (indexOut-1)) + indexIn-1].phase]}}</p>
+                            <p id="title-room">{{roomList[(4 * (indexOut-1)) + indexIn-1].subtitle}}</p>
+                          </div>
+                          <div class="room-info" :style="customCaroselStyle">
+                          <room-card :room="roomList[(4 * (indexOut-1)) + indexIn]"></room-card>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
                   </li>
-                </ul>
+                </ul> -->
               </div> <!-- main-inner-container -->
             </div> <!--main-container-->
       </div> <!--left-main-wrap-->
     </div>
   <!-- </div> -->
+
+  <!--수정 부분-->
 </template>
 
 <style>
@@ -207,6 +231,11 @@ ul {
 
 .main-inner-container {
   max-width: inherit;
+}
+
+/* 수정함 */
+h1{
+  text-align: left;
 }
 
 /* 메인 뷰 - carousel */
@@ -330,6 +359,18 @@ ul {
 .card-container-ul, .room-ul {
   padding: 0px;
 }
+/* 수정함 */
+.main-all-container{
+  display : flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+   width: 100%;
+}
+.main-all-ul{
+  width:100%;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
 /* room-list */
 
 </style>
@@ -363,6 +404,7 @@ export default {
       dropdownSortTF: false,
       homeCheckInModal : false,
       ppSet: true,
+      allcheck:true,
       //  - - - - - - 여기고침 - - - - - -  ⬇//
       // 0815 곧 지울
       // roomList : [
@@ -427,6 +469,13 @@ export default {
       this.homeCheckInModal = true
     },
     goCate(index)  {
+      if(index!='/list/all'){
+        console.log("전체 출력 바람");
+        this.allcheck ='true'
+      }else{
+        this.allcheck='false'
+      }
+      console.log(index);
       this.checkbox = false;
       this.$store.dispatch("getRoomInfoCate", index);
     },
