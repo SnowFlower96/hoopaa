@@ -13,7 +13,9 @@ export default {
     Main,
   },
   created () {
-    this.$store.commit('RESET_STATE');
+     if (!sessionStorage.getItem("accessToken")) {
+      this.$store.commit('RESET_STATE');
+    }
   },
 
   data: () => ({

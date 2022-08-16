@@ -100,7 +100,7 @@ export default {
 
 <style>
 .room-info:hover {
-  -webkit-transform: scale(1.2);
+  -webkit-transform: scale(1.1);
   filter: brightness(100%);
 }
 .room-desc{
