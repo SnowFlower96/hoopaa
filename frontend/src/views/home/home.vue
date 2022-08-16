@@ -17,10 +17,10 @@
                 <div style="font-size:30px;">비회원 참여</div>
                 <div class="displayFlex pp-set-inner">
                   <div>닉네임 입력</div>
-                  <input type="text">
+                  <input v-model="b_nnm" type="text">
                 </div>
                 <div class="displayFlex">
-                  <router-link to="/debateRoom" style=text-decoration:none;><div class="home-modal-btn displayFlex">참여</div></router-link>
+                  <div class="home-modal-btn displayFlex" @click="b_join">참여</div>
                 </div>
               </div>
             </div>
@@ -46,7 +46,7 @@
                 <div class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
-                    <div class="carosel-room-card" @click="gotoRoom">
+                    <div class="carosel-room-card" @click="gotoRoom(room.hostID)">
                       <div class="room-info-carosel" :style="customCaroselStyle">
                         <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
 
@@ -363,6 +363,8 @@ export default {
       dropdownSortTF: false,
       homeCheckInModal : false,
       ppSet: true,
+      b_nnm : '',
+      roomId : '',
       //  - - - - - - 여기고침 - - - - - -  ⬇//
       // 0815 곧 지울
       // roomList : [
@@ -423,8 +425,9 @@ export default {
       this.homeCheckInModal = false
       this.ppSet = true
     },
-    gotoRoom() {
-      this.homeCheckInModal = true
+    gotoRoom(hostID) {
+      this.roomId = hostID;
+      this.homeCheckInModal = true;
     },
     goCate(index)  {
       this.checkbox = false;
@@ -503,6 +506,16 @@ export default {
           const value = document.body.clientWidth*0.8*0.25
           carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
         }
+    },
+    async b_join () {
+      this.$store.dispatch("bJoin", this.b_nnm);
+      this.$store.commit("SET_POSITION",'audience');
+      console.log(this.roomId)
+      let data = {
+        pwd : '',
+        sessionId : this.roomId,
+      }
+      await this.$store.dispatch("enterRoom", data)
     }
     //  - - - - - - 여기고침 - - - - - -  ⬆//
   }

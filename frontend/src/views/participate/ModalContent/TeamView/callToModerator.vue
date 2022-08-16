@@ -16,6 +16,18 @@
     </div>
 </template>
 
+<script>
+export default {
+  methods : {
+    EmitRest () {
+      
+    }
+  }
+}
+
+</script>
+
+
 <style>
 .ttm-btn {
     margin-top: 30px;

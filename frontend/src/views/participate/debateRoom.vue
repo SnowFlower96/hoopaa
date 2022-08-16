@@ -22,7 +22,7 @@
 
 <!-- 곧 없어질 버튼 -->
 <div class="animation-control-btns">
-    <button @click="animation('startEvent')">시작 이벤트</button>
+    <button v-if="session.sessionId == user.id" @click="animation('startEvent')">시작 이벤트</button>
 </div>
 <!-- 곧 없어질 버튼 -->
 
@@ -690,6 +690,12 @@ export default {
           this.publisher.publishAudio(false);
         }
     });
+    // 투표시작 signal
+      this.session.on('Start-Vote', (event) => {
+        if (this.position == 'audience') {
+          
+        }
+      })
 
       this.session.on("signal:chat-all",(event)=>{
       console.log("전체 메세지");
@@ -748,6 +754,7 @@ export default {
           if (this.user.id == this.session.sessionId) {
             this.host = publisher;
             console.log("호스트래");
+            console.log(this.session)
           } else if (this.position == "agree") {
 
             this.agree.push(sub);
@@ -1469,6 +1476,15 @@ export default {
         to: who,
         type: 'Set-Audio'
       });
+    },
+
+    // 투표시작 시그널 보내기
+    startVote() {
+      this.session.signal({
+        data : 'startVote',
+        to : [],
+        type : 'Start-Vote'
+      })
     },
     }
   }

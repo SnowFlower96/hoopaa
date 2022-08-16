@@ -11,7 +11,7 @@
 
               <div v-if="isPannel" class="displayFlex" >
                 <div :class="{'ppbs-btn' : !isAgree, 'ppbs-btn-selected' : isAgree}" style="margin: 10px; margin-top: 0px;" @click="positionAgree">찬성</div>
-                <div :class="{'ppbs-btn' : isAgree, 'ppbs-btn-selected' : !isAgree}" style="margin: 10px; margin-top: 0px;" @click="positionDisagree">반대</div>
+                <div :class="{'ppbs-btn' : !isDisAgree, 'ppbs-btn-selected' : isDisAgree}" style="margin: 10px; margin-top: 0px;" @click="positionDisagree">반대</div>
               </div>
 
               <div class="displayFlex" style="margin-top: 30px;">
@@ -31,7 +31,8 @@ export default {
     return {
       isPannel : true,
       sessionId : '',
-      isAgree: true
+      isAgree: false,
+      isDisAgree: false,
     }
   },
   methods : {
@@ -41,21 +42,26 @@ export default {
       console.log(index)
       this.$store.dispatch("setPosition", index)
       this.isAgree = true
+      this.isDisAgree = false
     },
     positionDisagree () {
       this.$store.commit("SET_POSITION",'disagree')
       let index = '/room/enter/select/' + this.sessionId + '?pos=disagree'
       this.$store.dispatch("setPosition", index)
+      this.isDisAgree = true
       this.isAgree = false
     }
   },
   created () {
     var id = this.tempToken.split("?")[1].split("&")[0].split("=")[1]
+    if (this.position == 'audience') {
+      this.isPannel = false;
+    }
     if (id != this.user.id) this.isPannel = true;
     this.sessionId = id;
   },
   computed : {
-    ...mapState(["user", "tempToken"]),
+    ...mapState(["user", "tempToken", "position"]),
   },
 }
 
@@ -116,7 +122,7 @@ export default {
   box-shadow: 2px 2px 2px 2px rgb(189, 189, 189);
 }
 .ppbs-btn:active {
-  outline:none; 
+  outline:none;
   box-shadow: 0px 0px 0px 0px black;
 }
 .ppbs-sbm-btn {

@@ -47,6 +47,13 @@ export default new Vuex.Store({
       api.defaults.headers["accessToken"] = data.accessToken;
       state.user = data.user;
     },
+    // 비회원 로그인
+    BUSER_LOGIN(state, data) {
+      sessionStorage.setItem("accessToken", data.accessToken);
+      api.defaults.headers["accessToken"] = data.accessToken;
+      state.user = data.nnm;
+    },
+
     // 로그아웃
     USER_LOGOUT(state) {
       state.isLogin = false;
@@ -344,6 +351,17 @@ export default new Vuex.Store({
       method : "PUT",
       data : data
     })
-  }
+  },
+
+  // 비회원 토큰 발급
+
+  bJoin({commit}, data) {
+    api({
+      url : '/users/temp/' + data,
+      method : "POST",
+    }).then((res) => {
+      commit("BUSER_LOGIN", res.data)
+    })
+  },
 }
 })
