@@ -30,7 +30,7 @@ export default {
   },
   created() {
      if(this.room.thumbUrl==null){
-      this.backurl="https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg";
+      this.backurl="https://user-images.githubusercontent.com/87743473/184837786-3b9f1e12-9837-4f8f-be4c-ac12ceceddec.png";
     }else{
       this.backurl="data:image/png;base64,"+this.room.thumbUrl;
     }
@@ -40,7 +40,7 @@ export default {
   },
   updated() {
      if(this.room.thumbUrl==null){
-      this.backurl="https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg";
+      this.backurl="https://user-images.githubusercontent.com/87743473/184837786-3b9f1e12-9837-4f8f-be4c-ac12ceceddec.png";
     }else{
       this.backurl="data:image/png;base64,"+this.room.thumbUrl;
     }
@@ -92,13 +92,31 @@ export default {
   width: 100%;
   filter: brightness(80%);
   border-radius: 10px;
+  z-index: 1;
+}
+.room-info::after {
+  content :'';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(rgba(255, 255, 255,0), rgba(255, 255, 255,0), rgba(0, 0, 0, 0.856));
+  z-index: -2;
+  border-radius: 10px;
 }
 .room-title{
-  background-color: rgb(216, 24, 165);
+  position: relative;
+  left: 25px;
+  color: white;
   position : fixed;
   bottom:0;
   text-align: left;
   font-size: 20px;
   border-radius: 5px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  width: calc(100% - 40px);
 }
 </style>
