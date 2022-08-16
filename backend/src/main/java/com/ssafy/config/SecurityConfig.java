@@ -62,8 +62,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 인증이 필요하지 않은 URL
                 .antMatchers("/api/v1/users/register","/api/v1/users/temp/**","/api/v1/users/login", "/api/v1/users/certification/**",
-                        "/api/v1/room/connections/**", "/api/v1/sync/**").permitAll()
-    	        	    .anyRequest().authenticated()
+                        "/api/v1/room/connections/**", "/api/v1/sync/**", "/api/v1/list/**","/v3/api-docs",
+                        "/swagger*/**","/v2/api-docs")
+                .permitAll()
                 .and().cors();
     }
 }

@@ -166,14 +166,14 @@ export default new Vuex.Store({
      },
 
      // User Info 수정
-      putUserStat({commit},data) {
+     changeInfo({commit}, data) {
       api({
         headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/info`,
         method : "PUT",
         data : data,
-      }).then((res) => {
-        commit("USER_INFO",res.data);
+      }).then(() => {
+        commit();
       })
      },
 
@@ -332,6 +332,17 @@ export default new Vuex.Store({
     }).then((res) => {
       console.log(res.data)
       // commit();
+    })
+  },
+
+  // 토론방 기능
+
+  roomStart({commit}, data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : `/room/start`,
+      method : "PUT",
+      data : data
     })
   }
 }
