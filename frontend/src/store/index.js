@@ -365,5 +365,24 @@ export default new Vuex.Store({
       this.dispatch("enterRoom", data.data);
     })
   },
+
+  // 투표
+  // 투표시작
+  voteStart({commit},data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : `/room/vote`,
+      method : "PUT",
+      data : data
+    })
+  },
+  // 투표 보내기
+  voteFinal({commit}, data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/vote/final?kingUserID=' + data.kingUserID + '&sessionID=' + data.sessionID + '&vote=' + data.vote,
+      method : "POST",
+    })
+  }
 }
 })

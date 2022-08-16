@@ -82,15 +82,7 @@
                             <div class="all-view-wrap" v-if="selMVPView">
                                 <div style="font-size: 20px;">이번 토론의 MVP를 선택해주세요</div>
                                 <div class="mvp-list displayFlex" style="flex-wrap: wrap;">
-                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
-                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
-                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
-                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
-                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
-                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
-                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
-                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
-                                    <div class="vote-btn" @click="voteFunction('name')">김현주</div>
+                                    <div class="vote-btn" v-for="(item , index) in pannelList" :key="index"  @click="voteFunction(item)">{{item}}</div>
                                 </div>
                                 <div class="displayFlex">
                                     <div class="sub-vote-btn" @click="submitVote('mvp')">제출</div>
@@ -531,7 +523,15 @@ export default {
           //채팅
             messagesAll:[],
             messagesAgree:[],
-            messagesDisagree:[]
+            messagesDisagree:[],
+
+          // 투표결과
+            voteData : {
+              sessionID : '',
+              kingUserID : '',
+              vote : '',
+            },
+            pannelList : [],
 
         }
     },
@@ -584,13 +584,26 @@ export default {
     methods: {
         submitVote(option) {
             if(option === 'vote') {
-                console.log(this.voteStatus)
+                if(this.voteStatus == 1) {
+                  this.voteData.vote = 'agree'
+                } else if (this.voteStatus == 0) {
+                  this.voteData.vote = 'disagree'
+                }
                 this.allVoteView = false
                 this.selMVPView = true
                 this.waitVoteView =  false
             }
             else if (option === 'mvp') {
-                console.log('mvp')
+                let kingId = '';
+                for (var i in this.agree) {
+                  if (this.agree[i].nnm == this.voteStatus) kingId = this.agree[i].id
+                }
+                 for (var i in this.disagree) {
+                  if (this.disagree[i].nnm == this.voteStatus) kingId = this.disagree[i].id
+                }
+                this.voteData.kingUserID = kingId;
+                this.voteData.sessionID = this.session.sessionId;
+                this.$store.dispatch('voteFinal', this.voteData);
                 this.allVoteView = false
                 this.selMVPView = false
                 this.waitVoteView = true
@@ -617,7 +630,8 @@ export default {
           let sub = {
               id : clientData[0],
               stream : 'subscriber',
-              data : subscriber
+              data : subscriber,
+              nnm : clientData[2]
           };
           if (clientData[0] == this.session.sessionId) {
             console.log("host video connected");
@@ -697,7 +711,7 @@ export default {
       this.session.on('signal:Start-Vote', (event) => {
         if (this.voteTeam || this.voteAll ) {
           this.voteView();
-          console.log(this.voteViewTF)
+          this.pannelList = event.data.split(',');
         }
       })
 
@@ -737,7 +751,7 @@ export default {
     } )
 
       await this.session
-        .connect(token, { clientData: this.user.id + "/" + this.position })
+        .connect(token, { clientData: this.user.id + "/" + this.position + "/" + this.user.nnm })
         .then(() => {
           let publisher = this.OV.initPublisher(undefined, {
             audioSource: undefined, // The source of audio. If undefined default microphone
@@ -753,7 +767,8 @@ export default {
           let sub = {
             id : this.user.id,
             stream : 'publisher',
-            data : this.publisher
+            data : this.publisher,
+            nnm : this.user.nnm
         };
           if (this.user.id == this.session.sessionId) {
             this.host = publisher;
@@ -1067,9 +1082,6 @@ export default {
         },
         voteFunction(status) {
             this.voteStatus = status
-            if (status === 'name') {
-                console.log('name')
-            }
         },
         voteVisible() {
             // this.voteViewTF = true
@@ -1484,8 +1496,16 @@ export default {
 
     // 투표시작 시그널 보내기
     startVote() {
+      for (var i in this.agree) {
+        this.pannelList.push(this.agree[i].nnm)
+      }
+      for (var i in this.disagree) {
+        this.pannelList.push(this.disagree[i].nnm)
+      }
+      console.log("-----------" + this.pannelList)
+      this.$store.dispatch("voteStart", this.session.sessionId)
       this.session.signal({
-        data : 'startVote',
+        data : this.pannelList.toString(),
         to : [],
         type : 'Start-Vote'
       })
