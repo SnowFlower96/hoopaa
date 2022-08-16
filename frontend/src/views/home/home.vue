@@ -47,13 +47,12 @@
                 <div v-show="allcheck!='true'" class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
-                    <div v-if="index<6" class="carosel-room-card" @click="gotoRoom(room.hostID)">
+                    <div v-if="index<8" class="carosel-room-card" @click="gotoRoom(room.hostID)">
 
                       <div class="room-info-carosel" :style="customCaroselStyle">
                         <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
-
-                        <room-card :room="room">
-                        </room-card>
+                        <room-card :room="roomList[roomList.length - index-1]">
+                       </room-card>
                       </div>
                     </div>
                     </li>
@@ -90,11 +89,11 @@
                   <div class="main-all-container">
                     <ul class="main-all-ul">
                       <li  v-for="(room, index) in roomList" :key="index">
-                      <div v-if="index<7" class="carosel-room-card" @click="gotoRoom">
+                      <div class="carosel-room-card" @click="gotoRoom">
                         <div class="room-info-carosel" :style="customCaroselStyle">
                           <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
 
-                          <room-card :room="room">
+                          <room-card :room="roomList[roomList.length - index-1]">
                           </room-card>
                         </div>
                       </div>
@@ -184,7 +183,7 @@
 .left-main-wrap {
   display: flex;
 }
-.room-phase-tip {
+/* .room-phase-tip {
   width: 45px;
   text-align: end;
   background-color: rgb(167, 234, 255);
@@ -192,8 +191,8 @@
   padding: 3px;
   z-index: 3;
   border-radius: 3px;
-  /* margin-left: var(--room-phase-tip-margin-left); */
-}
+  margin-left: var(--room-phase-tip-margin-left);
+} */
 
 /* 카테고리 style */
 ul {
