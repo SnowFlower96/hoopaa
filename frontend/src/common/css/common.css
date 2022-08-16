@@ -5,7 +5,7 @@ html, body {
 
 body {
   margin: 0;
-  font-family: Cafe24;
+  font-family: GmarketSansMedium;
   font-weight: 400;
   font-size: large
 }
@@ -33,12 +33,18 @@ body {
   }
 }
 .v-application {
-  font-family: 'Cafe24', sans-serif !important;
+  font-family: 'GmarketSansMedium', sans-serif !important;
 }
-@font-face {
+/* @font-face {
   font-family: 'Cafe24';
   font-weight: 400;
   src: url('../../assets/fonts/Cafe24Ssurround.ttf') format('truetype');
+} */
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 /* @font-face {
   font-family: 'Pretendard-Regular';
