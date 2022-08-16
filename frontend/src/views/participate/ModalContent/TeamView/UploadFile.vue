@@ -6,12 +6,25 @@
                     <p style="font-size: 30px;">화면 공유</p>
                 </div>
                 <div class="ufw-inner">
-                    <div class="ufw-btn" >공유하기</div>
+                    <div class="ufw-btn" @click="EmitScreen">공유하기</div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<script>
+export default {
+   
+    methods: {
+
+        EmitScreen() {
+            this.$emit('publishScreenShare');
+        }
+
+    }
+}
+</script>
 
 <style>
 .upload-file-wrap {

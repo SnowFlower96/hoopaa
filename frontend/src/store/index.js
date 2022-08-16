@@ -333,6 +333,17 @@ export default new Vuex.Store({
       console.log(res.data)
       // commit();
     })
+  },
+
+  // 토론방 기능
+
+  roomStart({commit}, data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : `/room/start`,
+      method : "PUT",
+      data : data
+    })
   }
 }
 })

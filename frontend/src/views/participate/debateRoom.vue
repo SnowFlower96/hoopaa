@@ -30,13 +30,7 @@
 <!-- 뷰바꾸는 임시버튼 -->
 <div v-if="imgTF" class="startImg">
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
-    <button @click="moderatorView">사회자뷰</button>
-    <button @click="allView">방청객뷰</button>
-    <button @click="teamView">패널뷰</button>
-    <button @click="sendSession">세부세션 가기</button>
-    <button @click="positionAgree">찬성</button>
     <button @click="messageFromTeam">팀에서 사회자한테 주는 메세지</button>
-    <button @click="publishScreenShare">화면공유</button>
     <!-- <div id="demo">넨</div> -->
 </div>
 <!-- 뷰바꾸는 임시버튼 -->
@@ -142,7 +136,7 @@
 
                 <message-from-team v-if="messageFrom"></message-from-team>
 
-                <upload-file v-if="file"></upload-file>
+                <upload-file v-if="file" @publishScreenShare="publishScreenShare"></upload-file>
 
                 <let-team-speak
                 v-if="menu"
@@ -153,6 +147,7 @@
                 <rest-time
                 v-if="rest"
                 @emit-rest="EmitRest"
+                @sendSebuSession="sendSession"
                 ></rest-time>
             </div>
             <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
@@ -212,7 +207,7 @@
                                         <!-- 화면공유 여기에 넣으면 됨 -->
                                         <!-- <user-video :stream-manager="publisherScreen"></user-video> -->
 				                                <div v-for="(sub, index) in subscribersScreen" :key="index" >
-					                                <user-video :stream-manager="sub" v-if="sub"></user-video>
+					                                <user-video :stream-manager="sub.data" ></user-video>
 				                                </div>
 
 
@@ -653,6 +648,13 @@ export default {
           this.disagree.splice(i, 1);
         }
         }
+        console.log(this.subscribersScreen.length)
+        for (var i = 0; i < this.subscribersScreen.length; i++) {
+          if (this.subscriberScreen[i].data == stream.streamManager) {
+            this.subscriberScreen.splice(i, 1);
+            console.log("안녕")
+          }
+        }
 
       });
       // on session destroyed...
@@ -782,18 +784,15 @@ export default {
 			this.sessionScreen.on('streamCreated', ({ stream }) => {
 					const subscriberScreen = this.sessionScreen.subscribe(stream);
           if (subscriberScreen.stream.typeOfVideo == 'SCREEN') {
-            this.subscribersScreen.push(subscriberScreen);
+             let sub = {
+            id : this.user.id,
+            stream : 'publisher',
+            data : subscriberScreen
+        };
+            this.subscribersScreen.push(sub);
           }
 					console.log(this.subscribersScreen.length + "!!!!!!!!!!!!!!!!")
 			});
-
-       this.sessionScreen.on("streamDestroyed", ({ stream }) => {
-        for (let i = 0; i < this.subscribersScreen.length; i++) {
-          if (this.subscriberScreen[i] == stream.streamManager) {
-            this.subscriberScreen.splice(i, 1);
-          }
-        }
-      });
 
 			await this.getToken(this.session.sessionId).then(tokenScreen => {
 				this.sessionScreen.connect(tokenScreen, { clientData: this.user.id })
@@ -891,7 +890,12 @@ export default {
 			this.screensharing = false;
 		});
     this.publisherScreen = publisherScreen;
-    this.subscribersScreen.push(publisherScreen);
+     let sub = {
+            id : this.user.id,
+            stream : 'subscriber',
+            data : publisherScreen
+        };
+    this.subscribersScreen.push(sub);
 		this.sessionScreen.publish(publisherScreen);
 	});
 		},
@@ -995,6 +999,7 @@ export default {
                 this.heartfift = false
                 this.heartHund = false
                 this.restEvent = false
+                this.$store.dispatch("roomStart", this.session.sessionId)
                 }
             else if (option === 'heartHund') {
                 this.startEvent = false
