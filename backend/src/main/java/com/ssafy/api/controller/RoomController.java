@@ -285,7 +285,7 @@ public class RoomController {
 
         roomService.updatePhaseBySessionID(sessionID, 1);
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Debate start"));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
     @PutMapping("/cheer/{sessionID}/{pos}")
