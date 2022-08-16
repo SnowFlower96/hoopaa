@@ -80,6 +80,13 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                             null, userDetails.getAuthorities());
                     jwtAuthentication.setDetails(userDetails);
                     return jwtAuthentication;
+                } else {
+                    // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
+                    SsafyUserDetails userDetails = new SsafyUserDetails(User.builder().nnm(id).build());
+                    UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(id,
+                            null, userDetails.getAuthorities());
+                    jwtAuthentication.setDetails(userDetails);
+                    return jwtAuthentication;
                 }
             }
             return null;

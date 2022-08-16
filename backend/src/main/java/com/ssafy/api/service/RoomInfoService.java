@@ -7,11 +7,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
 import java.awt.print.Pageable;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public interface RoomInfoService {
 
-    List<RoomInfoDto> findAll();
-    List<RoomInfoDto> searchBy(String keyword);
-    List<RoomInfoDto> findByCate(int cate);
+    List<RoomInfoDto> findAll() throws IOException;
+    List<RoomInfoDto> searchBy(String keyword) throws IOException;
+    List<RoomInfoDto> findByCate(int cate) throws IOException;
+    List<RoomInfoDto> roomInfoToDto(List<RoomInfo> roomInfoList) throws IOException;
+
 }

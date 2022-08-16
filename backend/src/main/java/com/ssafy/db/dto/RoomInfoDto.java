@@ -27,7 +27,6 @@ public class RoomInfoDto {
     private String subtitle;
 
     @Builder
-
     public RoomInfoDto(Long id, String pwd, String hostID, String thumbUrl, int phase, int maxNum, int curNum, LocalDateTime startTime, Integer cate, String hash1, String hash2, String hash3, String title, String subtitle) {
         this.id = id;
         this.pwd = pwd;

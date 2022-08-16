@@ -3,16 +3,17 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
-import com.ssafy.common.data.VRoom;
 import com.ssafy.db.dto.UserInfoDto;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 public interface RoomService {
 
-    void createRoom(String sessionID, RoomOpenReq roomOpenReq);
+    void createRoom(String sessionID, RoomOpenReq roomOpenReq) throws IOException;
 
     boolean isExistRoom(String sessionID);
 
@@ -45,10 +46,10 @@ public interface RoomService {
 
     Map<String, String> finishRoom(String userID) throws OpenViduJavaClientException, OpenViduHttpException;
 
-    int findHashtagId(String nm);
-
-    void syncServer();
+    void syncServer() throws OpenViduJavaClientException, OpenViduHttpException;
 
     void initServer() throws OpenViduJavaClientException, OpenViduHttpException;
+
+    String saveImage(String fileBase64, String roomName);
 
 }
