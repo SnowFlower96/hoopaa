@@ -72,20 +72,12 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             // If so, then grab user details and create spring auth token using username, pass, authorities/roles
             if (id != null) {
                 // jwt 토큰에 포함된 계정 정보(userId) 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
-                User user = userService.getUserById(Long.parseLong(id));
-                System.out.println("--------------------");
-                System.out.println(user);
-                System.out.println("--------------------");
+                User user;
+                if (id.chars().allMatch(Character::isDigit)) user = userService.getUserById(Long.parseLong(id));
+                else user = User.builder().nnm(id).build();
                 if(user != null) {
                     // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
                     SsafyUserDetails userDetails = new SsafyUserDetails(user);
-                    UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(id,
-                            null, userDetails.getAuthorities());
-                    jwtAuthentication.setDetails(userDetails);
-                    return jwtAuthentication;
-                } else {
-                    // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
-                    SsafyUserDetails userDetails = new SsafyUserDetails(User.builder().nnm(id).build());
                     UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(id,
                             null, userDetails.getAuthorities());
                     jwtAuthentication.setDetails(userDetails);
