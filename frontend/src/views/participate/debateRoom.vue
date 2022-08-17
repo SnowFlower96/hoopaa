@@ -1105,7 +1105,8 @@ export default {
             this.voteStatus = status
         },
         async voteVisible() {
-            // this.voteViewTF = true
+            this.voteViewTF = !this.voteViewTF
+            this.startVote();
             setTimeout(this.theEnd,63000)
 
         // 타이머 로직
@@ -1132,9 +1133,7 @@ export default {
         },
         voteView() {
             this.voteViewTF = !this.voteViewTF
-            this.startVote();
-            this.voteViewTF = !this.voteViewTF
-
+          
             let time = this.voteTime;
             let min = "";
             let sec = "";
