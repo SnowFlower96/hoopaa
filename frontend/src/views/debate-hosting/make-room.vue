@@ -90,7 +90,7 @@ export default {
   },
   data () {
     return {
-      menuData : require('@/views/main/menu.json'),
+      menuData : require('@/views/main/category.json'),
       dropdownSortTF : false,
       host: '',
       mySessionId: 'SessionA',
