@@ -1110,6 +1110,21 @@ export default {
         async voteVisible() {
             this.voteViewTF = !this.voteViewTF
             this.startVote();
+            let time = this.voteTime;
+            let min = "";
+            let sec = "";
+            let x = setInterval(function() {
+            min = parseInt(time/60);
+            sec = time%60;
+
+            document.getElementById("demo").innerHTML = min + "분" + sec + "초";
+            time--;
+
+            if (time < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "투표가 종료되었습니다";
+            }
+            }, 1000);
             setTimeout(this.theEnd,63000)
 
         // 타이머 로직
