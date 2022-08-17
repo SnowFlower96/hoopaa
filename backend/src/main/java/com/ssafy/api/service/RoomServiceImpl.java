@@ -300,18 +300,18 @@ public class RoomServiceImpl implements RoomService {
         // 각 유저별로 토큰을 반환하기 위한 객체 생성
         Map<String, Map<String, String>> mapTokens = new ConcurrentHashMap<>();
         // 찬성측
-        for (String id : mapAgree.keySet()) {
+        for (VUserInfo vUserInfo : vRoom.getAgree()) {
             Map<String, String> map = new HashMap<>();
-            map.put("connectionID", mapAgree.get(id).getConnectionId());
-            map.put("token", mapAgree.get(id).getToken());
-            mapTokens.put(id, map);
+            map.put("connectionID", vUserInfo.getConnectionDto().getConnectionId());
+            map.put("token", mapAgree.get(vUserInfo.getId()).getToken());
+            mapTokens.put(vUserInfo.getId(), map);
         }
         // 반대측
-        for (String id : mapDisagree.keySet()) {
+        for (VUserInfo vUserInfo : vRoom.getDisagree()) {
             Map<String, String> map = new HashMap<>();
-            map.put("connectionID", mapDisagree.get(id).getConnectionId());
-            map.put("token", mapDisagree.get(id).getToken());
-            mapTokens.put(id, map);
+            map.put("connectionID", vUserInfo.getConnectionDto().getConnectionId());
+            map.put("token", mapDisagree.get(vUserInfo.getId()).getToken());
+            mapTokens.put(vUserInfo.getId(), map);
         }
         return mapTokens;
     }
