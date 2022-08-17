@@ -65,13 +65,13 @@
                             <div :class="{'my-stat-ele-closed' : !show[index], 'my-stat-ele-opened' : show[index]}" @click="toggleOn(index)">
                               <div class="my-stat-ele-title">
                                 <div style="color:white; font-size:20px; width: 200px;">2022.07.14 13:21</div>
-                                <div class="title"> {{history.subtitle}} </div>
+                                <div class="title"> {{history.title}} </div>
                               </div>
                               <i style="font-size:50px;" class="fas fa-angle-down" v-if="!show[index]"></i>
                               <i style="font-size:50px;" class="fas fa-angle-up" v-if="show[index]"></i>
                             </div>
                             <div v-if="show[index]" class="my-stat-ele-content">
-                              <p style="font-size:25px; color: black;">{{history.subtitle}} </p>
+                              <p style="font-size:25px; color: black;">{{history.title}} </p>
 
                               <h1 v-if="history._win"> <span  class="win-result">승</span> </h1>
                               <h1  v-else> <span class="lost-result">패</span> </h1>

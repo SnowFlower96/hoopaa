@@ -4,7 +4,7 @@
      <p class="room-phase-tip"  :style="{'background-color' : backcolor}" >{{phase[room.phase]}}</p>
      <!-- <p class="room-desc">
       <span class="room-phase">{{phase[room.phase]}}</span><span>     </span><span class="room-cate">{{this.menus[room.cate].name}}</span></p> -->
-    <p class="room-title"> {{room.subtitle}}</P>
+    <p class="room-title"> {{room.title}}</P>
     </div>
 
 </template>
