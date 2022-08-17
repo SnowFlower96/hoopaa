@@ -50,4 +50,6 @@ public class RoomInfoController {
         String findByCateString=mapper.writeValueAsString(findByCate);
         return ResponseEntity.ok(JsonRes.of(200, "success", findByCateString));
     }
+
+
 }

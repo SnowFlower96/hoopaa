@@ -394,7 +394,9 @@ public class RoomController {
 
         if (!roomService.updatePhaseBySessionID(sessionID, 2)) return ResponseEntity.status(411).body(BaseResponseBody.of(404, "Wrong status"));
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Vote start"));
+        Long roomID = roomService.getRoomInfoId(sessionID);
+
+        return ResponseEntity.status(200).body(StringRes.of(200, "Vote start", String.valueOf(roomID)));
     }
 
     @PostMapping("/vote/final")
@@ -435,7 +437,23 @@ public class RoomController {
 
         if (!roomService.updatePhaseBySessionID(AToken, 3)) return ResponseEntity.status(411).body(BaseResponseBody.of(404, "Wrong status"));
 
-        Map<String, String> result = roomService.finishRoom(AToken);
+        roomService.finishRoom(AToken);
+
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    @GetMapping("/{roomID}")
+    @ApiOperation(value = "토론방 결과 반환", notes = "각 진영별 투표수 및 토론왕 정보 반환")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "토론방 없음"),
+            @ApiResponse(code = 411, message = "종료 불가"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> getResult(@PathVariable String roomID) throws JsonProcessingException {
+        Map<String, String> result = roomService.getResultByRoomId(Long.parseLong(roomID));
+        if (result == null) return ResponseEntity.status(404).body(JsonRes.of(404, "No History"));
         String json = mapper.writeValueAsString(result);
 
         return ResponseEntity.status(200).body(JsonRes.of(200, "Success", json));

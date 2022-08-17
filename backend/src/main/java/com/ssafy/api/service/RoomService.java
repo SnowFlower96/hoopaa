@@ -1,13 +1,11 @@
 package com.ssafy.api.service;
 
 
-import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.db.dto.UserInfoDto;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 
@@ -20,6 +18,8 @@ public interface RoomService {
     boolean isExistSession(String sessionID);
 
     boolean isParticipate(String sessionID, String userID);
+
+    Long getRoomInfoId(String sessionID);
 
     void deleteRoom(String sessionID) throws OpenViduJavaClientException, OpenViduHttpException;
 
@@ -48,7 +48,9 @@ public interface RoomService {
 
     String updateVoteFinal(String sessionID, String userID, String vote, String kingUserID);
 
-    Map<String, String> finishRoom(String userID) throws OpenViduJavaClientException, OpenViduHttpException;
+    void finishRoom(String userID) throws OpenViduJavaClientException, OpenViduHttpException;
+
+    Map<String, String> getResultByRoomId(Long roomID);
 
     void syncServer() throws OpenViduJavaClientException, OpenViduHttpException;
 

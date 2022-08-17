@@ -180,6 +180,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public Long getRoomInfoId(String sessionID) {
+        return this.mapRooms.get(sessionID).getRoomInfoDto().getId();
+    }
+
+    @Override
     public void deleteRoom(String sessionID) throws OpenViduJavaClientException, OpenViduHttpException {
         this.mapRooms.get(sessionID).getSession().close();
         this.mapRooms.remove(sessionID);
@@ -468,7 +473,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public Map<String, String> finishRoom(String userID) {
+    public void finishRoom(String userID) {
         // 해당 유저가 만든 토론방의 VRoom 객체
         VRoom vRoom = this.mapRooms.get(userID);
 
@@ -501,6 +506,7 @@ public class RoomServiceImpl implements RoomService {
             roomInfo.setAgree(roomInfo.getAgree());
             roomInfo.setDisagree(roomInfo.getDisagree());
             roomInfo.setKingId(kingID != null ? Long.parseLong(kingID) : null);
+            roomInfoRepository.save(roomInfo);
 
             // user history 업데이트
             // 찬성 진영 업데이트
@@ -567,15 +573,21 @@ public class RoomServiceImpl implements RoomService {
             // openVidu 세션 종료
             Session session = vRoom.getSession();
             session.close();
-
-            Map<String, String> result = new HashMap<>();
-            result.put("agree", String.valueOf(vRoom.getVote_final_agree()));
-            result.put("disagree", String.valueOf(vRoom.getVote_final_disagree()));
-            result.put("king", kingID);
-            return result;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Map<String, String> getResultByRoomId(Long roomID) {
+        Optional<RoomInfo> roomInfoOptional = roomInfoRepository.findRoomInfoById(roomID);
+        if (!roomInfoOptional.isPresent()) return null;
+
+        Map<String, String> result = new HashMap<>();
+        result.put("agree", String.valueOf(roomInfoOptional.get().getAgree()));
+        result.put("disagree", String.valueOf(roomInfoOptional.get().getDisagree()));
+        result.put("king", roomInfoOptional.get().getUserKing().getNnm());
+        return result;
     }
 
     @Override
@@ -630,7 +642,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public String saveImage(String fileBase64, String sessionID) {
-        if (fileBase64 == null) return null;
+        if (fileBase64 == null || fileBase64.length() == 0) return null;
         File path = new File(thumbPath);
         if (!path.exists()) path.mkdirs();
         try{
