@@ -52,7 +52,15 @@ export default {
     mounted() {
     },
     methods: {
-        resultBtn() {
+        async resultBtn() {
+          let query = window.location.search;
+         await this.$store.dispatch("getRoomResult", query.split('?')[1]).then((res)=> {
+            console.log(res)
+            let result = JSON.parse(res.data.json);
+            this.agree = result.agree.split("표")[0];
+            this.disagree = result.disagree.split("표")[0];
+            this.king = result.king
+         })
             let element = document.getElementById("resultWrap");
             element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
 
@@ -67,14 +75,7 @@ export default {
         }
     },
     created () {
-      let query = window.location.search;
-      this.$store.dispatch("getRoomResult", query.split('?')[1]).then((res)=> {
-        console.log(res)
-        let result = JSON.parse(res);
-        this.agree = result.agree.split("표")[0];
-        this.disagree = result.disagree.split("표")[0];
-        this.king = result.king
-      })
+
     }
 }
 </script>

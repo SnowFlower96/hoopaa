@@ -646,6 +646,14 @@ export default {
             this.disagree.push(sub);
           }
         }
+         if (subscriber.stream.typeOfVideo == 'SCREEN') {
+             let sub = {
+            id : this.user.id,
+            stream : 'subscriber',
+            data : subscriberScreen
+        };
+            this.subscribersScreen.push(sub);
+          }
 
       });
 
@@ -715,11 +723,15 @@ export default {
           this.voteView();
           this.pannelList = event.data.split('&')[0].split(',');
           this.roomId = event.data.split('&')[1];
+          console.log(this.roomId + '222222222')
         }
       })
 
     // end signal
       this.session.on('signal:The-End', (event) => {
+        if (this.session.sessionId == this.user.id) {
+          this.$store.dispatch("closeRoom")
+        }
         this.$router.push('/endDebate?' + this.roomId)
       })
 
@@ -1494,8 +1506,9 @@ export default {
       }
 
       this.$store.dispatch("voteStart", this.session.sessionId).then((res) =>{
+        this.roomId = res.data.response
         this.session.signal({
-          data : this.pannelList.toString() + '&' + res,
+          data : this.pannelList.toString() + '&' + res.data.response,
           to : [],
           type : 'Start-Vote'
         })
@@ -1509,7 +1522,7 @@ export default {
         to : [],
         type : 'The-End'
       })
-      this.$store.dispatch("closeRoom")
+
     },
 
     // 세부세션 닫기

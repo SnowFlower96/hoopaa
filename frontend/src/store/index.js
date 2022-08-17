@@ -380,7 +380,7 @@ export default new Vuex.Store({
       method : "PUT",
       data : data
     }).then((res) => {
-      resolve(res.data.response);
+      resolve(res);
     })
   })
   },
@@ -416,7 +416,7 @@ export default new Vuex.Store({
       url : '/room/'+ data,
       method : "GET",
     }).then((res)=>{
-      resolve(res.data.json);
+      resolve(res);
     })
   })
   }
