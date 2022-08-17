@@ -113,7 +113,7 @@ export default {
     }
   },
    computed : {
-    ...mapState(["user"])
+    ...mapState(["user", "roomCode"])
   },
   created() {
     this.menus = this.menuData;
@@ -139,11 +139,11 @@ export default {
         cate: this.selectedMenu.idx,
         file: this.file,
       }
+      await this.$store.dispatch("makeRoom",room);
         let data = {
           pwd : room["pwd"],
-          sessionId : this.user.id,
+          sessionId : this.roomCode,
         }
-      await this.$store.dispatch("makeRoom",room);
       this.$store.dispatch("enterRoom", data);
 
     },
@@ -157,7 +157,7 @@ export default {
       const files = e.target.files;
       if(files.length>0){
 
-      
+
         let validation = true;
         let message = '';
 

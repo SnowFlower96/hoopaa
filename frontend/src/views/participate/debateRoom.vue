@@ -1386,8 +1386,9 @@ export default {
           let index = "/room/session/" + this.session.sessionId;
           await this.$store.dispatch("makeSessionRoom", index).then((response) => {
           let data = JSON.parse(response.data.json)
+          console.log(data)
           for (var key in data) {
-            if (data[key].token.includes('disagree')) {
+            if (data[key].token.split('_')[1].split('&')[0] == 'disagree') {
               this.sendSessionDisagreeFunc({connectionId : data[key].connectionID}, data[key].token)
             } else {
               this.sendSessionAgreeFunc({connectionId : data[key].connectionID}, data[key].token)
@@ -1490,11 +1491,12 @@ export default {
         this.pannelList.push(this.disagree[i].nnm)
       }
 
-      this.$store.dispatch("voteStart", this.session.sessionId)
-      this.session.signal({
-        data : this.pannelList.toString(),
-        to : [],
-        type : 'Start-Vote'
+      this.$store.dispatch("voteStart", this.session.sessionId).then((res) =>{
+        this.session.signal({
+          data : this.pannelList.toString() + '&' + res,
+          to : [],
+          type : 'Start-Vote'
+        })
       })
     },
 

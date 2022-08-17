@@ -20,6 +20,7 @@ export default new Vuex.Store({
     user : [],
     position : '',
     tempSubToken : '',
+    roomCode : '',
   },
 
   mutations : {
@@ -35,7 +36,7 @@ export default new Vuex.Store({
         state.user = [];
         state.position = '';
         state.tempSubToken = '';
-
+        state.roomCode = '';
     },
     // 방 리스트 불러오기
     GET_ROOM_LIST(state, data) {
@@ -77,6 +78,9 @@ export default new Vuex.Store({
     },
     SET_POSITION(state, data) {
       state.position = data;
+    },
+    SET_ROOM_CODE(state, data) {
+      state.roomCode = data;
     }
   },
 
@@ -273,7 +277,7 @@ export default new Vuex.Store({
       data : room,
     }).then((res) =>{
       resolve(res);
-      commit();
+      commit("SET_ROOM_CODE", res.data.response);
     }).catch((error) =>{
       reject(error);
     })
@@ -369,12 +373,17 @@ export default new Vuex.Store({
   // 투표
   // 투표시작
   voteStart({commit},data) {
+    return new Promise ((resolve, reject) => {
     api({
       headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
       url : `/room/vote`,
       method : "PUT",
       data : data
+    }).then((res) => {
+      resolve(res.data.response)
+      commit();
     })
+  })
   },
   // 투표 보내기
   voteFinal({commit}, data) {
@@ -389,6 +398,14 @@ export default new Vuex.Store({
     api({
       headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
       url : '/room/session/' + data,
+      method : "DELETE",
+    })
+  },
+  // 룸 종료
+  closeRoom({commit}) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room',
       method : "DELETE",
     })
   }
