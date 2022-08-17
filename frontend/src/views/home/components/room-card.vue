@@ -4,7 +4,15 @@
      <p class="room-phase-tip"  :style="{'background-color' : backcolor}" >{{phase[room.phase]}}</p>
      <!-- <p class="room-desc">
       <span class="room-phase">{{phase[room.phase]}}</span><span>     </span><span class="room-cate">{{this.menus[room.cate].name}}</span></p> -->
-    <p class="room-title"> {{room.title}}</P>
+
+      <div class="room-title">
+        <p class="para-hashtag">
+          <span v-if="room.hash1!=null" class="hash1">#{{room.hash1}}</span>
+          <span v-if="room.hash2!=null" class="hash2">#{{room.hash2}}</span>
+          <span v-if="room.hash3!=null" class="hash3">#{{room.hash3}}</span>
+        </p>
+        <p class="para-title">{{room.title}}</p>
+      </div>
     </div>
 
 </template>
@@ -111,9 +119,6 @@ export default {
 .room-cate{
   background-color : rgb(223, 230, 26);
 }
-.room-title{
-  text-align: left;
-}
 .room-info {
   height: 100%;
   background-size:100% 100%;
@@ -134,6 +139,7 @@ export default {
   border-radius: 10px;
 }
 .room-title{
+  margin-top:0;
   position: relative;
   left: 25px;
   color: white;
@@ -157,13 +163,28 @@ export default {
   margin-bottom: 0;
   /* margin-left: var(--room-phase-tip-margin-left); */
 }
-.lock{
+.para-title{
   margin-top:0;
 }
-.lock-img{
+.para-hashtag{
+  margin-bottom:0;
+  color:rgb(27, 25, 29);
+  font-size: smaller;
+}
+.hash1{
+  background-color: rgb(167, 234, 255);
+  border-radius: 4px;
+  margin-right: 2%;
+}
 
-  opacity: 0.5;
-  width: 50%;
+.hash2{
+  background-color: rgb(212, 114, 235);
+  border-radius: 4px;
+  margin-right: 2%;
+}
+.hash3{
+  background-color:rgb(234, 242, 129);
+  border-radius: 4px;
 }
 
 </style>
