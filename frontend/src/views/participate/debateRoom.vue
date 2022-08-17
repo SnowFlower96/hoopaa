@@ -533,7 +533,8 @@ export default {
               vote : '',
             },
             pannelList : [],
-
+          // 룸id
+            roomId : '',
         }
     },
     mounted() {
@@ -712,13 +713,14 @@ export default {
       this.session.on('signal:Start-Vote', (event) => {
         if (this.voteTeam || this.voteAll ) {
           this.voteView();
-          this.pannelList = event.data.split(',');
+          this.pannelList = event.data.split('&')[0].split(',');
+          this.roomId = event.data.split('&')[1];
         }
       })
 
     // end signal
       this.session.on('signal:The-End', (event) => {
-        this.$router.push('/endDebate')
+        this.$router.push('/endDebate?' + this.roomId)
       })
 
       this.session.on("signal:chat-all",(event)=>{
@@ -1507,6 +1509,7 @@ export default {
         to : [],
         type : 'The-End'
       })
+      this.$store.dispatch("closeRoom")
     },
 
     // 세부세션 닫기

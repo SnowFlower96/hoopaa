@@ -380,8 +380,7 @@ export default new Vuex.Store({
       method : "PUT",
       data : data
     }).then((res) => {
-      resolve(res.data.response)
-      commit();
+      resolve(res.data.response);
     })
   })
   },
@@ -408,6 +407,18 @@ export default new Vuex.Store({
       url : '/room',
       method : "DELETE",
     })
+  },
+  // 방 결과 불러오기
+  getRoomResult({commit}, data) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/'+ data,
+      method : "GET",
+    }).then((res)=>{
+      resolve(res.data.json);
+    })
+  })
   }
 }
 })
