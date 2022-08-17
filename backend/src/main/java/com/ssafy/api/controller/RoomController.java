@@ -110,7 +110,6 @@ public class RoomController {
     @ApiOperation(value = "토큰 재발급", notes = "토론 방 토큰 재발급")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
-            @ApiResponse(code = 400, message = "비밀번호 오류"),
             @ApiResponse(code = 404, message = "없는 토론 방"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
@@ -129,6 +128,7 @@ public class RoomController {
 
 //        String token = roomService.enterRoom(roomEnterReq, user);
         String token = roomService.reconnect(sessionID, user.getId());
+        if (token == null) return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
 
         return ResponseEntity.status(200).body(VTokenRes.of(200, "Success", token));
     }
