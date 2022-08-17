@@ -5,8 +5,6 @@ services:
     build: DB
     container_name: db
     restart: always
-    expose:
-      - "3306"
     environment:
       MYSQL_ROOT_PASSWORD: ssafy
       TZ: "Asia/Seoul"
@@ -16,8 +14,6 @@ services:
     build: backend
     container_name: spring
     restart: always
-    expose:
-      - "8080"
     environment:
       TZ: "Asia/Seoul"
       SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/debate?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true"
@@ -33,9 +29,6 @@ services:
       - ./data/nginx:/etc/nginx/conf.d
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
-    ports:
-      - "80:80"
-      - "443:443"
     network_mode: host
     logging:
       options:
