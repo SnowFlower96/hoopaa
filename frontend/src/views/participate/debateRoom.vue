@@ -71,7 +71,7 @@
                                     <div :class="{'vote-btn-selected': voteStatus === 1, 'vote-btn': voteStatus === 0}" @click="voteFunction(1)">찬성</div>
                                     <div :class="{'vote-btn-selected': voteStatus === 0, 'vote-btn': voteStatus === 1}" @click="voteFunction(0)">반대</div>
                                 </div>
-                                <p>타이머가 끝나면 자동으로 제출됩니다</p>
+                                <p>시간안에 제출하지 않으면 무효표 처리됩니다.</p>
                                 <div class="displayFlex">
                                     <div class="sub-vote-btn" @click="submitVote('vote')">제출</div>
                                 </div>
@@ -319,6 +319,7 @@ import { mapState} from 'vuex';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 import moment from 'moment';
 import router from '../../common/lib/vue-router'
+
 
 const OPENVIDU_SERVER_URL = "https://hoopaa.site:8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
@@ -715,6 +716,11 @@ export default {
         }
       })
 
+    // end signal
+      this.session.on('signal:The-End', (event) => {
+        this.$router.push('/endDebate')
+      })
+
       this.session.on("signal:chat-all",(event)=>{
       console.log("전체 메세지");
       let eventData = JSON.parse(event.data);
@@ -1083,8 +1089,9 @@ export default {
         voteFunction(status) {
             this.voteStatus = status
         },
-        voteVisible() {
+        async voteVisible() {
             // this.voteViewTF = true
+            this.startVote();
             this.voteViewTF = !this.voteViewTF
 
             let time = this.voteTime;
@@ -1102,7 +1109,8 @@ export default {
                 document.getElementById("demo").innerHTML = "투표가 종료되었습니다";
             }
             }, 1000);
-            this.startVote();
+            setTimeout(this.theEnd,63000)
+
         // 타이머 로직
         },
         openCloseModMenu() {
@@ -1510,6 +1518,15 @@ export default {
         type : 'Start-Vote'
       })
     },
+
+    // 최종화면으로 보내기
+    theEnd() {
+      this.session.signal({
+        data : 'the end',
+        to : [],
+        type : 'The-End'
+      })
+    }
     }
   }
 
