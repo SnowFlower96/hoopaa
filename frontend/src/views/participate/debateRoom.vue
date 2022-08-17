@@ -1289,10 +1289,16 @@ export default {
 
         //채팅 추가
         sendAllMessage(message){
-
-          var messageData = {
+          if(this.user.nnm==null){
+              var messageData = {
+              writer : this.user,
+              content: message
+            }
+          }else{
+            var messageData = {
             writer : this.user.nnm,
             content: message
+            }
           }
 
           this.session.signal({
