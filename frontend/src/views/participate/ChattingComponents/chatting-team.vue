@@ -1,36 +1,31 @@
 <template>
-    <div class="ctb-background">
+    <div :style="customStyle" class="ctb-background" @click="chatCheck">
       <div class="chat-close-btn" @click="EmitChatClose"><i class="fas fa-times"></i></div>
-      <div class="title">
-        <h1>Team 채팅</h1>
+      <div  class="title">
+        <h1 class="title"> Team 채팅창</h1>
       </div>
-            <!--채팅 내역-->
-            <div class="chatting-all-view"><!--  :heigth="chatHeight"> -->
-              <div
-                class="chat-format"
-                v-for="(message, i) of messagesTeam"
-                :key="i"
-              >
+      <div class="new-message-alarm">
+          <span>{{isNewMessage}}</span>
+      </div>
 
-
-                <div class="sender">
-                  <span>{{message.writer}}</span>
-                </div>
-                <div class="chat-content">
-                  <div class="message">
-                    <span>{{message.message}}</span>
-                  </div>
-                  <div class="time">
-                    <span>{{message.time}}</span>
-                  </div>
-                </div>
-
-
-
-            <!-- <div class="chatting-all-write">
-            <textarea placeholder="여기에 메세지를 입력하세요"  v-model="message" class="chatting-team-ta" cols="30" rows="10"></textarea>
-            </div> -->
-
+        <!--채팅 내역-->
+      <div class="chatting-all-view"><!--  :heigth="chatHeight"> -->
+        <div
+          class="chat-format"
+          v-for="(message, i) of messagesTeam"
+          :key="i"
+        >
+          <div class="sender">
+            <span>{{message.writer}}</span>
+          </div>
+          <div class="chat-content">
+            <div class="message">
+              <span>{{message.message}}</span>
+            </div>
+            <div class="time">
+              <span>{{message.time}}</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -47,11 +42,11 @@
           </div>
         </div>
       </div>
-
     </div>
 </template>
 
 <script>
+import { mapState} from 'vuex';
 export default {
     props:{
     messagesTeam:[]
@@ -60,16 +55,46 @@ export default {
   data(){
       return {
         message: "",
-        chatHeight: "80vh"
+        chatHeight: "80vh",
+        isNewMessage:'',
+        borderColor: ''
       }
     },
 
   watch:{
+    messagesTeam: {
+      deep : true,
 
+      handler(){
+        let len = this.messagesTeam.length;
+        let unm = '';
+        if(this.user.nnm==null){
+          console.log("닉넴 파악 불가");
+          unm = this.user
+        }else{
+          unm = this.user.nnm
+          console.log("닉넴 파악 가능");
+          console.log(unm);
+          console.log(this.messagesTeam[len-1].writer)
+        }
+        if(this.messagesTeam[len-1].writer!=unm){
+          console.log("다른 사람이 보냄");
+          this.borderColor="rgb(70, 70, 74)"
+          this.isNewMessage="*new"
+        }
+
+      }
+    }
   },
   computed:{
-    messagesAll(){
+    ...mapState(["user"]),
+    messagesTeam(){
       return this.messagesTeam
+    },
+    customStyle(){
+      return{
+      '--border-color' : this.borderColor
+      }
     }
   }
   ,
@@ -80,12 +105,15 @@ export default {
         clickSendMessages(){
           this.$emit('chat-team', this.message)
           this.message=''
+        },
+        chatCheck(){
+          this.borderColor=''
+          this.isNewMessage=''
         }
 
     }
 }
 </script>
-
 
 <style>
 
@@ -96,8 +124,8 @@ export default {
 
 }
 
-
 .ctb-background {
+  background-color: var(--border-color);
   width:100%;
   height: 100%;
   margin:0px;
@@ -107,6 +135,7 @@ export default {
 }
 .title{
   text-align: center;
+   display: inline;
 }
 .chatting-send-btn{
   float:right;
@@ -117,6 +146,7 @@ export default {
     justify-content: end;
 }
 .chatting-all-view{
+  margin-top: 10%;
   position: relative;
   width: 100%;
   height: 60%;
@@ -163,5 +193,9 @@ export default {
     width: 95%;
     height: 70px;
     margin: 0px;
+}
+.new-message-alarm{
+  text-align:right;
+  height:2%;
 }
 </style>
