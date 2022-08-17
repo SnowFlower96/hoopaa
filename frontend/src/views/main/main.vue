@@ -79,7 +79,6 @@ export default {
       if (this.location == 'main-page') {
         const scrollPosition = window.scrollY || document.documentElement.scrollTop;
         const percentageOfPageScroll = scrollPosition/document.body.scrollHeight *100
-        // console.log('돌아가는중',this.visible, this.location)
         if (percentageOfPageScroll < 15) {
           this.visibleMainHeader = false
         } else {
@@ -101,12 +100,11 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      // console.log(to.name)
       if (to.name === 'main-page' || to.name === 'login' || to.name === 'sign-up' || to.name === 'checkPwd' || to.name === 'Participate') {
         this.location = to.name
         this.visibleMainHeader = false
         document.addEventListener('scroll', this.zeroLocation)
-        } 
+        }
       else if (to.name === 'debateRoom'|| to.name === 'make-room' || to.name === 'homeToParticipate' || to.name === 'detailSessionView' || to.name === 'endDebate' || to.name === 'resultPage') {
         this.visibleMainHeader = false
         this.visibleMainFooter = false

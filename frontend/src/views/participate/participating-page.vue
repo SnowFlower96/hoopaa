@@ -40,7 +40,6 @@ export default {
     positionAgree () {
       this.$store.commit("SET_POSITION",'agree')
       let index = '/room/enter/select/' + this.sessionId + '?pos=agree'
-      console.log(index)
       this.$store.dispatch("setPosition", index)
       this.isAgree = true
       this.isDisAgree = false

@@ -76,7 +76,7 @@ export default {
 
     },
     mounted() {
-        console.log(this.timeList)
+
         const wValue = document.body.clientWidth*0.75*0.3-20  // 사회자 비디오
         const wValueNotVid = document.body.clientWidth*0.75*0.4 // 게이지 + 컨텐츠
         this.centerVideoWidth = `${wValue}px`
@@ -131,7 +131,7 @@ export default {
             this.dbContentInnerHeight = `${hValue*0.85-50}px`
         },
          leaveSession() {
-           console.log("leaveSession")
+          
             // --- Leave the session by calling 'disconnect' method over the Session object ---
             if (this.session) this.session.disconnect();
             this.session = undefined;

@@ -51,7 +51,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.timeList);
+  
     const wValue = document.body.clientWidth * 0.75 * 0.3 - 20; // 사회자 비디오
     this.centerVideoWidth = `${wValue}px`;
     this.centerVideoHeight = `${wValue * 0.6}px`;

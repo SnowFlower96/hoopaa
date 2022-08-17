@@ -126,7 +126,7 @@ export default {
     },
     getNum(event) {
         this.maxNum = event.target.value;
-        console.log(this.maxNum)
+
     },
     async makeRoom() {
       var room = {
@@ -157,7 +157,7 @@ export default {
       const files = e.target.files;
       if(files.length>0){
 
-        console.log(files[0].size);
+      
         let validation = true;
         let message = '';
 
@@ -187,7 +187,6 @@ export default {
             )
 
             this.file = base64
-            console.log("base64"+base64);
           })
           reader.readAsDataURL(files[0])
           this.file = this.encodedFile;
