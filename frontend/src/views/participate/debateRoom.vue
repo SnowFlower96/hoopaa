@@ -18,19 +18,21 @@
 </div>
 <!-- 쉬는시간 모달 -->
 
+<!-- 0818 임시버튼 또 추가 -->
+<div style="position: absolute; top: 10%;"> <button @click="userPenalty">유저패널티 모달창</button></div>
+<!-- 0818 임시버튼 또 추가 -->
 
+<!-- 사회자 시작버튼 -->
+<div class="mod-start-btn-bg">
+    <div v-if="session.sessionId == user.id && modStart == true" @click="animationSignal('startEvent')">토론 시작하기</div>
 
-<!-- 곧 없어질 버튼 -->
-<div class="animation-control-btns">
-    <button v-if="session.sessionId == user.id" @click="animation('startEvent')">시작 이벤트</button>
 </div>
-<!-- 곧 없어질 버튼 -->
+<!-- 사회자 시작버튼 -->
 
 
 <!-- 뷰바꾸는 임시버튼 -->
 <div v-if="imgTF" class="startImg">
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
-    <button @click="messageFromTeam">팀에서 사회자한테 주는 메세지</button>
     <!-- <div id="demo">넨</div> -->
 </div>
 <!-- 뷰바꾸는 임시버튼 -->
@@ -122,11 +124,11 @@
             <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
             <div class="call-to-moderator-inner-c call-to-moderator-center" :style="customCaroselStyle">
                 <div class="modal-icon" @click="offCallModal"><i class="fas fa-times"></i></div>
-                <call-to-moderator v-if="message"></call-to-moderator>
+                <call-to-moderator v-if="message" @sendMessage="toModerator"></call-to-moderator>
 
-                <user-out v-if="out"></user-out>
+                <user-out v-if="out" :list="penaltyList"></user-out>
 
-                <message-from-team v-if="messageFrom"></message-from-team>
+                <message-from-team v-if="messageFrom" :from="from" :message="toModeratorMessage" @close-modal="offCallModal"></message-from-team>
 
                 <upload-file v-if="file" @publishScreenShare="publishScreenShare"></upload-file>
 
@@ -141,6 +143,16 @@
                 @emit-rest="EmitRest"
                 @sendSebuSession="sendSession"
                 ></rest-time>
+
+                <div v-if="penaltyView" class="penalty-view displayFlex">
+                  <div>
+                    <div style="font-size:50px; color:white; text-align:center;">🚨경고🚨</div>
+                    <div style="font-size:20px; color:white; text-align:center;">올바른 태도로 토론에 참여해주세요</div>
+                    <div class="penalty-btn-wrap displayFlex">
+                      <div @click="offpenaltyView" class="penalty-btn displayFlex">확인</div>
+                    </div>
+                  </div>
+                </div>
             </div>
             <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
         </div>
@@ -466,6 +478,7 @@ export default {
             allHeartLeft: '',
             countingHeart :0,
             propsHeart: 1,
+            modStart: true,
 
           //  채팅
             chattTF: true,
@@ -500,6 +513,7 @@ export default {
             timerTeam:null,
             timeList:[], // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
             timerMin: 0,
+            penaltyView: false,
 
             // 토론끝나고 방청잭 투표뷰 3개
             allVoteView: true,
@@ -533,8 +547,12 @@ export default {
               vote : '',
             },
             pannelList : [],
+            penaltyList : [],
           // 룸id
             roomId : '',
+          // 팀 > 사회자 메시지
+            toModeratorMessage : '',
+            from : '',
         }
     },
     mounted() {
@@ -584,6 +602,20 @@ export default {
         window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
+      offpenaltyView() {
+        this.callToMdModal = false
+        this.penaltyView = false
+      },
+      userPenalty() {
+        this.callToMdModal = true
+        this.penaltyView = true
+        this.menu = false
+        this.out = false
+        this.message = false
+        this.file = false
+        this.rest = false
+        this.messageFrom = false
+      },
         submitVote(option) {
             if(option === 'vote') {
                 if(this.voteStatus == 1) {
@@ -726,7 +758,25 @@ export default {
           console.log(this.roomId + '222222222')
         }
       })
+    // 팀 > 사회자 메시지 signal
+      this.session.on('signal:Team-To-Moderator', (event) => {
+        if (this.session.sessionId == this.user.id) {
+          this.toModeratorMessage = event.data.split('/')[0]
+          this.from = event.data.split('/')[1]
+          this.messageFromTeam();
+        }
+      })
+    // 애니메이션 시그널
 
+      this.session.on('signal:Animation', (event) => {
+        if (event.data == 'startEvent') {
+          this.animation(event.data)
+        } else if (event.data == 'heartHund') {
+          if (this.position) {
+            this.animation(event.data)
+          }
+        }
+      })
     // end signal
       this.session.on('signal:The-End', (event) => {
         if (this.session.sessionId == this.user.id) {
@@ -1031,17 +1081,18 @@ export default {
         animation(option) {
             this.animationBG = !this.animationBG
             if (option === 'startEvent') {
+                const startSound = new Audio("https://drive.google.com/uc?export=download&id=1SCuIo3Ds1tU3RBaO-JljNA-liMFASoLB");
+                startSound.play();
                 // this.startEvent = true
                 this.startEvent = !this.startEvent
                 this.heartTen = false
                 this.heartfift = false
                 this.heartHund = false
                 this.restEvent = false
-                this.$store.dispatch("roomStart", this.session.sessionId)
-
-                const startSound = new Audio("https://drive.google.com/uc?export=download&id=1SCuIo3Ds1tU3RBaO-JljNA-liMFASoLB");
-                startSound.play();
-
+                if (this.session.sessionId == this.user.id) {
+                  this.$store.dispatch("roomStart", this.session.sessionId)
+                }
+                this.modStart = false
                 setTimeout(() => {
                   this.startEvent = false
                   this.animationBG = false
@@ -1065,6 +1116,8 @@ export default {
             this.rest = false
         },
         EmitRest(timeRest) {
+            const restSound = new Audio("https://drive.google.com/uc?export=download&id=1R8_KNwIEBS_LpkCjazOjPZrk4jz4F2cM");
+            restSound.play();
 
             this.restModal = true
             this.callToMdModal = false
@@ -1090,7 +1143,9 @@ export default {
           this.restEvent = false
           this.restModal = false
           clearInterval(z);
+          restSound.pause();
         }, (timeRest*1000) + 2000)
+
 
         },
         EmitTime(Array) {
@@ -1107,6 +1162,21 @@ export default {
         async voteVisible() {
             this.voteViewTF = !this.voteViewTF
             this.startVote();
+            let time = this.voteTime;
+            let min = "";
+            let sec = "";
+            let x = setInterval(function() {
+            min = parseInt(time/60);
+            sec = time%60;
+
+            document.getElementById("demo").innerHTML = min + "분" + sec + "초";
+            time--;
+
+            if (time < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "투표가 종료되었습니다";
+            }
+            }, 1000);
             setTimeout(this.theEnd,63000)
 
         // 타이머 로직
@@ -1133,7 +1203,7 @@ export default {
         },
         voteView() {
             this.voteViewTF = !this.voteViewTF
-          
+
             let time = this.voteTime;
             let min = "";
             let sec = "";
@@ -1352,6 +1422,7 @@ export default {
 
         offCallModal() {
             this.callToMdModal = false
+            this.messageFrom = false
         },
         // Emit 함수를 하나로 하고 그 안에서 분기처리하기
         EmitcallModal(option) {
@@ -1373,6 +1444,7 @@ export default {
                 this.file = false
                 this.rest = false
                 this.messageFrom = false
+                this.makeList();
             }
             else if (option == 'message') {
                 this.menu = false
@@ -1403,11 +1475,6 @@ export default {
                 this.heartfift = false
                 this.heartHund = false
                 this.restEvent = !this.restEvent
-                const restSound = new Audio("https://drive.google.com/uc?export=download&id=1R8_KNwIEBS_LpkCjazOjPZrk4jz4F2cM");
-                restSound.play();
-                setTimeout(() =>  {
-                  restSound.pause()
-                }, 3000)
             }
         },
 
@@ -1468,7 +1535,10 @@ export default {
 
         return result.data;
     },
-
+    // 신고 리스트 만들기
+    makeList() {
+      this.penaltyList.push({id:2, nnm:'admin'})
+    },
     // 음소거 컨트롤 시그널
     async audioMute(status) {
       let agreeArr = [];
@@ -1547,7 +1617,26 @@ export default {
     closeSession(sessionId) {
       this.$store.dispatch("closeSession", sessionId + '_' + 'agree');
       this.$store.dispatch("closeSession", sessionId + '_' + 'disagree')
-    }
+    },
+    // 팀 > 사회자 메시지
+    toModerator(message) {
+      this.session.signal({
+        data : message + '/' + this.position,
+        to : [],
+        type : 'Team-To-Moderator'
+      })
+      this.offCallModal();
+    },
+
+    // 애니메이션 시그널
+    animationSignal(option) {
+      this.session.signal({
+        data : option,
+        to : [],
+        type : 'Animation'
+      })
+    },
+
     }
   }
 
@@ -1572,12 +1661,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-.animation-control-btns {
-    position: absolute;
-    top: 50px;
-    background-color: rgba(202, 88, 88, 0.534);
-    height: 50px;
 }
 .animation-role-background {
     position: absolute;
@@ -1624,7 +1707,27 @@ export default {
     justify-content: center;
     align-items: center;
 }
-
+.mod-start-btn-bg {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+}
+.mod-start-btn-bg > div {
+  width: 230px;
+  height: 70px;
+  border-radius: 10px;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: rgb(141, 141, 141) 1px solid;
+  color: rgb(141, 141, 141);
+}
+.mod-start-btn-bg > div:hover {
+  outline: white 1px solid;
+  color: white;
+  cursor: pointer;
+}
 .sub-vote-btn {
     font-size: 25px;
     margin: 10px;
@@ -1721,7 +1824,10 @@ export default {
     left: var(--all-heart-left);
     position: absolute;
 }
+.penalty-view {
+  height: 90%;
 
+}
 #heart-div {
   position: absolute;
   bottom: 0px;
@@ -1774,7 +1880,22 @@ export default {
         opacity: 0
     }
 }
-
+.penalty-btn-wrap {
+  margin-top: 25px;
+}
+.penalty-btn {
+  width: 100px;
+  height: 50px;
+  border-radius: 10px;
+  outline: 1px rgb(145, 145, 145) solid;
+  color:rgb(145, 145, 145);
+  font-size: 30px;
+}
+.penalty-btn:hover {
+  outline: 1px white solid;
+  color:white;
+  cursor: pointer;
+}
 .chatt-btn {
     width: 5vh;
     height: 5vh;

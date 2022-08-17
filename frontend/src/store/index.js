@@ -419,6 +419,15 @@ export default new Vuex.Store({
       resolve(res);
     })
   })
+  },
+
+  // 패널티 주기
+  givePenalty({commit}, data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/'+ data,
+      method : "PUT",
+    })
   }
 }
 })

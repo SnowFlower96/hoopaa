@@ -46,13 +46,18 @@ export default {
             agree: '',
             disagree: '',
             king : '',
-            mvpView: false
+            mvpView: false,
+            total : parseInt(this.agree) + parseInt(this.disagree)
         }
     },
     mounted() {
+        const endSound = new Audio("https://drive.google.com/uc?export=download&id=1CwL1BIeUH7ymCbHOFtO9J2BMHCw3Vsk0");
+        endSound.play();
     },
     methods: {
         async resultBtn() {
+            const clap = new Audio("https://drive.google.com/uc?export=download&id=13AIGF6JIkbdiO5WYS2YhB-g4Y-5Ub6iE");
+            clap.play();
           let query = window.location.search;
          await this.$store.dispatch("getRoomResult", query.split('?')[1]).then((res)=> {
             console.log(res)
@@ -64,10 +69,10 @@ export default {
             let element = document.getElementById("resultWrap");
             element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
 
-            document.getElementById("barChart").style.height = this.agree*17 + "px";
+            document.getElementById("barChart").style.height = (this.agree/this.total)*700 + "px";
             document.getElementById("chartValue").innerText = Math.round(this.agree);
 
-            document.getElementById("barChart2").style.height = this.disagree*17 + "px";
+            document.getElementById("barChart2").style.height = (this.disagree/this.total)*700 + "px";
             document.getElementById("chartValue2").innerText = Math.round(this.disagree);
             setTimeout(() => {
                 this.mvpView = true
