@@ -134,7 +134,7 @@ export default {
         hashtags : '#' + this.hashTag1 + '#' + this.hashTag2 + '#' + this.hashTag3,
         max_num : this.maxNum,
         pwd : this.roomPwd,
-        subtitle : this.roomName,
+        title : this.roomName,
         title : this.roomTitle,
         cate: this.selectedMenu.idx,
         file: this.file,
