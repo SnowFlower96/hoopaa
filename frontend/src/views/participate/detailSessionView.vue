@@ -1,7 +1,7 @@
 <template>
 <!-- 세부세션 메인 -->
     <div class="detail-box-background" :style="customDetailSessionSize">
-        
+
         <!-- 화면공유 + 사용자비디오 들어가는부분 -->
         <div class="detail-box-outer">
 
@@ -24,7 +24,8 @@
 
         <!-- 채팅방 -->
             <div v-if="chattTF" class="chatting-box" :style="customDetailSessionSize">
-                <chatting-team @click="changeChatView"></chatting-team>
+              <chatting-team v-if="position=='agree'" :messagesTeam="messagesAgree" @close-chat="changeChatView" @chat-team="sendTeamMessage"></chatting-team>
+              <chatting-team v-if="position!='agree'" :messagesTeam="messagesDisagree" @close-chat="changeChatView" @chat-team="sendTeamMessage"></chatting-team>
             </div>
         <!-- 채팅방 -->
 
@@ -73,8 +74,6 @@ export default {
     components: {
         FooterTeam,
         debateRoomSideComponent,
-        chattingTeam,
-
 
       // 토론방 관련
         debateRoomVideo,
@@ -164,6 +163,10 @@ export default {
 			      publisherScreen: undefined,
 			      subscribersScreen:[],
             screensharing: false,
+
+            //채팅
+            messagesAgree:[],
+            messagesDisagree:[],
         }
     },
     mounted() {
@@ -285,6 +288,28 @@ export default {
       this.session.on("exception", ({ exception }) => {
         console.warn(exception);
       });
+
+
+      //chatting
+      this.session.on("signal:chat-agree",(event)=>{
+      let eventData = JSON.parse(event.data);
+      let data = new Object()
+      let time = new Date()
+      data.writer = eventData.writer
+      data.message = eventData.content
+      data.time = moment(time).format('HH:mm')
+      this.messagesAgree.push(data)
+    } )
+
+    this.session.on("signal:chat-disagree",(event)=>{
+     let eventData = JSON.parse(event.data);
+      let data = new Object()
+      let time = new Date()
+      data.writer = eventData.writer
+      data.message = eventData.content
+      data.time = moment(time).format('HH:mm')
+      this.messagesDisagree.push(data)
+    } )
 
       // Hearing Signal
 
@@ -452,6 +477,25 @@ export default {
 		this.sessionScreen.publish(publisherScreen);
 	});
 		},
+    sendTeamMessage(message){
+          var messageData = {
+            writer : this.user.nnm,
+            content: message
+          }
+          if(this.position ==="agree"){
+            this.session.signal({
+              type : "chat-agree",
+              data : JSON.stringify(messageData),
+              to : []
+            })
+          }else{
+            this.session.signal({
+              type : "chat-disagree",
+              data : JSON.stringify(messageData),
+              to : []
+            })
+          }
+        },
     },
 
 }
