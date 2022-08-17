@@ -15,6 +15,7 @@ backend/!**/src/main/**/out/
 backend/!**/src/test/**/out/
 backend/*.log
 backend/*.gz
+backend/app
 
 ### frontend ###
 frontend/node_modules

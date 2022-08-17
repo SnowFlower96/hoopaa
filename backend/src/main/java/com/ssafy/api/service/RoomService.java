@@ -13,7 +13,7 @@ import java.util.Map;
 
 public interface RoomService {
 
-    void createRoom(String sessionID, RoomOpenReq roomOpenReq) throws IOException;
+    String createRoom(String sessionID, RoomOpenReq roomOpenReq) throws IOException;
 
     boolean isExistRoom(String sessionID);
 
@@ -25,7 +25,11 @@ public interface RoomService {
 
     boolean checkPwd(String sessionID, String pwd);
 
-    String enterRoom(RoomEnterReq roomEnterReq, UserInfoDto userInfoDto);
+    String decodeCode(String code);
+
+    String enterRoom(String sessionID, UserInfoDto userInfoDto);
+
+    String reconnect(String sessionID, String userID);
 
     Map<String, Map<String, String>> createSession(String sessionID) throws OpenViduJavaClientException, OpenViduHttpException;
     void deleteSession(String sessionID) throws OpenViduJavaClientException, OpenViduHttpException;

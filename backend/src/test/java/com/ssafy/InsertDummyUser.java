@@ -2,6 +2,7 @@ package com.ssafy;
 
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.service.UserService;
+import com.ssafy.common.util.AES128Util;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,18 +18,14 @@ public class InsertDummyUser {
     PasswordEncoder passwordEncoder;
 
     @Test
-    public void test() {
-        UserRegisterPostReq userRegisterPostReq = new UserRegisterPostReq();
-        userRegisterPostReq.setEm("test");
-        userRegisterPostReq.setPwd("test");
-        userRegisterPostReq.setNnm("test");
-        userService.createUser(userRegisterPostReq);
-
-        userRegisterPostReq = new UserRegisterPostReq();
-        userRegisterPostReq.setEm("admin");
-        userRegisterPostReq.setPwd("admin");
-        userRegisterPostReq.setNnm("admin");
-        userService.createUser(userRegisterPostReq);
+    public void test() throws InterruptedException {
+        AES128Util aes128Util = new AES128Util("1234567890123456");
+        String str = "1";
+        String enc = aes128Util.encrypt(str);
+        String dec = aes128Util.decrypt(enc);
+        System.out.println(str);
+        System.out.println(enc);
+        System.out.println(dec);
     }
 
 }

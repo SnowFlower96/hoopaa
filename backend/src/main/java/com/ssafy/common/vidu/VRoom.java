@@ -13,6 +13,9 @@ import java.util.Map;
 @Data
 public class VRoom {
 
+    // 방 코드(암호화)
+    private String code;
+
     // OpenVidu 세션
     private Session session;
 
@@ -38,7 +41,8 @@ public class VRoom {
     private boolean disagree_voice;  // 반대측 발언권 유무
 
     @Builder
-    public VRoom(Session session, VSession VSession, Map<String, VUserInfo> mapParticipants, RoomInfoDto roomInfoDto, VUserInfo[] agree, VUserInfo[] disagree, int cheer_agree, int cheer_disagree, int vote_agree, int vote_disagree, int vote_final_agree, int vote_final_disagree, boolean agree_voice, boolean disagree_voice) {
+    public VRoom(String code, Session session, com.ssafy.common.vidu.VSession VSession, Map<String, VUserInfo> mapParticipants, RoomInfoDto roomInfoDto, VUserInfo[] agree, VUserInfo[] disagree, int cheer_agree, int cheer_disagree, int vote_agree, int vote_disagree, int vote_final_agree, int vote_final_disagree, boolean agree_voice, boolean disagree_voice) {
+        this.code = code;
         this.session = session;
         this.VSession = VSession;
         this.mapParticipants = mapParticipants;

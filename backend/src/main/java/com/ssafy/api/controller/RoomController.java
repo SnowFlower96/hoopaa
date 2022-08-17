@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -47,6 +48,9 @@ public class RoomController {
     @Autowired
     ObjectMapper mapper;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @PostMapping
     @ApiOperation(value = "토론 방 생성", notes = "토론 방을 세팅하고 모집 중 상태로 만든다.")
     @ApiResponses({
@@ -62,13 +66,13 @@ public class RoomController {
 
         // 유저 아이디로 생성된 토론방이 이미 있으면
         if (roomService.isExistRoom(AToken)) {
-            return ResponseEntity.status(405).body(StringRes.of(405, "Session Already Exist"));
+            return ResponseEntity.status(405).body(BaseResponseBody.of(405, "Session Already Exist"));
         }
 
         // 토론방 생성
-        roomService.createRoom(AToken, roomOpenReq);
+        String code = roomService.createRoom(AToken, roomOpenReq);
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        return ResponseEntity.status(200).body(StringRes.of(200, "Success", code));
     }
 
     @PostMapping("/enter")
@@ -81,6 +85,7 @@ public class RoomController {
     })
     public ResponseEntity<? extends BaseResponseBody> enterRoom(@ApiIgnore Authentication authentication, @RequestBody RoomEnterReq roomEnterReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        String sessionID = roomService.decodeCode(roomEnterReq.getSessionId());
 
         UserInfoDto user;
         // 회원
@@ -89,14 +94,41 @@ public class RoomController {
         else user = new UserInfoDto(User.builder().nnm(userDetails.getNnm()).build());
 
         // 해당 세션이 존재하지 않으면
-        if (!roomService.isExistRoom(roomEnterReq.getSessionId()))
+        if (!roomService.isExistRoom(sessionID))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
         // 비밀번호 오류
-        if (!roomService.checkPwd(roomEnterReq.getSessionId(), roomEnterReq.getPwd()))
+        if (!roomService.checkPwd(sessionID, roomEnterReq.getPwd()))
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong Password"));
 
-        String token = roomService.enterRoom(roomEnterReq, user);
+        String token = roomService.enterRoom(sessionID, user);
+
+        return ResponseEntity.status(200).body(VTokenRes.of(200, "Success", token));
+    }
+
+    @PutMapping("/enter/{sessionID}")
+    @ApiOperation(value = "토큰 재발급", notes = "토론 방 토큰 재발급")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "비밀번호 오류"),
+            @ApiResponse(code = 404, message = "없는 토론 방"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> reconnectRoom(@ApiIgnore Authentication authentication, @PathVariable String sessionID) {
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+
+        UserInfoDto user;
+        // 회원
+        if (userDetails.isUser()) user = userService.getUserInfoDtoById(Long.parseLong(userDetails.getUsername()));
+        // 비회원
+        else user = new UserInfoDto(User.builder().nnm(userDetails.getNnm()).build());
+
+        // 해당 세션이 존재하지 않으면
+        if (!roomService.isExistRoom(sessionID))
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
+
+//        String token = roomService.enterRoom(roomEnterReq, user);
+        String token = roomService.reconnect(sessionID, user.getId());
 
         return ResponseEntity.status(200).body(VTokenRes.of(200, "Success", token));
     }
@@ -137,7 +169,7 @@ public class RoomController {
             @ApiResponse(code = 404, message = "없는 토론 방"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> closeSession(@ApiIgnore Authentication authentication, @PathVariable String sessionID) {
+    public ResponseEntity<? extends BaseResponseBody> closeSession(@ApiIgnore Authentication authentication, @PathVariable String sessionID) throws OpenViduJavaClientException, OpenViduHttpException {
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         String AToken = userDetails.getUsername();
 
@@ -151,6 +183,8 @@ public class RoomController {
 
         // 호스트가 아니면
         if (!AToken.equals(sessionID)) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Not host"));
+
+        roomService.deleteSession(sessionID);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
@@ -282,7 +316,7 @@ public class RoomController {
         if (!roomService.isExistRoom(sessionID))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
-        roomService.updatePhaseBySessionID(sessionID, 1);
+        if (!roomService.updatePhaseBySessionID(sessionID, 1)) return ResponseEntity.status(411).body(BaseResponseBody.of(404, "Wrong status"));
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
@@ -358,7 +392,7 @@ public class RoomController {
         if (!roomService.isExistRoom(sessionID))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
-        roomService.updatePhaseBySessionID(sessionID, 2);
+        if (!roomService.updatePhaseBySessionID(sessionID, 2)) return ResponseEntity.status(411).body(BaseResponseBody.of(404, "Wrong status"));
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Vote start"));
     }
@@ -399,7 +433,7 @@ public class RoomController {
         if (!roomService.isExistRoom(AToken))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 
-        roomService.updatePhaseBySessionID(AToken, 3);
+        if (!roomService.updatePhaseBySessionID(AToken, 3)) return ResponseEntity.status(411).body(BaseResponseBody.of(404, "Wrong status"));
 
         Map<String, String> result = roomService.finishRoom(AToken);
         String json = mapper.writeValueAsString(result);

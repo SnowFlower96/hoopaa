@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
+import com.ssafy.common.util.AES128Util;
 import com.ssafy.common.vidu.ConnectionDto;
 import com.ssafy.common.vidu.VRoom;
 import com.ssafy.common.vidu.VSession;
@@ -10,21 +11,17 @@ import com.ssafy.db.dto.RoomInfoDto;
 import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
-import io.netty.handler.codec.base64.Base64Decoder;
 import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.swing.filechooser.FileSystemView;
 import javax.transaction.Transactional;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.FileSystem;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -34,7 +31,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RoomServiceImpl implements RoomService {
 
     private Map<String, VRoom> mapRooms;
-//    private Map<String, VSession> mapSessions;
 
     private OpenVidu openVidu;
     @Value("${openvidu.url}")
@@ -43,6 +39,10 @@ public class RoomServiceImpl implements RoomService {
     private String SECRET;
     @Value("${upload.path}")
     private String thumbPath;
+
+    private AES128Util aes128Util;
+    @Value("aes.key")
+    private String key;
 
     @PostConstruct
     void init() throws OpenViduJavaClientException, OpenViduHttpException {
@@ -55,6 +55,8 @@ public class RoomServiceImpl implements RoomService {
         }
 
         this.mapRooms = new ConcurrentHashMap<>();
+
+        aes128Util = new AES128Util(key);
     }
 
     @Autowired
@@ -82,7 +84,7 @@ public class RoomServiceImpl implements RoomService {
     UserStatRepository userStatRepository;
 
     @Override
-    public void createRoom(String sessionID, RoomOpenReq roomOpenReq) throws IOException {
+    public String createRoom(String sessionID, RoomOpenReq roomOpenReq) throws IOException {
         // 세션 생성
         Session session;
         try {
@@ -152,12 +154,14 @@ public class RoomServiceImpl implements RoomService {
                 .hash1(hashtagNms[0]).hash2(hashtagNms[1]).hash3(hashtagNms[2])
                 .title(roomOpenReq.getTitle()).subtitle(roomOpenReq.getSubtitle())
                 .build();
-        VRoom vRoom = VRoom.builder().session(session).VSession(null)
+        VRoom vRoom = VRoom.builder().code(aes128Util.encrypt(sessionID)).session(session).VSession(null)
                 .mapParticipants(new ConcurrentHashMap<>())
                 .roomInfoDto(roomInfoDto)
                 .agree(new VUserInfo[roomOpenReq.getMax_num()]).disagree(new VUserInfo[roomOpenReq.getMax_num()])
                 .build();
         this.mapRooms.put(sessionID, vRoom);
+
+        return this.mapRooms.get(sessionID).getCode();
     }
 
     @Override
@@ -187,9 +191,16 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public String enterRoom(RoomEnterReq roomEnterReq, UserInfoDto userInfoDto) {
+    public String decodeCode(String code) {
+        return aes128Util.decrypt(code);
+    }
+
+    @Override
+    public String enterRoom(String sessionID, UserInfoDto userInfoDto) {
         Connection connection;
-        VRoom vRoom = this.mapRooms.get(roomEnterReq.getSessionId());
+        VRoom vRoom = this.mapRooms.get(sessionID);
+        // 방 코드 체크
+//        if (!roomEnterReq.getCode().equals(this.mapRooms.get(roomEnterReq.getSessionId()))) return null;
         Session session = vRoom.getSession();
 
         try {
@@ -222,6 +233,15 @@ public class RoomServiceImpl implements RoomService {
             vRoom.getMapParticipants().remove(userInfoDto.getId());
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String reconnect(String sessionID, String userID) {
+        if (this.mapRooms.get(sessionID).getMapParticipants().containsKey(userID)) {
+            return this.mapRooms.get(sessionID).getMapParticipants().get(userID).getConnectionDto().getToken();
+        }
+
+        return null;
     }
 
     @Override
