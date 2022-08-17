@@ -386,7 +386,9 @@ public class RoomServiceImpl implements RoomService {
     public void increasePenalty(String sessionID, String panel) {
         VRoom vRoom = this.mapRooms.get(sessionID);
         VUserInfo vUserInfo = vRoom.getMapParticipants().get(panel);
+        System.out.println(vUserInfo);
         vUserInfo.setPenaltyCnt(vUserInfo.getPenaltyCnt() + 1);
+        System.out.println(vUserInfo);
     }
 
     @Override
