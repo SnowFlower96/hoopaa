@@ -22,7 +22,7 @@
 
 <!-- 곧 없어질 버튼 -->
 <div class="animation-control-btns">
-    <button v-if="session.sessionId == user.id" @click="animation('startEvent')">시작 이벤트</button>
+    <button v-if="session.sessionId == user.id" @click="animationSignal('startEvent')">시작 이벤트</button>
 </div>
 <!-- 곧 없어질 버튼 -->
 
@@ -123,7 +123,7 @@
                 <div class="modal-icon" @click="offCallModal"><i class="fas fa-times"></i></div>
                 <call-to-moderator v-if="message" @sendMessage="toModerator"></call-to-moderator>
 
-                <user-out v-if="out"></user-out>
+                <user-out v-if="out" :list="penaltyList"></user-out>
 
                 <message-from-team v-if="messageFrom" :from="from" :message="toModeratorMessage" @close-modal="offCallModal"></message-from-team>
 
@@ -532,6 +532,7 @@ export default {
               vote : '',
             },
             pannelList : [],
+            penaltyList : [],
           // 룸id
             roomId : '',
           // 팀 > 사회자 메시지
@@ -736,7 +737,17 @@ export default {
           this.messageFromTeam();
         }
       })
+    // 애니메이션 시그널
 
+      this.session.on('signal:Animation', (event) => {
+        if (event.data == 'startEvent') {
+          this.animation(event.data)
+        } else if (event.data == 'heartHund') {
+          if (this.position) {
+            this.animation(event.data)
+          }
+        }
+      })
     // end signal
       this.session.on('signal:The-End', (event) => {
         if (this.session.sessionId == this.user.id) {
@@ -1049,7 +1060,9 @@ export default {
                 this.heartfift = false
                 this.heartHund = false
                 this.restEvent = false
-                this.$store.dispatch("roomStart", this.session.sessionId)
+                if (this.session.sessionId == this.user.id) {
+                  this.$store.dispatch("roomStart", this.session.sessionId)
+                }
 
                 setTimeout(() => {
                   this.startEvent = false
@@ -1402,6 +1415,7 @@ export default {
                 this.file = false
                 this.rest = false
                 this.messageFrom = false
+                this.makeList();
             }
             else if (option == 'message') {
                 this.menu = false
@@ -1492,7 +1506,10 @@ export default {
 
         return result.data;
     },
-
+    // 신고 리스트 만들기
+    makeList() {
+      this.penaltyList.push({id:2, nnm:'admin'})
+    },
     // 음소거 컨트롤 시그널
     async audioMute(status) {
       let agreeArr = [];
@@ -1580,7 +1597,16 @@ export default {
         type : 'Team-To-Moderator'
       })
       this.offCallModal();
-    }
+    },
+
+    // 애니메이션 시그널
+    animationSignal(option) {
+      this.session.signal({
+        data : option,
+        to : [],
+        type : 'Animation'
+      })
+    },
 
     }
   }
