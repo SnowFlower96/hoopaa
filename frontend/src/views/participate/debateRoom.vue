@@ -1031,6 +1031,8 @@ export default {
         animation(option) {
             this.animationBG = !this.animationBG
             if (option === 'startEvent') {
+                const startSound = new Audio("https://drive.google.com/uc?export=download&id=1SCuIo3Ds1tU3RBaO-JljNA-liMFASoLB");
+                startSound.play();
                 // this.startEvent = true
                 this.startEvent = !this.startEvent
                 this.heartTen = false
@@ -1038,9 +1040,6 @@ export default {
                 this.heartHund = false
                 this.restEvent = false
                 this.$store.dispatch("roomStart", this.session.sessionId)
-
-                const startSound = new Audio("https://drive.google.com/uc?export=download&id=1SCuIo3Ds1tU3RBaO-JljNA-liMFASoLB");
-                startSound.play();
 
                 setTimeout(() => {
                   this.startEvent = false
@@ -1065,6 +1064,8 @@ export default {
             this.rest = false
         },
         EmitRest(timeRest) {
+            const restSound = new Audio("https://drive.google.com/uc?export=download&id=1R8_KNwIEBS_LpkCjazOjPZrk4jz4F2cM");
+            restSound.play();
 
             this.restModal = true
             this.callToMdModal = false
@@ -1090,7 +1091,9 @@ export default {
           this.restEvent = false
           this.restModal = false
           clearInterval(z);
+          restSound.pause();
         }, (timeRest*1000) + 2000)
+        
 
         },
         EmitTime(Array) {
@@ -1404,11 +1407,6 @@ export default {
                 this.heartfift = false
                 this.heartHund = false
                 this.restEvent = !this.restEvent
-                const restSound = new Audio("https://drive.google.com/uc?export=download&id=1R8_KNwIEBS_LpkCjazOjPZrk4jz4F2cM");
-                restSound.play();
-                setTimeout(() =>  {
-                  restSound.pause()
-                }, 3000)
             }
         },
 
