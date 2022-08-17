@@ -3,18 +3,28 @@
         <div class="tft-inner">
             <div>
                 <div class="tft-inner-label">
-                    <p style="font-size: 25px; color:white;">찬성팀에서 온 메세지</p>
+                    <p style="font-size: 25px; color:white;">{{from}}팀에서 온 메세지</p>
                 </div>
                 <div class="tft-inner-label message-box">
-                    <div style="color:white;">발언ㅣㅅ간 10분으로 한번더 주세요dfgspdg;osdflkg;sdkljfg;sldfjg;slkdjf;lskdjf;glkdfjg;lkdf;lkd[fpioguspdofgjpsoidrhgposedjrpgiohjdlifgj;sodfjg;siodjfg;lsdjf;gkljs;dflgkj;dflkgjgsj;dlfkgjs;dlfkgj;k</div>
+                    <div style="color:white;">{{message}}</div>
                 </div>
                 <div class="tft-inner-label">
-                    <div class="tft-btn">확인</div>
+                    <div @click="close" class="tft-btn">확인</div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+<script>
+export default {
+  props: ["message", "from"],
+  methods : {
+    close() {
+      this.$emit('close-modal');
+    }
+  }
+}
+</script>
 
 <style>
 .message-box::-webkit-scrollbar{width: 8px;}

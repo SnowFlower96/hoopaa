@@ -30,7 +30,6 @@
 <!-- 뷰바꾸는 임시버튼 -->
 <div v-if="imgTF" class="startImg">
 <!-- <img v-if="imgTF" class="startImg" :src="require(`@/assets/images/start.png`)" alt=""> -->
-    <button @click="messageFromTeam">팀에서 사회자한테 주는 메세지</button>
     <!-- <div id="demo">넨</div> -->
 </div>
 <!-- 뷰바꾸는 임시버튼 -->
@@ -122,11 +121,11 @@
             <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
             <div class="call-to-moderator-inner-c call-to-moderator-center" :style="customCaroselStyle">
                 <div class="modal-icon" @click="offCallModal"><i class="fas fa-times"></i></div>
-                <call-to-moderator v-if="message"></call-to-moderator>
+                <call-to-moderator v-if="message" @sendMessage="toModerator"></call-to-moderator>
 
                 <user-out v-if="out"></user-out>
 
-                <message-from-team v-if="messageFrom"></message-from-team>
+                <message-from-team v-if="messageFrom" :from="from" :message="toModeratorMessage" @close-modal="offCallModal"></message-from-team>
 
                 <upload-file v-if="file" @publishScreenShare="publishScreenShare"></upload-file>
 
@@ -535,6 +534,9 @@ export default {
             pannelList : [],
           // 룸id
             roomId : '',
+          // 팀 > 사회자 메시지
+            toModeratorMessage : '',
+            from : '',
         }
     },
     mounted() {
@@ -724,6 +726,14 @@ export default {
           this.pannelList = event.data.split('&')[0].split(',');
           this.roomId = event.data.split('&')[1];
           console.log(this.roomId + '222222222')
+        }
+      })
+    // 팀 > 사회자 메시지 signal
+      this.session.on('signal:Team-To-Moderator', (event) => {
+        if (this.session.sessionId == this.user.id) {
+          this.toModeratorMessage = event.data.split('/')[0]
+          this.from = event.data.split('/')[1]
+          this.messageFromTeam();
         }
       })
 
@@ -1093,7 +1103,7 @@ export default {
           clearInterval(z);
           restSound.pause();
         }, (timeRest*1000) + 2000)
-        
+
 
         },
         EmitTime(Array) {
@@ -1151,7 +1161,7 @@ export default {
         },
         voteView() {
             this.voteViewTF = !this.voteViewTF
-          
+
             let time = this.voteTime;
             let min = "";
             let sec = "";
@@ -1370,6 +1380,7 @@ export default {
 
         offCallModal() {
             this.callToMdModal = false
+            this.messageFrom = false
         },
         // Emit 함수를 하나로 하고 그 안에서 분기처리하기
         EmitcallModal(option) {
@@ -1560,7 +1571,17 @@ export default {
     closeSession(sessionId) {
       this.$store.dispatch("closeSession", sessionId + '_' + 'agree');
       this.$store.dispatch("closeSession", sessionId + '_' + 'disagree')
+    },
+    // 팀 > 사회자 메시지
+    toModerator(message) {
+      this.session.signal({
+        data : message + '/' + this.position,
+        to : [],
+        type : 'Team-To-Moderator'
+      })
+      this.offCallModal();
     }
+
     }
   }
 

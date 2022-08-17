@@ -16,13 +16,17 @@
                     </select>
                 </div>
                 <div class="uow-inner">
-                    <div class="uow-btn" >강퇴하기</div>
+                    <div class="uow-btn" >주의주기</div>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
+<script>
+export default {
+  props : ['list']
+}
+</script>
 <style>
 .user-out-wrap {
     color: white;

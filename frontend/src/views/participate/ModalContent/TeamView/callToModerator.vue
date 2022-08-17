@@ -6,7 +6,7 @@
                     <p style="font-size: 25px; color:white;">사회자에게 메세지 보내기</p>
                 </div>
                 <div class="ttm-inner-label">
-                    <textarea class="ttm-inner-input" placeholder="여기에 사회자에게 보내는 메세지를 입력하세요" cols="30" rows="10"></textarea>
+                    <textarea class="ttm-inner-input" v-model="message" placeholder="여기에 사회자에게 보내는 메세지를 입력하세요" cols="30" rows="10"></textarea>
                 </div>
                 <div class="ttm-inner-label">
                     <div class="ttm-btn" @click="EmitRest">제출</div>
@@ -18,9 +18,12 @@
 
 <script>
 export default {
+  data () {
+    message : ''
+  },
   methods : {
     EmitRest () {
-      
+      this.$emit('sendMessage', this.message);
     }
   }
 }
