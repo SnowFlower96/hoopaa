@@ -14,6 +14,7 @@ import com.ssafy.db.repository.*;
 import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -382,6 +383,13 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public void increasePenalty(String sessionID, String panel) {
+        VRoom vRoom = this.mapRooms.get(sessionID);
+        VUserInfo vUserInfo = vRoom.getMapParticipants().get(panel);
+        vUserInfo.setPenaltyCnt(vUserInfo.getPenaltyCnt() + 1);
+    }
+
+    @Override
     public Boolean updatePhaseBySessionID(String sessionID, int phase) {
         RoomInfoDto roomInfoDto = mapRooms.get(sessionID).getRoomInfoDto();
 
@@ -596,6 +604,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    @Scheduled(cron = "0/60 * * * * *")
     public void syncServer() throws OpenViduJavaClientException, OpenViduHttpException {
         // openVidu 서버 최신화
         this.openVidu.fetch();

@@ -459,4 +459,25 @@ public class RoomController {
         return ResponseEntity.status(200).body(JsonRes.of(200, "Success", json));
     }
 
+    @PutMapping("/{panel}")
+    @ApiOperation(value = "패널티 부여", notes = "해당 패널의 패널티 회수 증가")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "토론방 없음"),
+            @ApiResponse(code = 411, message = "종료 불가"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> putPenalty(@ApiIgnore Authentication authentication, @PathVariable String panel) {
+        SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
+        String AToken = ssafyUserDetails.getUsername();
+
+        // 해당 토론방이 존재하지 않으면
+        if (!roomService.isExistRoom(AToken))
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
+
+        roomService.increasePenalty(AToken, panel);
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
 }

@@ -1341,3 +1341,74 @@ Caused by: org.springframework.beans.factory.BeanCurrentlyInCreationException: E
 2022-08-17 17:37:56.591  INFO 6868 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2022-08-17 17:37:56.593  INFO 6868 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2022-08-17 17:37:56.601  INFO 6868 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 23:18:54.200  INFO 9476 --- [Test worker] com.ssafy.InitDBTest                     : Starting InitDBTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 9476 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 23:18:54.203  INFO 9476 --- [Test worker] com.ssafy.InitDBTest                     : No active profile set, falling back to default profiles: default
+2022-08-17 23:18:54.245 DEBUG 9476 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@23642598
+2022-08-17 23:18:55.663  INFO 9476 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 23:18:55.780  INFO 9476 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 107 ms. Found 7 JPA repository interfaces.
+2022-08-17 23:18:56.345  INFO 9476 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@a4db23' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 23:18:56.366  INFO 9476 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 23:18:56.698  INFO 9476 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 23:18:56.793  INFO 9476 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 23:18:57.019  INFO 9476 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 23:18:57.178  INFO 9476 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 23:18:57.455  INFO 9476 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 23:18:57.477  INFO 9476 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 23:18:58.449  INFO 9476 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 23:18:58.462  INFO 9476 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 23:18:59.925  INFO 9476 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session 'ses_Mdr5kZFEq5' fetched
+2022-08-17 23:18:59.926  INFO 9476 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [ses_Mdr5kZFEq5]
+2022-08-17 23:18:59.971  INFO 9476 --- [Test worker] io.openvidu.java.client.Session          : Session ses_Mdr5kZFEq5 closed
+2022-08-17 23:19:00.505  WARN 9476 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 23:19:02.067 DEBUG 9476 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 23:19:02.324  INFO 9476 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 23:19:02.873  INFO 9476 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@41f69fba, org.springframework.security.web.context.SecurityContextPersistenceFilter@5f14504f, org.springframework.security.web.header.HeaderWriterFilter@5523e1a3, org.springframework.web.filter.CorsFilter@66ed0615, org.springframework.security.web.authentication.logout.LogoutFilter@1cdccf64, com.ssafy.common.auth.JwtAuthenticationFilter@37ee17aa, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@374e44e5, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@41988be, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@155dba4b, org.springframework.security.web.session.SessionManagementFilter@6fe626ab, org.springframework.security.web.access.ExceptionTranslationFilter@272e0f29, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@787a1053]
+2022-08-17 23:19:12.877  INFO 12012 --- [restartedMain] com.ssafy.GroupCallApplication           : Starting GroupCallApplication using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 12012 (C:\SSAFY\Common_Project_02\backend\build\classes\java\main started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 23:19:12.879  INFO 12012 --- [restartedMain] com.ssafy.GroupCallApplication           : No active profile set, falling back to default profiles: default
+2022-08-17 23:19:12.919  INFO 12012 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-08-17 23:19:12.919  INFO 12012 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-08-17 23:19:13.935  INFO 12012 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 23:19:14.016  INFO 12012 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 74 ms. Found 7 JPA repository interfaces.
+2022-08-17 23:19:14.308  INFO 12012 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@1056c483' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 23:19:14.311  INFO 12012 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 23:19:14.915  INFO 12012 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (https)
+2022-08-17 23:19:14.925  INFO 12012 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-08-17 23:19:14.925  INFO 12012 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.45]
+2022-08-17 23:19:15.018  INFO 12012 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-08-17 23:19:15.018  INFO 12012 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2098 ms
+2022-08-17 23:19:15.153 DEBUG 12012 --- [restartedMain] o.s.web.filter.CharacterEncodingFilter   : Filter 'characterEncodingFilter' configured for use
+2022-08-17 23:19:15.154 DEBUG 12012 --- [restartedMain] o.s.w.f.CommonsRequestLoggingFilter      : Filter 'commonsRequestLoggingFilter' configured for use
+2022-08-17 23:19:15.274  INFO 12012 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 23:19:15.313  INFO 12012 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 23:19:15.481  INFO 12012 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 23:19:15.569  INFO 12012 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 23:19:15.756  INFO 12012 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 23:19:15.766  INFO 12012 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 23:19:16.369  INFO 12012 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 23:19:16.376  INFO 12012 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 23:19:16.393  INFO 12012 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-08-17 23:19:17.122  INFO 12012 --- [restartedMain] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: []
+2022-08-17 23:19:17.210  WARN 12012 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 23:19:17.693 DEBUG 12012 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 23:19:17.757  INFO 12012 --- [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 23:19:17.907  INFO 12012 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@73de5717, org.springframework.security.web.context.SecurityContextPersistenceFilter@4e318f55, org.springframework.security.web.header.HeaderWriterFilter@957458, org.springframework.web.filter.CorsFilter@12d7092, org.springframework.security.web.authentication.logout.LogoutFilter@8247131, com.ssafy.common.auth.JwtAuthenticationFilter@78993e59, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1f044158, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2596de99, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@76fd26b8, org.springframework.security.web.session.SessionManagementFilter@6fcca575, org.springframework.security.web.access.ExceptionTranslationFilter@2d954d9b, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7aafcf5c]
+2022-08-17 23:19:17.978  INFO 12012 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 23:19:17.992 DEBUG 12012 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 23:19:18.030 DEBUG 12012 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 23:19:18.287 DEBUG 12012 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 23:19:18.296 DEBUG 12012 --- [restartedMain] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 23:19:18.407  INFO 12012 --- [restartedMain] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2022-08-17 23:19:18.687  INFO 12012 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (https) with context path ''
+2022-08-17 23:19:18.982  INFO 12012 --- [restartedMain] com.ssafy.GroupCallApplication           : Started GroupCallApplication in 6.422 seconds (JVM running for 6.96)
+2022-08-17 23:20:00.043  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : New session 'ses_No8mUjVkXb' fetched
+2022-08-17 23:20:00.044  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : New session '1' fetched
+2022-08-17 23:20:00.044  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [1, ses_No8mUjVkXb]
+2022-08-17 23:21:00.050  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : New session 'ses_X4qjwyauxE' fetched
+2022-08-17 23:21:00.050  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : New session 'ses_CMgj4VAsyT' fetched
+2022-08-17 23:21:00.050  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : Removing closed session 1
+2022-08-17 23:21:00.050  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : Removing closed session ses_No8mUjVkXb
+2022-08-17 23:21:00.050  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [ses_X4qjwyauxE, ses_CMgj4VAsyT]
+2022-08-17 23:22:00.045  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : New session 'ses_Xqrdl6V6nk' fetched
+2022-08-17 23:22:00.049  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : Available session 'ses_X4qjwyauxE' info fetched. Any change: false
+2022-08-17 23:22:00.049  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : Removing closed session ses_CMgj4VAsyT
+2022-08-17 23:22:00.049  INFO 12012 --- [scheduling-1] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [ses_X4qjwyauxE, ses_Xqrdl6V6nk]

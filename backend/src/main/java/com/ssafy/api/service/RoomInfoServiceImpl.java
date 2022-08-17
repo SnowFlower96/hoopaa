@@ -59,9 +59,9 @@ public class RoomInfoServiceImpl implements RoomInfoService {
             String[] hashes = new String[3];
             hashtagOptional = r.getRoomDescription().getHash1() != null ? hashtagRepository.findById(r.getRoomDescription().getHash1()) : Optional.empty();
             hashes[0] = hashtagOptional.map(RoomHashtag::getNm).orElse(null);
-            hashtagOptional = r.getRoomDescription().getHash1() != null ? hashtagRepository.findById(r.getRoomDescription().getHash2()) : Optional.empty();
+            hashtagOptional = r.getRoomDescription().getHash2() != null ? hashtagRepository.findById(r.getRoomDescription().getHash2()) : Optional.empty();
             hashes[1] = hashtagOptional.map(RoomHashtag::getNm).orElse(null);
-            hashtagOptional = r.getRoomDescription().getHash1() != null ? hashtagRepository.findById(r.getRoomDescription().getHash3()) : Optional.empty();
+            hashtagOptional = r.getRoomDescription().getHash3() != null ? hashtagRepository.findById(r.getRoomDescription().getHash3()) : Optional.empty();
             hashes[2] = hashtagOptional.map(RoomHashtag::getNm).orElse(null);
             roomInfoDto = RoomInfoDto.builder()
                     .id(r.getId()).hostID(String.valueOf(r.getHostId()))
