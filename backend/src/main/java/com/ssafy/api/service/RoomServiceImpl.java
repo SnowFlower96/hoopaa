@@ -385,7 +385,7 @@ public class RoomServiceImpl implements RoomService {
     public Boolean updatePhaseBySessionID(String sessionID, int phase) {
         RoomInfoDto roomInfoDto = mapRooms.get(sessionID).getRoomInfoDto();
 
-        if (roomInfoDto.getPhase() >= phase || phase < 0 || phase > 2) return false;
+        if (roomInfoDto.getPhase() >= phase || phase < 0 || phase > 4) return false;
 
         // 세션 변경
         roomInfoDto.setPhase(phase);
@@ -476,11 +476,12 @@ public class RoomServiceImpl implements RoomService {
     public void finishRoom(String userID) {
         // 해당 유저가 만든 토론방의 VRoom 객체
         VRoom vRoom = this.mapRooms.get(userID);
-
+        System.out.println("----------");
+        System.out.println(vRoom);
+        System.out.println("----------");
         // DB에 저장
         try {
             RoomInfo roomInfo = roomInfoRepository.findById(vRoom.getRoomInfoDto().getId()).get();
-
             // 승패 설정
             short winner = -1;  // 무승부
             if (vRoom.getVote_final_agree() > vRoom.getVote_final_disagree()) winner = 1;
@@ -503,9 +504,9 @@ public class RoomServiceImpl implements RoomService {
 
             // room_info 업데이트
             roomInfo.setWinner(winner);
-            roomInfo.setAgree(roomInfo.getAgree());
-            roomInfo.setDisagree(roomInfo.getDisagree());
-            roomInfo.setKingId(kingID != null ? Long.parseLong(kingID) : null);
+            roomInfo.setAgree((short) vRoom.getVote_final_agree());
+            roomInfo.setDisagree((short) vRoom.getVote_final_disagree());
+            if (kingID != null) roomInfo.setUserKing(userRepository.findUserById(Long.parseLong(kingID)).get());
             roomInfoRepository.save(roomInfo);
 
             // user history 업데이트
@@ -513,7 +514,7 @@ public class RoomServiceImpl implements RoomService {
             for (VUserInfo VUserInfo : vRoom.getAgree()) {
                 if (VUserInfo == null) continue;
                 boolean isHost = Objects.equals(roomInfo.getHostId(), Long.parseLong(VUserInfo.getId()));
-                boolean isKing = false;
+                boolean isKing = VUserInfo.getId().equals(kingID);
 
                 User user = userRepository.findUserById(Long.parseLong(VUserInfo.getId())).get();
                 UserHistory userHistory = UserHistory.builder()
@@ -523,36 +524,7 @@ public class RoomServiceImpl implements RoomService {
                         .isKing(isKing)
                         .userPos(1)
                         .build();
-                userHistoryRepository.save(userHistory);
-
-                //user stat 업데이트
-                UserStat userStat = userStatRepository.findStatById(user.getId()).get();
-                userStat.setTotal(userStat.getTotal() + 1);
-                //승 , 패 , 무
-                if (winner == 1) {
-                    userStat.setWin(userStat.getWin() + 1);
-                } else if (winner == 2) {
-                    userStat.setLose(userStat.getLose() + 1);
-                } else {
-                    userStat.setDraw(userStat.getDraw() + 1);
-                }
-                userStatRepository.save(userStat);
-            }
-
-            //반대 진영 업데이트
-            for (VUserInfo VUserInfo : vRoom.getDisagree()) {
-                if (VUserInfo == null) continue;
-                boolean isHost = Objects.equals(roomInfo.getHostId(), Long.parseLong(VUserInfo.getId()));
-                boolean isKing = false;
-
-                User user = userRepository.findUserById(Long.parseLong(VUserInfo.getId())).get();
-                UserHistory userHistory = UserHistory.builder()
-                        .userId(user.getId())
-                        .roomId(roomInfo.getId())
-                        .isHost(isHost)
-                        .isKing(isKing)
-                        .userPos(1)
-                        .build();
+                userHistory.setRoomInfo(roomInfo);
                 userHistoryRepository.save(userHistory);
 
                 //user stat 업데이트
@@ -567,7 +539,40 @@ public class RoomServiceImpl implements RoomService {
                     userStat.setDraw(userStat.getDraw() + 1);
                 }
                 // 토론왕
-                if (isHost) userStat.setKing(userStat.getKing() + 1);
+                if (isKing) userStat.setKing(userStat.getKing() + 1);
+                userStatRepository.save(userStat);
+            }
+
+            //반대 진영 업데이트
+            for (VUserInfo VUserInfo : vRoom.getDisagree()) {
+                if (VUserInfo == null) continue;
+                boolean isHost = Objects.equals(roomInfo.getHostId(), Long.parseLong(VUserInfo.getId()));
+                boolean isKing = VUserInfo.getId().equals(kingID);
+
+                User user = userRepository.findUserById(Long.parseLong(VUserInfo.getId())).get();
+                UserHistory userHistory = UserHistory.builder()
+                        .userId(user.getId())
+                        .roomId(roomInfo.getId())
+                        .isHost(isHost)
+                        .isKing(isKing)
+                        .userPos(1)
+                        .build();
+                userHistory.setRoomInfo(roomInfo);
+                userHistoryRepository.save(userHistory);
+
+                //user stat 업데이트
+                UserStat userStat = userStatRepository.findStatById(user.getId()).get();
+                userStat.setTotal(userStat.getTotal() + 1);
+                //승 , 패 , 무
+                if (winner == 1) {
+                    userStat.setWin(userStat.getWin() + 1);
+                } else if (winner == 2) {
+                    userStat.setLose(userStat.getLose() + 1);
+                } else {
+                    userStat.setDraw(userStat.getDraw() + 1);
+                }
+                // 토론왕
+                if (isKing) userStat.setKing(userStat.getKing() + 1);
                 userStatRepository.save(userStat);
             }
             // openVidu 세션 종료
