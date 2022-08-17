@@ -29,7 +29,7 @@
                 <div v-if="ppSet">
                   <div style="font-size:30px;">참여 여부</div>
                   <div class="displayFlex">
-                    <router-link to="/login" style=text-decoration:none;><div class="home-modal-btn displayFlex">참가</div></router-link>
+                    <div class="home-modal-btn displayFlex" @click="roomEnter">참여</div>
                   </div>
                 </div>
               </div>
@@ -58,11 +58,11 @@
                 <div v-show="allcheck!='true'" class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
-                    <div v-if="index<8" class="carosel-room-card" @click="gotoRoom(room.hostID)">
+                    <div v-if="index<8" class="carosel-room-card" >
 
                       <div class="room-info-carosel" :style="customCaroselStyle">
                         <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
-                        <room-card :room="roomList[roomList.length - index-1]">
+                        <room-card :room="roomList[roomList.length - index-1]" @click="gotoRoom(roomList[roomList.length - index-1].hostID)">
                        </room-card>
                       </div>
                     </div>
@@ -100,11 +100,11 @@
                   <div class="main-all-container">
                     <ul class="main-all-ul">
                       <li  v-for="(room, index) in roomList" :key="index">
-                      <div class="carosel-room-card" @click="gotoRoom(room.hostID)">
+                      <div class="carosel-room-card" >
                         <div class="room-info-carosel" :style="customCaroselStyle">
                           <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
 
-                          <room-card :room="roomList[roomList.length - index-1]">
+                          <room-card :room="roomList[roomList.length - index-1]" @click="gotoRoom(roomList[roomList.length - index-1].hostID)">
                           </room-card>
                         </div>
                       </div>
@@ -440,6 +440,8 @@ export default {
       b_nnm : '',
       roomId : '',
       allcheck:true,
+      pwd:'',
+
       // roomList : [
       //   {phase: 0, title: 'yes01', subtitle: 'GMO식품과연안전한가?'},
       //   {phase: 1, title: 'yes01', subtitle: '가나다라마바사아자차카타퍼ㅏ하'},
@@ -596,6 +598,16 @@ export default {
 
       await this.$store.dispatch("bJoin", b_data);
       //await this.$store.dispatch("enterRoom", data)
+    },
+
+    //방 입장
+    roomEnter() {
+      let data = {
+        pwd : this.pwd,
+        sessionId : this.roomId,
+      }
+      console.log(data)
+      this.$store.dispatch("enterRoom", data)
     }
   }
   // setup () {
