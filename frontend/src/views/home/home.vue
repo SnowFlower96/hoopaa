@@ -112,26 +112,7 @@
                     </ul>
                   </div>
                 </div>
-                <!-- <ul class="room-ul">
-                  <li v-for="(indexOut) in (Math.floor(roomsize/4)+1)" :key="indexOut">
-                  <h1>{{indexOut}}</h1>
-                    <ul class="card-container-ul">
-                      <li v-for="(indexIn) in 4" :key="indexIn">
-                        <h1>{{(4 * (indexOut-1)) + indexIn}}</h1>
-                        <div v-if="(4 * (indexOut-1)) + indexIn <= roomsize" class="room-card">
-                          <div class="room-info" :style="customCaroselStyle">
-                            <room-card :room="roomList[(4 * (indexOut-1)) + indexIn-1]"></room-card>
-                            <p class="room-phase-tip">{{phase[roomList[(4 * (indexOut-1)) + indexIn-1].phase]}}</p>
-                            <p id="title-room">{{roomList[(4 * (indexOut-1)) + indexIn-1].subtitle}}</p>
-                          </div>
-                          <div class="room-info" :style="customCaroselStyle">
-                          <room-card :room="roomList[(4 * (indexOut-1)) + indexIn]"></room-card>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </li>
-                </ul> -->
+
               </div> <!-- main-inner-container -->
             </div> <!--main-container-->
       </div> <!--left-main-wrap-->
