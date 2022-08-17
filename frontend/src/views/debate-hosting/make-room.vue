@@ -135,7 +135,6 @@ export default {
         max_num : this.maxNum,
         pwd : this.roomPwd,
         title : this.roomName,
-        title : this.roomTitle,
         cate: this.selectedMenu.idx,
         file: this.file,
       }
