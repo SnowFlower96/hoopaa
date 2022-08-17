@@ -85,7 +85,7 @@ public class RoomController {
     })
     public ResponseEntity<? extends BaseResponseBody> enterRoom(@ApiIgnore Authentication authentication, @RequestBody RoomEnterReq roomEnterReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
-        String sessionID = roomService.decodeCode(roomEnterReq.getSessionId());
+        String sessionID = roomEnterReq.getSessionId().chars().allMatch(Character::isDigit) ? roomEnterReq.getSessionId() : roomService.decodeCode(roomEnterReq.getSessionId());
 
         UserInfoDto user;
         // 회원

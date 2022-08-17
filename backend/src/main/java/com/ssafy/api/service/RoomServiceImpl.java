@@ -22,6 +22,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -109,7 +110,7 @@ public class RoomServiceImpl implements RoomService {
                 } else {  //존재하지 않던 해시태그라면
                     roomHashtag = RoomHashtag.builder()
                             .nm(hashtag)
-                            .cnt(0L)
+                            .cnt(1L)
                             .build();
                 }
                 roomHashtag = hashtagRepository.save(roomHashtag);
@@ -120,7 +121,7 @@ public class RoomServiceImpl implements RoomService {
 
         // room_info
         User user = userRepository.findUserById(Long.parseLong(sessionID)).get();
-        String thumbUrl = saveImage(roomOpenReq.getFile(), roomOpenReq.getSubtitle());
+        String thumbUrl = saveImage(roomOpenReq.getFile(), sessionID);
         RoomInfo roomInfo = RoomInfo.builder()
                 .pwd(roomOpenReq.getPwd())
                 .userHost(user)
@@ -645,7 +646,7 @@ public class RoomServiceImpl implements RoomService {
         File path = new File(thumbPath);
         if (!path.exists()) path.mkdirs();
         try{
-            String fileName = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_" + sessionID;
+            String fileName = System.currentTimeMillis() + "_" + sessionID;
             File file = new File(thumbPath + fileName + ".jpg");
             Base64.Decoder decoder = Base64.getDecoder();
             byte[] decodeBytes = decoder.decode(fileBase64.getBytes());

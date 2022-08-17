@@ -1,5 +1,5 @@
-2022-08-17 10:52:41.970  INFO 16108 --- [Test worker] com.ssafy.InsertDummyUser                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 16108 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
-2022-08-17 10:52:41.976  INFO 16108 --- [Test worker] com.ssafy.InsertDummyUser                : No active profile set, falling back to default profiles: default
+2022-08-17 10:52:41.970  INFO 16108 --- [Test worker] com.ssafy.InitDBTest                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 16108 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 10:52:41.976  INFO 16108 --- [Test worker] com.ssafy.InitDBTest                : No active profile set, falling back to default profiles: default
 2022-08-17 10:52:42.018 DEBUG 16108 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619
 2022-08-17 10:52:43.316  INFO 16108 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 2022-08-17 10:52:43.433  INFO 16108 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 104 ms. Found 7 JPA repository interfaces.
@@ -23,14 +23,14 @@
 2022-08-17 10:52:49.583 DEBUG 16108 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
 2022-08-17 10:52:50.293 DEBUG 16108 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
 2022-08-17 10:52:50.316 DEBUG 16108 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
-2022-08-17 10:52:51.149  INFO 16108 --- [Test worker] com.ssafy.InsertDummyUser                : Started InsertDummyUser in 9.478 seconds (JVM running for 10.851)
+2022-08-17 10:52:51.149  INFO 16108 --- [Test worker] com.ssafy.InitDBTest                : Started InsertDummyUser in 9.478 seconds (JVM running for 10.851)
 2022-08-17 10:52:51.528 DEBUG 16108 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619, started on Wed Aug 17 10:52:42 KST 2022
 2022-08-17 10:52:51.543  INFO 16108 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
 2022-08-17 10:52:51.555  INFO 16108 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2022-08-17 10:52:51.558  INFO 16108 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2022-08-17 10:52:51.569  INFO 16108 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2022-08-17 10:58:02.131  INFO 7248 --- [Test worker] com.ssafy.InsertDummyUser                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 7248 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
-2022-08-17 10:58:02.133  INFO 7248 --- [Test worker] com.ssafy.InsertDummyUser                : No active profile set, falling back to default profiles: default
+2022-08-17 10:58:02.131  INFO 7248 --- [Test worker] com.ssafy.InitDBTest                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 7248 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 10:58:02.133  INFO 7248 --- [Test worker] com.ssafy.InitDBTest                : No active profile set, falling back to default profiles: default
 2022-08-17 10:58:02.170 DEBUG 7248 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@1999c3a2
 2022-08-17 10:58:03.492  INFO 7248 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 2022-08-17 10:58:03.608  INFO 7248 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 97 ms. Found 7 JPA repository interfaces.
@@ -54,14 +54,14 @@
 2022-08-17 10:58:09.986 DEBUG 7248 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
 2022-08-17 10:58:10.753 DEBUG 7248 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
 2022-08-17 10:58:10.775 DEBUG 7248 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
-2022-08-17 10:58:11.588  INFO 7248 --- [Test worker] com.ssafy.InsertDummyUser                : Started InsertDummyUser in 9.748 seconds (JVM running for 11.2)
+2022-08-17 10:58:11.588  INFO 7248 --- [Test worker] com.ssafy.InitDBTest                : Started InsertDummyUser in 9.748 seconds (JVM running for 11.2)
 2022-08-17 10:58:12.941 DEBUG 7248 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@1999c3a2, started on Wed Aug 17 10:58:02 KST 2022
 2022-08-17 10:58:12.942  INFO 7248 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
 2022-08-17 10:58:12.949  INFO 7248 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2022-08-17 10:58:12.953  INFO 7248 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2022-08-17 10:58:12.963  INFO 7248 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2022-08-17 11:22:25.124  INFO 10776 --- [Test worker] com.ssafy.InsertDummyUser                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 10776 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
-2022-08-17 11:22:25.126  INFO 10776 --- [Test worker] com.ssafy.InsertDummyUser                : No active profile set, falling back to default profiles: default
+2022-08-17 11:22:25.124  INFO 10776 --- [Test worker] com.ssafy.InitDBTest                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 10776 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 11:22:25.126  INFO 10776 --- [Test worker] com.ssafy.InitDBTest                : No active profile set, falling back to default profiles: default
 2022-08-17 11:22:25.165 DEBUG 10776 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619
 2022-08-17 11:22:26.428  INFO 10776 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 2022-08-17 11:22:26.530  INFO 10776 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 93 ms. Found 7 JPA repository interfaces.
@@ -285,7 +285,7 @@ Caused by: org.springframework.beans.factory.BeanCurrentlyInCreationException: E
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:657) ~[spring-beans-5.3.6.jar:5.3.6]
 	... 175 common frames omitted
 
-2022-08-17 11:22:29.850 ERROR 10776 --- [Test worker] o.s.test.context.TestContextManager      : Caught exception while allowing TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener@1985ab83] to prepare test instance [com.ssafy.InsertDummyUser@3d33389e]
+2022-08-17 11:22:29.850 ERROR 10776 --- [Test worker] o.s.test.context.TestContextManager      : Caught exception while allowing TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener@1985ab83] to prepare test instance [com.ssafy.InitDBTest@3d33389e]
 
 java.lang.IllegalStateException: Failed to load ApplicationContext
 	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:132) ~[spring-test-5.3.6.jar:5.3.6]
@@ -641,8 +641,8 @@ Caused by: org.springframework.beans.factory.BeanCurrentlyInCreationException: E
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:657) ~[spring-beans-5.3.6.jar:5.3.6]
 	... 91 common frames omitted
 
-2022-08-17 11:25:29.738  INFO 10120 --- [Test worker] com.ssafy.InsertDummyUser                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 10120 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
-2022-08-17 11:25:29.741  INFO 10120 --- [Test worker] com.ssafy.InsertDummyUser                : No active profile set, falling back to default profiles: default
+2022-08-17 11:25:29.738  INFO 10120 --- [Test worker] com.ssafy.InitDBTest                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 10120 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 11:25:29.741  INFO 10120 --- [Test worker] com.ssafy.InitDBTest                : No active profile set, falling back to default profiles: default
 2022-08-17 11:25:29.786 DEBUG 10120 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619
 2022-08-17 11:25:31.380  INFO 10120 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 2022-08-17 11:25:31.516  INFO 10120 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 125 ms. Found 7 JPA repository interfaces.
@@ -666,14 +666,14 @@ Caused by: org.springframework.beans.factory.BeanCurrentlyInCreationException: E
 2022-08-17 11:25:38.683 DEBUG 10120 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
 2022-08-17 11:25:39.364 DEBUG 10120 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
 2022-08-17 11:25:39.393 DEBUG 10120 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
-2022-08-17 11:25:40.502  INFO 10120 --- [Test worker] com.ssafy.InsertDummyUser                : Started InsertDummyUser in 11.137 seconds (JVM running for 12.759)
+2022-08-17 11:25:40.502  INFO 10120 --- [Test worker] com.ssafy.InitDBTest                : Started InsertDummyUser in 11.137 seconds (JVM running for 12.759)
 2022-08-17 11:25:40.657 DEBUG 10120 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619, started on Wed Aug 17 11:25:29 KST 2022
 2022-08-17 11:25:40.660  INFO 10120 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
 2022-08-17 11:25:40.668  INFO 10120 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2022-08-17 11:25:40.670  INFO 10120 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2022-08-17 11:25:40.681  INFO 10120 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2022-08-17 11:26:42.166  INFO 11724 --- [Test worker] com.ssafy.InsertDummyUser                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 11724 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
-2022-08-17 11:26:42.170  INFO 11724 --- [Test worker] com.ssafy.InsertDummyUser                : No active profile set, falling back to default profiles: default
+2022-08-17 11:26:42.166  INFO 11724 --- [Test worker] com.ssafy.InitDBTest                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 11724 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 11:26:42.170  INFO 11724 --- [Test worker] com.ssafy.InitDBTest                : No active profile set, falling back to default profiles: default
 2022-08-17 11:26:42.216 DEBUG 11724 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619
 2022-08-17 11:26:43.513  INFO 11724 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 2022-08-17 11:26:43.639  INFO 11724 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 118 ms. Found 7 JPA repository interfaces.
@@ -697,14 +697,14 @@ Caused by: org.springframework.beans.factory.BeanCurrentlyInCreationException: E
 2022-08-17 11:26:49.308 DEBUG 11724 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
 2022-08-17 11:26:50.108 DEBUG 11724 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
 2022-08-17 11:26:50.154 DEBUG 11724 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
-2022-08-17 11:26:51.338  INFO 11724 --- [Test worker] com.ssafy.InsertDummyUser                : Started InsertDummyUser in 9.458 seconds (JVM running for 10.816)
+2022-08-17 11:26:51.338  INFO 11724 --- [Test worker] com.ssafy.InitDBTest                : Started InsertDummyUser in 9.458 seconds (JVM running for 10.816)
 2022-08-17 11:26:51.517 DEBUG 11724 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619, started on Wed Aug 17 11:26:42 KST 2022
 2022-08-17 11:26:51.520  INFO 11724 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
 2022-08-17 11:26:51.527  INFO 11724 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2022-08-17 11:26:51.530  INFO 11724 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2022-08-17 11:26:51.538  INFO 11724 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2022-08-17 15:31:11.521  INFO 14544 --- [Test worker] com.ssafy.InsertDummyUser                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 14544 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
-2022-08-17 15:31:11.523  INFO 14544 --- [Test worker] com.ssafy.InsertDummyUser                : No active profile set, falling back to default profiles: default
+2022-08-17 15:31:11.521  INFO 14544 --- [Test worker] com.ssafy.InitDBTest                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 14544 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 15:31:11.523  INFO 14544 --- [Test worker] com.ssafy.InitDBTest                : No active profile set, falling back to default profiles: default
 2022-08-17 15:31:11.562 DEBUG 14544 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619
 2022-08-17 15:31:19.070  INFO 12180 --- [restartedMain] com.ssafy.GroupCallApplication           : Starting GroupCallApplication using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 12180 (C:\SSAFY\Common_Project_02\backend\build\classes\java\main started by SSAFY in C:\SSAFY\Common_Project_02\backend)
 2022-08-17 15:31:19.073  INFO 12180 --- [restartedMain] com.ssafy.GroupCallApplication           : No active profile set, falling back to default profiles: default
@@ -814,3 +814,530 @@ Caused by: org.springframework.beans.factory.BeanCurrentlyInCreationException: E
 2022-08-17 15:32:25.770 DEBUG 12500 --- [restartedMain] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
 2022-08-17 15:32:26.099  INFO 12500 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (https) with context path ''
 2022-08-17 15:32:26.366  INFO 12500 --- [restartedMain] com.ssafy.GroupCallApplication           : Started GroupCallApplication in 5.938 seconds (JVM running for 6.424)
+2022-08-17 15:50:08.922  INFO 7012 --- [Test worker] com.ssafy.InitDBTest                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 7012 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 15:50:08.925  INFO 7012 --- [Test worker] com.ssafy.InitDBTest                : No active profile set, falling back to default profiles: default
+2022-08-17 15:50:08.963 DEBUG 7012 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619
+2022-08-17 15:50:10.303  INFO 7012 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 15:50:10.417  INFO 7012 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 98 ms. Found 7 JPA repository interfaces.
+2022-08-17 15:50:11.011  INFO 7012 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@55e4f85a' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 15:50:11.032  INFO 7012 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 15:50:11.384  INFO 7012 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 15:50:11.448  INFO 7012 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 15:50:11.620  INFO 7012 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 15:50:11.736  INFO 7012 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 15:50:11.983  INFO 7012 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 15:50:12.003  INFO 7012 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 15:50:12.934  INFO 7012 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 15:50:12.948  INFO 7012 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 15:50:14.146  INFO 7012 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '3' fetched
+2022-08-17 15:50:14.147  INFO 7012 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [3]
+2022-08-17 15:50:14.157  INFO 7012 --- [Test worker] io.openvidu.java.client.Session          : Session 3 closed
+2022-08-17 15:50:14.321  WARN 7012 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 15:50:15.218 DEBUG 7012 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 15:50:15.427  INFO 7012 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 15:50:15.865  INFO 7012 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5cb87110, org.springframework.security.web.context.SecurityContextPersistenceFilter@20eb39c7, org.springframework.security.web.header.HeaderWriterFilter@23687b38, org.springframework.web.filter.CorsFilter@510a29c4, org.springframework.security.web.authentication.logout.LogoutFilter@6739743b, com.ssafy.common.auth.JwtAuthenticationFilter@2d21a115, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@28c166f9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4c2f4163, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3d1963, org.springframework.security.web.session.SessionManagementFilter@848e625, org.springframework.security.web.access.ExceptionTranslationFilter@1298006a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@aade122]
+2022-08-17 15:50:16.211  INFO 7012 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 15:50:16.235 DEBUG 7012 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 15:50:16.312 DEBUG 7012 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 15:50:16.995 DEBUG 7012 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 15:50:17.013 DEBUG 7012 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 15:50:17.806  INFO 7012 --- [Test worker] com.ssafy.InitDBTest                : Started InsertDummyUser in 9.196 seconds (JVM running for 10.828)
+2022-08-17 15:50:18.559 DEBUG 7012 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619, started on Wed Aug 17 15:50:08 KST 2022
+2022-08-17 15:50:18.562  INFO 7012 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 15:50:18.571  INFO 7012 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 15:50:18.573  INFO 7012 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 15:50:18.583  INFO 7012 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 15:54:39.161  INFO 11436 --- [Test worker] com.ssafy.InitDBTest                : Starting InsertDummyUser using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 11436 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 15:54:39.164  INFO 11436 --- [Test worker] com.ssafy.InitDBTest                : No active profile set, falling back to default profiles: default
+2022-08-17 15:54:39.209 DEBUG 11436 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619
+2022-08-17 15:54:40.569  INFO 11436 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 15:54:40.676  INFO 11436 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 98 ms. Found 7 JPA repository interfaces.
+2022-08-17 15:54:41.163  INFO 11436 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@55e4f85a' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 15:54:41.179  INFO 11436 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 15:54:41.486  INFO 11436 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 15:54:41.557  INFO 11436 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 15:54:41.738  INFO 11436 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 15:54:41.871  INFO 11436 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 15:54:42.114  INFO 11436 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 15:54:42.135  INFO 11436 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 15:54:43.044  INFO 11436 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 15:54:43.055  INFO 11436 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 15:54:44.192  INFO 11436 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '3' fetched
+2022-08-17 15:54:44.193  INFO 11436 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [3]
+2022-08-17 15:54:44.203  INFO 11436 --- [Test worker] io.openvidu.java.client.Session          : Session 3 closed
+2022-08-17 15:54:44.390  WARN 11436 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 15:54:45.333 DEBUG 11436 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 15:54:45.534  INFO 11436 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 15:54:45.961  INFO 11436 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@510a29c4, org.springframework.security.web.context.SecurityContextPersistenceFilter@6fdd8a31, org.springframework.security.web.header.HeaderWriterFilter@7d42e54a, org.springframework.web.filter.CorsFilter@2d21a115, org.springframework.security.web.authentication.logout.LogoutFilter@10ad9bf0, com.ssafy.common.auth.JwtAuthenticationFilter@3d1963, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@464d4773, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@e4d8dfa, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1f12c885, org.springframework.security.web.session.SessionManagementFilter@36a8ce6, org.springframework.security.web.access.ExceptionTranslationFilter@7bc13798, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2a48c06c]
+2022-08-17 15:54:46.340  INFO 11436 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 15:54:46.363 DEBUG 11436 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 15:54:46.451 DEBUG 11436 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 15:54:47.152 DEBUG 11436 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 15:54:47.172 DEBUG 11436 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 15:54:48.032  INFO 11436 --- [Test worker] com.ssafy.InitDBTest                : Started InsertDummyUser in 9.191 seconds (JVM running for 10.521)
+2022-08-17 15:54:48.557 DEBUG 11436 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@2fe1d619, started on Wed Aug 17 15:54:39 KST 2022
+2022-08-17 15:54:48.561  INFO 11436 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 15:54:48.573  INFO 11436 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 15:54:48.576  INFO 11436 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 15:54:48.587  INFO 11436 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 16:25:53.782  INFO 1548 --- [Test worker] com.ssafy.InitDBTest                   : Starting InitializeDB using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 1548 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 16:25:53.784  INFO 1548 --- [Test worker] com.ssafy.InitDBTest                   : No active profile set, falling back to default profiles: default
+2022-08-17 16:25:53.823 DEBUG 1548 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@64960b74
+2022-08-17 16:25:55.031  INFO 1548 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 16:25:55.141  INFO 1548 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 101 ms. Found 7 JPA repository interfaces.
+2022-08-17 16:25:55.594  INFO 1548 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@4cf3f602' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 16:25:55.608  INFO 1548 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 16:25:55.896  INFO 1548 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 16:25:55.959  INFO 1548 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 16:25:56.127  INFO 1548 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 16:25:56.263  INFO 1548 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 16:25:56.496  INFO 1548 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 16:25:56.516  INFO 1548 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 16:25:57.319  INFO 1548 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 16:25:57.328  INFO 1548 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 16:25:58.470  INFO 1548 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '1_disagree' fetched
+2022-08-17 16:25:58.472  INFO 1548 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '1' fetched
+2022-08-17 16:25:58.472  INFO 1548 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '1_agree' fetched
+2022-08-17 16:25:58.473  INFO 1548 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [1_disagree, 1, 1_agree]
+2022-08-17 16:25:58.482  INFO 1548 --- [Test worker] io.openvidu.java.client.Session          : Session 1_disagree closed
+2022-08-17 16:25:58.501  INFO 1548 --- [Test worker] io.openvidu.java.client.Session          : Session 1 closed
+2022-08-17 16:25:58.515  INFO 1548 --- [Test worker] io.openvidu.java.client.Session          : Session 1_agree closed
+2022-08-17 16:25:58.674  WARN 1548 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 16:25:59.533 DEBUG 1548 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 16:25:59.721  INFO 1548 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 16:26:00.173  INFO 1548 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@8ed61bb, org.springframework.security.web.context.SecurityContextPersistenceFilter@154dc03e, org.springframework.security.web.header.HeaderWriterFilter@342e7f3b, org.springframework.web.filter.CorsFilter@58ae859d, org.springframework.security.web.authentication.logout.LogoutFilter@511aa6e8, com.ssafy.common.auth.JwtAuthenticationFilter@2d631d8b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1e8415a7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4990488a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@39757439, org.springframework.security.web.session.SessionManagementFilter@6a4eb00f, org.springframework.security.web.access.ExceptionTranslationFilter@60b2a7ae, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@52af697b]
+2022-08-17 16:26:00.520  INFO 1548 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 16:26:00.537 DEBUG 1548 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 16:26:00.619 DEBUG 1548 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 16:26:01.353 DEBUG 1548 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 16:26:01.370 DEBUG 1548 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 16:26:02.196  INFO 1548 --- [Test worker] com.ssafy.InitDBTest                   : Started InitializeDB in 8.677 seconds (JVM running for 10.011)
+2022-08-17 16:26:04.492 DEBUG 1548 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@64960b74, started on Wed Aug 17 16:25:53 KST 2022
+2022-08-17 16:26:04.495  INFO 1548 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 16:26:04.501  INFO 1548 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 16:26:04.503  INFO 1548 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 16:26:04.511  INFO 1548 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 17:02:35.501  INFO 6344 --- [Test worker] com.ssafy.InitDBTest                   : Starting InitializeDB using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 6344 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 17:02:35.503  INFO 6344 --- [Test worker] com.ssafy.InitDBTest                   : No active profile set, falling back to default profiles: default
+2022-08-17 17:02:35.551 DEBUG 6344 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@54e88d44
+2022-08-17 17:02:36.977  INFO 6344 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 17:02:37.079  INFO 6344 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 93 ms. Found 7 JPA repository interfaces.
+2022-08-17 17:02:37.572  INFO 6344 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@2a624a21' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:02:37.588  INFO 6344 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:02:37.894  INFO 6344 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 17:02:37.977  INFO 6344 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 17:02:38.199  INFO 6344 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 17:02:38.346  INFO 6344 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 17:02:38.596  INFO 6344 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 17:02:38.616  INFO 6344 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 17:02:39.454  INFO 6344 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 17:02:39.463  INFO 6344 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:02:40.681  INFO 6344 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: []
+2022-08-17 17:02:40.862  WARN 6344 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 17:02:42.034 DEBUG 6344 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 17:02:42.257  INFO 6344 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 17:02:42.692  INFO 6344 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6395814, org.springframework.security.web.context.SecurityContextPersistenceFilter@1f8c0029, org.springframework.security.web.header.HeaderWriterFilter@60610575, org.springframework.web.filter.CorsFilter@44e8327b, org.springframework.security.web.authentication.logout.LogoutFilter@63bb8a12, com.ssafy.common.auth.JwtAuthenticationFilter@3d0299e8, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5d289b78, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@10c9cbb3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6d9c63e5, org.springframework.security.web.session.SessionManagementFilter@2541651a, org.springframework.security.web.access.ExceptionTranslationFilter@7c840df4, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@561781b5]
+2022-08-17 17:02:43.073  INFO 6344 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:02:43.099 DEBUG 6344 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 17:02:43.195 DEBUG 6344 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 17:02:43.774 DEBUG 6344 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 17:02:43.793 DEBUG 6344 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 17:02:44.794  INFO 6344 --- [Test worker] com.ssafy.InitDBTest                   : Started InitializeDB in 9.606 seconds (JVM running for 11.006)
+2022-08-17 17:02:44.984 DEBUG 6344 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@54e88d44, started on Wed Aug 17 17:02:35 KST 2022
+2022-08-17 17:02:44.989  INFO 6344 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:02:44.999  INFO 6344 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:02:45.002  INFO 6344 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 17:02:45.016  INFO 6344 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 17:10:19.362  INFO 11284 --- [Test worker] com.ssafy.InitDBTest                   : Starting InitializeDB using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 11284 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 17:10:19.365  INFO 11284 --- [Test worker] com.ssafy.InitDBTest                   : No active profile set, falling back to default profiles: default
+2022-08-17 17:10:19.404 DEBUG 11284 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@3c990b76
+2022-08-17 17:10:21.058  INFO 11284 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 17:10:21.337  INFO 11284 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 258 ms. Found 7 JPA repository interfaces.
+2022-08-17 17:10:21.967  INFO 11284 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@4a58b9ec' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:10:21.986  INFO 11284 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:10:22.322  INFO 11284 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 17:10:22.435  INFO 11284 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 17:10:22.669  INFO 11284 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 17:10:22.874  INFO 11284 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 17:10:23.141  INFO 11284 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 17:10:23.171  INFO 11284 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 17:10:23.996  INFO 11284 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 17:10:24.006  INFO 11284 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:10:25.284  INFO 11284 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '1' fetched
+2022-08-17 17:10:25.284  INFO 11284 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [1]
+2022-08-17 17:10:25.299  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session 1 closed
+2022-08-17 17:10:25.519  WARN 11284 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 17:10:26.485 DEBUG 11284 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 17:10:26.704  INFO 11284 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 17:10:27.117  INFO 11284 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3d1963, org.springframework.security.web.context.SecurityContextPersistenceFilter@464d4773, org.springframework.security.web.header.HeaderWriterFilter@63bb8a12, org.springframework.web.filter.CorsFilter@1f12c885, org.springframework.security.web.authentication.logout.LogoutFilter@504ae1a, com.ssafy.common.auth.JwtAuthenticationFilter@1fd696aa, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3c1ee2ad, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4c4d37e2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3f5fb54c, org.springframework.security.web.session.SessionManagementFilter@20eb39c7, org.springframework.security.web.access.ExceptionTranslationFilter@4f8cfd41, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@49936cbd]
+2022-08-17 17:10:27.511  INFO 11284 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:10:27.534 DEBUG 11284 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 17:10:27.616 DEBUG 11284 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 17:10:28.435 DEBUG 11284 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 17:10:28.460 DEBUG 11284 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 17:10:29.496  INFO 11284 --- [Test worker] com.ssafy.InitDBTest                   : Started InitializeDB in 10.42 seconds (JVM running for 11.938)
+2022-08-17 17:10:29.837  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '3' created
+2022-08-17 17:10:29.954  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '4' created
+2022-08-17 17:10:30.002  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '5' created
+2022-08-17 17:10:30.062  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '6' created
+2022-08-17 17:10:30.120  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '7' created
+2022-08-17 17:10:30.173  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '8' created
+2022-08-17 17:10:30.221  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '9' created
+2022-08-17 17:10:30.294  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '10' created
+2022-08-17 17:10:30.386  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '11' created
+2022-08-17 17:10:30.449  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '12' created
+2022-08-17 17:10:30.512  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '13' created
+2022-08-17 17:10:30.561  INFO 11284 --- [Test worker] io.openvidu.java.client.Session          : Session '14' created
+2022-08-17 17:10:30.595 DEBUG 11284 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@3c990b76, started on Wed Aug 17 17:10:19 KST 2022
+2022-08-17 17:10:30.597  INFO 11284 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:10:30.603  INFO 11284 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:10:30.605  INFO 11284 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 17:10:30.612  INFO 11284 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 17:12:25.063  INFO 15240 --- [Test worker] com.ssafy.InitDBTest                   : Starting InitializeDB using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 15240 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 17:12:25.066  INFO 15240 --- [Test worker] com.ssafy.InitDBTest                   : No active profile set, falling back to default profiles: default
+2022-08-17 17:12:25.106 DEBUG 15240 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@3c990b76
+2022-08-17 17:12:26.409  INFO 15240 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 17:12:26.515  INFO 15240 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 96 ms. Found 7 JPA repository interfaces.
+2022-08-17 17:12:27.036  INFO 15240 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@4a58b9ec' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:12:27.050  INFO 15240 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:12:27.359  INFO 15240 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 17:12:27.431  INFO 15240 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 17:12:27.590  INFO 15240 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 17:12:27.726  INFO 15240 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 17:12:27.974  INFO 15240 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 17:12:28.000  INFO 15240 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 17:12:29.041  INFO 15240 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 17:12:29.063  INFO 15240 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:12:30.383  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '5' fetched
+2022-08-17 17:12:30.384  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '14' fetched
+2022-08-17 17:12:30.384  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '10' fetched
+2022-08-17 17:12:30.384  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '8' fetched
+2022-08-17 17:12:30.384  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '4' fetched
+2022-08-17 17:12:30.384  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '12' fetched
+2022-08-17 17:12:30.385  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '6' fetched
+2022-08-17 17:12:30.385  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '13' fetched
+2022-08-17 17:12:30.385  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '9' fetched
+2022-08-17 17:12:30.385  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '3' fetched
+2022-08-17 17:12:30.385  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '11' fetched
+2022-08-17 17:12:30.385  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '7' fetched
+2022-08-17 17:12:30.386  INFO 15240 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [11, 12, 13, 14, 3, 4, 5, 6, 7, 8, 9, 10]
+2022-08-17 17:12:30.397  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 11 closed
+2022-08-17 17:12:30.407  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 12 closed
+2022-08-17 17:12:30.416  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 13 closed
+2022-08-17 17:12:30.426  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 14 closed
+2022-08-17 17:12:30.435  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 3 closed
+2022-08-17 17:12:30.446  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 4 closed
+2022-08-17 17:12:30.458  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 5 closed
+2022-08-17 17:12:30.468  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 6 closed
+2022-08-17 17:12:30.480  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 7 closed
+2022-08-17 17:12:30.493  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 8 closed
+2022-08-17 17:12:30.503  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 9 closed
+2022-08-17 17:12:30.514  INFO 15240 --- [Test worker] io.openvidu.java.client.Session          : Session 10 closed
+2022-08-17 17:12:30.707  WARN 15240 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 17:12:31.703 DEBUG 15240 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 17:12:31.897  INFO 15240 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 17:12:32.444  INFO 15240 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@288429c1, org.springframework.security.web.context.SecurityContextPersistenceFilter@1d453f8a, org.springframework.security.web.header.HeaderWriterFilter@10c9cbb3, org.springframework.web.filter.CorsFilter@6aa2720c, org.springframework.security.web.authentication.logout.LogoutFilter@4c4d37e2, com.ssafy.common.auth.JwtAuthenticationFilter@4bffca14, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@55a9efb2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@36a8ce6, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7929e13b, org.springframework.security.web.session.SessionManagementFilter@68110ed6, org.springframework.security.web.access.ExceptionTranslationFilter@1f8c0029, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@12b906b4]
+2022-08-17 17:12:32.804  INFO 15240 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:12:32.828 DEBUG 15240 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 17:12:32.917 DEBUG 15240 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 17:12:33.613 DEBUG 15240 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 17:12:33.632 DEBUG 15240 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 17:12:34.427  INFO 15240 --- [Test worker] com.ssafy.InitDBTest                   : Started InitializeDB in 9.634 seconds (JVM running for 10.939)
+2022-08-17 17:12:36.340 DEBUG 15240 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@3c990b76, started on Wed Aug 17 17:12:25 KST 2022
+2022-08-17 17:12:36.342  INFO 15240 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:12:36.350  INFO 15240 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:12:36.352  INFO 15240 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 17:12:36.362  INFO 15240 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 17:12:44.131  INFO 11780 --- [Test worker] com.ssafy.InitDBTest                   : Starting InitializeDB using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 11780 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 17:12:44.133  INFO 11780 --- [Test worker] com.ssafy.InitDBTest                   : No active profile set, falling back to default profiles: default
+2022-08-17 17:12:44.174 DEBUG 11780 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@3c990b76
+2022-08-17 17:12:45.426  INFO 11780 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 17:12:45.531  INFO 11780 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 95 ms. Found 7 JPA repository interfaces.
+2022-08-17 17:12:46.110  INFO 11780 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@4a58b9ec' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:12:46.129  INFO 11780 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:12:46.441  INFO 11780 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 17:12:46.518  INFO 11780 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 17:12:46.709  INFO 11780 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 17:12:46.859  INFO 11780 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 17:12:47.145  INFO 11780 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 17:12:47.169  INFO 11780 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 17:12:48.024  INFO 11780 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 17:12:48.036  INFO 11780 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:12:49.321  INFO 11780 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: []
+2022-08-17 17:12:49.532  WARN 11780 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 17:12:50.485 DEBUG 11780 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 17:12:50.706  INFO 11780 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 17:12:51.119  INFO 11780 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@43315d9a, org.springframework.security.web.context.SecurityContextPersistenceFilter@3342fde1, org.springframework.security.web.header.HeaderWriterFilter@5b6783be, org.springframework.web.filter.CorsFilter@17aa8016, org.springframework.security.web.authentication.logout.LogoutFilter@1298006a, com.ssafy.common.auth.JwtAuthenticationFilter@ec34f1d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3cf2cfa5, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2541651a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@561781b5, org.springframework.security.web.session.SessionManagementFilter@6f079ef2, org.springframework.security.web.access.ExceptionTranslationFilter@9094363, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@41b77943]
+2022-08-17 17:12:51.506  INFO 11780 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:12:51.529 DEBUG 11780 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 17:12:51.623 DEBUG 11780 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 17:12:52.134 DEBUG 11780 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 17:12:52.157 DEBUG 11780 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 17:12:53.028  INFO 11780 --- [Test worker] com.ssafy.InitDBTest                   : Started InitializeDB in 9.179 seconds (JVM running for 10.557)
+2022-08-17 17:12:53.440  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '3' created
+2022-08-17 17:12:53.826  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '4' created
+2022-08-17 17:12:53.898  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '5' created
+2022-08-17 17:12:53.967  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '6' created
+2022-08-17 17:12:54.048  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '7' created
+2022-08-17 17:12:54.113  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '8' created
+2022-08-17 17:12:54.184  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '9' created
+2022-08-17 17:12:54.234  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '10' created
+2022-08-17 17:12:54.275  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '11' created
+2022-08-17 17:12:54.313  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '12' created
+2022-08-17 17:12:54.375  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '13' created
+2022-08-17 17:12:54.425  INFO 11780 --- [Test worker] io.openvidu.java.client.Session          : Session '14' created
+2022-08-17 17:12:54.471 DEBUG 11780 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@3c990b76, started on Wed Aug 17 17:12:44 KST 2022
+2022-08-17 17:12:54.475  INFO 11780 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:12:54.482  INFO 11780 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:12:54.485  INFO 11780 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 17:12:54.494  INFO 11780 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 17:25:19.886  INFO 16620 --- [Test worker] com.ssafy.InitDBTest                     : Starting InitDBTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 16620 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 17:25:19.889  INFO 16620 --- [Test worker] com.ssafy.InitDBTest                     : No active profile set, falling back to default profiles: default
+2022-08-17 17:25:19.926 DEBUG 16620 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7
+2022-08-17 17:25:21.133  INFO 16620 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 17:25:21.239  INFO 16620 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 98 ms. Found 7 JPA repository interfaces.
+2022-08-17 17:25:21.723  INFO 16620 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@2a624a21' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:25:21.737  INFO 16620 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:25:22.050  INFO 16620 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 17:25:22.127  INFO 16620 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 17:25:22.325  INFO 16620 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 17:25:22.460  INFO 16620 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 17:25:22.730  INFO 16620 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 17:25:22.753  INFO 16620 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 17:25:23.565  INFO 16620 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 17:25:23.574  INFO 16620 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:25:24.712  INFO 16620 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: []
+2022-08-17 17:25:24.873  WARN 16620 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 17:25:25.713 DEBUG 16620 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 17:25:25.895  INFO 16620 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 17:25:26.288  INFO 16620 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6395814, org.springframework.security.web.context.SecurityContextPersistenceFilter@1f8c0029, org.springframework.security.web.header.HeaderWriterFilter@1b991ba9, org.springframework.web.filter.CorsFilter@44e8327b, org.springframework.security.web.authentication.logout.LogoutFilter@63bb8a12, com.ssafy.common.auth.JwtAuthenticationFilter@3d0299e8, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5d289b78, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@10c9cbb3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6d9c63e5, org.springframework.security.web.session.SessionManagementFilter@2541651a, org.springframework.security.web.access.ExceptionTranslationFilter@47e87399, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@561781b5]
+2022-08-17 17:25:26.609  INFO 16620 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:25:26.630 DEBUG 16620 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 17:25:26.713 DEBUG 16620 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 17:25:27.221 DEBUG 16620 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 17:25:27.240 DEBUG 16620 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 17:25:27.971  INFO 16620 --- [Test worker] com.ssafy.InitDBTest                     : Started InitDBTest in 8.357 seconds (JVM running for 9.639)
+2022-08-17 17:25:28.102 DEBUG 16620 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7, started on Wed Aug 17 17:25:19 KST 2022
+2022-08-17 17:25:28.105  INFO 16620 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:25:28.116  INFO 16620 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:25:28.118  INFO 16620 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 17:25:28.129  INFO 16620 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 17:29:46.889  INFO 7004 --- [Test worker] com.ssafy.InitDBTest                     : Starting InitDBTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 7004 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 17:29:46.891  INFO 7004 --- [Test worker] com.ssafy.InitDBTest                     : No active profile set, falling back to default profiles: default
+2022-08-17 17:29:46.927 DEBUG 7004 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7
+2022-08-17 17:29:48.189  INFO 7004 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 17:29:48.291  INFO 7004 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 95 ms. Found 7 JPA repository interfaces.
+2022-08-17 17:29:48.782  INFO 7004 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@39fe2196' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:29:48.797  INFO 7004 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:29:49.082  INFO 7004 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 17:29:49.154  INFO 7004 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 17:29:49.334  INFO 7004 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 17:29:49.469  INFO 7004 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 17:29:49.743  INFO 7004 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 17:29:49.760  INFO 7004 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 17:29:50.566  INFO 7004 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 17:29:50.577  INFO 7004 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:29:51.641  INFO 7004 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '1' fetched
+2022-08-17 17:29:51.642  INFO 7004 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [1]
+2022-08-17 17:29:51.676  INFO 7004 --- [Test worker] io.openvidu.java.client.Session          : Session 1 closed
+2022-08-17 17:29:51.856  WARN 7004 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 17:29:52.672 DEBUG 7004 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 17:29:52.844  INFO 7004 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 17:29:53.213  INFO 7004 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@c8bce0e, org.springframework.security.web.context.SecurityContextPersistenceFilter@23b05e4b, org.springframework.security.web.header.HeaderWriterFilter@e4d8dfa, org.springframework.web.filter.CorsFilter@39244b60, org.springframework.security.web.authentication.logout.LogoutFilter@78d39bff, com.ssafy.common.auth.JwtAuthenticationFilter@6a0df361, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@48d79ff2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3fbd7803, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@10a4df3, org.springframework.security.web.session.SessionManagementFilter@1fe8ef07, org.springframework.security.web.access.ExceptionTranslationFilter@6fdd8a31, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@432e0dbb]
+2022-08-17 17:29:53.528  INFO 7004 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:29:53.548 DEBUG 7004 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 17:29:53.625 DEBUG 7004 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 17:29:54.108 DEBUG 7004 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 17:29:54.126 DEBUG 7004 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 17:29:54.883  INFO 7004 --- [Test worker] com.ssafy.InitDBTest                     : Started InitDBTest in 8.259 seconds (JVM running for 9.595)
+2022-08-17 17:29:55.154 DEBUG 7004 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7, started on Wed Aug 17 17:29:46 KST 2022
+2022-08-17 17:29:55.158  INFO 7004 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:29:55.166  INFO 7004 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:29:55.168  INFO 7004 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 17:29:55.179  INFO 7004 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 17:30:10.337  INFO 9348 --- [Test worker] com.ssafy.InitDBTest                     : Starting InitDBTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 9348 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 17:30:10.339  INFO 9348 --- [Test worker] com.ssafy.InitDBTest                     : No active profile set, falling back to default profiles: default
+2022-08-17 17:30:10.373 DEBUG 9348 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7
+2022-08-17 17:30:11.638  INFO 9348 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 17:30:11.734  INFO 9348 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 87 ms. Found 7 JPA repository interfaces.
+2022-08-17 17:30:12.213  INFO 9348 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@625317df' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:30:12.229  INFO 9348 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:30:12.565  INFO 9348 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 17:30:12.634  INFO 9348 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 17:30:12.807  INFO 9348 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 17:30:12.933  INFO 9348 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 17:30:13.172  INFO 9348 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 17:30:13.192  INFO 9348 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 17:30:13.999  INFO 9348 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 17:30:14.008  INFO 9348 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:30:15.080  INFO 9348 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: []
+2022-08-17 17:30:15.264  WARN 9348 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 17:30:16.214 DEBUG 9348 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 17:30:16.416  INFO 9348 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 17:30:16.801  INFO 9348 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@29308a2d, org.springframework.security.web.context.SecurityContextPersistenceFilter@7cec8ebc, org.springframework.security.web.header.HeaderWriterFilter@1ee3937f, org.springframework.web.filter.CorsFilter@553ee6e0, org.springframework.security.web.authentication.logout.LogoutFilter@3342fde1, com.ssafy.common.auth.JwtAuthenticationFilter@197f124, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7587bc80, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@13c21dc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2143eb72, org.springframework.security.web.session.SessionManagementFilter@5bed713e, org.springframework.security.web.access.ExceptionTranslationFilter@ded8c8c, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@48d79ff2]
+2022-08-17 17:30:17.151  INFO 9348 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:30:17.177 DEBUG 9348 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 17:30:17.265 DEBUG 9348 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 17:30:17.952 DEBUG 9348 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 17:30:17.971 DEBUG 9348 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 17:30:18.803  INFO 9348 --- [Test worker] com.ssafy.InitDBTest                     : Started InitDBTest in 8.741 seconds (JVM running for 10.059)
+2022-08-17 17:30:18.972 DEBUG 9348 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7, started on Wed Aug 17 17:30:10 KST 2022
+2022-08-17 17:30:18.977  INFO 9348 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:30:18.993  INFO 9348 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:30:18.995  INFO 9348 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 17:30:19.008  INFO 9348 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 17:32:31.450  INFO 1444 --- [Test worker] com.ssafy.InitDBTest                     : Starting InitDBTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 1444 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 17:32:31.452  INFO 1444 --- [Test worker] com.ssafy.InitDBTest                     : No active profile set, falling back to default profiles: default
+2022-08-17 17:32:31.487 DEBUG 1444 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7
+2022-08-17 17:32:32.792  INFO 1444 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 17:32:32.911  INFO 1444 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 110 ms. Found 7 JPA repository interfaces.
+2022-08-17 17:32:33.406  INFO 1444 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@2a624a21' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:32:33.421  INFO 1444 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:32:33.772  INFO 1444 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 17:32:33.886  INFO 1444 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 17:32:34.121  INFO 1444 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 17:32:34.257  INFO 1444 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 17:32:34.515  INFO 1444 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 17:32:34.536  INFO 1444 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 17:32:35.382  INFO 1444 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 17:32:35.391  INFO 1444 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:32:36.481  INFO 1444 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: []
+2022-08-17 17:32:36.653  WARN 1444 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 17:32:37.546 DEBUG 1444 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 17:32:37.723  INFO 1444 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 17:32:38.107  INFO 1444 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@46d2c39e, org.springframework.security.web.context.SecurityContextPersistenceFilter@2aed12df, org.springframework.security.web.header.HeaderWriterFilter@3342fde1, org.springframework.web.filter.CorsFilter@6395814, org.springframework.security.web.authentication.logout.LogoutFilter@7fb26ff1, com.ssafy.common.auth.JwtAuthenticationFilter@44e8327b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@31cbcf77, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7ff93f0f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3d0299e8, org.springframework.security.web.session.SessionManagementFilter@49cf8368, org.springframework.security.web.access.ExceptionTranslationFilter@3d5464ab, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@ec34f1d]
+2022-08-17 17:32:38.434  INFO 1444 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:32:38.457 DEBUG 1444 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 17:32:38.553 DEBUG 1444 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 17:32:39.237 DEBUG 1444 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 17:32:39.257 DEBUG 1444 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 17:32:40.024  INFO 1444 --- [Test worker] com.ssafy.InitDBTest                     : Started InitDBTest in 8.845 seconds (JVM running for 10.233)
+2022-08-17 17:32:42.049  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '3' created
+2022-08-17 17:32:42.128  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '4' created
+2022-08-17 17:32:42.183  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '5' created
+2022-08-17 17:32:42.239  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '6' created
+2022-08-17 17:32:42.304  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '7' created
+2022-08-17 17:32:42.367  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '8' created
+2022-08-17 17:32:42.428  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '9' created
+2022-08-17 17:32:42.487  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '10' created
+2022-08-17 17:32:42.538  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '11' created
+2022-08-17 17:32:42.589  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '12' created
+2022-08-17 17:32:42.655  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '13' created
+2022-08-17 17:32:42.710  INFO 1444 --- [Test worker] io.openvidu.java.client.Session          : Session '14' created
+2022-08-17 17:32:42.769 DEBUG 1444 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7, started on Wed Aug 17 17:32:31 KST 2022
+2022-08-17 17:32:42.772  INFO 1444 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:32:42.782  INFO 1444 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:32:42.785  INFO 1444 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 17:32:42.793  INFO 1444 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 17:34:52.925  INFO 6332 --- [Test worker] com.ssafy.InitDBTest                     : Starting InitDBTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 6332 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 17:34:52.929  INFO 6332 --- [Test worker] com.ssafy.InitDBTest                     : No active profile set, falling back to default profiles: default
+2022-08-17 17:34:52.967 DEBUG 6332 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7
+2022-08-17 17:34:54.240  INFO 6332 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 17:34:54.351  INFO 6332 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 101 ms. Found 7 JPA repository interfaces.
+2022-08-17 17:34:54.845  INFO 6332 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@39fe2196' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:34:54.859  INFO 6332 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:34:55.157  INFO 6332 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 17:34:55.219  INFO 6332 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 17:34:55.400  INFO 6332 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 17:34:55.525  INFO 6332 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 17:34:55.761  INFO 6332 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 17:34:55.786  INFO 6332 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 17:34:56.648  INFO 6332 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 17:34:56.658  INFO 6332 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:34:57.911  INFO 6332 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '1' fetched
+2022-08-17 17:34:57.911  INFO 6332 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [1]
+2022-08-17 17:34:57.933  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session 1 closed
+2022-08-17 17:34:58.152  WARN 6332 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 17:34:59.077 DEBUG 6332 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 17:34:59.261  INFO 6332 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 17:34:59.662  INFO 6332 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@510a29c4, org.springframework.security.web.context.SecurityContextPersistenceFilter@6fdd8a31, org.springframework.security.web.header.HeaderWriterFilter@39a6d498, org.springframework.web.filter.CorsFilter@2d21a115, org.springframework.security.web.authentication.logout.LogoutFilter@10ad9bf0, com.ssafy.common.auth.JwtAuthenticationFilter@3d1963, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@464d4773, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@e4d8dfa, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1f12c885, org.springframework.security.web.session.SessionManagementFilter@38cff289, org.springframework.security.web.access.ExceptionTranslationFilter@68110ed6, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2a48c06c]
+2022-08-17 17:35:00.004  INFO 6332 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:35:00.034 DEBUG 6332 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 17:35:00.110 DEBUG 6332 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 17:35:00.794 DEBUG 6332 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 17:35:00.826 DEBUG 6332 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 17:35:01.596  INFO 6332 --- [Test worker] com.ssafy.InitDBTest                     : Started InitDBTest in 8.95 seconds (JVM running for 10.287)
+2022-08-17 17:35:03.624  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '3' created
+2022-08-17 17:35:03.691  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '4' created
+2022-08-17 17:35:03.745  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '5' created
+2022-08-17 17:35:03.795  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '6' created
+2022-08-17 17:35:03.851  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '7' created
+2022-08-17 17:35:03.906  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '8' created
+2022-08-17 17:35:03.971  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '9' created
+2022-08-17 17:35:04.023  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '10' created
+2022-08-17 17:35:04.068  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '11' created
+2022-08-17 17:35:04.121  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '12' created
+2022-08-17 17:35:04.176  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '13' created
+2022-08-17 17:35:04.231  INFO 6332 --- [Test worker] io.openvidu.java.client.Session          : Session '14' created
+2022-08-17 17:35:04.288 DEBUG 6332 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7, started on Wed Aug 17 17:34:52 KST 2022
+2022-08-17 17:35:04.291  INFO 6332 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:35:04.304  INFO 6332 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:35:04.306  INFO 6332 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 17:35:04.311  INFO 6332 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-08-17 17:37:45.864  INFO 6868 --- [Test worker] com.ssafy.InitDBTest                     : Starting InitDBTest using Java 1.8.0_192 on DESKTOP-KVCQHCD with PID 6868 (started by SSAFY in C:\SSAFY\Common_Project_02\backend)
+2022-08-17 17:37:45.867  INFO 6868 --- [Test worker] com.ssafy.InitDBTest                     : No active profile set, falling back to default profiles: default
+2022-08-17 17:37:45.904 DEBUG 6868 --- [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7
+2022-08-17 17:37:47.137  INFO 6868 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-17 17:37:47.238  INFO 6868 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 93 ms. Found 7 JPA repository interfaces.
+2022-08-17 17:37:47.710  INFO 6868 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@2a624a21' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:37:47.724  INFO 6868 --- [Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-08-17 17:37:48.000  INFO 6868 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-17 17:37:48.068  INFO 6868 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2022-08-17 17:37:48.243  INFO 6868 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-17 17:37:48.371  INFO 6868 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-08-17 17:37:48.611  INFO 6868 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-08-17 17:37:48.631  INFO 6868 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2022-08-17 17:37:49.435  INFO 6868 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-17 17:37:49.444  INFO 6868 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:37:50.540  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '14' fetched
+2022-08-17 17:37:50.541  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '4' fetched
+2022-08-17 17:37:50.541  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '9' fetched
+2022-08-17 17:37:50.541  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '3' fetched
+2022-08-17 17:37:50.541  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '6' fetched
+2022-08-17 17:37:50.541  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '8' fetched
+2022-08-17 17:37:50.541  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '12' fetched
+2022-08-17 17:37:50.542  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '7' fetched
+2022-08-17 17:37:50.542  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '13' fetched
+2022-08-17 17:37:50.542  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '5' fetched
+2022-08-17 17:37:50.542  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '10' fetched
+2022-08-17 17:37:50.542  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : New session '11' fetched
+2022-08-17 17:37:50.543  INFO 6868 --- [Test worker] io.openvidu.java.client.OpenVidu         : Active sessions info fetched: [11, 12, 13, 14, 3, 4, 5, 6, 7, 8, 9, 10]
+2022-08-17 17:37:50.556  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 11 closed
+2022-08-17 17:37:50.567  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 12 closed
+2022-08-17 17:37:50.580  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 13 closed
+2022-08-17 17:37:50.592  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 14 closed
+2022-08-17 17:37:50.603  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 3 closed
+2022-08-17 17:37:50.614  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 4 closed
+2022-08-17 17:37:50.625  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 5 closed
+2022-08-17 17:37:50.635  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 6 closed
+2022-08-17 17:37:50.646  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 7 closed
+2022-08-17 17:37:50.657  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 8 closed
+2022-08-17 17:37:50.671  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 9 closed
+2022-08-17 17:37:50.685  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session 10 closed
+2022-08-17 17:37:50.851  WARN 6868 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-17 17:37:51.640 DEBUG 6868 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2022-08-17 17:37:51.815  INFO 6868 --- [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2022-08-17 17:37:52.199  INFO 6868 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@69dfa645, org.springframework.security.web.context.SecurityContextPersistenceFilter@258bef00, org.springframework.security.web.header.HeaderWriterFilter@5d289b78, org.springframework.web.filter.CorsFilter@4e865f3b, org.springframework.security.web.authentication.logout.LogoutFilter@3c1ee2ad, com.ssafy.common.auth.JwtAuthenticationFilter@14d07cf9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@60178607, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@55a9efb2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4a8af86d, org.springframework.security.web.session.SessionManagementFilter@33110fa4, org.springframework.security.web.access.ExceptionTranslationFilter@d0c2dd6, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@21a96fba]
+2022-08-17 17:37:52.520  INFO 6868 --- [Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:37:52.541 DEBUG 6868 --- [Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2022-08-17 17:37:52.614 DEBUG 6868 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2022-08-17 17:37:53.117 DEBUG 6868 --- [Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/resources/**, /swagger-ui.html, /webjars/**, /css/**, /fonts/**, /icons/**, /img/**, /js/**, /swagger-ui/**, /**] in 'resourceHandlerMapping'
+2022-08-17 17:37:53.136 DEBUG 6868 --- [Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2022-08-17 17:37:53.892  INFO 6868 --- [Test worker] com.ssafy.InitDBTest                     : Started InitDBTest in 8.302 seconds (JVM running for 9.613)
+2022-08-17 17:37:55.886  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '3' created
+2022-08-17 17:37:55.964  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '4' created
+2022-08-17 17:37:56.042  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '5' created
+2022-08-17 17:37:56.118  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '6' created
+2022-08-17 17:37:56.180  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '7' created
+2022-08-17 17:37:56.236  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '8' created
+2022-08-17 17:37:56.294  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '9' created
+2022-08-17 17:37:56.341  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '10' created
+2022-08-17 17:37:56.383  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '11' created
+2022-08-17 17:37:56.420  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '12' created
+2022-08-17 17:37:56.475  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '13' created
+2022-08-17 17:37:56.534  INFO 6868 --- [Test worker] io.openvidu.java.client.Session          : Session '14' created
+2022-08-17 17:37:56.582 DEBUG 6868 --- [SpringContextShutdownHook] o.s.w.c.s.GenericWebApplicationContext   : Closing org.springframework.web.context.support.GenericWebApplicationContext@44952ee7, started on Wed Aug 17 17:37:45 KST 2022
+2022-08-17 17:37:56.584  INFO 6868 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-08-17 17:37:56.591  INFO 6868 --- [SpringContextShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-17 17:37:56.593  INFO 6868 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-08-17 17:37:56.601  INFO 6868 --- [SpringContextShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

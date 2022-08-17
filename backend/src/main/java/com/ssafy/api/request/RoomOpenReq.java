@@ -1,17 +1,14 @@
 package com.ssafy.api.request;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 
-@Getter
-@Setter
-@ToString
+@Data
+@NoArgsConstructor
 public class RoomOpenReq {
 
     @ApiModelProperty(name = "방 패스워드", example = "abcd")
@@ -34,5 +31,16 @@ public class RoomOpenReq {
 
     @ApiModelProperty(name = "썸네일")
     String file;
+
+    @Builder
+    public RoomOpenReq(String pwd, int max_num, Integer cate, String hashtags, String title, String subtitle, String file) {
+        this.pwd = pwd;
+        this.max_num = max_num;
+        this.cate = cate;
+        this.hashtags = hashtags;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.file = file;
+    }
 
 }
