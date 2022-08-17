@@ -12,6 +12,7 @@
               <div v-if="isPannel" class="displayFlex" >
                 <div :class="{'ppbs-btn' : !isAgree, 'ppbs-btn-selected' : isAgree}" style="margin: 10px; margin-top: 0px;" @click="positionAgree">찬성</div>
                 <div :class="{'ppbs-btn' : !isDisAgree, 'ppbs-btn-selected' : isDisAgree}" style="margin: 10px; margin-top: 0px;" @click="positionDisagree">반대</div>
+                <div :class="{'ppbs-btn' : !isAudience, 'ppbs-btn-selected' : isAudience}" style="margin: 10px; margin-top: 0px;" @click="positionAudience">방청객</div>
               </div>
 
               <div class="displayFlex" style="margin-top: 30px;">
@@ -33,6 +34,7 @@ export default {
       sessionId : '',
       isAgree: false,
       isDisAgree: false,
+      isAudience : false,
       who : '',
     }
   },
@@ -43,6 +45,7 @@ export default {
       this.$store.dispatch("setPosition", index)
       this.isAgree = true
       this.isDisAgree = false
+      this.isAudience = false
     },
     positionDisagree () {
       this.$store.commit("SET_POSITION",'disagree')
@@ -50,6 +53,13 @@ export default {
       this.$store.dispatch("setPosition", index)
       this.isDisAgree = true
       this.isAgree = false
+      this.isAudience = false
+    },
+    positionAudience() {
+      this.$store.commit("SET_POSITION", 'audience')
+      this.isAudience = true
+      this.isAgree = false
+      this.isDisAgree = false
     }
   },
   created () {

@@ -3,7 +3,7 @@
         <div class="tft-inner">
             <div>
                 <div class="tft-inner-label">
-                    <p style="font-size: 25px; color:white;">{{from}}팀에서 온 메세지</p>
+                    <p style="font-size: 25px; color:white;">{{team}}팀에서 온 메세지</p>
                 </div>
                 <div class="tft-inner-label message-box">
                     <div style="color:white;">{{message}}</div>
@@ -17,6 +17,16 @@
 </template>
 <script>
 export default {
+  data () {
+    return {
+      team : '',
+    }
+  },
+  created () {
+    if (this.from == 'agree') {
+      this.team = '찬성'
+    } else this.team = '반대'
+  },
   props: ["message", "from"],
   methods : {
     close() {

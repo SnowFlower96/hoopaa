@@ -29,6 +29,7 @@ export default {
   methods : {
     givePenalty() {
       this.$store.dispatch("givePenalty", this.id)
+      this.$emit('sendPenalty', this.id);
     }
   }
 }

@@ -19,7 +19,7 @@
 <!-- 쉬는시간 모달 -->
 
 <!-- 0818 임시버튼 또 추가 -->
-<div style="position: absolute; top: 10%;"> <button @click="userPenalty">유저패널티 모달창</button></div>
+<!-- <div style="position: absolute; top: 10%;"> <button @click="userPenalty">유저패널티 모달창</button></div> -->
 <!-- 0818 임시버튼 또 추가 -->
 
 <!-- 사회자 시작버튼 -->
@@ -126,7 +126,7 @@
                 <div class="modal-icon" @click="offCallModal"><i class="fas fa-times"></i></div>
                 <call-to-moderator v-if="message" @sendMessage="toModerator"></call-to-moderator>
 
-                <user-out v-if="out" :list="penaltyList"></user-out>
+                <user-out v-if="out" :list="penaltyList" @sendPenalty="sendPenalty"></user-out>
 
                 <message-from-team v-if="messageFrom" :from="from" :message="toModeratorMessage" @close-modal="offCallModal"></message-from-team>
 
@@ -678,14 +678,6 @@ export default {
             this.disagree.push(sub);
           }
         }
-         if (subscriber.stream.typeOfVideo == 'SCREEN') {
-             let sub = {
-            id : this.user.id,
-            stream : 'subscriber',
-            data : subscriberScreen
-        };
-            this.subscribersScreen.push(sub);
-          }
 
       });
 
@@ -705,13 +697,6 @@ export default {
         }
         }
 
-        for (var i = 0; i < this.subscribersScreen.length; i++) {
-          if (this.subscriberScreen[i].data == stream.streamManager) {
-            this.subscriberScreen.splice(i, 1);
-
-          }
-        }
-
       });
       // on session destroyed...
       this.session.on("sessionDestroyed", () => {
@@ -725,6 +710,10 @@ export default {
       });
 
       // Hearing Signal
+      // 스크린 signal
+      this.session.on('signal:Unpublish-Screen', (event) => {
+        this.subscribersScreen.splice(0, 1);
+      })
 
       // 세부세션 signal
      this.session.on('signal:Go-SebuSession-Agree', (event) => {
@@ -742,10 +731,14 @@ export default {
       // 발언권 signal
       this.session.on('signal:Set-Audio', (event) => {
         if (this.session.sessionId != this.user.id) {
-        if (event.data == 'On') {
-          this.publisher.publishAudio(true);
-        } else {
-          this.publisher.publishAudio(false);
+        if (event.data == 'agree') {
+          if (this.position == 'agree') {
+            this.publisher.publishAudio(true);
+          } else this.publisher.publishAudio(false);
+        } else if (event.data == 'disagree') {
+          if (this.position == 'disagree') {
+            this.publisher.publishAudio(true);
+          } else this.publisher.publishAudio(false);
         }
         }
     });
@@ -777,6 +770,20 @@ export default {
           }
         }
       })
+
+    // 휴식 애니메이션
+      this.session.on('signal:Rest-Time', (event) => {
+        if (this.position == 'audience') {
+          this.EmitRest(event.data)
+        }
+      })
+    // 주의 signal
+      this.session.on('signal:Send-Penalty', (event) => {
+        if (this.user.id == event.data) {
+          this.userPenalty();
+        }
+      })
+
     // end signal
       this.session.on('signal:The-End', (event) => {
         if (this.session.sessionId == this.user.id) {
@@ -823,21 +830,35 @@ export default {
       await this.session
         .connect(token, { clientData: this.user.id + "/" + this.position + "/" + this.user.nnm })
         .then(() => {
-          let publisher = this.OV.initPublisher(undefined, {
-            audioSource: undefined, // The source of audio. If undefined default microphone
-            videoSource: undefined, // The source of video. If undefined default webcam
-            publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
-            publishVideo: true, // Whether you want to start publishing with your video enabled or not
-            resolution: "680x480", // The resolution of your video
-            frameRate: 30, // The frame rate of your video
-            insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-            mirror: false // Whether to mirror your local video or not
-          });
+          let publisher = undefined
+          if (this.session.sessionId == this.user.id) {
+              publisher = this.OV.initPublisher(undefined, {
+              audioSource: undefined, // The source of audio. If undefined default microphone
+              videoSource: undefined, // The source of video. If undefined default webcam
+              publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+              publishVideo: true, // Whether you want to start publishing with your video enabled or not
+              resolution: "680x480", // The resolution of your video
+              frameRate: 30, // The frame rate of your video
+              insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+              mirror: false // Whether to mirror your local video or not
+            });
+          } else {
+              publisher = this.OV.initPublisher(undefined, {
+              audioSource: undefined, // The source of audio. If undefined default microphone
+              videoSource: undefined, // The source of video. If undefined default webcam
+              publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+              publishVideo: true, // Whether you want to start publishing with your video enabled or not
+              resolution: "680x480", // The resolution of your video
+              frameRate: 30, // The frame rate of your video
+              insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+              mirror: false // Whether to mirror your local video or not
+            });
+          }
           this.publisher = publisher;
           let sub = {
             id : this.user.id,
             stream : 'publisher',
-            data : this.publisher,
+            data : publisher,
             nnm : this.user.nnm
         };
           if (this.user.id == this.session.sessionId) {
@@ -881,6 +902,18 @@ export default {
           }
 
 			});
+
+      this.sessionScreen.on("streamDestroyed", ({stream}) => {
+
+        for (var i = 0; i < this.subscribersScreen.length; i++) {
+          if (this.subscribersScreen[i].data == stream.streamManager) {
+            this.subscribersScreen.splice(i, 1);
+
+          }
+        }
+
+      });
+
 
 			await this.getToken(this.session.sessionId).then(tokenScreen => {
 				this.sessionScreen.connect(tokenScreen, { clientData: this.user.id })
@@ -975,6 +1008,7 @@ export default {
 		publisherScreen.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
 			console.log('User pressed the "Stop sharing" button');
 			this.sessionScreen.unpublish(publisherScreen);
+      this.unpublishScreen()
 			this.screensharing = false;
 		});
     this.publisherScreen = publisherScreen;
@@ -1116,9 +1150,18 @@ export default {
             this.rest = false
         },
         EmitRest(timeRest) {
+            if (this.session.sessionId == this.user.id) {
+               this.session.signal({
+                data : timeRest,
+                to : [],
+                type : 'Rest-Time'
+              })
+            }
             const restSound = new Audio("https://drive.google.com/uc?export=download&id=1R8_KNwIEBS_LpkCjazOjPZrk4jz4F2cM");
             restSound.play();
 
+            this.animationBG = true
+            this.restEvent = true
             this.restModal = true
             this.callToMdModal = false
 
@@ -1541,45 +1584,16 @@ export default {
     },
     // 음소거 컨트롤 시그널
     async audioMute(status) {
-      let agreeArr = [];
-      let disagreeArr = [];
-      await this.getAgreePosition().then((res) => { agreeArr = res});
-      await this.getDisagreePosition().then((res) => { disagreeArr = res});
-
-      let temp = {
-        connectionId : '',
-      }
       if (status == 1) {
-        for (var i in agreeArr) {
-
-          temp.connectionId = agreeArr[i]
-          this.sendAudioSignal('On', temp)
-        }
-        for (var j in disagreeArr) {
-          //this.sendAudioSignal('Off', disagreeArr[j])
-
-          temp.connectionId = disagreeArr[j]
-          this.sendAudioSignal('Off', temp)
-        }
+        this.sendAudioSignal('agree')
       } else if (status == 0) {
-        for (var k in agreeArr) {
-          //this.sendAudioSignal('Off', agreeArr[k])
-
-          temp.connectionId = agreeArr[k]
-          this.sendAudioSignal('Off', temp)
-        }
-        for (var z in disagreeArr) {
-          //this.sendAudioSignal('On', disagreeArr[z])
-
-          temp.connectionId = disagreeArr[z]
-          this.sendAudioSignal('On', temp)
-        }
+        this.sendAudioSignal('disagree')
       }
     },
-    sendAudioSignal(order, who) {
+    sendAudioSignal(order) {
       this.session.signal({
         data: order,
-        to: who,
+        to: [],
         type: 'Set-Audio'
       });
     },
@@ -1636,7 +1650,24 @@ export default {
         type : 'Animation'
       })
     },
+    // 주의 보내기
+    sendPenalty(id) {
+      this.session.signal({
+        data : id,
+        to : [],
+        type : 'Send-Penalty'
+      })
+      this.out = false
+    },
 
+    // screen 삭제
+    unpublishScreen() {
+      this.session.signal({
+        data : 'unpublish',
+        to : [],
+        type : 'Unpublish-Screen'
+      })
+    }
     }
   }
 

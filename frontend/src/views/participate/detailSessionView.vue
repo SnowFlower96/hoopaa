@@ -271,12 +271,6 @@ export default {
         }
         }
 
-        for (var i = 0; i < this.subscribersScreen.length; i++) {
-          if (this.subscriberScreen[i].data == stream.streamManager) {
-            this.subscriberScreen.splice(i, 1);
-          }
-        }
-
       });
       // on session destroyed...
       this.session.on("sessionDestroyed", () => {
@@ -331,13 +325,11 @@ export default {
           let sub = {
             id : this.user.id,
             stream : 'publisher',
-            data : this.publisher
+            data : publisher
         };
 
 
             this.subscribers.push(sub);
-
-          console.log("Connected!!!");
 
           this.session.publish(publisher);
         })
@@ -368,6 +360,9 @@ export default {
           }
 
 			});
+      this.session.on('signal:Unpublish-Screen', (event) => {
+        this.subscribersScreen.splice(0, 1);
+      })
 
 			await this.getToken(this.session.sessionId).then(tokenScreen => {
 				this.sessionScreen.connect(tokenScreen, { clientData: this.user.id })
@@ -459,6 +454,7 @@ export default {
 		publisherScreen.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
 			console.log('User pressed the "Stop sharing" button');
 			this.sessionScreen.unpublish(publisherScreen);
+      this.unpublishScreen();
 			this.screensharing = false;
 		});
     this.publisherScreen = publisherScreen;
@@ -490,6 +486,14 @@ export default {
             })
           }
         },
+    // screen 삭제
+    unpublishScreen() {
+      this.session.signal({
+        data : 'unpublish',
+        to : [],
+        type : 'Unpublish-Screen'
+      })
+    }
     },
 
 }
