@@ -688,13 +688,13 @@ export default {
       // 세부세션 signal
      this.session.on('signal:Go-SebuSession-Agree', (event) => {
       if (this.session.sessionId != this.user.id) {
-        this.$store.commit("CREATE_TEMP_TOKEN", event.data);
+        this.$store.commit("CREATE_TEMP_SUB_TOKEN", event.data);
         this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'agree')
       }
     });
      this.session.on('signal:Go-SebuSession-Disagree', (event) => {
       if (this.session.sessionId != this.user.id) {
-      this.$store.commit("CREATE_TEMP_TOKEN", event.data);
+      this.$store.commit("CREATE_TEMP_SUB_TOKEN", event.data);
       this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'disagree')
       }
     });
@@ -1062,6 +1062,7 @@ export default {
             // }
         }, 1000);
         setTimeout(() => {
+          this.closeSession(this.session.sessionId)
           this.rest = false
           this.animationBG = false
           this.restEvent = false
@@ -1074,7 +1075,7 @@ export default {
             this.timerTime = Array[0]*60
             this.timerTeam = Array[1]
             this.timeList = [this.timerTime, this.timerTeam]
-        
+
             this.callToMdModal = false
             this.timerMin = Array[0]
         },
@@ -1386,10 +1387,10 @@ export default {
           await this.$store.dispatch("makeSessionRoom", index).then((response) => {
           let data = JSON.parse(response.data.json)
           for (var key in data) {
-            if (data[key].token.includes('agree')) {
-              this.sendSessionAgreeFunc({connectionId : data[key].connectionID}, data[key].token)
-            } else {
+            if (data[key].token.includes('disagree')) {
               this.sendSessionDisagreeFunc({connectionId : data[key].connectionID}, data[key].token)
+            } else {
+              this.sendSessionAgreeFunc({connectionId : data[key].connectionID}, data[key].token)
             }
           }
         })
@@ -1504,6 +1505,12 @@ export default {
         to : [],
         type : 'The-End'
       })
+    },
+
+    // 세부세션 닫기
+    closeSession(sessionId) {
+      this.$store.dispatch("closeSession", sessionId + '_' + 'agree');
+      this.$store.dispatch("closeSession", sessionId + '_' + 'disagree')
     }
     }
   }

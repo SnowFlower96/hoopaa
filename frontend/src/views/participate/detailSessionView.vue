@@ -96,7 +96,7 @@ export default {
                 "--video-box": this.videoBox,
             }
         },
-        ...mapState(["user", "position", "tempToken"]),
+        ...mapState(["user", "position", "tempSubToken"]),
         customCaroselStyle() {
             return {
 
@@ -235,7 +235,7 @@ export default {
         },
          // 세션 연결
       async joinSession() {
-      const token = this.tempToken;
+      const token = this.tempSubToken;
 
       // --- Get an OpenVidu object ---
       this.OV = new OpenVidu();
@@ -280,7 +280,7 @@ export default {
       });
       // on session destroyed...
       this.session.on("sessionDestroyed", () => {
-        router.push('/')
+        router.push('/debateRoom')
       });
 
 
@@ -348,7 +348,7 @@ export default {
             error.message
           );
         });
-
+      console.log(this.session.sessionId + 'dddddddddddddd')
       this.joinScreen();
       },
 
@@ -452,7 +452,7 @@ export default {
 		publishScreenShare(){
 
 			let publisherScreen = this.OVScreen.initPublisher("container-screens", {videoSource: "screen"});
- 
+
 			publisherScreen.once('accessAllowed', () => {
 		this.screensharing = true;
 		// It is very important to define what to do when the stream ends.

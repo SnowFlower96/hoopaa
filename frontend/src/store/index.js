@@ -19,6 +19,7 @@ export default new Vuex.Store({
     tempToken : '',
     user : [],
     position : '',
+    tempSubToken : '',
   },
 
   mutations : {
@@ -33,6 +34,7 @@ export default new Vuex.Store({
         state.tempToken = '';
         state.user = [];
         state.position = '';
+        state.tempSubToken = '';
 
     },
     // 방 리스트 불러오기
@@ -69,6 +71,9 @@ export default new Vuex.Store({
     },
     CREATE_TEMP_TOKEN(state, data) {
       state.tempToken = data;
+    },
+    CREATE_TEMP_SUB_TOKEN(state, data) {
+      state.tempSubToken = data;
     },
     SET_POSITION(state, data) {
       state.position = data;
@@ -377,6 +382,14 @@ export default new Vuex.Store({
       headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
       url : '/room/vote/final?kingUserID=' + data.kingUserID + '&sessionID=' + data.sessionID + '&vote=' + data.vote,
       method : "POST",
+    })
+  },
+  // 세부세션 닫기
+  closeSession({commit}, data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/session/' + data,
+      method : "DELETE",
     })
   }
 }
