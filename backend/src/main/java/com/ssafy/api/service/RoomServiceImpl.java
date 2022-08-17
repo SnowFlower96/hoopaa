@@ -41,7 +41,7 @@ public class RoomServiceImpl implements RoomService {
     private String thumbPath;
 
     private AES128Util aes128Util;
-    @Value("aes.key")
+    @Value("${aes.key}")
     private String key;
 
     @PostConstruct
@@ -55,7 +55,6 @@ public class RoomServiceImpl implements RoomService {
         }
 
         this.mapRooms = new ConcurrentHashMap<>();
-
         aes128Util = new AES128Util(key);
     }
 
