@@ -1038,7 +1038,15 @@ export default {
                 this.heartHund = false
                 this.restEvent = false
                 this.$store.dispatch("roomStart", this.session.sessionId)
-                }
+
+                const startSound = new Audio("https://drive.google.com/uc?export=download&id=1SCuIo3Ds1tU3RBaO-JljNA-liMFASoLB");
+                startSound.play();
+
+                setTimeout(() => {
+                  this.startEvent = false
+                  this.animationBG = false
+                }, 5000)
+            }
             else if (option === 'heartHund') {
                 this.startEvent = false
                 this.heartTen = false
@@ -1098,24 +1106,6 @@ export default {
         },
         async voteVisible() {
             // this.voteViewTF = true
-            this.startVote();
-            this.voteViewTF = !this.voteViewTF
-
-            let time = this.voteTime;
-            let min = "";
-            let sec = "";
-            let x = setInterval(function() {
-            min = parseInt(time/60);
-            sec = time%60;
-
-            document.getElementById("demo").innerHTML = min + "분" + sec + "초";
-            time--;
-
-            if (time < 0) {
-                clearInterval(x);
-                document.getElementById("demo").innerHTML = "투표가 종료되었습니다";
-            }
-            }, 1000);
             setTimeout(this.theEnd,63000)
 
         // 타이머 로직
@@ -1142,6 +1132,24 @@ export default {
         },
         voteView() {
             this.voteViewTF = !this.voteViewTF
+            this.startVote();
+            this.voteViewTF = !this.voteViewTF
+
+            let time = this.voteTime;
+            let min = "";
+            let sec = "";
+            let x = setInterval(function() {
+            min = parseInt(time/60);
+            sec = time%60;
+
+            document.getElementById("demo").innerHTML = min + "분" + sec + "초";
+            time--;
+
+            if (time < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "투표가 종료되었습니다";
+            }
+            }, 1000);
         },
         risingHeart() {
             const stripe = document.getElementById('heart-div')
@@ -1303,10 +1311,16 @@ export default {
 
         //채팅 추가
         sendAllMessage(message){
-
-          var messageData = {
+          if(this.user.nnm==null){
+              var messageData = {
+              writer : this.user,
+              content: message
+            }
+          }else{
+            var messageData = {
             writer : this.user.nnm,
             content: message
+            }
           }
 
           this.session.signal({
@@ -1390,6 +1404,11 @@ export default {
                 this.heartfift = false
                 this.heartHund = false
                 this.restEvent = !this.restEvent
+                const restSound = new Audio("https://drive.google.com/uc?export=download&id=1R8_KNwIEBS_LpkCjazOjPZrk4jz4F2cM");
+                restSound.play();
+                setTimeout(() =>  {
+                  restSound.pause()
+                }, 3000)
             }
         },
 
