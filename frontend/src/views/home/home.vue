@@ -6,23 +6,34 @@
             <div style="display: flex; justify-content: end;" @click="offModal"><i class="fas fa-times"></i></div>
           <div class="home-check-in-inner displayFlex">
             <div style="text-align:center;">
-              <div v-if="ppSet">
-                <div style="font-size:30px;">참여 설정</div>
-                <div class="displayFlex">
-                  <router-link to="/login" style=text-decoration:none;><div class="home-modal-btn displayFlex">로그인</div></router-link>
-                  <div class="home-modal-btn displayFlex" @click="changePpSet">비회원</div>
+              <div v-if="!isLogin">
+                <div v-if="ppSet">
+                  <div style="font-size:30px;">참여 설정</div>
+                  <div class="displayFlex">
+                    <router-link to="/login" style=text-decoration:none;><div class="home-modal-btn displayFlex">로그인</div></router-link>
+                    <div class="home-modal-btn displayFlex" @click="changePpSet">비회원</div>
+                  </div>
+                </div>
+                <div class="pp-set" v-if="!ppSet">
+                  <div style="font-size:30px;">비회원 참여</div>
+                  <div class="displayFlex pp-set-inner">
+                    <div>닉네임 입력</div>
+                    <input v-model="b_nnm" type="text">
+                  </div>
+                  <div class="displayFlex">
+                    <div class="home-modal-btn displayFlex" @click="b_join">참여</div>
+                  </div>
                 </div>
               </div>
-              <div class="pp-set" v-if="!ppSet">
-                <div style="font-size:30px;">비회원 참여</div>
-                <div class="displayFlex pp-set-inner">
-                  <div>닉네임 입력</div>
-                  <input v-model="b_nnm" type="text">
-                </div>
-                <div class="displayFlex">
-                  <div class="home-modal-btn displayFlex" @click="b_join">참여</div>
+              <div v-else>
+                <div v-if="ppSet">
+                  <div style="font-size:30px;">참여 여부</div>
+                  <div class="displayFlex">
+                    <router-link to="/login" style=text-decoration:none;><div class="home-modal-btn displayFlex">참가</div></router-link>
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -441,7 +452,7 @@ export default {
     }
   },
   computed : {
-    ...mapState(["roomList"]),
+    ...mapState(["roomList","isLogin"]),
     customCaroselStyle() {
       return {
         "--carosel-item-width": this.caroselWidth,
@@ -540,19 +551,19 @@ export default {
       const data = [];
       if (this.checkbox) {
         this.data = sortdata;
-      for (let i=0 ; i < sortdata.length; i++) {
+        for (let i=0 ; i < sortdata.length; i++) {
           if (sortdata[i].phase == 0 ) {
             data.push(JSON.parse(JSON.stringify(sortdata[i])));
           }
         }
 
-    this.GET_ROOM_LIST(JSON.stringify(data));
+      this.GET_ROOM_LIST(JSON.stringify(data));
 
-    } else {
+      } else {
       this.data = JSON.stringify(this.data)
       this.GET_ROOM_LIST(this.data);
 
-    }
+      }
     },
 
     prev() {

@@ -2,6 +2,9 @@
 
     <div class="room-info" :style="{backgroundImage: 'url('+backurl+')'}">
      <p class="room-phase-tip"  :style="{'background-color' : backcolor}" >{{phase[room.phase]}}</p>
+      <p v-if="this.room.pwd!=''" class="lock">
+        <img src="@/assets/images/Lock-icon.png" class="lock-img"/>
+      </p>
      <!-- <p class="room-desc">
       <span class="room-phase">{{phase[room.phase]}}</span><span>     </span><span class="room-cate">{{this.menus[room.cate].name}}</span></p> -->
     <p class="room-title"> {{room.subtitle}}</P>
@@ -100,7 +103,7 @@ export default {
 
 <style>
 .room-info:hover {
-  -webkit-transform: scale(1.2);
+  -webkit-transform: scale(1.1);
   filter: brightness(100%);
 }
 .room-desc{
@@ -155,7 +158,16 @@ export default {
   padding: 3px;
   z-index: 3;
   border-radius: 3px;
+  margin-bottom: 0;
   /* margin-left: var(--room-phase-tip-margin-left); */
+}
+.lock{
+  margin-top:0;
+}
+.lock-img{
+
+  opacity: 0.5;
+  width: 50%;
 }
 
 </style>

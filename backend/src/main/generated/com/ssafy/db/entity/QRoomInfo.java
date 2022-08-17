@@ -22,21 +22,23 @@ public class QRoomInfo extends EntityPathBase<RoomInfo> {
 
     public static final QRoomInfo roomInfo = new QRoomInfo("roomInfo");
 
-    public final NumberPath<Integer> cate = createNumber("cate", Integer.class);
+    public final NumberPath<Short> agree = createNumber("agree", Short.class);
 
     public final NumberPath<Integer> curNum = createNumber("curNum", Integer.class);
 
-    public final NumberPath<Integer> hash1 = createNumber("hash1", Integer.class);
+    public final NumberPath<Short> disagree = createNumber("disagree", Short.class);
 
-    public final NumberPath<Integer> hash2 = createNumber("hash2", Integer.class);
-
-    public final NumberPath<Integer> hash3 = createNumber("hash3", Integer.class);
+    public final DateTimePath<java.time.LocalDateTime> endTime = createDateTime("endTime", java.time.LocalDateTime.class);
 
     public final NumberPath<Long> hostId = createNumber("hostId", Long.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Integer> isSys = createNumber("isSys", Integer.class);
+    public final NumberPath<Short> invalid = createNumber("invalid", Short.class);
+
+    public final NumberPath<Long> kingId = createNumber("kingId", Long.class);
+
+    public final StringPath log = createString("log");
 
     public final NumberPath<Integer> maxNum = createNumber("maxNum", Integer.class);
 
@@ -44,19 +46,19 @@ public class QRoomInfo extends EntityPathBase<RoomInfo> {
 
     public final StringPath pwd = createString("pwd");
 
-    public final QRoomHistory roomHistory;
+    public final QRoomDescription roomDescription;
 
-    public final QRoomStatus roomStatus;
+    public final QRoomPanel roomPanel;
 
     public final DateTimePath<java.time.LocalDateTime> startTime = createDateTime("startTime", java.time.LocalDateTime.class);
 
-    public final StringPath subtitle = createString("subtitle");
-
     public final StringPath thumbUrl = createString("thumbUrl");
 
-    public final StringPath title = createString("title");
+    public final QUser userHost;
 
-    public final QUser user;
+    public final QUser userKing;
+
+    public final NumberPath<Short> winner = createNumber("winner", Short.class);
 
     public QRoomInfo(String variable) {
         this(RoomInfo.class, forVariable(variable), INITS);
@@ -76,9 +78,10 @@ public class QRoomInfo extends EntityPathBase<RoomInfo> {
 
     public QRoomInfo(Class<? extends RoomInfo> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.roomHistory = inits.isInitialized("roomHistory") ? new QRoomHistory(forProperty("roomHistory")) : null;
-        this.roomStatus = inits.isInitialized("roomStatus") ? new QRoomStatus(forProperty("roomStatus")) : null;
-        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
+        this.roomDescription = inits.isInitialized("roomDescription") ? new QRoomDescription(forProperty("roomDescription")) : null;
+        this.roomPanel = inits.isInitialized("roomPanel") ? new QRoomPanel(forProperty("roomPanel")) : null;
+        this.userHost = inits.isInitialized("userHost") ? new QUser(forProperty("userHost"), inits.get("userHost")) : null;
+        this.userKing = inits.isInitialized("userKing") ? new QUser(forProperty("userKing"), inits.get("userKing")) : null;
     }
 
 }
