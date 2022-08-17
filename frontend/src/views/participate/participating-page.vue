@@ -7,7 +7,7 @@
             <div class="displayFlex" style="font-size: 40px; color:white; height: 35%;">토론 입장</div>
 
             <div style="height: 60%;">
-              <div v-if="!isPannel" style="font-size:30px; color:white;">방청객으로 입장합니다.</div>
+              <div v-if="!isPannel" style="font-size:30px; color:white;">{{who}} 입장합니다.</div>
 
               <div v-if="isPannel" class="displayFlex" >
                 <div :class="{'ppbs-btn' : !isAgree, 'ppbs-btn-selected' : isAgree}" style="margin: 10px; margin-top: 0px;" @click="positionAgree">찬성</div>
@@ -33,6 +33,7 @@ export default {
       sessionId : '',
       isAgree: false,
       isDisAgree: false,
+      who : '',
     }
   },
   methods : {
@@ -56,8 +57,12 @@ export default {
     var id = this.tempToken.split("?")[1].split("&")[0].split("=")[1]
     if (this.position == 'audience') {
       this.isPannel = false;
+      this.who = '방청객으로'
+    } else if (id == this.user.id) {
+      this.who = '사회자로'
+    } else {
+      this.isPannel = true;
     }
-    if (id != this.user.id) this.isPannel = true;
     this.sessionId = id;
   },
   computed : {

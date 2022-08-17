@@ -284,7 +284,7 @@ export default new Vuex.Store({
       method : "POST",
       data : data,
     }).then((res) => {
-      console.log(res.data);
+      console.log("enterRoom ", res.data);
       commit("CREATE_TEMP_TOKEN",res.data.token);
       router.push("/participatingPage")
     })
@@ -357,11 +357,32 @@ export default new Vuex.Store({
 
   bJoin({commit}, data) {
     api({
-      url : '/users/temp/' + data,
+      url : '/users/temp/' + data.nnm,
       method : "POST",
     }).then((res) => {
       commit("BUSER_LOGIN", res.data)
+      console.log(data.data)
+      this.dispatch("enterRoom", data.data);
     })
   },
+
+  // 투표
+  // 투표시작
+  voteStart({commit},data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : `/room/vote`,
+      method : "PUT",
+      data : data
+    })
+  },
+  // 투표 보내기
+  voteFinal({commit}, data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/vote/final?kingUserID=' + data.kingUserID + '&sessionID=' + data.sessionID + '&vote=' + data.vote,
+      method : "POST",
+    })
+  }
 }
 })

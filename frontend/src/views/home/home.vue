@@ -100,7 +100,7 @@
                   <div class="main-all-container">
                     <ul class="main-all-ul">
                       <li  v-for="(room, index) in roomList" :key="index">
-                      <div class="carosel-room-card" @click="gotoRoom">
+                      <div class="carosel-room-card" @click="gotoRoom(room.hostID)">
                         <div class="room-info-carosel" :style="customCaroselStyle">
                           <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
 
@@ -585,14 +585,17 @@ export default {
         }
     },
     async b_join () {
-      this.$store.dispatch("bJoin", this.b_nnm);
-      this.$store.commit("SET_POSITION",'audience');
-      console.log(this.roomId)
-      let data = {
-        pwd : '',
-        sessionId : this.roomId,
+      let b_data = {
+        nnm : this.b_nnm,
+        data : {
+          pwd : '',
+          sessionId : this.roomId,
+        }
       }
-      await this.$store.dispatch("enterRoom", data)
+      await this.$store.commit("SET_POSITION",'audience');
+
+      await this.$store.dispatch("bJoin", b_data);
+      //await this.$store.dispatch("enterRoom", data)
     }
   }
   // setup () {

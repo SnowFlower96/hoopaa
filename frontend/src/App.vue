@@ -13,7 +13,7 @@ export default {
     Main,
   },
   created () {
-     if (!sessionStorage.getItem("accessToken")) {
+    if (!sessionStorage.getItem("accessToken")) {
       this.$store.commit('RESET_STATE');
     }
   },
