@@ -33,56 +33,44 @@
               <h1>토론 기록 상세 보기</h1>
             </div>
             <div class="my-page-stat-space" :style="customBoxSize">
-              <!-- ***** 이부분 주석 풀면 됨 ***** -->
-                <!-- <div>
-                  <ul>
-                    <li v-for="(item, index) in userHistory" :key="index" style="list-style:none;">
-                        <div class="my-stat-ele-wrap">
-                          <div @click="toggleOn(index)" :class="{'my-stat-ele-closed' : !show[index], 'my-stat-ele-opened' : show[index]}">
-                            <div class="my-stat-ele-title">
-                              <div style="color:white; font-size:20px; width: 350px;">{{item.start_time}}</div>
-                              <div class="title">{{item.title}}</div>
-                            </div>
-                            <i style="font-size:50px;" class="fas fa-angle-down" v-if="!show[index]"></i>
-                            <i style="font-size:50px;" class="fas fa-angle-up" v-if="show[index]"></i>
+
+              <div>
+                <ul>
+                  <li v-for="(history, index) in userHistory" :key="index" style="list-style:none;">
+                      <div class="my-stat-ele-wrap">
+                        <div :class="{'my-stat-ele-closed' : !show[index], 'my-stat-ele-opened' : show[index]}" @click="toggleOn(index)">
+                          <div class="my-stat-ele-title">
+                            <div style="color:white; font-size:20px; width: 200px;">2022.07.14 13:21</div>
+                            <div class="title"> {{history.title}} </div>
                           </div>
-                          <div v-if="show[index]" class="my-stat-ele-content">
-                            <div style="font-size:25px; color: black;">{{item.title}}</div>
-                            <p>{{item._win ? "승리" : "패배"}}</p>
-                            <p>결과 : 총 {{item.max_num}}명중 찬성 {{item.agree}}명 반대 {{item.disagree}}명 무효 {{item.invalid}}명</p>
-                          </div>
+                          <i style="font-size:50px;" class="fas fa-angle-down" v-if="!show[index]"></i>
+                          <i style="font-size:50px;" class="fas fa-angle-up" v-if="show[index]"></i>
                         </div>
-                    </li>
-                  </ul>
-                </div> -->
-              <!-- ***** 이부분 주석 풀면 됨 ***** -->
+                        <div v-if="show[index]" class="my-stat-ele-content">
+                          <p style="font-size:25px; color: black;">{{history.title}} </p>
 
-              <!-- 이부분은 예시임 : 주석처리하면 됨-->
-                  <div>
-                    <ul>
-                      <li v-for="(history, index) in userHistory" :key="index" style="list-style:none;">
-                          <div class="my-stat-ele-wrap">
-                            <div :class="{'my-stat-ele-closed' : !show[index], 'my-stat-ele-opened' : show[index]}" @click="toggleOn(index)">
-                              <div class="my-stat-ele-title">
-                                <div style="color:white; font-size:20px; width: 200px;">2022.07.14 13:21</div>
-                                <div class="title"> {{history.title}} </div>
-                              </div>
-                              <i style="font-size:50px;" class="fas fa-angle-down" v-if="!show[index]"></i>
-                              <i style="font-size:50px;" class="fas fa-angle-up" v-if="show[index]"></i>
-                            </div>
-                            <div v-if="show[index]" class="my-stat-ele-content">
-                              <p style="font-size:25px; color: black;">{{history.title}} </p>
+                          <h1 v-if="history._win"> <span  class="win-result">승</span> </h1>
+                          <h1  v-else> <span class="lost-result">패</span> </h1>
+                          <p>{{history.agree+history.disagree+history.invalid}}명중 {{history.agree}}명 찬성 {{history.disagree}}명 반대</p>
+                          <p >내 포지션 : <span class="my-position">{{history.position}}</span></p>
+                        </div>
+                      </div>
+                  </li>
+                </ul>
+              </div>
 
-                              <h1 v-if="history._win"> <span  class="win-result">승</span> </h1>
-                              <h1  v-else> <span class="lost-result">패</span> </h1>
-                              <p>{{history.agree+history.disagree+history.invalid}}명중 {{history.agree}}명 찬성 {{history.disagree}}명 반대</p>
-                              <p >내 포지션 : <span class="my-position">{{history.position}}</span></p>
-                            </div>
-                          </div>
-                      </li>
-                    </ul>
-                  </div>
-              <!-- 이부분은 예시임 : 주석처리하면 됨-->
+               <div style="padding-left: 50px;">
+                <h1>총 전적</h1>
+                <div class="my-stat-ele-wrap" style="text-align:center">
+                  <h3 class="my-user-stat-count"> 총 토론  {{userStat.total}} 회</h3>
+                  <h2 class="my-user-stat-count">🏆 승리 {{userStat.win}} 회 </h2>
+                  <h3 class="my-user-stat-count">💢 패배 {{userStat.lose}} 회 </h3>
+                  <h3 class="my-user-stat-count">⏹ 무승부 {{userStat.draw}} 회</h3>
+                  <h3 class="my-user-stat-count">👑 토론왕 {{userStat.king}} 회 </h3>
+                  <h3 class="my-user-stat-count">👎 패널티 {{userStat.penalty}} 회 </h3>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -306,5 +294,8 @@ created () {
 .lost-result{
   background-color: rgb(248, 108, 127);
   border-radius: 5px;
+}
+.my-user-stat-count:hover{
+  -webkit-transform: scale(1.1);
 }
 </style>
