@@ -18,13 +18,15 @@
 </div>
 <!-- 쉬는시간 모달 -->
 
+<!-- 0818 임시버튼 또 추가 -->
+<div style="position: absolute; top: 10%;"> <button @click="userPenalty">유저패널티 모달창</button></div>
+<!-- 0818 임시버튼 또 추가 -->
 
-
-<!-- 곧 없어질 버튼 -->
-<div class="animation-control-btns">
-    <button v-if="session.sessionId == user.id" @click="animation('startEvent')">시작 이벤트</button>
+<!-- 사회자 시작버튼 -->
+<div class="mod-start-btn-bg">
+    <div v-if="session.sessionId == user.id && modStart == true" @click="animation('startEvent')">토론 시작하기</div>
 </div>
-<!-- 곧 없어질 버튼 -->
+<!-- 사회자 시작버튼 -->
 
 
 <!-- 뷰바꾸는 임시버튼 -->
@@ -141,6 +143,16 @@
                 @emit-rest="EmitRest"
                 @sendSebuSession="sendSession"
                 ></rest-time>
+
+                <div v-if="penaltyView" class="penalty-view displayFlex">
+                  <div>
+                    <div style="font-size:50px; color:white; text-align:center;">🚨경고🚨</div>
+                    <div style="font-size:20px; color:white; text-align:center;">올바른 태도로 토론에 참여해주세요</div>
+                    <div class="penalty-btn-wrap displayFlex">
+                      <div @click="offpenaltyView" class="penalty-btn displayFlex">확인</div>
+                    </div>
+                  </div>
+                </div>
             </div>
             <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
         </div>
@@ -466,6 +478,7 @@ export default {
             allHeartLeft: '',
             countingHeart :0,
             propsHeart: 1,
+            modStart: true,
 
           //  채팅
             chattTF: true,
@@ -500,6 +513,7 @@ export default {
             timerTeam:null,
             timeList:[], // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
             timerMin: 0,
+            penaltyView: false,
 
             // 토론끝나고 방청잭 투표뷰 3개
             allVoteView: true,
@@ -584,6 +598,20 @@ export default {
         window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
+      offpenaltyView() {
+        this.callToMdModal = false
+        this.penaltyView = false
+      },
+      userPenalty() {
+        this.callToMdModal = true
+        this.penaltyView = true
+        this.menu = false
+        this.out = false
+        this.message = false
+        this.file = false
+        this.rest = false
+        this.messageFrom = false
+      },
         submitVote(option) {
             if(option === 'vote') {
                 if(this.voteStatus == 1) {
@@ -1039,6 +1067,7 @@ export default {
                 this.heartfift = false
                 this.heartHund = false
                 this.restEvent = false
+                this.modStart = false
                 this.$store.dispatch("roomStart", this.session.sessionId)
 
                 setTimeout(() => {
@@ -1586,12 +1615,6 @@ export default {
     justify-content: center;
     align-items: center;
 }
-.animation-control-btns {
-    position: absolute;
-    top: 50px;
-    background-color: rgba(202, 88, 88, 0.534);
-    height: 50px;
-}
 .animation-role-background {
     position: absolute;
     height: 90vh;
@@ -1637,7 +1660,27 @@ export default {
     justify-content: center;
     align-items: center;
 }
-
+.mod-start-btn-bg {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+}
+.mod-start-btn-bg > div {
+  width: 230px;
+  height: 70px;
+  border-radius: 10px;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: rgb(141, 141, 141) 1px solid;
+  color: rgb(141, 141, 141);
+}
+.mod-start-btn-bg > div:hover {
+  outline: white 1px solid;
+  color: white;
+  cursor: pointer;
+}
 .sub-vote-btn {
     font-size: 25px;
     margin: 10px;
@@ -1734,7 +1777,10 @@ export default {
     left: var(--all-heart-left);
     position: absolute;
 }
+.penalty-view {
+  height: 90%;
 
+}
 #heart-div {
   position: absolute;
   bottom: 0px;
@@ -1787,7 +1833,22 @@ export default {
         opacity: 0
     }
 }
-
+.penalty-btn-wrap {
+  margin-top: 25px;
+}
+.penalty-btn {
+  width: 100px;
+  height: 50px;
+  border-radius: 10px;
+  outline: 1px rgb(145, 145, 145) solid;
+  color:rgb(145, 145, 145);
+  font-size: 30px;
+}
+.penalty-btn:hover {
+  outline: 1px white solid;
+  color:white;
+  cursor: pointer;
+}
 .chatt-btn {
     width: 5vh;
     height: 5vh;
