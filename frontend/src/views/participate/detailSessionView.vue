@@ -250,7 +250,7 @@ export default {
         if (subscriber.stream.typeOfVideo == 'CAMERA') {
           let connectionData = JSON.parse(subscriber.stream.connection.data);
           var clientData = connectionData.clientData.split("/");
-          console.log(clientData);
+
           let sub = {
               id : clientData[0],
               stream : 'subscriber',
@@ -270,7 +270,7 @@ export default {
           this.subscribers.splice(i, 1);
         }
         }
-        console.log(this.subscribersScreen.length)
+
         for (var i = 0; i < this.subscribersScreen.length; i++) {
           if (this.subscriberScreen[i].data == stream.streamManager) {
             this.subscriberScreen.splice(i, 1);
@@ -338,7 +338,7 @@ export default {
             this.subscribers.push(sub);
 
           console.log("Connected!!!");
-          console.log(this.session.connection)
+
           this.session.publish(publisher);
         })
         .catch(error => {
@@ -349,12 +349,6 @@ export default {
           );
         });
 
-      if (this.user.id == this.session.sessionId) {
-        console.log("you are host");
-      } else {
-        console.log("you are pannel");
-        console.log(this.agree);
-      }
       this.joinScreen();
       },
 
@@ -372,7 +366,7 @@ export default {
         };
             this.subscribersScreen.push(sub);
           }
-					console.log(this.subscribersScreen.length + "!!!!!!!!!!!!!!!!")
+
 			});
 
 			await this.getToken(this.session.sessionId).then(tokenScreen => {
@@ -456,9 +450,9 @@ export default {
 
 
 		publishScreenShare(){
-      console.log("들어오지");
+
 			let publisherScreen = this.OVScreen.initPublisher("container-screens", {videoSource: "screen"});
-      console.log("여기오냐?")
+ 
 			publisherScreen.once('accessAllowed', () => {
 		this.screensharing = true;
 		// It is very important to define what to do when the stream ends.

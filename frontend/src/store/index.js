@@ -116,7 +116,6 @@ export default new Vuex.Store({
             method: "POST",
             data : data
           }).then((res) => {
-            console.log(res);
             router.push('/email?em='+data.em)
             commit();
           })
@@ -167,7 +166,6 @@ export default new Vuex.Store({
         url : `/users/info`,
         method : "GET"
       }).then((res) => {
-        console.log(res.data)
         commit("USER_INFO",res.data.json);
       })
      },
@@ -284,7 +282,6 @@ export default new Vuex.Store({
       method : "POST",
       data : data,
     }).then((res) => {
-      console.log("enterRoom ", res.data);
       commit("CREATE_TEMP_TOKEN",res.data.token);
       router.push("/participatingPage")
     })
@@ -337,7 +334,6 @@ export default new Vuex.Store({
       url : index,
       method : "POST",
     }).then((res) => {
-      console.log(res.data)
       // commit();
     })
   },
@@ -361,7 +357,6 @@ export default new Vuex.Store({
       method : "POST",
     }).then((res) => {
       commit("BUSER_LOGIN", res.data)
-      console.log(data.data)
       this.dispatch("enterRoom", data.data);
     })
   },

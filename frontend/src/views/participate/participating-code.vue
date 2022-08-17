@@ -36,7 +36,7 @@ export default {
         pwd : this.pwd,
         sessionId : this.sessionId,
       }
-      console.log(data)
+    
       this.$store.dispatch("enterRoom", data)
     }
   }

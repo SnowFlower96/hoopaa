@@ -27,7 +27,7 @@ export default {
     let param = new URLSearchParams(query);
     let loginNew = param.get('em');
     this.loginNew = loginNew;
-    console.log(this.loginNew)
+
      var data = {
         em : this.loginNew
       }
@@ -42,7 +42,7 @@ export default {
         em : this.em,
         pwd : this.pwd
       }
-      console.log(data);
+   
       await this.$store.dispatch("login",data);
     }
   }

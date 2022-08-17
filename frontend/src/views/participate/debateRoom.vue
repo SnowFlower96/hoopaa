@@ -627,7 +627,7 @@ export default {
         if (subscriber.stream.typeOfVideo == 'CAMERA') {
           let connectionData = JSON.parse(subscriber.stream.connection.data);
           var clientData = connectionData.clientData.split("/");
-          console.log(clientData);
+
           let sub = {
               id : clientData[0],
               stream : 'subscriber',
@@ -635,13 +635,13 @@ export default {
               nnm : clientData[2]
           };
           if (clientData[0] == this.session.sessionId) {
-            console.log("host video connected");
+
             this.host = subscriber;
           } else if (clientData[1] == "agree") {
-            console.log("agree video connected");
+
             this.agree.push(sub);
           } else if (clientData[1] == "disagree") {
-            console.log("disagree video connected");
+
             this.disagree.push(sub);
           }
         }
@@ -663,11 +663,11 @@ export default {
           this.disagree.splice(i, 1);
         }
         }
-        console.log(this.subscribersScreen.length)
+
         for (var i = 0; i < this.subscribersScreen.length; i++) {
           if (this.subscriberScreen[i].data == stream.streamManager) {
             this.subscriberScreen.splice(i, 1);
-            console.log("안녕")
+
           }
         }
 
@@ -680,7 +680,7 @@ export default {
 
       // On every asynchronous exception...
       this.session.on("exception", ({ exception }) => {
-        console.warn(exception);
+
       });
 
       // Hearing Signal
@@ -722,7 +722,7 @@ export default {
       })
 
       this.session.on("signal:chat-all",(event)=>{
-      console.log("전체 메세지");
+
       let eventData = JSON.parse(event.data);
       let data = new Object()
       let time = new Date()
@@ -731,7 +731,7 @@ export default {
       data.time = moment(time).format('HH:mm')
 
       this.messagesAll.push(data)
-      console.log(this.messagesAll);
+
     } )
 
     this.session.on("signal:chat-agree",(event)=>{
@@ -742,7 +742,7 @@ export default {
       data.message = eventData.content
       data.time = moment(time).format('HH:mm')
       this.messagesAgree.push(data)
-      console.log(this.messagesAll);
+
     } )
 
     this.session.on("signal:chat-disagree",(event)=>{
@@ -753,7 +753,7 @@ export default {
       data.message = eventData.content
       data.time = moment(time).format('HH:mm')
       this.messagesDisagree.push(data)
-      console.log(this.messagesAll);
+
     } )
 
       await this.session
@@ -778,18 +778,16 @@ export default {
         };
           if (this.user.id == this.session.sessionId) {
             this.host = publisher;
-            console.log("호스트래");
-            console.log(this.session)
+
           } else if (this.position == "agree") {
 
             this.agree.push(sub);
-            console.log("찬성이래");
+
           } else if (this.position == "disagree") {
             this.disagree.push(sub);
-            console.log("반대래");
+
           }
-          console.log("Connected!!!");
-          console.log(this.session.connection)
+
           this.session.publish(publisher);
         })
         .catch(error => {
@@ -800,12 +798,6 @@ export default {
           );
         });
 
-      if (this.user.id == this.session.sessionId) {
-        console.log("you are host");
-      } else {
-        console.log("you are pannel");
-        console.log(this.agree);
-      }
       this.joinScreen();
       },
 
@@ -823,7 +815,7 @@ export default {
         };
             this.subscribersScreen.push(sub);
           }
-					console.log(this.subscribersScreen.length + "!!!!!!!!!!!!!!!!")
+
 			});
 
 			await this.getToken(this.session.sessionId).then(tokenScreen => {
@@ -910,9 +902,9 @@ export default {
 
 
 		publishScreenShare(){
-      console.log("들어오지");
+
 			let publisherScreen = this.OVScreen.initPublisher("container-screens", {videoSource: "screen"});
-      console.log("여기오냐?")
+
 			publisherScreen.once('accessAllowed', () => {
 		this.screensharing = true;
 		// It is very important to define what to do when the stream ends.
@@ -1051,7 +1043,7 @@ export default {
             this.rest = false
         },
         EmitRest(timeRest) {
-          console.log(timeRest)
+
             this.restModal = true
             this.callToMdModal = false
 
@@ -1064,7 +1056,7 @@ export default {
 
             document.getElementById("restTimerDemo").innerHTML = min + "분" + sec + "초";
             time--;
-            console.log('네')
+
             // if (time < 0) {
             //     clearInterval(z);
             // }
@@ -1082,7 +1074,7 @@ export default {
             this.timerTime = Array[0]*60
             this.timerTeam = Array[1]
             this.timeList = [this.timerTime, this.timerTeam]
-            console.log(this.timeList)
+        
             this.callToMdModal = false
             this.timerMin = Array[0]
         },
@@ -1123,7 +1115,6 @@ export default {
             }, 500);
             stripe.classList.add('animate');
             this.countingHeart += 1
-            console.log(this.countingHeart % 50)
             if(this.countingHeart % 50 === 0) {
                     this.propsHeart = this.countingHeart /50
                     this.animationBG = true
@@ -1144,7 +1135,6 @@ export default {
             }, 500);
             stripe.classList.add('animate');
             this.countingHeart += 1
-            console.log(this.countingHeart % 50)
             if(this.countingHeart % 50 === 0) {
                     this.propsHeart = this.countingHeart /50
                     this.animationBG = true
@@ -1298,8 +1288,7 @@ export default {
 
         //채팅 추가
         sendAllMessage(message){
-          console.log("메세지 배열에 삽입");
-          console.log(this.user.nnm)
+
           var messageData = {
             writer : this.user.nnm,
             content: message
@@ -1330,7 +1319,7 @@ export default {
               to : []
             })
           }
-            console.log("팀 메세지")
+
         },
 
         offCallModal() {
@@ -1338,17 +1327,7 @@ export default {
         },
         // Emit 함수를 하나로 하고 그 안에서 분기처리하기
         EmitcallModal(option) {
-            // const labels = ['menu', 'out', 'message', 'file'];
 
-            // for (let idx=0; idx < this.options.length; idx++) {
-            //      console.log(labels[idx], option, this.options[idx])
-            //     if (labels[idx] == option) {
-            //         this.options[idx] = true
-            //         console.log('여기를 왔는데 ?', labels[idx], this.options)
-            //     } else {
-            //         this.options[idx] = false
-            //     }
-            // }
             this.callToMdModal = !this.callToMdModal
 
             if (option == 'menu') {
@@ -1441,7 +1420,7 @@ export default {
           result.push(data[key])
         }
       })
-        console.log(result)
+
         return result;
     },
     async getDisagreePosition() {
@@ -1452,7 +1431,7 @@ export default {
           result.push(data[key])
         }
       })
-      console.log(result)
+
         return result.data;
     },
 
@@ -1462,33 +1441,32 @@ export default {
       let disagreeArr = [];
       await this.getAgreePosition().then((res) => { agreeArr = res});
       await this.getDisagreePosition().then((res) => { disagreeArr = res});
-      console.log(agreeArr)
-      console.log(disagreeArr)
+
       let temp = {
         connectionId : '',
       }
       if (status == 1) {
         for (var i in agreeArr) {
-          console.log(agreeArr[i])
+
           temp.connectionId = agreeArr[i]
           this.sendAudioSignal('On', temp)
         }
         for (var j in disagreeArr) {
           //this.sendAudioSignal('Off', disagreeArr[j])
-          console.log(disagreeArr[j])
+
           temp.connectionId = disagreeArr[j]
           this.sendAudioSignal('Off', temp)
         }
       } else if (status == 0) {
         for (var k in agreeArr) {
           //this.sendAudioSignal('Off', agreeArr[k])
-          console.log(agreeArr[k])
+
           temp.connectionId = agreeArr[k]
           this.sendAudioSignal('Off', temp)
         }
         for (var z in disagreeArr) {
           //this.sendAudioSignal('On', disagreeArr[z])
-          console.log(disagreeArr[z])
+
           temp.connectionId = disagreeArr[z]
           this.sendAudioSignal('On', temp)
         }
@@ -1510,7 +1488,7 @@ export default {
       for (var i in this.disagree) {
         this.pannelList.push(this.disagree[i].nnm)
       }
-      console.log("-----------" + this.pannelList)
+
       this.$store.dispatch("voteStart", this.session.sessionId)
       this.session.signal({
         data : this.pannelList.toString(),

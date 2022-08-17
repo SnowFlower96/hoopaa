@@ -78,7 +78,6 @@ export default {
             this.$emit('close-chat')
         },
         clickSendMessages(){
-          console.log("메세지 보내기");
           this.$emit('chat-team', this.message)
           this.message=''
         }

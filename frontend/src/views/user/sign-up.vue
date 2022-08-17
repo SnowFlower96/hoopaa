@@ -77,7 +77,7 @@ export default {
 
     checkPwd () {
       this.samePwd = true;
-      console.log(this.pwd1, this.pwd2)
+
       if (this.pwd1 == this.pwd2) {
         this.samePwd = true;
       } else {
@@ -105,7 +105,7 @@ export default {
         nnm : this.nnm,
         pwd : this.pwd1
       }
-      console.log(this.email)
+  
       if(this.samePwd && this.availableEmail && this.availableEmailForm && this.availableNickName) {
         this.$store.dispatch("signUp",data);
       } else {
