@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @Setter
 @ApiModel("RoomResponse")
 public class RoomRes extends BaseResponseBody {
+
     Long id;
-    Long host_id;
-    int is_sys;
+    String host_id;
     String thumb_url;
     int phase;
     int max_num;
@@ -28,12 +28,11 @@ public class RoomRes extends BaseResponseBody {
         res.setStatusCode(statusCode);
         res.setMessage(message);
         res.setId(roomInfoDto.getId());
-        res.setHost_id(roomInfoDto.getHostId());
-        res.setIs_sys(roomInfoDto.getIsSys());
+        res.setHost_id(roomInfoDto.getHostID());
         res.setThumb_url(roomInfoDto.getThumbUrl());
         res.setPhase(roomInfoDto.getPhase());
         res.setMax_num(roomInfoDto.getMaxNum());
-//        res.setCur_num(roomInfoDto.getCurNum());
+        res.setCur_num(roomInfoDto.getCurNum());
         res.setStart_time(roomInfoDto.getStartTime());
         res.setTitle(roomInfoDto.getTitle());
         res.setSubtitle(roomInfoDto.getSubtitle());

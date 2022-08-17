@@ -1,7 +1,7 @@
 <template>
     <div class="debate-room-footer-container">
-        <div @click="callModalFile" class="file-btn footer-btn">F</div>
-        <div @click="callModalMessage" class="message-btn footer-btn">M</div>
+        <div @click="callModalFile" class="file-btn footer-btn"><i class="fas fa-desktop"></i></div>
+        <div @click="callModalMessage" class="message-btn footer-btn"><i class="fas fa-envelope"></i></div>
     </div>
 </template>
 
@@ -37,17 +37,17 @@ export default {
     color: black;
 }
 .file-btn {
-    outline: tomato solid 1px;
-    color: tomato;
+    outline: white solid 1px;
+    color: white;
 }
 .file-btn:hover {
-    background-color: tomato;
+    background-color: white;
 }
 .message-btn {
-    outline: rgb(80, 255, 71) solid 1px;
-    color: rgb(80, 255, 71);
+    outline: white solid 1px;
+    color: white;
 }
 .message-btn:hover {
-    background-color: rgb(80, 255, 71);
+    background-color: white;
 }
 </style>

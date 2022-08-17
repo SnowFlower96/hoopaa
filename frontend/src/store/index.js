@@ -14,14 +14,27 @@ export default new Vuex.Store({
     isLogin: false,
     userHistory : '',
     userStat : '',
-    userInfo : '',
     roomList : [],
     headerVisible: true,
     tempToken : '',
     user : [],
+    position : '',
   },
 
   mutations : {
+    // State 초기화
+    RESET_STATE(state) {
+
+        state.isLogin = false;
+        state.userHistory = '';
+        state.userStat = '';
+        state.roomList = [];
+        state.headerVisible = true;
+        state.tempToken = '';
+        state.user = [];
+        state.position = '';
+
+    },
     // 방 리스트 불러오기
     GET_ROOM_LIST(state, data) {
 
@@ -47,13 +60,12 @@ export default new Vuex.Store({
     USER_STAT(state, data) {
       state.userStat = JSON.parse(data);
     },
-    USER_INFO(state, data) {
-      state.userInfo = JSON.parse(data);
-    },
     CREATE_TEMP_TOKEN(state, data) {
       state.tempToken = data;
     },
-
+    SET_POSITION(state, data) {
+      state.position = data;
+    }
   },
 
   actions : {
@@ -128,7 +140,6 @@ export default new Vuex.Store({
         url : `/users/history`,
         method : "GET"
       }).then((res) => {
-        console.log(res.data.json)
         commit("USER_HISTORY",res.data.json);
       })
      },
@@ -149,7 +160,8 @@ export default new Vuex.Store({
         url : `/users/info`,
         method : "GET"
       }).then((res) => {
-        commit("USER_INFO",res.data);
+        console.log(res.data)
+        commit("USER_INFO",res.data.json);
       })
      },
 
@@ -157,7 +169,7 @@ export default new Vuex.Store({
       putUserStat({commit},data) {
       api({
         headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
-        url : `/users/stat`,
+        url : `/users/info`,
         method : "PUT",
         data : data,
       }).then((res) => {
@@ -211,17 +223,16 @@ export default new Vuex.Store({
 
     // 유저 비밀번호 확인
     checkPwd({commit}, data) {
-      return new Promise((reject) => {
       api({
         headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/verify`,
         method : "POST",
         data : data,
       }).then((res) => {
-        console.log(res)
         let query = window.location.search;
         let param = new URLSearchParams(query);
         let loc = param.get('loc');
+
         if (loc == 'info') {
           router.push('/myPage/info')
         } else {
@@ -239,7 +250,6 @@ export default new Vuex.Store({
         } else {
           router.push('/checkPwd?loc=reSign')
         }
-      })
     })
   },
 
@@ -272,4 +282,57 @@ export default new Vuex.Store({
       router.push("/participatingPage")
     })
   },
-}})
+  makeSessionRoom({commit}, index) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : index,
+      method : "POST",
+    }).then((res) => {
+      resolve(res);
+      commit();
+    }).catch((error) => {
+      reject(error);
+    })
+  })
+},
+  getConnectionAgree({commit}, sessionId) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/connections/agree?sessionID=' + sessionId ,
+      method : "GET",
+    }).then((res) => {
+      resolve(res);
+      commit();
+    }).catch((error) => {
+      reject(error);
+    })
+  })
+  },
+  getConnectionDisagree({commit}, sessionId) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/connections/disagree?sessionID=' + sessionId ,
+      method : "GET",
+    }).then((res) => {
+      resolve(res);
+      commit();
+    }).catch((error) => {
+      reject(error);
+    })
+  })
+  },
+  setPosition({commit}, index) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : index,
+      method : "POST",
+    }).then((res) => {
+      console.log(res.data)
+      // commit();
+    })
+  }
+}
+})

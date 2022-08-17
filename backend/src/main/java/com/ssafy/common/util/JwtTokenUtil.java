@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,9 +12,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * jwt 토큰 유틸 정의.
@@ -33,7 +29,7 @@ public class JwtTokenUtil {
 
     @Autowired
     public JwtTokenUtil(@Value("${jwt.accessSecret}") String accessSecretKey, @Value("${jwt.accessExpiration}") Integer accessExpirationTime,
-                        @Value("${jwt.refreshSecret}") String refreshSecretKey, @Value("${jwt.refreshExpiration}") Long refreshExpirationTime            ) {
+                        @Value("${jwt.refreshSecret}") String refreshSecretKey, @Value("${jwt.refreshExpiration}") Long refreshExpirationTime) {
         this.accessSecretKey = accessSecretKey;
         this.accessExpirationTime = accessExpirationTime;
         this.refreshSecretKey = refreshSecretKey;
@@ -95,6 +91,7 @@ public class JwtTokenUtil {
         Date now = new Date();
         return new Date(now.getTime() + expirationTime);
     }
+
     public static Date getTokenExpiration(long expirationTime) {
         Date now = new Date();
         return new Date(now.getTime() + expirationTime);
@@ -152,4 +149,5 @@ public class JwtTokenUtil {
             throw ex;
         }
     }
+
 }

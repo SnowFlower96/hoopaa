@@ -10,13 +10,14 @@ import lombok.ToString;
 @ApiModel("UserInfoDto")
 public class UserInfoDto {
 
-    Long id;
+    String id;
     String em;
     String nnm;
 
     public UserInfoDto(User user) {
-        this.id = user.getId();
+        this.id = String.valueOf(user.getId());
         this.em = user.getEm();
         this.nnm = user.getNnm();
     }
+
 }

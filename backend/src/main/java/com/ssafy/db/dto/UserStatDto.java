@@ -30,4 +30,5 @@ public class UserStatDto {
         this.penalty = userStat.getPenalty();
         this.king = userStat.getKing();
     }
+
 }

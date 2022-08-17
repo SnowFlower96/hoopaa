@@ -26,12 +26,13 @@ public class UserHistory {
     RoomInfo roomInfo;
 
     @Builder
-    public UserHistory(Long id, Long userId, Long roomId, boolean isHost, boolean is_king, int userPos) {
+    public UserHistory(Long id, Long userId, Long roomId, boolean isHost, boolean isKing, int userPos) {
         this.id = id;
         this.userId = userId;
         this.roomId = roomId;
         this.isHost = isHost;
-        this.isKing = is_king;
+        this.isKing = isKing;
         this.userPos = userPos;
     }
+
 }

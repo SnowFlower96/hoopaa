@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class RoomCloseReq {
+
     @ApiModelProperty(name = "방 id", example = "1")
     Long id;
 
@@ -26,7 +27,5 @@ public class RoomCloseReq {
 
     @ApiModelProperty(name = "방 패스워드", example = "abcd")
     int invalid;
-
-
 
 }

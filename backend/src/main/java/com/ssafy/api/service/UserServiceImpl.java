@@ -1,6 +1,6 @@
 package com.ssafy.api.service;
 
-import com.ssafy.common.data.UserDupl;
+import com.ssafy.db.dto.UserDupl;
 import com.ssafy.common.util.MailUtil;
 import com.ssafy.db.dto.UserHistoryDto;
 import com.ssafy.db.dto.UserInfoDto;
@@ -20,15 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
  */
 @Service("userService")
 public class UserServiceImpl implements UserService {
+
     @Autowired
     UserRepository userRepository;
 
@@ -45,6 +44,11 @@ public class UserServiceImpl implements UserService {
     JavaMailSender mailSender;
 
     @Override
+    public boolean isUser(String AToken) {
+        return AToken.chars().allMatch(Character::isDigit);
+    }
+
+    @Override
     @Transactional
     public UserDupl createUser(UserRegisterPostReq userRegisterInfo) {
         UserDupl userDupl = new UserDupl();
@@ -59,7 +63,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
 
-        userRepository.save(user); //user table에 삽입
+        userRepository.save(user); // user table 에 삽입
 
         UserStat userStat = UserStat.builder().id(user.getId()).build();
         userStatRepository.save(userStat);
@@ -70,14 +74,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         // 디비에 유저 정보 조회 (userId 를 통한 조회).
-        User user = userRepository.findUserById(id).get();
-        return user;
+        Optional<User> user = userRepository.findUserById(id);
+        return user.orElse(null);
     }
 
     @Override
     public User getUserByEm(String em) {
-        User user = userRepository.findUserByEm(em).get();
-        return user;
+        Optional<User> user = userRepository.findUserByEm(em);
+        return user.orElse(null);
     }
 
     @Override
@@ -146,7 +150,7 @@ public class UserServiceImpl implements UserService {
     public List<UserHistoryDto> getUserHistoryById(Long id) {
         List<UserHistory> userHistoryList = userHistoryRepository.findUserHistoryByUserId(id).get();
         List<UserHistoryDto> userHistoryDtoList = new ArrayList<>();
-        for(UserHistory u : userHistoryList) {
+        for (UserHistory u : userHistoryList) {
             userHistoryDtoList.add(new UserHistoryDto(u));
         }
         return userHistoryDtoList;
@@ -162,12 +166,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendAuthMail(User user) throws Exception{
+    public void sendAuthMail(User user) throws Exception {
 
         MailUtil sendMail = new MailUtil(mailSender);
         sendMail.setSubject("[HooPaa 회원가입 서비스 이메일 인증 입니다.]");
         sendMail.setText(new StringBuffer().append("<h1>HooPaa 가입 메일인증 입니다</h1>")
-                        .append("<p> <img src='cid:logo2' style='width:300px'; ></p>")
+                .append("<p> <img src='cid:logo2' style='width:300px'; ></p>")
                 .append("<a href='http://3.38.181.187/login?em=")
                 .append(user.getEm())//.append("&key=").append(key)
                 .append("' target='_blenk'>가입 완료를 위해 이곳을 눌러주세요</a>").toString());

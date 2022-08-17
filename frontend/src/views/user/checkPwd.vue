@@ -14,9 +14,8 @@
     </div>
     </div>
 </template>
+
 <script>
-import { useRouter } from 'vue-router'
-import { mapState } from 'vuex';
 export default {
   name: 'checkPwd',
    data () {
@@ -29,7 +28,7 @@ export default {
       var data = {
         pwd : this.checkPwd,
       }
-      this.$store.dispatch("checkPwd", data)
+      this.$store.dispatch("checkPwd", this.checkPwd)
     }
    }
   }

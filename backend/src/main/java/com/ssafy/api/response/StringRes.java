@@ -13,7 +13,8 @@ import lombok.Setter;
 @Setter
 @ApiModel("StringResponse")
 public class StringRes extends BaseResponseBody {
-    @ApiModelProperty(name="String")
+
+    @ApiModelProperty(name = "String")
     String response;
 
     public static StringRes of(Integer statusCode, String message, String str) {

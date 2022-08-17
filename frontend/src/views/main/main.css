@@ -28,9 +28,11 @@
   height: calc(100% - 195px);
 }
 
-.el-row.main-footer {
-  z-index: -1;
+.main-footer {
+  z-index: 250 !important;
+  background-color: white;
   margin-left: 0 !important;
   margin-right: 0 !important;
   border-top: 1px solid #dcdfe6;
+  background-color: white;
 }

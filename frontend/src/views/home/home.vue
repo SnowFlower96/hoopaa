@@ -1,6 +1,32 @@
 <template>
   <!-- <div> -->
     <div>
+      <div class="home-modal-wrap displayFlex" v-if="homeCheckInModal">
+        <div class="home-check-in">
+            <div style="display: flex; justify-content: end;" @click="offModal"><i class="fas fa-times"></i></div>
+          <div class="home-check-in-inner displayFlex">
+            <div style="text-align:center;">
+              <div v-if="ppSet">
+                <div style="font-size:30px;">참여 설정</div>
+                <div class="displayFlex">
+                  <router-link to="/login" style=text-decoration:none;><div class="home-modal-btn displayFlex">로그인</div></router-link>
+                  <div class="home-modal-btn displayFlex" @click="changePpSet">비회원</div>
+                </div>
+              </div>
+              <div class="pp-set" v-if="!ppSet">
+                <div style="font-size:30px;">비회원 참여</div>
+                <div class="displayFlex pp-set-inner">
+                  <div>닉네임 입력</div>
+                  <input type="text">
+                </div>
+                <div class="displayFlex">
+                  <router-link to="/debateRoom" style=text-decoration:none;><div class="home-modal-btn displayFlex">참여</div></router-link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="list-page-black-space"></div>
       <search></search>
       <div class="left-main-wrap">
@@ -8,7 +34,6 @@
 
           <div class="left">
             <ul>
-              <div id="logo">카테고리</div>
               <li v-for="(item, index) in menus" :key="index" @click="goCate(item.path)">
                 <div class="cate-li-div-container">{{item.name}}</div>
               </li>
@@ -21,7 +46,7 @@
                 <div class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
-                    <div class="carosel-room-card">
+                    <div class="carosel-room-card" @click="gotoRoom">
                       <div class="room-info-carosel" :style="customCaroselStyle">
                         <p class="room-phase-tip">{{phase[room.phase]}}</p>
                         <p id="title-carosel">{{room.title}}</p>
@@ -57,7 +82,7 @@
 
                 <!-- <div class="list">여기가 기본 all, 총 방 갯수 : {{roomList.length}}</div> -->
                 <ul class="room-ul">
-                  <li v-for="(indexOut) in (roomList.length/4-1)" :key="indexOut">
+                  <li v-for="(indexOut) in (roomList.length/4)" :key="indexOut">
                     <ul class="card-container-ul">
                       <li v-for="(indexIn) in 4" :key="indexIn">
                       <div class="room-card">
@@ -78,7 +103,52 @@
 </template>
 
 <style>
-
+.pp-set-inner > input {
+  margin: 10px;
+}
+.pp-set-inner {
+  margin-top: 10px;
+}
+.home-modal-btn {
+  margin: 20px;
+  padding: 10px;
+  outline: 1px solid #d4b4ff;
+  width:60px;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px 1px #9747ff9f;
+  background-color: #9747ffa8;
+  color: white;
+}
+.home-modal-btn:hover {
+  cursor: pointer;
+  background-color: #9747FF;
+}
+.home-modal-btn:active {
+  cursor: pointer;
+  box-shadow: 0px 0px 0px 0px #9747ff9f;
+}
+.fa-times:hover {
+  cursor: pointer;
+}
+.home-check-in-inner {
+  width: 100%;
+  height: 90%;
+}
+.home-modal-wrap {
+  z-index: 5;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.home-check-in{
+  padding: 10px;
+  width: 350px;
+  height: 200px;
+  background-color: whitesmoke;
+  outline: 1px rgb(153, 153, 153) solid;
+  border-radius: 10px;
+  box-shadow: 3px 10px 10px 3px  rgba(0, 0, 0, 0.589);
+}
 .list-page-black-space {
   height: 61px;
 }
@@ -174,10 +244,12 @@ ul {
 }
 .room-info-carosel:hover {
   background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+  cursor: pointer;
   /* filter: brightness(80%);
   transition: filter .3s; */
 }
 .room-info-carosel:hover #title-carosel {
+  cursor: pointer;
   opacity: 100%;
   color: white;
 }
@@ -239,9 +311,11 @@ ul {
   width: var(--carosel-item-width);
 }
 .room-info:hover {
+  cursor: pointer;
   background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('../../assets/images/room.jpg');
 }
 .room-info:hover #title-room {
+  cursor: pointer;
   opacity: 100%;
   color: white;
 }
@@ -261,7 +335,7 @@ ul {
 import Search from '@/views/common/search'
 import Conference from './components/conference'
 import 'vue3-carousel/dist/carousel.css';
-import { mapState , mapMutations} from "vuex";
+// import { mapState , mapMutations} from "vuex";
 
 
 export default {
@@ -282,11 +356,23 @@ export default {
       caroselWidth: '',
       caroselHeight: '',
       caoselWrapperOverTF: false,
-      dropdownSortTF: false
+      dropdownSortTF: false,
+      homeCheckInModal : false,
+      ppSet: true,
+      //  - - - - - - 여기고침 - - - - - -  ⬇//
+      // 0815 곧 지울
+      roomList : [
+        {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
+        {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
+        {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
+        ],
+      // // 0815 곧 지울
+      viewCaroselLenghth : 4
+      //  - - - - - - 여기고침 - - - - - -  ⬆//
     }
   },
   computed : {
-    ...mapState(["roomList"]),
+    // ...mapState(["roomList"]),
     customCaroselStyle() {
       return {
         "--carosel-item-width": this.caroselWidth,
@@ -300,13 +386,21 @@ export default {
       console.log(to)
     }
   },
+ //  - - - - - - 여기고침 - - - - - -  ⬇//
   mounted() {
-    this.clickCaroselNext = setInterval(this.next, 5000)
+    if (this.roomList.length < 8) {
+      const ceroselLet = this.roomList.length
+      for(let i = 1; i < 9-ceroselLet; i++) {
+        this.roomList.push({phase: '', title: '', subtitle: ''})
+      }
+    }
+    this.clickCaroselNext = setInterval(this.next, 3000)
     const value = document.body.clientWidth*0.8*0.25
     this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
     this.caroselHeight = `${(value-20)*0.62}px`
     window.addEventListener('resize', this.handleResizeHome);
   },
+//  - - - - - - 여기고침 - - - - - -  ⬆//
   beforeRouteLeave() {
     clearInterval(this.clickCaroselNext)
   },
@@ -316,7 +410,17 @@ export default {
     this.menus = menuData;
   },
    methods: {
-    ...mapMutations(["GET_ROOM_LIST"]),
+    // ...mapMutations(["GET_ROOM_LIST"]),
+    changePpSet() {
+      this.ppSet = false
+    },
+    offModal() {
+      this.homeCheckInModal = false
+      this.ppSet = true
+    },
+    gotoRoom() {
+      this.homeCheckInModal = true
+    },
     goCate(index)  {
       this.checkbox = false;
       this.$store.dispatch("getRoomInfoCate", index);
@@ -372,7 +476,7 @@ export default {
     } else {
       this.data = JSON.stringify(this.data)
       this.GET_ROOM_LIST(this.data);
-     
+
     }
     },
 
@@ -383,9 +487,10 @@ export default {
       const value = document.body.clientWidth*0.8*0.25
       carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
     },
+    //  - - - - - - 여기고침 - - - - - -  ⬇//
     next() {
         const carousel = document.querySelector('.carousel-ul');
-        if (this.c_index === 10) {
+        if (this.c_index === this.viewCaroselLenghth) {
           carousel.style.transform = `translate3d(0, 0, 0)`;
           this.c_index = 0
         } else {
@@ -394,6 +499,7 @@ export default {
           carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
         }
     }
+    //  - - - - - - 여기고침 - - - - - -  ⬆//
   }
   // setup () {
   //   const router = useRouter()

@@ -11,6 +11,7 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserStat {
+
     @Id
     Long id;
 
@@ -39,4 +40,5 @@ public class UserStat {
         this.penalty = penalty;
         this.king = king;
     }
+
 }
