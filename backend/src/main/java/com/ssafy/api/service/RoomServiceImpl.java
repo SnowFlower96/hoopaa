@@ -633,30 +633,31 @@ public class RoomServiceImpl implements RoomService {
         }
 
         for (String key : this.mapRooms.keySet()) {
-//            if (!activeSessions.containsKey(key)) {
-//                this.mapRooms.remove(key);
-//            } else {
-//                VRoom vRoom = mapRooms.get(key);
-//
-//                vRoom.setSession(activeSessions.get(key));  // 세션 정보 갱신
-//                List<Connection> connectionList = activeSessions.get(key).getActiveConnections();
-//                for (Connection conn : connectionList) {
-//                    for (String id : vRoom.getMapParticipants().keySet()) {
-//                        if (vRoom.getMapParticipants().get(id).getConnectionDto().getConnectionId().equals(conn.getConnectionId())) {
-//                            // Connection 정보 갱신
-//                            vRoom.getMapParticipants().get(id).setConnectionDto(new ConnectionDto(conn));
-//                            break;
-//                        }
-//                    }
-//                }
-//                vRoom.getRoomInfoDto().setCurNum(connectionList.size());
-//
-//                // DB 저장
-//                RoomInfo roomInfo = roomInfoRepository.findRoomInfoById(vRoom.getRoomInfoDto().getId()).get();
-//                roomInfo.setCurNum(vRoom.getRoomInfoDto().getCurNum());
-//                roomInfo.setPhase(vRoom.getRoomInfoDto().getPhase());
-//                roomInfoRepository.save(roomInfo);
-//            }
+            if (!key.chars().allMatch(Character::isDigit)) continue;
+            if (!activeSessions.containsKey(key)) {
+                this.mapRooms.remove(key);
+            } else {
+                VRoom vRoom = mapRooms.get(key);
+
+                vRoom.setSession(activeSessions.get(key));  // 세션 정보 갱신
+                List<Connection> connectionList = activeSessions.get(key).getActiveConnections();
+                for (Connection conn : connectionList) {
+                    for (String id : vRoom.getMapParticipants().keySet()) {
+                        if (vRoom.getMapParticipants().get(id).getConnectionDto().getConnectionId().equals(conn.getConnectionId())) {
+                            // Connection 정보 갱신
+                            vRoom.getMapParticipants().get(id).setConnectionDto(new ConnectionDto(conn));
+                            break;
+                        }
+                    }
+                }
+                vRoom.getRoomInfoDto().setCurNum(connectionList.size());
+
+                // DB 저장
+                RoomInfo roomInfo = roomInfoRepository.findRoomInfoById(vRoom.getRoomInfoDto().getId()).get();
+                roomInfo.setCurNum(vRoom.getRoomInfoDto().getCurNum());
+                roomInfo.setPhase(vRoom.getRoomInfoDto().getPhase());
+                roomInfoRepository.save(roomInfo);
+            }
         }
     }
 
