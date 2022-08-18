@@ -265,7 +265,7 @@
         <!-- 사회자 footer에서 나오는 메뉴 -->
 
 
-            <div class="leave-session displayFlex" @click="leaveSession">토론 나가기</div>
+            <div class="leave-session displayFlex" @click="leaveSessionButton">토론 나가기</div>
         <!-- footer -->
             <div class="debate-room-footer-class">
                 <footer-team
@@ -720,7 +720,7 @@ export default {
         }
 
       });
- 
+
       // On every asynchronous exception...
       this.session.on("exception", ({ exception }) => {
 
@@ -1694,6 +1694,12 @@ export default {
         to : [],
         type : 'Unpublish-Screen'
       })
+    },
+
+    // 나가기 버튼
+    leaveSessionButton() {
+      this.leaveSession();
+      this.$router.push('/')
     }
     }
   }
