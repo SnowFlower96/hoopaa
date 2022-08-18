@@ -260,6 +260,27 @@ public class RoomController {
         }
     }
 
+    @GetMapping("/panels")
+    @ApiOperation(value = "패널 닉네임 조회", notes = "토론방의 모든 패널 닉네임 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "해당 세션 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> getPanelNickname(@ApiIgnore Authentication authentication) throws JsonProcessingException {
+        SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
+        String AToken = ssafyUserDetails.getUsername();
+
+        // 해당 세션이 존재하지 않으면
+        if (!roomService.isExistRoom(AToken))
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
+
+        Map<String, String> mapPanels = roomService.getPanelNicknames(AToken);
+        String json = mapper.writeValueAsString(mapPanels);
+
+        return ResponseEntity.status(200).body(JsonRes.of(200, "Success", json));
+    }
+
     @GetMapping("/connections/agree")
     @ApiOperation(value = "패널 커넥션 ID 조회", notes = "토론방의 찬성 측 커넥션 이름 반환")
     @ApiResponses({
