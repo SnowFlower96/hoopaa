@@ -632,6 +632,7 @@ export default {
       userPenalty() {
         this.callToMdModal = true
         this.penaltyView = true
+        this.viewCodeMd = false
         this.menu = false
         this.out = false
         this.message = false
@@ -1171,6 +1172,7 @@ export default {
         messageFromTeam() {
             this.callToMdModal = !this.callToMdModal
             this.messageFrom = !this.messageFrom
+            this.viewCodeMd = false
             this.menu = false
             this.out = false
             this.message = false
@@ -1507,6 +1509,7 @@ export default {
                 this.file = false
                 this.rest = false
                 this.messageFrom = false
+                this.viewCodeMd = false
             }
             else if (option == 'out') {
                 this.menu = false
@@ -1515,6 +1518,7 @@ export default {
                 this.file = false
                 this.rest = false
                 this.messageFrom = false
+                this.viewCodeMd = false
                 this.makeList();
             }
             else if (option == 'message') {
@@ -1524,6 +1528,7 @@ export default {
                 this.file = false
                 this.rest = false
                 this.messageFrom = false
+                this.viewCodeMd = false
             }
             else if (option == 'file') {
                 this.menu = false
@@ -1532,6 +1537,7 @@ export default {
                 this.file = true
                 this.rest = false
                 this.messageFrom = false
+                this.viewCodeMd = false
             }
             else if (option == 'rest') {
                 this.animationBG = !this.animationBG
@@ -1544,6 +1550,7 @@ export default {
                 this.startEvent = false
                 this.heartTen = false
                 this.heartfift = false
+                this.viewCodeMd = false
                 this.heartHund = false
                 this.restEvent = !this.restEvent
             }
