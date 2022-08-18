@@ -258,7 +258,7 @@
 
         <!-- 사회자 footer에서 나오는 메뉴 -->
             <div class="moderator-menus" v-if="modMenu && moderator" :style="customCaroselStyle">
-                <p @click="modMutecontrol">전체 음소거</p>
+                <p @click="muteAll">전체 음소거</p>
                 <p @click="viewCode">입장코드 확인</p>
                 <p @click="EmitcallModal('menu')">패널 발언권 부여</p>
                 <p @click="EmitcallModal('rest')">쉬는시간 부여</p>
@@ -283,8 +283,8 @@
 
                 <footer-all
                 v-if="footerAll"
-                @rising-heart="risingHeart"
-                @clap-anime="clapAnime"
+                @rising-heart="sendAnimeHeart"
+                @clap-anime="sendAnimeClap"
                 ></footer-all>
 
                 <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
@@ -612,9 +612,7 @@ export default {
         window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
-      modMutecontrol(){
-        this.modMenu = false
-      },
+
       viewCode() {
         this.modMenu = false
         this.callToMdModal = true
@@ -809,6 +807,12 @@ export default {
         }
       })
 
+      this.session.on('signal:Anime-Heart', (event) => {
+        this.risingHeart();
+      })
+      this.session.on('signal:Anime-Clap', (event) => {
+        this.clapAnime();
+      })
     // 휴식 애니메이션
       this.session.on('signal:Rest-Time', (event) => {
         if (this.position == 'audience') {
@@ -1733,6 +1737,23 @@ export default {
         data : 'all',
         to : [],
         type : 'Mute-All'
+      })
+      this.modMenu = false
+    },
+
+    //호응 시그널
+    sendAnimeHeart() {
+      this.session.signal({
+        data : 'heart',
+        to : [],
+        type : 'Anime-Heart'
+      })
+    },
+    sendAnimeClap() {
+      this.session.signal({
+        data : 'clap',
+        to : [],
+        type : 'Anime-Clap'
       })
     }
     }
