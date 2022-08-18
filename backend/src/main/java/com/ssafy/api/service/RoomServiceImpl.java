@@ -299,7 +299,7 @@ public class RoomServiceImpl implements RoomService {
         Map<String, Map<String, String>> mapTokens = new ConcurrentHashMap<>();
         // 찬성측
         for (VUserInfo vUserInfo : vRoom.getAgree()) {
-            if (vUserInfo.getConnectionDto().getConnectionId() == null || (mapDisagree.containsKey(vUserInfo.getId()) && mapDisagree.get(vUserInfo.getId()) == null)) continue;
+            if (vUserInfo == null) continue;
             Map<String, String> map = new HashMap<>();
             map.put("connectionID", vUserInfo.getConnectionDto().getConnectionId());
             map.put("token", mapAgree.get(vUserInfo.getId()).getToken());
@@ -307,7 +307,7 @@ public class RoomServiceImpl implements RoomService {
         }
         // 반대측
         for (VUserInfo vUserInfo : vRoom.getDisagree()) {
-            if (vUserInfo.getConnectionDto().getConnectionId() == null || (mapDisagree.containsKey(vUserInfo.getId()) && mapDisagree.get(vUserInfo.getId()) == null)) continue;
+            if (vUserInfo == null) continue;
             Map<String, String> map = new HashMap<>();
             map.put("connectionID", vUserInfo.getConnectionDto().getConnectionId());
             map.put("token", mapDisagree.get(vUserInfo.getId()).getToken());
@@ -702,9 +702,11 @@ public class RoomServiceImpl implements RoomService {
         for (String key : mapRooms.keySet()) {
             Map<String, String> temp = new HashMap<>();
             for (VUserInfo vUserInfo : mapRooms.get(key).getAgree()) {
+                if (vUserInfo == null) continue;
                 temp.put("agree", vUserInfo.toString());
             }
             for (VUserInfo vUserInfo : mapRooms.get(key).getDisagree()) {
+                if (vUserInfo == null) continue;
                 temp.put("disagree", vUserInfo.toString());
             }
             result.put(key, temp);
