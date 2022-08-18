@@ -181,7 +181,7 @@
 <!-------------------------------------------- 여기가 토론방 비디오 들어가는 부분 ------------------------------------------->
                               <!-- 토론방 왼쪽 -->
                                 <div class="videobox-side" :style="customCaroselStyle">
-                                    <div class="vsi-blank"></div>
+                                    <div class="vsi-blank displayFlex" style="color:white; font-size:30px;">찬성측</div>
                                     <div class="vsi-wrap">
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
                                         <!-- <debate-room-video v-for="(item, index) in agree" :key="index" :stream="item.data" class="debate-room-side-vido"></debate-room-video> -->
@@ -227,7 +227,7 @@
 
                               <!-- 토론방 오른쪽 -->
                                 <div class="videobox-side" :style="customCaroselStyle">
-                                    <div class="vsi-blank"></div>
+                                    <div class="vsi-blank displayFlex" style="color:white; font-size:30px;">반대측</div>
                                     <div class="vsi-wrap">
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
                                         <!-- <debate-room-video v-for="(item, index) in disagree" :key="index" :stream="item.data" class="debate-room-side-vido"></debate-room-video> -->
@@ -269,24 +269,22 @@
             <div class="leave-session displayFlex" @click="leaveSessionButton">토론 나가기</div>
         <!-- footer -->
             <div class="debate-room-footer-class">
-                <!-- v-if="footerTeam" -->
-                <!-- <footer-team
-                v-if="true"
+                <footer-team
+                v-if="footerTeam"
                 @call-modal="EmitcallModal"
-                ></footer-team> -->
+                ></footer-team>
 
-                <!-- v-if="footerModerator" -->
                 <footer-moderator
-                v-if="true"
+                v-if="footerModerator"
                 @call-modal="EmitcallModal"
                 @mod-menu="openCloseModMenu"
                 ></footer-moderator>
 
-                <!-- <footer-all
+                <footer-all
                 v-if="footerAll"
                 @rising-heart="sendAnimeHeart"
                 @clap-anime="sendAnimeClap"
-                ></footer-all> -->
+                ></footer-all>
 
                 <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
             </div>

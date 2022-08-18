@@ -22,6 +22,7 @@
             </div>
         </div>
     </div>
+    <button @click="dlfj">sdf</button>
     <div id="resultWrap" class="graphWrap">
         <p class="result-title">토론 결과</p>
 
@@ -56,6 +57,16 @@ export default {
         this.endSound.play();
     },
     methods: {
+        dlfj(){
+            let element = document.getElementById("resultWrap");
+            element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+            const total = this.agree + this.disagree
+            document.getElementById("barChart").style.height = (this.agree/total)*570 + "px";
+            document.getElementById("chartValue").innerText = Math.round(this.agree);
+
+            document.getElementById("barChart2").style.height = (this.disagree/total)*570 + "px";
+            document.getElementById("chartValue2").innerText = Math.round(this.disagree);
+        },
         async resultBtn() {
             const clap = new Audio("https://drive.google.com/uc?export=download&id=13AIGF6JIkbdiO5WYS2YhB-g4Y-5Ub6iE");
             clap.play();
