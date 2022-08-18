@@ -40,8 +40,6 @@ services:
       - spring
     networks:
       - my_network
-    extra_hosts:
-			- "host.docker,internal:host-gateway"
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
   certbot:
     image: certbot/certbot
