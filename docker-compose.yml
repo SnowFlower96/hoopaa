@@ -5,28 +5,26 @@ services:
     build: DB
     container_name: db
     restart: always
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ssafy
       TZ: "Asia/Seoul"
-    expose:
-      - "3306"
     networks:
       - my_network
-
   spring:
     build: backend
     container_name: spring
     restart: always
+    expose:
+      - "8080"
     environment:
       TZ: "Asia/Seoul"
       SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/debate?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true"
-    expose:
-      - "8080"
     depends_on:
       - db
     networks:
       - my_network
-
   nginx:
     build: frontend
     container_name: nginx
@@ -38,13 +36,11 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    depends_on:
+      - spring
     networks:
       - my_network
-    logging:
-      options:
-        max-size: "${DOCKER_LOGS_MAX_SIZE:-100M}"
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
-
   certbot:
     image: certbot/certbot
     container_name: certbot

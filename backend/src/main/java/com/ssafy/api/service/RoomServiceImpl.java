@@ -223,7 +223,7 @@ public class RoomServiceImpl implements RoomService {
 
             // 방 정보에 UserInfo 추가
             VUserInfo vUserInfo = VUserInfo.builder()
-                    .id(userInfoDto.getId()).em(userInfoDto.getEm()).em(userInfoDto.getEm())
+                    .id(userInfoDto.getId()).em(userInfoDto.getEm()).nnm(userInfoDto.getNnm())
                     .build();
             vRoom.getMapParticipants().put(userInfoDto.getId(), vUserInfo);
             vRoom.getMapParticipants().get(userInfoDto.getId()).setConnectionDto(new ConnectionDto(connection));
@@ -377,6 +377,21 @@ public class RoomServiceImpl implements RoomService {
         }
 
         return connections;
+    }
+
+    @Override
+    public Map<String, String> getPanelNicknames(String sessionID) {
+        VRoom vRoom = this.mapRooms.get(sessionID);
+        Map<String, String> mapPanels = new HashMap<>();
+        // 찬성측
+        for (VUserInfo VUserInfo : vRoom.getAgree()) {
+            mapPanels.put(VUserInfo.getId(), VUserInfo.getNnm());
+        }
+        // 반대측
+        for (VUserInfo VUserInfo : vRoom.getDisagree()) {
+            mapPanels.put(VUserInfo.getId(), VUserInfo.getNnm());
+        }
+        return mapPanels;
     }
 
     @Override

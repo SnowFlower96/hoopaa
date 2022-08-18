@@ -41,6 +41,8 @@ public interface RoomService {
 
     Map<String, String> getDisagreeConnections(String sessionID);
 
+    Map<String, String> getPanelNicknames(String sessionID);
+
     void increasePenalty(String sessionID, String panel);
 
     Boolean updatePhaseBySessionID(String sessionID, int phase);
