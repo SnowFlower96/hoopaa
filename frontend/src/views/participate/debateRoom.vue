@@ -269,22 +269,24 @@
             <div class="leave-session displayFlex" @click="leaveSessionButton">토론 나가기</div>
         <!-- footer -->
             <div class="debate-room-footer-class">
-                <footer-team
-                v-if="footerTeam"
+                <!-- v-if="footerTeam" -->
+                <!-- <footer-team
+                v-if="true"
                 @call-modal="EmitcallModal"
-                ></footer-team>
+                ></footer-team> -->
 
+                <!-- v-if="footerModerator" -->
                 <footer-moderator
-                v-if="footerModerator"
+                v-if="true"
                 @call-modal="EmitcallModal"
                 @mod-menu="openCloseModMenu"
                 ></footer-moderator>
 
-                <footer-all
+                <!-- <footer-all
                 v-if="footerAll"
                 @rising-heart="sendAnimeHeart"
                 @clap-anime="sendAnimeClap"
-                ></footer-all>
+                ></footer-all> -->
 
                 <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
             </div>
@@ -2140,7 +2142,8 @@ export default {
     height: calc(100% - var(--vsi-blank));
     width: 100%;
     /* background-color: rgb(61, 255, 94); */
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .vsi-wrap::-webkit-scrollbar{width: 4px;}
 .vsi-wrap::-webkit-scrollbar-thumb {
