@@ -9,7 +9,7 @@
       </div>
 
         <!--채팅 내역-->
-      <div class="chatting-all-view"><!--  :heigth="chatHeight"> -->
+      <div class="chatting-all-view" ref="messages"><!--  :heigth="chatHeight"> -->
         <div
           class="chat-format"
           v-for="(message, i) of messagesTeam"
@@ -82,6 +82,11 @@ export default {
           this.borderColor="rgb(70, 70, 74)"
           this.isNewMessage="*new"
         }
+
+        this.$nextTick(()=>{
+            let messages = this.$refs.messages;
+            messages.scrollTo({ top: messages.scrollHeight, behavior: 'smooth' });
+          })
 
       }
     }

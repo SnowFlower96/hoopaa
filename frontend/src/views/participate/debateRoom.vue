@@ -269,22 +269,24 @@
             <div class="leave-session displayFlex" @click="leaveSessionButton">토론 나가기</div>
         <!-- footer -->
             <div class="debate-room-footer-class">
-                <footer-team
-                v-if="footerTeam"
+                <!-- v-if="footerTeam" -->
+                <!-- <footer-team
+                v-if="true"
                 @call-modal="EmitcallModal"
-                ></footer-team>
+                ></footer-team> -->
 
+                <!-- v-if="footerModerator" -->
                 <footer-moderator
-                v-if="footerModerator"
+                v-if="true"
                 @call-modal="EmitcallModal"
                 @mod-menu="openCloseModMenu"
                 ></footer-moderator>
 
-                <footer-all
+                <!-- <footer-all
                 v-if="footerAll"
                 @rising-heart="sendAnimeHeart"
                 @clap-anime="sendAnimeClap"
-                ></footer-all>
+                ></footer-all> -->
 
                 <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
             </div>
@@ -304,8 +306,6 @@ import restTimeEvent from './animation-view/rest-time-event.vue'
 
 
 // 토론방 관련
-import debateRoomSideComponent from './debateRoomSideComponent'
-import debateRoomSideComponentAgree from './debateRoomSideComponentAgree'  // @@ 없앨거
 import debateRoomCenterComponent from './debateRoomCenterComponent'        // @@ 없앨거
 import detailSessionView from './detailSessionView'
 import debateRoomVideo from './debateRoomVideo'
@@ -353,10 +353,8 @@ export default {
         restTimeEvent,
 
       // 토론방 관련
-        debateRoomSideComponent,
         debateRoomCenterComponent,
         detailSessionView,
-        debateRoomSideComponentAgree,
         debateRoomVideo,
 
       //  채팅
@@ -1292,8 +1290,8 @@ export default {
             }, 500);
             stripe.classList.add('animate');
             this.countingHeart += 1
-            if(this.countingHeart % 50 === 0) {
-                    this.propsHeart = this.countingHeart /50
+            if(this.countingHeart % 10 === 0) {
+                    this.propsHeart = this.countingHeart /10
                     this.animationBG = true
                     this.heartHund = true
                 const x = setTimeout(() => {
@@ -1574,6 +1572,17 @@ export default {
                 this.heartHund = false
                 this.restEvent = !this.restEvent
             }
+            else if (option == 'out') {
+              this.menu = false
+              this.out = true
+              this.message = false
+              this.file = false
+              this.rest = false
+              this.messageFrom = false
+              this.viewCodeMd = false
+              this.makeList()
+
+            }
         },
 
         // 세부세션 보내기 시그널
@@ -1628,11 +1637,12 @@ export default {
       this.$store.dispatch("getPanels").then((res) => {
         var data = JSON.parse(res.data.json)
         console.log(data)
+        this.penaltyList = [];
         for (var key in data) {
         this.penaltyList.push({id: key, nnm:data[key]})
       }
       })
-      console.log(this.penaltyList)
+
     },
     // 음소거 컨트롤 시그널
     async audioMute(status) {
@@ -1709,6 +1719,7 @@ export default {
         type : 'Send-Penalty'
       })
       this.out = false
+      this.callToMdModal = false
     },
 
     // screen 삭제
@@ -1764,7 +1775,7 @@ export default {
 </script>
 
 <style>
-.share-inner > #local-video-undefined {
+.share-inner > video {
   width: var(--share-view-width);
   height: var(--share-view-height);
 }
@@ -2140,7 +2151,8 @@ export default {
     height: calc(100% - var(--vsi-blank));
     width: 100%;
     /* background-color: rgb(61, 255, 94); */
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .vsi-wrap::-webkit-scrollbar{width: 4px;}
 .vsi-wrap::-webkit-scrollbar-thumb {

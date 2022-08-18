@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import list from '@/views/home/home'
-import ConferencesDetail from '@/views/conferences/conference-detail'
-import History from '@/views/history/history'
 import SignUp from '@/views/user/sign-up'
 import Login from '@/views/user/login'
 import reSign from '@/views/user/resign'
@@ -55,11 +53,7 @@ function makeRoutesFromMenu () {
   routes = routes.filter(item => item)
   // menu 자체에는 나오지 않는 페이지 라우터에 추가(방 상세보기)
 
-  routes.push({
-    path: '/conferences/:conferenceId',
-    name: 'conference-detail',
-    component: ConferencesDetail
-  },
+  routes.push(
   {path: '/signUp',
   name: 'sign-up',
   component: SignUp},

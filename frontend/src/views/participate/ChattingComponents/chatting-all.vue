@@ -9,7 +9,7 @@
       </div>
 
             <!--채팅 내역-->
-      <div class="chatting-all-view"><!--  :heigth="chatHeight"> -->
+      <div class="chatting-all-view" ref="messages"><!--  :heigth="chatHeight"> -->
         <div
           class="chat-format"
           v-for="(message, i) of messagesAll"
@@ -67,6 +67,7 @@ export default {
 
       handler(){
         let len = this.messagesAll.length;
+
         let unm = '';
         if(this.user.nnm==null){
           unm = this.user
@@ -78,7 +79,15 @@ export default {
           this.isNewMessage="*new"
         }
 
+        this.$nextTick(()=>{
+          let messages = this.$refs.messages;
+           messages.scrollTo({ top: messages.scrollHeight, behavior: 'smooth' });
+        })
       }
+
+
+
+
     }
   },
   computed:{
