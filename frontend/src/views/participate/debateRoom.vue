@@ -257,6 +257,7 @@
 
         <!-- 사회자 footer에서 나오는 메뉴 -->
             <div class="moderator-menus" v-if="modMenu && moderator" :style="customCaroselStyle">
+                <p @click="modMutecontrol">전체 음소거</p>
                 <p @click="viewCode">입장코드 확인</p>
                 <p @click="EmitcallModal('menu')">패널 발언권 부여</p>
                 <p @click="EmitcallModal('rest')">쉬는시간 부여</p>
@@ -608,7 +609,11 @@ export default {
         window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
+      modMutecontrol(){
+        this.modMenu = false
+      },
       viewCode() {
+        this.modMenu = false
         this.callToMdModal = true
         this.viewCodeMd = true
         this.penaltyView = false
@@ -1229,6 +1234,7 @@ export default {
             this.voteStatus = status
         },
         async voteVisible() {
+            this.modMenu = false
             this.voteViewTF = !this.voteViewTF
             this.startVote();
             let time = this.voteTime;
@@ -1488,7 +1494,6 @@ export default {
           }
 
         },
-
         offCallModal() {
             this.callToMdModal = false
             this.messageFrom = false
@@ -1499,6 +1504,7 @@ export default {
             this.callToMdModal = !this.callToMdModal
 
             if (option == 'menu') {
+                this.modMenu = false
                 this.menu = true
                 this.out = false
                 this.message = false
@@ -1506,16 +1512,6 @@ export default {
                 this.rest = false
                 this.messageFrom = false
                 this.viewCodeMd = false
-            }
-            else if (option == 'out') {
-                this.menu = false
-                this.out = true
-                this.message = false
-                this.file = false
-                this.rest = false
-                this.messageFrom = false
-                this.viewCodeMd = false
-                this.makeList();
             }
             else if (option == 'message') {
                 this.menu = false
@@ -1536,6 +1532,7 @@ export default {
                 this.viewCodeMd = false
             }
             else if (option == 'rest') {
+                this.modMenu = false
                 this.animationBG = !this.animationBG
                 this.menu = false
                 this.out = false

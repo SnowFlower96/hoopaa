@@ -46,8 +46,7 @@ export default {
             agree: '',
             disagree: '',
             king : '',
-            mvpView: false,
-            total : parseInt(this.agree) + parseInt(this.disagree)
+            mvpView: false
         }
     },
     mounted() {
@@ -68,11 +67,11 @@ export default {
          })
             let element = document.getElementById("resultWrap");
             element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
-
-            document.getElementById("barChart").style.height = (this.agree/this.total)*700 + "px";
+            const total = this.agree + this.disagree
+            document.getElementById("barChart").style.height = (this.agree/total)*570 + "px";
             document.getElementById("chartValue").innerText = Math.round(this.agree);
 
-            document.getElementById("barChart2").style.height = (this.disagree/this.total)*700 + "px";
+            document.getElementById("barChart2").style.height = (this.disagree/total)*570 + "px";
             document.getElementById("chartValue2").innerText = Math.round(this.disagree);
             setTimeout(() => {
                 this.mvpView = true
