@@ -16,7 +16,7 @@
                           <p style="font-size: 30px;">화면 공유</p>
                       </div>
                       <div class="ufw-inner">
-                          <div class="ufw-btn" @click="shareScreen">공유하기</div>
+                          <div class="ufw-btn" @click="publishScreenShare">공유하기</div>
                       </div>
                   </div>
               </div>
@@ -251,9 +251,7 @@ export default {
       console.log(this.$store.state.tempToken)
   },
     methods: {
-      shareScreen() {
-        // 여기에 화면공유하는 함수를 넣어라
-      },
+  
         callModalFile() {
           this.callToMdModal = true
         },
