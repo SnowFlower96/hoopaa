@@ -24,6 +24,7 @@ import javax.persistence.Id;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -64,4 +65,5 @@ public class User {
         this.leave_dt = leave_dt;
         this.refresh_tk = refresh_tk;
     }
+
 }

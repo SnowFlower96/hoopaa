@@ -34,4 +34,5 @@ public class UserHistory {
         this.isKing = isKing;
         this.userPos = userPos;
     }
+
 }

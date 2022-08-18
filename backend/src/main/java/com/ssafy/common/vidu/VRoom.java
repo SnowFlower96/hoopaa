@@ -13,7 +13,7 @@ import java.util.Map;
 @Data
 public class VRoom {
 
-    // 방 코드(암호화)
+    // 방 코드(AES128 암호화)
     private String code;
 
     // OpenVidu 세션

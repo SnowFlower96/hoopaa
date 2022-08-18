@@ -32,6 +32,7 @@ public interface RoomService {
     String reconnect(String sessionID, String userID);
 
     Map<String, Map<String, String>> createSession(String sessionID) throws OpenViduJavaClientException, OpenViduHttpException;
+
     void deleteSession(String sessionID) throws OpenViduJavaClientException, OpenViduHttpException;
 
     String checkPos(String sessionID, String AToken, String pos, boolean isSelect);
@@ -39,6 +40,8 @@ public interface RoomService {
     Map<String, String> getAgreeConnections(String sessionID);
 
     Map<String, String> getDisagreeConnections(String sessionID);
+
+    Map<String, String> getPanelNicknames(String sessionID);
 
     void increasePenalty(String sessionID, String panel);
 

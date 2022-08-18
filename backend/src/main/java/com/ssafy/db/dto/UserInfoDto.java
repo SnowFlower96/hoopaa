@@ -19,4 +19,5 @@ public class UserInfoDto {
         this.em = user.getEm();
         this.nnm = user.getNnm();
     }
+
 }

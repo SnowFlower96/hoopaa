@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter;
  */
 @Configuration
 public class JpaConfig {
+
     @PersistenceContext
     EntityManager entityManager;
 
@@ -62,4 +63,5 @@ public class JpaConfig {
                 .registerModule(new ParameterNamesModule())
                 .registerModule(new Jdk8Module());
     }
+
 }

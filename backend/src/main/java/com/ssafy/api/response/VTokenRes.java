@@ -13,7 +13,8 @@ import lombok.Setter;
 @Setter
 @ApiModel("ViduTokenResponse")
 public class VTokenRes extends BaseResponseBody {
-    @ApiModelProperty(name="OpenVidu Connection Token")
+
+    @ApiModelProperty(name = "OpenVidu Connection Token")
     String token;
 
     public static VTokenRes of(Integer statusCode, String message, String token) {
@@ -23,4 +24,5 @@ public class VTokenRes extends BaseResponseBody {
         vTokenRes.setToken(token);
         return vTokenRes;
     }
+
 }

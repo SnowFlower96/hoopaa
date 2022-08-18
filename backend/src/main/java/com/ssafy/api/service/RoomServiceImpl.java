@@ -1,6 +1,5 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.request.RoomEnterReq;
 import com.ssafy.api.request.RoomOpenReq;
 import com.ssafy.common.util.AES128Util;
 import com.ssafy.common.vidu.ConnectionDto;
@@ -15,7 +14,6 @@ import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -23,9 +21,6 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -383,12 +378,28 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public Map<String, String> getPanelNicknames(String sessionID) {
+        VRoom vRoom = this.mapRooms.get(sessionID);
+        Map<String, String> mapPanels = new HashMap<>();
+        // 찬성측
+        for (VUserInfo VUserInfo : vRoom.getAgree()) {
+            mapPanels.put(VUserInfo.getId(), VUserInfo.getNnm());
+        }
+        // 반대측
+        for (VUserInfo VUserInfo : vRoom.getDisagree()) {
+            mapPanels.put(VUserInfo.getId(), VUserInfo.getNnm());
+        }
+        return mapPanels;
+    }
+
+    @Override
     public void increasePenalty(String sessionID, String panel) {
         VRoom vRoom = this.mapRooms.get(sessionID);
         VUserInfo vUserInfo = vRoom.getMapParticipants().get(panel);
-        System.out.println(vUserInfo);
         vUserInfo.setPenaltyCnt(vUserInfo.getPenaltyCnt() + 1);
-        System.out.println(vUserInfo);
+        UserStat userStat = userStatRepository.findStatById(Long.valueOf(panel)).get();
+        userStat.setPenalty(vUserInfo.getPenaltyCnt());
+        userStatRepository.save(userStat);
     }
 
     @Override
@@ -661,7 +672,7 @@ public class RoomServiceImpl implements RoomService {
         if (fileBase64 == null || fileBase64.length() == 0) return null;
         File path = new File(thumbPath);
         if (!path.exists()) path.mkdirs();
-        try{
+        try {
             String fileName = System.currentTimeMillis() + "_" + sessionID;
             File file = new File(thumbPath + fileName + ".jpg");
             Base64.Decoder decoder = Base64.getDecoder();
@@ -669,8 +680,8 @@ public class RoomServiceImpl implements RoomService {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(decodeBytes);
             fileOutputStream.close();
-            return fileName+".jpg";
-        }catch (IOException e){
+            return fileName + ".jpg";
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }

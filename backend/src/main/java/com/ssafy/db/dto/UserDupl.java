@@ -13,4 +13,5 @@ public class UserDupl {
     public boolean isDuple() {
         return isEmDupl || isNnmDupl;
     }
+
 }

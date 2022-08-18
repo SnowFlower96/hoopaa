@@ -11,18 +11,19 @@ import lombok.*;
 @NoArgsConstructor
 @ApiModel("UserRegisterPostRequest")
 public class UserRegisterPostReq {
-	@ApiModelProperty(name="유저 email", example="ssafy@ssafy.com")
-	String em;
-	@ApiModelProperty(name="유저 Password", example="your_password")
-	String pwd;
-	@ApiModelProperty(name="유저 닉네임", example="your_nickname")
-	String nnm;
 
-	@Builder
-	public UserRegisterPostReq(String em, String pwd, String nnm) {
-		this.em = em;
-		this.pwd = pwd;
-		this.nnm = nnm;
-	}
+	@ApiModelProperty(name = "유저 email", example = "ssafy@ssafy.com")
+    String em;
+    @ApiModelProperty(name = "유저 Password", example = "your_password")
+    String pwd;
+    @ApiModelProperty(name = "유저 닉네임", example = "your_nickname")
+    String nnm;
+
+    @Builder
+    public UserRegisterPostReq(String em, String pwd, String nnm) {
+        this.em = em;
+        this.pwd = pwd;
+        this.nnm = nnm;
+    }
 
 }

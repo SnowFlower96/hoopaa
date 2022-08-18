@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name="room_category")
+@Table(name = "room_category")
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomCategory {

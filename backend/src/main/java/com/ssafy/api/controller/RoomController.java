@@ -90,7 +90,7 @@ public class RoomController {
         UserInfoDto user;
         // 회원
         if (userDetails.isUser()) user = userService.getUserInfoDtoById(Long.parseLong(userDetails.getUsername()));
-        // 비회원
+            // 비회원
         else user = new UserInfoDto(User.builder().nnm(userDetails.getNnm()).build());
 
         // 해당 세션이 존재하지 않으면
@@ -119,7 +119,7 @@ public class RoomController {
         UserInfoDto user;
         // 회원
         if (userDetails.isUser()) user = userService.getUserInfoDtoById(Long.parseLong(userDetails.getUsername()));
-        // 비회원
+            // 비회원
         else user = new UserInfoDto(User.builder().nnm(userDetails.getNnm()).build());
 
         // 해당 세션이 존재하지 않으면
@@ -260,6 +260,27 @@ public class RoomController {
         }
     }
 
+    @GetMapping("/panels")
+    @ApiOperation(value = "패널 닉네임 조회", notes = "토론방의 모든 패널 닉네임 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "해당 세션 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> getPanelNickname(@ApiIgnore Authentication authentication) throws JsonProcessingException {
+        SsafyUserDetails ssafyUserDetails = (SsafyUserDetails) authentication.getDetails();
+        String AToken = ssafyUserDetails.getUsername();
+
+        // 해당 세션이 존재하지 않으면
+        if (!roomService.isExistRoom(AToken))
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
+
+        Map<String, String> mapPanels = roomService.getPanelNicknames(AToken);
+        String json = mapper.writeValueAsString(mapPanels);
+
+        return ResponseEntity.status(200).body(JsonRes.of(200, "Success", json));
+    }
+
     @GetMapping("/connections/agree")
     @ApiOperation(value = "패널 커넥션 ID 조회", notes = "토론방의 찬성 측 커넥션 이름 반환")
     @ApiResponses({
@@ -316,7 +337,8 @@ public class RoomController {
         if (!roomService.isExistRoom(sessionID))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
-        if (!roomService.updatePhaseBySessionID(sessionID, 1)) return ResponseEntity.status(411).body(BaseResponseBody.of(404, "Wrong status"));
+        if (!roomService.updatePhaseBySessionID(sessionID, 1))
+            return ResponseEntity.status(411).body(BaseResponseBody.of(404, "Wrong status"));
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
@@ -392,7 +414,8 @@ public class RoomController {
         if (!roomService.isExistRoom(sessionID))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
-        if (!roomService.updatePhaseBySessionID(sessionID, 2)) return ResponseEntity.status(411).body(BaseResponseBody.of(404, "Wrong status"));
+        if (!roomService.updatePhaseBySessionID(sessionID, 2))
+            return ResponseEntity.status(411).body(BaseResponseBody.of(404, "Wrong status"));
 
         Long roomID = roomService.getRoomInfoId(sessionID);
 
@@ -415,7 +438,8 @@ public class RoomController {
 
         String response = roomService.updateVoteFinal(sessionID, AToken, vote, kingUserID);
 
-        if (response.equals("400")) return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong parameter (vote)"));
+        if (response.equals("400"))
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Wrong parameter (vote)"));
         else if (response.equals("200")) return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
         else return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Error"));
     }
@@ -435,7 +459,8 @@ public class RoomController {
         if (!roomService.isExistRoom(AToken))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Session not exists"));
 
-        if (!roomService.updatePhaseBySessionID(AToken, 3)) return ResponseEntity.status(411).body(BaseResponseBody.of(404, "Wrong status"));
+        if (!roomService.updatePhaseBySessionID(AToken, 3))
+            return ResponseEntity.status(411).body(BaseResponseBody.of(404, "Wrong status"));
 
         roomService.finishRoom(AToken);
 

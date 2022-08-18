@@ -14,8 +14,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel("NonUserLoginResponse")
-public class NonUserLoginRes extends BaseResponseBody{
-    @ApiModelProperty(name="JWT 인증 토큰", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN...")
+public class NonUserLoginRes extends BaseResponseBody {
+
+    @ApiModelProperty(name = "JWT 인증 토큰", example = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN...")
     String accessToken;
     String nnm;
 
@@ -27,4 +28,5 @@ public class NonUserLoginRes extends BaseResponseBody{
         res.setNnm(nnm);
         return res;
     }
+
 }

@@ -1,6 +1,5 @@
 package com.ssafy.db.dto;
 
-import com.ssafy.db.entity.RoomInfo;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;

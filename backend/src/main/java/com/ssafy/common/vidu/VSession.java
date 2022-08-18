@@ -1,6 +1,5 @@
 package com.ssafy.common.vidu;
 
-import io.openvidu.java.client.Connection;
 import io.openvidu.java.client.Session;
 import lombok.Builder;
 import lombok.Data;
@@ -19,10 +18,10 @@ public class VSession {
     Session sessionDisagree;
 
     // 찬성측 참가자와 Connection
-    Map<String , ConnectionDto> mapAgree;
+    Map<String, ConnectionDto> mapAgree;
 
     // 반대측 참가자와 Connection
-    Map<String , ConnectionDto> mapDisagree;
+    Map<String, ConnectionDto> mapDisagree;
 
     @Builder
     public VSession(Session sessionAgree, Session sessionDisagree, Map<String, ConnectionDto> mapAgree, Map<String, ConnectionDto> mapDisagree) {
@@ -31,4 +30,5 @@ public class VSession {
         this.mapAgree = mapAgree;
         this.mapDisagree = mapDisagree;
     }
+    
 }

@@ -23,12 +23,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private SsafyUserDetailService ssafyUserDetailService;
-    
+
     @Autowired
     private UserService userService;
-    
+
     // Password 인코딩 방식에 BCrypt 암호화 방식 사용
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -62,9 +63,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
                 .authorizeRequests()
                 // 인증이 필요하지 않은 URL
-                .antMatchers("/api/v1/users/register","/api/v1/users/temp/**","/api/v1/users/login", "/api/v1/users/certification/**",
-                        "/api/v1/room/connections/**", "/api/v1/sync/**", "/api/v1/list/**","/api/v1/users").permitAll()
-    	        	    .anyRequest().authenticated()
+                .antMatchers("/api/v1/users/register", "/api/v1/users/temp/**", "/api/v1/users/login", "/api/v1/users/certification/**",
+                        "/api/v1/room/connections/**", "/api/v1/sync/**", "/api/v1/list/**", "/api/v1/users").permitAll()
+                .anyRequest().authenticated()
                 .and().cors();
     }
+
 }

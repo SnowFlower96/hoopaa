@@ -11,5 +11,7 @@ import java.util.Optional;
  */
 @Repository
 public interface UserStatRepository extends JpaRepository<UserStat, Long> {
+
     Optional<UserStat> findStatById(Long id);
+
 }

@@ -1,6 +1,5 @@
 package com.ssafy.api.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.api.response.JsonRes;
 import com.ssafy.api.service.RoomInfoService;
@@ -31,25 +30,25 @@ public class RoomInfoController {
     @GetMapping("/all")
     @ApiOperation(value = "전체 토론방 조회")
     public ResponseEntity<? extends BaseResponseBody> findAll() throws IOException {
-        List<RoomInfoDto> findAll=roomInfoService.findAll();
-        String findAllString=mapper.writeValueAsString(findAll);
+        List<RoomInfoDto> findAll = roomInfoService.findAll();
+        String findAllString = mapper.writeValueAsString(findAll);
         return ResponseEntity.ok(JsonRes.of(200, "success", findAllString));
     }
+
     @GetMapping("/search/{keyword}")
-    @ApiOperation(value="토론방 검색")
+    @ApiOperation(value = "토론방 검색")
     public ResponseEntity<? extends BaseResponseBody> searchBy(@PathVariable String keyword) throws IOException {
-        List<RoomInfoDto> searchBy=roomInfoService.searchBy(keyword);
-        String searchByString=mapper.writeValueAsString(searchBy);
+        List<RoomInfoDto> searchBy = roomInfoService.searchBy(keyword);
+        String searchByString = mapper.writeValueAsString(searchBy);
         return ResponseEntity.ok(JsonRes.of(200, "success", searchByString));
     }
 
     @GetMapping("/{cate}")
-    @ApiOperation(value="카테고리별 검색")
+    @ApiOperation(value = "카테고리별 검색")
     public ResponseEntity<? extends BaseResponseBody> findByCate(@PathVariable int cate) throws IOException {
-        List<RoomInfoDto> findByCate=roomInfoService.findByCate(cate);
-        String findByCateString=mapper.writeValueAsString(findByCate);
+        List<RoomInfoDto> findByCate = roomInfoService.findByCate(cate);
+        String findByCateString = mapper.writeValueAsString(findByCate);
         return ResponseEntity.ok(JsonRes.of(200, "success", findByCateString));
     }
-
 
 }

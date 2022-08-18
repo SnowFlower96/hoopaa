@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @ApiModel("RoomResponse")
 public class RoomRes extends BaseResponseBody {
+
     Long id;
     String host_id;
     String thumb_url;

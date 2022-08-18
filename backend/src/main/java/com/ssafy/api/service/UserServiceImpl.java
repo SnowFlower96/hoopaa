@@ -27,6 +27,7 @@ import java.util.Optional;
  */
 @Service("userService")
 public class UserServiceImpl implements UserService {
+
     @Autowired
     UserRepository userRepository;
 
@@ -149,7 +150,7 @@ public class UserServiceImpl implements UserService {
     public List<UserHistoryDto> getUserHistoryById(Long id) {
         List<UserHistory> userHistoryList = userHistoryRepository.findUserHistoryByUserId(id).get();
         List<UserHistoryDto> userHistoryDtoList = new ArrayList<>();
-        for(UserHistory u : userHistoryList) {
+        for (UserHistory u : userHistoryList) {
             userHistoryDtoList.add(new UserHistoryDto(u));
         }
         return userHistoryDtoList;
@@ -165,12 +166,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendAuthMail(User user) throws Exception{
+    public void sendAuthMail(User user) throws Exception {
 
         MailUtil sendMail = new MailUtil(mailSender);
         sendMail.setSubject("[HooPaa 회원가입 서비스 이메일 인증 입니다.]");
         sendMail.setText(new StringBuffer().append("<h1>HooPaa 가입 메일인증 입니다</h1>")
-                        .append("<p> <img src='cid:logo2' style='width:300px'; ></p>")
+                .append("<p> <img src='cid:logo2' style='width:300px'; ></p>")
                 .append("<a href='http://3.38.181.187/login?em=")
                 .append(user.getEm())//.append("&key=").append(key)
                 .append("' target='_blenk'>가입 완료를 위해 이곳을 눌러주세요</a>").toString());

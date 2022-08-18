@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="room_description")
+@Table(name = "room_description")
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomDescription {

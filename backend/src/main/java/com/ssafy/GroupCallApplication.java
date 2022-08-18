@@ -13,7 +13,8 @@ import java.nio.charset.StandardCharsets;
 @SpringBootApplication
 @EnableScheduling
 public class GroupCallApplication {
-	public static void main(String[] args) {
+
+    public static void main(String[] args) {
         SpringApplication.run(GroupCallApplication.class, args);
     }
 
@@ -29,4 +30,5 @@ public class GroupCallApplication {
         characterEncodingFilter.setForceEncoding(true);
         return characterEncodingFilter;
     }
+
 }

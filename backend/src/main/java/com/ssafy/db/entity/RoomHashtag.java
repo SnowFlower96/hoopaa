@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="room_hashtag")
+@Table(name = "room_hashtag")
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomHashtag {
@@ -31,4 +31,5 @@ public class RoomHashtag {
         this.cnt = cnt;
         this.recent = recent;
     }
+
 }

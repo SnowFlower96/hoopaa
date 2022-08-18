@@ -13,7 +13,8 @@ import lombok.Setter;
 @Setter
 @ApiModel("JsonResponse")
 public class JsonRes extends BaseResponseBody {
-    @ApiModelProperty(name="Json")
+
+    @ApiModelProperty(name = "Json")
     String json;
 
     public static JsonRes of(Integer statusCode, String message, String json) {

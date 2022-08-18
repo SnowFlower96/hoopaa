@@ -15,7 +15,8 @@ import java.util.Map;
 @Setter
 @ApiModel("ViduTokensResponse")
 public class VTokensRes extends BaseResponseBody {
-    @ApiModelProperty(name="OpenVidu Connection Token")
+
+    @ApiModelProperty(name = "OpenVidu Connection Token")
     Map<String, String> tokens;
 
     public static VTokensRes of(Integer statusCode, String message, Map<String, String> tokens) {
@@ -25,4 +26,5 @@ public class VTokensRes extends BaseResponseBody {
         vTokensRes.setTokens(tokens);
         return vTokensRes;
     }
+
 }

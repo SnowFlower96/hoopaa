@@ -9,17 +9,17 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class HashtagRepositorySupport{
+public class HashtagRepositorySupport {
 
     @Autowired
     private JPAQueryFactory jpaQueryFactory;
 
     QRoomHashtag roomHashtag = QRoomHashtag.roomHashtag;
 
-    public Optional<RoomHashtag> findHashtagByNm(String nm){
+    public Optional<RoomHashtag> findHashtagByNm(String nm) {
         RoomHashtag roomHashtag = jpaQueryFactory.select(this.roomHashtag).from(this.roomHashtag)
                 .where(this.roomHashtag.nm.eq(nm)).fetchOne();
-        if(roomHashtag == null) {
+        if (roomHashtag == null) {
             return Optional.empty();
         }
 

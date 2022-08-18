@@ -53,7 +53,7 @@ public class RoomInfoServiceImpl implements RoomInfoService {
     public List<RoomInfoDto> roomInfoToDto(List<RoomInfo> roomInfoList) throws IOException {
         List<RoomInfoDto> roomInfoDtoList = new LinkedList<>();
         RoomInfoDto roomInfoDto;
-        for (RoomInfo r : roomInfoList){
+        for (RoomInfo r : roomInfoList) {
             String encodedThumb = r.getThumbUrl() != null ? Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(thumbPath + r.getThumbUrl()))) : null;
             Optional<RoomHashtag> hashtagOptional;
             String[] hashes = new String[3];
