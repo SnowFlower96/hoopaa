@@ -8,7 +8,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ssafy
       TZ: "Asia/Seoul"
-    network_mode: host
+    networks:
+      - my_network
 
   spring:
     build: backend
@@ -19,7 +20,8 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:mysql://3.38.181.187:3306/debate"
     depends_on:
       - db
-    network_mode: host
+    networks:
+      - my_network
 
   nginx:
     build: frontend
@@ -29,7 +31,8 @@ services:
       - ./data/nginx:/etc/nginx/conf.d
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
-    network_mode: host
+    networks:
+      - my_network
     logging:
       options:
         max-size: "${DOCKER_LOGS_MAX_SIZE:-100M}"
@@ -107,3 +110,7 @@ services:
   #   logging:
   #     options:
   #       max-size: "${DOCKER_LOGS_MAX_SIZE:-100M}"
+
+networks:
+  my_network:
+    driver: bridge
