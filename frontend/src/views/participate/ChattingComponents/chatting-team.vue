@@ -67,7 +67,6 @@ export default {
 
       handler(){
         let len = this.messagesTeam.length;
-        let messages = this.$refs.messages;
         let unm = '';
         if(this.user.nnm==null){
           console.log("닉넴 파악 불가");
@@ -83,7 +82,11 @@ export default {
           this.borderColor="rgb(70, 70, 74)"
           this.isNewMessage="*new"
         }
-        messages.scrollTo({ top: messages.scrollHeight, behavior: 'smooth' });
+
+        this.$nextTick(()=>{
+            let messages = this.$refs.messages;
+            messages.scrollTo({ top: messages.scrollHeight, behavior: 'smooth' });
+          })
 
       }
     }

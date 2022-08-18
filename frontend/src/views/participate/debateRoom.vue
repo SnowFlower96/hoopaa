@@ -1637,6 +1637,7 @@ export default {
       this.$store.dispatch("getPanels").then((res) => {
         var data = JSON.parse(res.data.json)
         console.log(data)
+        this.penaltyList = [];
         for (var key in data) {
         this.penaltyList.push({id: key, nnm:data[key]})
       }
@@ -1774,7 +1775,7 @@ export default {
 </script>
 
 <style>
-.share-inner > #local-video-undefined {
+.share-inner > video {
   width: var(--share-view-width);
   height: var(--share-view-height);
 }

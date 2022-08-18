@@ -67,7 +67,7 @@ export default {
 
       handler(){
         let len = this.messagesAll.length;
-        let messages = this.$refs.messages;
+
         let unm = '';
         if(this.user.nnm==null){
           unm = this.user
@@ -78,9 +78,16 @@ export default {
           this.borderColor="rgb(70, 70, 74)"
           this.isNewMessage="*new"
         }
-        messages.scrollTo({ top: messages.scrollHeight, behavior: 'smooth' });
 
+        this.$nextTick(()=>{
+          let messages = this.$refs.messages;
+           messages.scrollTo({ top: messages.scrollHeight, behavior: 'smooth' });
+        })
       }
+
+
+
+
     }
   },
   computed:{

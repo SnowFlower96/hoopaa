@@ -570,7 +570,6 @@ export default {
 <style>
 .detail-box-video-inner {
   height:90%;
-  background-color: rgb(84, 156, 73);
   overflow: auto;
 }
     .chatting-box {
