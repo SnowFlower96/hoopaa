@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.api.response.StringRes;
 import com.ssafy.api.service.RoomService;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.common.vidu.VUserInfo;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import io.swagger.annotations.ApiOperation;
@@ -60,7 +61,7 @@ public class ServerController {
     @GetMapping("/panels")
     public ResponseEntity<? extends BaseResponseBody> getPanelList() throws OpenViduJavaClientException, OpenViduHttpException, JsonProcessingException {
 
-        Map<String, Map<String, String>> list = roomService.getPanels();
+        Map<String, Map<String, List<VUserInfo>>> list = roomService.getPanels();
 
         String json = mapper.writeValueAsString(list);
         return ResponseEntity.status(200).body(StringRes.of(200, "success", json));

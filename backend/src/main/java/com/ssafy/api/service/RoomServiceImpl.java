@@ -12,6 +12,7 @@ import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import io.openvidu.java.client.*;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -344,8 +345,12 @@ public class RoomServiceImpl implements RoomService {
 
         // 참여할 수 있으면
         for (int i = 0; i < max; i++) {
-            if (VUserInfos[i] == null) {
-                VUserInfos[i] = isSelect ? vRoom.getMapParticipants().get(AToken) : null;
+            if (isSelect && VUserInfos[i] == null) {
+                VUserInfos[i] = vRoom.getMapParticipants().get(AToken);
+                return "Success";
+            }
+            else if (!isSelect && VUserInfos[i].getId().equals(AToken)) {
+                VUserInfos[i] = null;
                 return "Success";
             }
         }
@@ -701,18 +706,23 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Map<String, Map<String, String>> getPanels() {
-        Map<String, Map<String, String>> result = new HashMap<>();
+    public Map<String, Map<String, List<VUserInfo>>> getPanels() {
+        Map<String, Map<String, List<VUserInfo>>> result = new HashMap<>();
         for (String key : mapRooms.keySet()) {
-            Map<String, String> temp = new HashMap<>();
+            Map<String, List<VUserInfo>> temp = new HashMap<>();
+            List<VUserInfo> list = new ArrayList<>();
             for (VUserInfo vUserInfo : mapRooms.get(key).getAgree()) {
                 if (vUserInfo == null) continue;
-                temp.put("agree", vUserInfo.toString());
+                list.add(vUserInfo);
             }
+            temp.put("agree", list);
+
+            list.clear();
             for (VUserInfo vUserInfo : mapRooms.get(key).getDisagree()) {
                 if (vUserInfo == null) continue;
-                temp.put("disagree", vUserInfo.toString());
+                list.add(vUserInfo);
             }
+            temp.put("disagree", list);
             result.put(key, temp);
         }
         return result;

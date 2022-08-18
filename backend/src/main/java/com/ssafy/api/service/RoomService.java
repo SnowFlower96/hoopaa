@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 
 import com.ssafy.api.request.RoomOpenReq;
+import com.ssafy.common.vidu.VUserInfo;
 import com.ssafy.db.dto.UserInfoDto;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
@@ -66,6 +67,6 @@ public interface RoomService {
 
     List<String> getLists();
 
-    Map<String, Map<String, String>> getPanels();
+    Map<String, Map<String, List<VUserInfo>>> getPanels();
 
 }
