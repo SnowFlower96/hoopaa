@@ -183,7 +183,6 @@
                                 <div class="videobox-side" :style="customCaroselStyle">
                                     <div class="vsi-blank"></div>
                                     <div class="vsi-wrap">
-                                        <!-- <div class="videobox-side-inner" :style="customCaroselStyle"></div> -->
                                         <!-- 여기에 for문으로 비디오 넣어보면 됨 -->
                                         <!-- <debate-room-video v-for="(item, index) in agree" :key="index" :stream="item.data" class="debate-room-side-vido"></debate-room-video> -->
                                         <debate-room-video class="debate-room-side-vido" v-for="(item, index) in agree" :key="index" :stream="item.data"></debate-room-video>
@@ -214,7 +213,7 @@
                                   </div>
 
                                   <div class="share-view-wrap" :style="customCaroselStyle">
-                                    <div class="share-view">
+                                    <div class="share-view" :style="customCaroselStyle">
                                         <!-- 화면공유 여기에 넣으면 됨 -->
                                         <!-- <user-video :stream-manager="publisherScreen"></user-video> -->
 				                                <div v-for="(sub, index) in subscribersScreen" :key="index" >
@@ -568,11 +567,11 @@ export default {
     mounted() {
         // 화면 기본 사이즈 받아옴 => 채팅창 있는 화면 로드됨
         const wValue = document.body.clientWidth
-        const wValue075 = document.body.clientWidth*0.75
+        const wValue075 = document.body.clientWidth*0.77
         const hValue = document.body.clientHeight
 
         this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
-        this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
+        this.chattBox =  `${wValue*0.23}px` // 채팅창 (.chatting-box)
         this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
 
         //표준 비디오 사이즈
@@ -581,19 +580,19 @@ export default {
         this.centerVideoHeight = `${videoSize*0.6}px`
 
         // 토론방 센터 (.videobox-center)
-        this.dCenterW = `${wValue075*0.4-10}px`
+        this.dCenterW = `${wValue075*0.48}px`
         this.dCenterH = `${hValue*0.8}px`
 
         const debateTimer = (hValue - (videoSize*0.6))
         this.dtcHeight = `${debateTimer*0.1}px`
 
         // 토론방 화면공유 (.share-view)
-        this.shareViewH = `${debateTimer*0.6-20}px`
-        this.shareViewW = `${wValue075*0.4-40}px`
+        this.shareViewH = `${debateTimer*0.76}px`
+        this.shareViewW = `${wValue075*0.46}px`
 
         // 토론방 양쪽 (.videobox-side)
-        this.dSideW = `${wValue075*0.3-10}px`
-        this.dSideH = `${hValue*0.8}px`
+        this.dSideW = `${wValue075*0.3-60}px`
+        this.dSideH = `${hValue*0.93}px`
         this.vsiBlank = `${hValue*0.8*0.2}px`
 
         // 토론방 추가기능 모달창
@@ -1080,11 +1079,11 @@ export default {
             if (this.chattTF === true) {    // 채팅창 열려있을때
                // 화면 기본 사이즈 받아옴 => 채팅창 있는 화면 로드됨
                 const wValue = document.body.clientWidth
-                const wValue075 = document.body.clientWidth*0.75
+                const wValue075 = document.body.clientWidth*0.77
                 const hValue = document.body.clientHeight
 
                 this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
-                this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
+                this.chattBox =  `${wValue*0.23}px` // 채팅창 (.chatting-box)
                 this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
 
                 //표준 비디오 사이즈
@@ -1093,19 +1092,19 @@ export default {
                 this.centerVideoHeight = `${videoSize*0.6}px`
 
                 // 토론방 센터 (.videobox-center)
-                this.dCenterW = `${wValue075*0.4-10}px`
+                this.dCenterW = `${wValue075*0.48}px`
                 this.dCenterH = `${hValue*0.8}px`
 
                 const debateTimer = (hValue - (videoSize*0.6))
                 this.dtcHeight = `${debateTimer*0.1}px`
 
                 // 토론방 화면공유 (.share-view)
-                this.shareViewH = `${debateTimer*0.6-20}px`
-                this.shareViewW = `${wValue075*0.4-40}px`
+                this.shareViewH = `${debateTimer*0.76}px`
+                this.shareViewW = `${wValue075*0.46}px`
 
                 // 토론방 양쪽 (.videobox-side)
-                this.dSideW = `${wValue075*0.3-10}px`
-                this.dSideH = `${hValue*0.8}px`
+                this.dSideW = `${wValue075*0.3-60}px`
+                this.dSideH = `${hValue*0.93}px`
                 this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
@@ -1121,6 +1120,7 @@ export default {
 
                 this.allHeartLeft= `${document.body.clientWidth*0.5}px`
 
+
             }
             else {     // 채팅창 닫혀있을때
                 const wValue = document.body.clientWidth
@@ -1128,7 +1128,7 @@ export default {
                 const hValue = document.body.clientHeight
 
                 this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
-                this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
+                this.chattBox =  `${wValue*0.23}px` // 채팅창 (.chatting-box)
                 this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
 
                 //표준 비디오 사이즈
@@ -1137,19 +1137,19 @@ export default {
                 this.centerVideoHeight = `${videoSize*0.6}px`
 
                 // 토론방 센터 (.videobox-center)
-                this.dCenterW = `${wValue075*0.4-10}px`
+                this.dCenterW = `${wValue075*0.48}px`
                 this.dCenterH = `${hValue*0.8}px`
 
                 const debateTimer = (hValue - (videoSize*0.6))
                 this.dtcHeight = `${debateTimer*0.1}px`
 
                 // 토론방 화면공유 (.share-view)
-                this.shareViewH = `${debateTimer*0.6-20}px`
-                this.shareViewW = `${wValue075*0.4-40}px`
+                this.shareViewH = `${debateTimer*0.76}px`
+                this.shareViewW = `${wValue075*0.46}px`
 
                 // 토론방 양쪽 (.videobox-side)
-                this.dSideW = `${wValue075*0.3-10}px`
-                this.dSideH = `${hValue*0.8}px`
+                this.dSideW = `${wValue075*0.3-60}px`
+                this.dSideH = `${hValue*0.93}px`
                 this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
@@ -1391,11 +1391,11 @@ export default {
             if (this.chattTF === true) {    // 채팅창 열려있을때
                // 화면 기본 사이즈 받아옴 => 채팅창 있는 화면 로드됨
                 const wValue = document.body.clientWidth
-                const wValue075 = document.body.clientWidth*0.75
+                const wValue075 = document.body.clientWidth*0.77
                 const hValue = document.body.clientHeight
 
                 this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
-                this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
+                this.chattBox =  `${wValue*0.23}px` // 채팅창 (.chatting-box)
                 this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
 
                 //표준 비디오 사이즈
@@ -1404,19 +1404,19 @@ export default {
                 this.centerVideoHeight = `${videoSize*0.6}px`
 
                 // 토론방 센터 (.videobox-center)
-                this.dCenterW = `${wValue075*0.4-10}px`
+                this.dCenterW = `${wValue075*0.48}px`
                 this.dCenterH = `${hValue*0.8}px`
 
                 const debateTimer = (hValue - (videoSize*0.6))
                 this.dtcHeight = `${debateTimer*0.1}px`
 
                 // 토론방 화면공유 (.share-view)
-                this.shareViewH = `${debateTimer*0.6-20}px`
-                this.shareViewW = `${wValue075*0.4-40}px`
+                this.shareViewH = `${debateTimer*0.76}px`
+                this.shareViewW = `${wValue075*0.46}px`
 
                 // 토론방 양쪽 (.videobox-side)
-                this.dSideW = `${wValue075*0.3-10}px`
-                this.dSideH = `${hValue*0.8}px`
+                this.dSideW = `${wValue075*0.3-60}px`
+                this.dSideH = `${hValue*0.93}px`
                 this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
@@ -1432,6 +1432,7 @@ export default {
 
                 this.allHeartLeft= `${document.body.clientWidth*0.5}px`
 
+
             }
             else {     // 채팅창 닫혀있을때
                 const wValue = document.body.clientWidth
@@ -1439,7 +1440,7 @@ export default {
                 const hValue = document.body.clientHeight
 
                 this.wValue075 = `${wValue075}px` // 메인화면 wrap (.debate-background)
-                this.chattBox =  `${wValue*0.25}px` // 채팅창 (.chatting-box)
+                this.chattBox =  `${wValue*0.23}px` // 채팅창 (.chatting-box)
                 this.footerWidth = `${wValue}px` // 하단바 (.debate-room-footer-class)
 
                 //표준 비디오 사이즈
@@ -1448,19 +1449,19 @@ export default {
                 this.centerVideoHeight = `${videoSize*0.6}px`
 
                 // 토론방 센터 (.videobox-center)
-                this.dCenterW = `${wValue075*0.4-10}px`
+                this.dCenterW = `${wValue075*0.48}px`
                 this.dCenterH = `${hValue*0.8}px`
 
                 const debateTimer = (hValue - (videoSize*0.6))
                 this.dtcHeight = `${debateTimer*0.1}px`
 
                 // 토론방 화면공유 (.share-view)
-                this.shareViewH = `${debateTimer*0.6-20}px`
-                this.shareViewW = `${wValue075*0.4-40}px`
+                this.shareViewH = `${debateTimer*0.76}px`
+                this.shareViewW = `${wValue075*0.46}px`
 
                 // 토론방 양쪽 (.videobox-side)
-                this.dSideW = `${wValue075*0.3-10}px`
-                this.dSideH = `${hValue*0.8}px`
+                this.dSideW = `${wValue075*0.3-60}px`
+                this.dSideH = `${hValue*0.93}px`
                 this.vsiBlank = `${hValue*0.8*0.2}px`
 
                 // 토론방 추가기능 모달창
@@ -2125,6 +2126,7 @@ export default {
     height: var(--debate-box-side-height);
     width: var(--debate-box-side-width);
     overflow: hidden;
+    /* background-color: aquamarine; */
 }
 .vsi-blank {
     height: var(--vsi-blank);
@@ -2134,12 +2136,6 @@ export default {
     width: 100%;
     /* background-color: rgb(61, 255, 94); */
     overflow: auto;
-}
-.videobox-side-inner {
-    height: var(--center-video-height);
-    width: var(--center-video-width);
-    background-color: bisque;
-    outline: 3px solid aqua;
 }
 .vsi-wrap::-webkit-scrollbar{width: 4px;}
 .vsi-wrap::-webkit-scrollbar-thumb {
@@ -2176,7 +2172,7 @@ export default {
   height: calc(var(--dct-height) + 10px);
 }
 .share-view-wrap {
-    /* background-color: aquamarine; */
+    /* background-color: pink; */
     height: calc(var(--share-view-height) + 20px);
     display: flex;
     justify-content: center;
