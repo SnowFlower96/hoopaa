@@ -428,6 +428,18 @@ export default new Vuex.Store({
       url : '/room/'+ data,
       method : "PUT",
     })
-  }
+  },
+  // 패널 정보 가져오기
+  getPanels({commit}) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/panels',
+      method : "GET",
+    }).then((res => {
+      resolve(res)
+    }))
+  })
+  },
 }
 })

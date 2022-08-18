@@ -743,7 +743,7 @@ export default {
       var connectionId = event.data.split('%')[0]
       var token = event.data.split('%')[1]
       var time = event.data.split('%')[2]
-    
+
       var connection = this.session.connection
 
       if (connection.connectionId == connectionId) {
@@ -1598,7 +1598,14 @@ export default {
     },
     // 신고 리스트 만들기
     makeList() {
-      this.penaltyList.push({id:2, nnm:'admin'})
+      this.$store.dispatch("getPanels").then((res) => {
+        var data = JSON.parse(res.data.json)
+        console.log(data)
+        for (var key in data) {
+        this.penaltyList.push({id: key, nnm:data[key]})
+      }
+      })
+      console.log(this.penaltyList)
     },
     // 음소거 컨트롤 시그널
     async audioMute(status) {
