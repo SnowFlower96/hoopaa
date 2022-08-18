@@ -702,10 +702,10 @@ public class RoomServiceImpl implements RoomService {
         for (String key : mapRooms.keySet()) {
             Map<String, String> temp = new HashMap<>();
             for (VUserInfo vUserInfo : mapRooms.get(key).getAgree()) {
-                temp.put("agree", vUserInfo.getId());
+                temp.put("agree", vUserInfo.toString());
             }
             for (VUserInfo vUserInfo : mapRooms.get(key).getDisagree()) {
-                temp.put("disagree", vUserInfo.getId());
+                temp.put("disagree", vUserInfo.toString());
             }
             result.put(key, temp);
         }
