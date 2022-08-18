@@ -16,7 +16,7 @@ services:
     restart: always
     environment:
       TZ: "Asia/Seoul"
-      SPRING_DATASOURCE_URL: "jdbc:mysql://host.docker.internal:3306/debate"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://3.38.181.187:3306/debate"
     depends_on:
       - db
     network_mode: host
