@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="list-page-black-space"></div>
-      <search></search>
+      <search @searchKeyword="searchKeyword"></search>
 
       <!--수정 부분-->
       <div class="left-main-wrap">
@@ -422,7 +422,7 @@ export default {
       roomId : '',
       allcheck:true,
       pwd:'',
-
+      keyword:'',
       // roomList : [
       //   {phase: 0, title: 'yes01', subtitle: 'GMO식품과연안전한가?'},
       //   {phase: 1, title: 'yes01', subtitle: '가나다라마바사아자차카타퍼ㅏ하'},
@@ -588,30 +588,19 @@ export default {
       }
       console.log(data)
       this.$store.dispatch("enterRoom", data)
+   },
+
+    //키워드 검색
+    searchKeyword(keyword){
+      if(keyword ==''){
+        this.$store.dispatch("getRoomInfo");
+        this.allcheck ='false'
+      }else{
+        this.$store.dispatch("getRoomInfokeyword", keyword);
+        this.checkbox = false;
+        this.allcheck='true';
+      }
     }
-  }
-  // setup () {
-  //   const router = useRouter()
-
-  //   const state = reactive({
-  //     count: 5
-  //   })
-
-  //   const load = function () {
-  //     state.count += 4
-  //   }
-
-  //   const clickConference = function (id) {
-  //     router.push({
-  //       name: 'conference-detail',
-  //       params: {
-  //         conferenceId: id
-  //       }
-  //     })
-  //   }
-
-  //   return { state, load, clickConference }
-  // },
-
+}
 }
 </script>

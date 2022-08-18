@@ -1,6 +1,6 @@
 <template>
 <!-- 타이머 컴포넌트 -->
-    <div class="debate-guague" :style="customViewStyle">
+    <div class="debate-guague" :style="customViewStyle" v-if="timer">
         <div class="debate-guague-inner" :style="customViewStyle">
             <span style="font-size: 25px;" v-if="!timeList[1]">반대팀</span>
             <span style="font-size: 25px;" v-if="timeList[1]">찬성팀</span>
@@ -24,15 +24,14 @@ export default {
     data() {
         return {
             timerMin: 0,
-            timerSec: 0
+            timerSec: 0,
         }
     },
     props: [
         'timeList',
         'moderator',
-        'all',
-        'team',
-        'timerMin'
+        'timerMin',
+        'timer'
     ],
     components : {
         // UserVideo,
@@ -96,6 +95,9 @@ export default {
     },
     methods: {
         startTimer() {
+            if (this.moderator) {
+              this.$emit('startTimer');
+            }
             let time = this.timeList[0];
             let min = this.timerMin;
             let sec = this.timerSec;
@@ -109,6 +111,9 @@ export default {
             if (time < 0) {
                 clearInterval(x);
                 document.getElementById("speaktimer").innerHTML = "0분 0초";
+                if (this.moderator) {
+                  this.$emit('muteAll')
+                }
             }
             }, 1000);
 
@@ -131,7 +136,7 @@ export default {
             this.dbContentInnerHeight = `${hValue*0.85-50}px`
         },
          leaveSession() {
-          
+
             // --- Leave the session by calling 'disconnect' method over the Session object ---
             if (this.session) this.session.disconnect();
             this.session = undefined;
