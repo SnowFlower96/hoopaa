@@ -216,8 +216,8 @@
                                     <div class="share-view" :style="customCaroselStyle">
                                         <!-- 화면공유 여기에 넣으면 됨 -->
                                         <!-- <user-video :stream-manager="publisherScreen"></user-video> -->
-				                                <div v-for="(sub, index) in subscribersScreen" :key="index" >
-					                                <user-video :stream-manager="sub.data" ></user-video>
+				                                <div v-for="(sub, index) in subscribersScreen" :key="index" :style="customCaroselStyle">
+					                                <user-video class="share-inner" :stream-manager="sub.data" :style="customCaroselStyle" ></user-video>
 				                                </div>
                                     </div>
                                   </div>
@@ -289,6 +289,7 @@
                 <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
             </div>
         <!-- footer -->
+
 
     </div>
     <!-- 토론방 메인화면 -->
@@ -1763,6 +1764,10 @@ export default {
 </script>
 
 <style>
+.share-inner > #local-video-undefined {
+  width: var(--share-view-width);
+  height: var(--share-view-height);
+}
 .leave-session {
   right: 0;
   position: absolute;
