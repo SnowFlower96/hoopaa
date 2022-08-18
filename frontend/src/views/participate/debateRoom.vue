@@ -25,7 +25,6 @@
 <!-- 사회자 시작버튼 -->
 <div class="mod-start-btn-bg">
     <div v-if="session.sessionId == user.id && modStart == true" @click="animationSignal('startEvent')">토론 시작하기</div>
-
 </div>
 <!-- 사회자 시작버튼 -->
 
@@ -153,6 +152,13 @@
                     </div>
                   </div>
                 </div>
+
+                <div v-if="viewCodeMd" class="penalty-view displayFlex">
+                  <div>
+                    <div style="color:white; font-size:20px; margin-bottom: 70px;">입장코드 : </div>
+                    <div @click="offpenaltyView" class="penalty-btn displayFlex">확인</div>
+                  </div>
+                </div>
             </div>
             <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
         </div>
@@ -253,6 +259,7 @@
 
         <!-- 사회자 footer에서 나오는 메뉴 -->
             <div class="moderator-menus" v-if="modMenu && moderator" :style="customCaroselStyle">
+                <p @click="viewCode">입장코드 확인</p>
                 <p @click="EmitcallModal('menu')">패널 발언권 부여</p>
                 <p @click="EmitcallModal('rest')">쉬는시간 부여</p>
                 <p @click="voteVisible">투표 보내기</p>
@@ -285,7 +292,7 @@
 
     </div>
     <!-- 토론방 메인화면 -->
-    <button @click="leaveSession">닫기닫기닫기</button>
+    <div @click="leaveSession">토론 나가기</div>
 </template>
 
 
@@ -514,6 +521,7 @@ export default {
             timeList:[], // 타이머 = 0: 시간(초), 1: 찬반 (찬1, 반0)
             timerMin: 0,
             penaltyView: false,
+            viewCodeMd:false,
 
             // 토론끝나고 방청잭 투표뷰 3개
             allVoteView: true,
@@ -602,6 +610,21 @@ export default {
         window.addEventListener('resize', this.handleResizeHome);
     },
     methods: {
+      viewCode() {
+        this.callToMdModal = true
+        this.viewCodeMd = true
+        this.penaltyView = false
+        this.menu = false
+        this.out = false
+        this.message = false
+        this.file = false
+        this.rest = false
+        this.messageFrom = false
+      },
+      offviewCode() {
+        this.callToMdModal = false
+        this.viewCodeMd = false
+      },
       offpenaltyView() {
         this.callToMdModal = false
         this.penaltyView = false
@@ -1744,10 +1767,10 @@ export default {
   left: 50%;
 }
 .mod-start-btn-bg > div {
-  width: 230px;
-  height: 70px;
+  width: 130px;
+  height: 50px;
   border-radius: 10px;
-  font-size: 30px;
+  font-size: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
