@@ -632,10 +632,11 @@ public class RoomServiceImpl implements RoomService {
             activeSessions.put(session.getSessionId(), session);
         }
 
+        List<String> buffer = new ArrayList<>();
         for (String key : this.mapRooms.keySet()) {
             if (!key.chars().allMatch(Character::isDigit)) continue;
             if (!activeSessions.containsKey(key)) {
-                this.mapRooms.remove(key);
+                buffer.add(key);
             } else {
                 VRoom vRoom = mapRooms.get(key);
 
@@ -659,6 +660,8 @@ public class RoomServiceImpl implements RoomService {
                 roomInfoRepository.save(roomInfo);
             }
         }
+
+        for (String key : buffer) this.mapRooms.remove(key);
     }
 
     @Override
