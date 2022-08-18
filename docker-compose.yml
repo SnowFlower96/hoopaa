@@ -52,7 +52,7 @@ services:
     volumes:
       - ./openvidu/coturn:/run/secrets/coturn
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${OPENVIDU_CDR_PATH}:${OPENVIDU_CDR_PATH}
+      - ${OPENVIDU_CDR_PATH}:/openvidu/cdr
     env_file:
       - .env
     environment:
