@@ -2,6 +2,33 @@
 <!-- 세부세션 메인 -->
     <div class="detail-box-background" :style="customDetailSessionSize">
 
+<!-- 화면공유 모달창 -->
+<div v-if="callToMdModal" class="call-to-moderator-container" :style="customCaroselStyle">
+    <div class="call-to-moderator-blank"></div>
+    <div class="call-to-moderator">
+        <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
+        <div class="call-to-moderator-inner-c call-to-moderator-center" :style="customCaroselStyle">
+            <div class="modal-icon" @click="offCallModal"><i class="fas fa-times"></i></div>
+            <div class="upload-file-wrap">
+              <div  class="ufw-inner">
+                  <div>
+                      <div class="ufw-inner">
+                          <p style="font-size: 30px;">화면 공유</p>
+                      </div>
+                      <div class="ufw-inner">
+                          <div class="ufw-btn" @click="shareScreen">공유하기</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="call-to-moderator-inner" :style="customCaroselStyle"></div>
+    </div>
+    <div class="call-to-moderator-blank"></div>
+</div>
+
+<!-- 화면공유 모달창 -->
+
         <!-- 화면공유 + 사용자비디오 들어가는부분 -->
         <div class="detail-box-outer">
 
@@ -49,7 +76,7 @@
 
     <!-- 세부세션 푸터 -->
         <div class="debate-room-footer-class-detail">
-            <footer-team @call-modal="changeChatView"></footer-team>
+           <div @click="callModalFile" class="file-btn footer-btn"><i class="fas fa-desktop"></i></div>
             <div class="chatt-btn" @click="changeChatView"><i class="fas fa-comment-alt"></i></div>
         </div>
     <!-- 세부세션 푸터 -->
@@ -177,6 +204,8 @@ export default {
 			      subscribersScreen:[],
             screensharing: false,
 
+            callToMdModal: false,
+
             //채팅
             messagesAgree:[],
             messagesDisagree:[],
@@ -220,6 +249,15 @@ export default {
       await this.joinSession();
   },
     methods: {
+      shareScreen() {
+        // 여기에 화면공유하는 함수를 넣어라
+      },
+        callModalFile() {
+          this.callToMdModal = true
+        },
+        offCallModal() {
+          this.callToMdModal = false
+        },
         handleResizeSession() {
             if(this.chattTF === true) {
                 const ViewWidth = document.body.clientWidth

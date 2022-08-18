@@ -17,9 +17,9 @@
             </div>
           </div>
 
-          <div class="main-img-wrapp-child" style="background-color: #fff8e0; color: #ffdb65">
-            <div style="height: 15%;"></div>
-            <div><p>서비스 소개</p></div>
+          <div class="main-img-wrapp-child" style="background-color: #fff8e0; color: #eac035; font-weight:border;">
+            <div style="height: 3%;"></div>
+            <div style="font-size:70px; margin:4%;">서비스 소개</div>
             <iframe width="700" height="400" src="https://www.youtube.com/embed/h42tRhiiv48" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
         </div>
@@ -183,6 +183,7 @@ export default {
 @media (max-width: 800px) {
   .main-img-wrapp-button {
     width: 50%;
+    /* color: #eac035; */
   }
   .main-img-wrapp-child > div > p {
   font-size: 25px;

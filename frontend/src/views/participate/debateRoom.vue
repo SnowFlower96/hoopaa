@@ -219,8 +219,6 @@
 				                                <div v-for="(sub, index) in subscribersScreen" :key="index" >
 					                                <user-video :stream-manager="sub.data" ></user-video>
 				                                </div>
-
-
                                     </div>
                                   </div>
 
