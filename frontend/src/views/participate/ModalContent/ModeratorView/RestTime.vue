@@ -27,7 +27,7 @@ export default {
     methods: {
         EmitRest() {
             this.$emit('emit-rest', parseInt(this.timeRest)*60);
-            this.$emit('sendSebuSession');
+            this.$emit('sendSebuSession', parseInt(this.timeRest)*60 );
         }
     }
 

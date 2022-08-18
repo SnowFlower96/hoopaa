@@ -716,18 +716,22 @@ export default {
       })
 
       // 세부세션 signal
-     this.session.on('signal:Go-SebuSession-Agree', (event) => {
-      if (this.session.sessionId != this.user.id) {
-        this.$store.commit("CREATE_TEMP_SUB_TOKEN", event.data);
-        this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'agree')
+     this.session.on('signal:Go-SebuSession', (event) => {
+      var connectionId = event.data.split('/')[0]
+      var token = event.data.split('/')[1]
+      var time = event.data.split('/')[2]
+      console.log(this.session.connection)
+      console.log(this.session.connectionId)
+      if (this.session.connectionId == connectionId) {
+        this.$store.commit("CREATE_TEMP_SUB_TOKEN", token);
+        if (this.position == 'agree') {
+          this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'agree' + '?time=' + time)
+        } else if (this.position == 'disagree') {
+          this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'disagree' + '?time=' + time)
+        }
       }
     });
-     this.session.on('signal:Go-SebuSession-Disagree', (event) => {
-      if (this.session.sessionId != this.user.id) {
-      this.$store.commit("CREATE_TEMP_SUB_TOKEN", event.data);
-      this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'disagree')
-      }
-    });
+
       // 발언권 signal
       this.session.on('signal:Set-Audio', (event) => {
         if (this.session.sessionId != this.user.id) {
@@ -1522,7 +1526,7 @@ export default {
         },
 
         // 세부세션 보내기 시그널
-        async sendSession() {
+        async sendSession(time) {
           let agreeArr = [];
           let disagreeArr = [];
           let index = "/room/session/" + this.session.sessionId;
@@ -1530,28 +1534,18 @@ export default {
           let data = JSON.parse(response.data.json)
           console.log(data)
           for (var key in data) {
-            if (data[key].token.split('_')[1].split('&')[0] == 'disagree') {
-              this.sendSessionDisagreeFunc({connectionId : data[key].connectionID}, data[key].token)
-            } else {
-              this.sendSessionAgreeFunc({connectionId : data[key].connectionID}, data[key].token)
-            }
+
+              this.sendSessionFunc(data[key].connectionID, data[key].token, time)
           }
         })
 
     },
     // 세부세션 보내기 시그널 함수
-     sendSessionAgreeFunc(connectionId, token) {
+     sendSessionFunc(connectionId, token, time) {
        this.session.signal({
-          data: token,
-          to: connectionId,
-          type: 'Go-SebuSession-Agree'
-        });
-     },
-     sendSessionDisagreeFunc(connectionId, token) {
-       this.session.signal({
-          data: token,
-          to: connectionId,
-          type: 'Go-SebuSession-Disagree'
+          data: connectionId + '/' + token + '/' + time ,
+          to: [],
+          type: 'Go-SebuSession'
         });
      },
 
