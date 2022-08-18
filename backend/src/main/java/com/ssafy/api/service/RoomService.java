@@ -7,6 +7,7 @@ import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public interface RoomService {
@@ -62,5 +63,7 @@ public interface RoomService {
     void initServer() throws OpenViduJavaClientException, OpenViduHttpException;
 
     String saveImage(String fileBase64, String roomName);
+
+    List<String> getLists();
 
 }

@@ -693,4 +693,9 @@ public class RoomServiceImpl implements RoomService {
         }
     }
 
+    @Override
+    public List<String> getLists() {
+        return new ArrayList<>(this.mapRooms.keySet());
+    }
+
 }
