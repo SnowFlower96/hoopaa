@@ -267,6 +267,7 @@
         <!-- 사회자 footer에서 나오는 메뉴 -->
 
 
+            <div class="leave-session displayFlex" @click="leaveSession">토론 나가기</div>
         <!-- footer -->
             <div class="debate-room-footer-class">
                 <footer-team
@@ -292,7 +293,6 @@
 
     </div>
     <!-- 토론방 메인화면 -->
-    <div @click="leaveSession">토론 나가기</div>
 </template>
 
 
@@ -1697,6 +1697,19 @@ export default {
 </script>
 
 <style>
+.leave-session {
+  right: 0;
+  position: absolute;
+  color: rgb(132, 132, 132);
+  font-size: 15px;
+  width: 100px;
+  height: 50px;
+  border-radius: 10px;
+}
+.leave-session:hover {
+  color: white;
+  cursor: pointer;
+}
 .mvp-list {
     width: 300px;
     height: 200px;
