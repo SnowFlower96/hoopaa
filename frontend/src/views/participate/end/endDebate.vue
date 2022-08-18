@@ -5,7 +5,7 @@
             <div class="end-btn-wrap">
             <div @click="resultBtn" class="end-btn">결과 보러가기 ⬇ </div>
             </div>
-            
+
         </div>
     </div>
 
@@ -14,8 +14,7 @@
             <p style="font-size: 40px; color:white;" class="displayFlex">👑 이번 토론의 MVP 👑</p>
             <div class="displayFlex">
                 <div class="mvp-menber-box displayFlex">
-                    <p style="color:white; font-size: 40px; margin:15px;">김현주</p>
-                    <p style="color:white; font-size: 40px; margin:15px;">김현주</p>
+                    <p style="color:white; font-size: 40px; margin:15px;">{{king}}</p>
                 </div>
             </div>
             <div class="displayFlex">
@@ -25,7 +24,7 @@
     </div>
     <div id="resultWrap" class="graphWrap">
         <p class="result-title">토론 결과</p>
-        
+
         <div id="barChart" class="barChart">
             <div id="chartValue">{{initial}}</div>
         </div>
@@ -44,27 +43,44 @@ export default {
         return {
             initial: 0,
             // 받아온 데이터 넣을 예정
-            agree: 35,
-            disagree: 25,
-            mvpView: false
+            agree: '',
+            disagree: '',
+            king : '',
+            mvpView: false,
+            total : parseInt(this.agree) + parseInt(this.disagree)
         }
     },
     mounted() {
+        const endSound = new Audio("https://drive.google.com/uc?export=download&id=1CwL1BIeUH7ymCbHOFtO9J2BMHCw3Vsk0");
+        endSound.play();
     },
     methods: {
-        resultBtn() {
+        async resultBtn() {
+            const clap = new Audio("https://drive.google.com/uc?export=download&id=13AIGF6JIkbdiO5WYS2YhB-g4Y-5Ub6iE");
+            clap.play();
+          let query = window.location.search;
+         await this.$store.dispatch("getRoomResult", query.split('?')[1]).then((res)=> {
+            console.log(res)
+            let result = JSON.parse(res.data.json);
+            this.agree = result.agree.split("표")[0];
+            this.disagree = result.disagree.split("표")[0];
+            this.king = result.king
+         })
             let element = document.getElementById("resultWrap");
             element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
 
-            document.getElementById("barChart").style.height = this.agree*17 + "px";
+            document.getElementById("barChart").style.height = (this.agree/this.total)*700 + "px";
             document.getElementById("chartValue").innerText = Math.round(this.agree);
 
-            document.getElementById("barChart2").style.height = this.disagree*17 + "px";
+            document.getElementById("barChart2").style.height = (this.disagree/this.total)*700 + "px";
             document.getElementById("chartValue2").innerText = Math.round(this.disagree);
             setTimeout(() => {
                 this.mvpView = true
             }, 5000)
         }
+    },
+    created () {
+
     }
 }
 </script>
@@ -97,8 +113,8 @@ export default {
     }
     .barChart{
         position: absolute;
-        left:65%; 
-        bottom:-90vh;  
+        left:65%;
+        bottom:-90vh;
         width:30px;
         height:20px;
         perspective-origin: center bottom ;
@@ -116,7 +132,7 @@ export default {
     .barChart::after{
         position: absolute;
         content:"";
-        width:30px; height:30px; bottom:0; 
+        width:30px; height:30px; bottom:0;
         border-radius: 100%;
         background-color:rgba(0,0,0,0.15);
     }
@@ -131,29 +147,29 @@ export default {
         width: 100px;
         position: absolute;
         left: 65%;
-        bottom:-95vh; 
+        bottom:-95vh;
         font-size: 30px;
-    } 
+    }
     .barChart-t2{
         transform: translate(-27%, 0%);
         width: 100px;
         position: absolute;
         left:  80%;
-        bottom:-95vh; 
+        bottom:-95vh;
         font-size: 30px;
-    } 
-    
+    }
+
     .result-title {
         position: absolute;
-        font-size: 100px; 
+        font-size: 100px;
         margin:0px;
         top: 125%;
         left: 13%;
     }
     .barChart2{
         position: absolute;
-        left:80%; 
-        bottom:-90vh; 
+        left:80%;
+        bottom:-90vh;
         width:30px;
         height:20px;
         perspective-origin: center bottom ;
@@ -171,7 +187,7 @@ export default {
     .barChart2::after{
         position: absolute;
         content:"";
-        width:30px; height:30px; bottom:0; 
+        width:30px; height:30px; bottom:0;
         border-radius: 100%;
         background-color:rgba(0,0,0,0.15);
     }

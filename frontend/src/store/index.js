@@ -19,6 +19,8 @@ export default new Vuex.Store({
     tempToken : '',
     user : [],
     position : '',
+    tempSubToken : '',
+    roomCode : '',
   },
 
   mutations : {
@@ -33,7 +35,8 @@ export default new Vuex.Store({
         state.tempToken = '';
         state.user = [];
         state.position = '';
-
+        state.tempSubToken = '';
+        state.roomCode = '';
     },
     // 방 리스트 불러오기
     GET_ROOM_LIST(state, data) {
@@ -47,6 +50,13 @@ export default new Vuex.Store({
       api.defaults.headers["accessToken"] = data.accessToken;
       state.user = data.user;
     },
+    // 비회원 로그인
+    BUSER_LOGIN(state, data) {
+      sessionStorage.setItem("accessToken", data.accessToken);
+      api.defaults.headers["accessToken"] = data.accessToken;
+      state.user = data.nnm;
+    },
+
     // 로그아웃
     USER_LOGOUT(state) {
       state.isLogin = false;
@@ -63,8 +73,14 @@ export default new Vuex.Store({
     CREATE_TEMP_TOKEN(state, data) {
       state.tempToken = data;
     },
+    CREATE_TEMP_SUB_TOKEN(state, data) {
+      state.tempSubToken = data;
+    },
     SET_POSITION(state, data) {
       state.position = data;
+    },
+    SET_ROOM_CODE(state, data) {
+      state.roomCode = data;
     }
   },
 
@@ -109,7 +125,6 @@ export default new Vuex.Store({
             method: "POST",
             data : data
           }).then((res) => {
-            console.log(res);
             router.push('/email?em='+data.em)
             commit();
           })
@@ -160,20 +175,19 @@ export default new Vuex.Store({
         url : `/users/info`,
         method : "GET"
       }).then((res) => {
-        console.log(res.data)
         commit("USER_INFO",res.data.json);
       })
      },
 
      // User Info 수정
-      putUserStat({commit},data) {
+     changeInfo({commit}, data) {
       api({
         headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
         url : `/users/info`,
         method : "PUT",
         data : data,
-      }).then((res) => {
-        commit("USER_INFO",res.data);
+      }).then(() => {
+        commit();
       })
      },
 
@@ -263,7 +277,7 @@ export default new Vuex.Store({
       data : room,
     }).then((res) =>{
       resolve(res);
-      commit();
+      commit("SET_ROOM_CODE", res.data.response);
     }).catch((error) =>{
       reject(error);
     })
@@ -277,7 +291,6 @@ export default new Vuex.Store({
       method : "POST",
       data : data,
     }).then((res) => {
-      console.log(res.data);
       commit("CREATE_TEMP_TOKEN",res.data.token);
       router.push("/participatingPage")
     })
@@ -330,9 +343,115 @@ export default new Vuex.Store({
       url : index,
       method : "POST",
     }).then((res) => {
-      console.log(res.data)
       // commit();
     })
+  },
+
+  // 토론방 기능
+
+  roomStart({commit}, data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : `/room/start`,
+      method : "PUT",
+      data : data
+    })
+  },
+
+  // 비회원 토큰 발급
+
+  bJoin({commit}, data) {
+    api({
+      url : '/users/temp/' + data.nnm,
+      method : "POST",
+    }).then((res) => {
+      commit("BUSER_LOGIN", res.data)
+      this.dispatch("enterRoom", data.data);
+    })
+  },
+
+  // 투표
+  // 투표시작
+  voteStart({commit},data) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : `/room/vote`,
+      method : "PUT",
+      data : data
+    }).then((res) => {
+      resolve(res);
+    })
+  })
+  },
+  // 투표 보내기
+  voteFinal({commit}, data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/vote/final?kingUserID=' + data.kingUserID + '&sessionID=' + data.sessionID + '&vote=' + data.vote,
+      method : "POST",
+    })
+  },
+  // 세부세션 닫기
+  closeSession({commit}, data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/session/' + data,
+      method : "DELETE",
+    })
+  },
+  // 룸 종료
+  closeRoom({commit}) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room',
+      method : "DELETE",
+    })
+  },
+  // 방 결과 불러오기
+  getRoomResult({commit}, data) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/'+ data,
+      method : "GET",
+    }).then((res)=>{
+      resolve(res);
+    })
+  })
+  },
+
+  // 패널티 주기
+  givePenalty({commit}, data) {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/'+ data,
+      method : "PUT",
+    })
+  },
+  // 패널 정보 가져오기
+  getPanels({commit}) {
+    return new Promise ((resolve, reject) => {
+    api({
+      headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+      url : '/room/panels',
+      method : "GET",
+    }).then((res => {
+      resolve(res)
+    }))
+  })
+  },
+
+  // 토큰 재발급
+  getReToken({commit}, data) {
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+        url : '/room/enter/' + data,
+        method : "PUT",
+      }).then((res => {
+        commit("CREATE_TEMP_TOKEN",res.data.token);
+      }))
+
   }
 }
 })

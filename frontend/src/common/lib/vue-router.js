@@ -13,8 +13,6 @@ import homeToParticipate from '@/views/home/homeToParticipate'
 import debateRoom from '@/views/participate/debateRoom'
 import detailSessionView from '@/views/participate/detailSessionView'
 
-import test from '@/views/participate/test'
-
 import endDebate from '@/views/participate/end/endDebate'
 
 import signUpEmail from '@/views/user/email'
@@ -102,7 +100,7 @@ function makeRoutesFromMenu () {
   path: '/participatingPage',
   name: 'participating-page',
   component: participatingPage,
-  beforeEnter: checkLogin(),
+  // beforeEnter: checkLogin(),
 },
 {
   path: '/startWithCode',
@@ -148,12 +146,6 @@ function makeRoutesFromMenu () {
 },
 
 {
-  path : '/test',
-  name: 'test',
-  component: test,
-},
-
-{
   path : '/endDebate',
   name: 'endDebate',
   component: endDebate,
@@ -170,10 +162,5 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
-
-// router.afterEach((to) => {
-//   console.log('이거냐?', to.fullPath, $state.headerVisible)
-
-// })
 
 export default router

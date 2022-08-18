@@ -6,50 +6,64 @@
             <div style="display: flex; justify-content: end;" @click="offModal"><i class="fas fa-times"></i></div>
           <div class="home-check-in-inner displayFlex">
             <div style="text-align:center;">
-              <div v-if="ppSet">
-                <div style="font-size:30px;">참여 설정</div>
-                <div class="displayFlex">
-                  <router-link to="/login" style=text-decoration:none;><div class="home-modal-btn displayFlex">로그인</div></router-link>
-                  <div class="home-modal-btn displayFlex" @click="changePpSet">비회원</div>
+              <div v-if="!isLogin">
+                <div v-if="ppSet">
+                  <div style="font-size:30px;">참여 설정</div>
+                  <div class="displayFlex">
+                    <router-link to="/login" style=text-decoration:none;><div class="home-modal-btn displayFlex">로그인</div></router-link>
+                    <div class="home-modal-btn displayFlex" @click="changePpSet">비회원</div>
+                  </div>
+                </div>
+                <div class="pp-set" v-if="!ppSet">
+                  <div style="font-size:30px;">비회원 참여</div>
+                  <div class="displayFlex pp-set-inner">
+                    <div>닉네임 입력</div>
+                    <input v-model="b_nnm" type="text">
+                  </div>
+                  <div class="displayFlex">
+                    <div class="home-modal-btn displayFlex" @click="b_join">참여</div>
+                  </div>
                 </div>
               </div>
-              <div class="pp-set" v-if="!ppSet">
-                <div style="font-size:30px;">비회원 참여</div>
-                <div class="displayFlex pp-set-inner">
-                  <div>닉네임 입력</div>
-                  <input type="text">
-                </div>
-                <div class="displayFlex">
-                  <router-link to="/debateRoom" style=text-decoration:none;><div class="home-modal-btn displayFlex">참여</div></router-link>
+              <div v-else>
+                <div v-if="ppSet">
+                  <div style="font-size:30px;">참여 여부</div>
+                  <div class="displayFlex">
+                    <div class="home-modal-btn displayFlex" @click="roomEnter">참여</div>
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
       </div>
       <div class="list-page-black-space"></div>
       <search></search>
+
+      <!--수정 부분-->
       <div class="left-main-wrap">
-
-
           <div class="left">
+            <div class="cate-title">카테고리</div>
             <ul>
-              <li v-for="(item, index) in menus" :key="index" @click="goCate(item.path)">
-                <div class="cate-li-div-container">{{item.name}}</div>
+              <li v-for="(item, index) in menus" :key="index" @click="goCate(item.path)" :class="{'cldc-highlight': menusIndex == `${index}`, 'cate-li-div-container' : menusIndex != `${index}`}">
+                <div>{{item.name}}</div>
               </li>
             </ul>
           </div> <!--left-->
 
             <div class="main-container">
               <div class="main-inner-container">
-                <h1>실시간 인기 토론</h1>
-                <div class="carousel-wrapper">
+                <h1 v-if="allcheck!='true'" >실시간 인기 토론</h1>
+                <div v-show="allcheck!='true'" class="carousel-wrapper">
                   <ul class="carousel-ul">
                     <li  v-for="(room, index) in roomList" :key="index">
-                    <div class="carosel-room-card" @click="gotoRoom">
+                    <div v-if="index<8" class="carosel-room-card" >
+
                       <div class="room-info-carosel" :style="customCaroselStyle">
-                        <p class="room-phase-tip">{{phase[room.phase]}}</p>
-                        <p id="title-carosel">{{room.title}}</p>
+                        <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
+                        <room-card :room="roomList[roomList.length - index-1]" @click="gotoRoom(roomList[roomList.length - index-1].hostID)">
+                       </room-card>
                       </div>
                     </div>
                     </li>
@@ -58,7 +72,8 @@
 
 
                 <div>
-                  <h1>전체 카테고리</h1>
+                  <!-- 수정 부분 -->
+                  <h1>{{menus[menusIndex].name}} 카테고리</h1> <!-- 수정 부분 -->
                   <div class="cate-items-wrap">
                     <div class="cate-item">
                       <div>
@@ -81,25 +96,30 @@
 
 
                 <!-- <div class="list">여기가 기본 all, 총 방 갯수 : {{roomList.length}}</div> -->
-                <ul class="room-ul">
-                  <li v-for="(indexOut) in (roomList.length/4)" :key="indexOut">
-                    <ul class="card-container-ul">
-                      <li v-for="(indexIn) in 4" :key="indexIn">
-                      <div class="room-card">
-                        <div class="room-info" :style="customCaroselStyle">
-                          <p class="room-phase-tip">{{phase[roomList[(4 * (indexOut-1)) + indexIn-1].phase]}}</p>
-                          <p id="title-room">{{roomList[(4 * (indexOut-1)) + indexIn-1].subtitle}}</p>
+                <div class="main-all-wrapper">
+                  <div class="main-all-container">
+                    <ul class="main-all-ul">
+                      <li  v-for="(room, index) in roomList" :key="index">
+                      <div class="carosel-room-card" >
+                        <div class="room-info-carosel" :style="customCaroselStyle">
+                          <!-- <p class="room-phase-tip">{{phase[room.phase]}}</p> -->
+
+                          <room-card :room="roomList[roomList.length - index-1]" @click="gotoRoom(roomList[roomList.length - index-1].hostID)">
+                          </room-card>
                         </div>
                       </div>
                       </li>
                     </ul>
-                  </li>
-                </ul>
+                  </div>
+                </div>
+
               </div> <!-- main-inner-container -->
             </div> <!--main-container-->
       </div> <!--left-main-wrap-->
     </div>
   <!-- </div> -->
+
+  <!--수정 부분-->
 </template>
 
 <style>
@@ -155,7 +175,7 @@
 .left-main-wrap {
   display: flex;
 }
-.room-phase-tip {
+/* .room-phase-tip {
   width: 45px;
   text-align: end;
   background-color: rgb(167, 234, 255);
@@ -163,8 +183,8 @@
   padding: 3px;
   z-index: 3;
   border-radius: 3px;
-  /* margin-left: var(--room-phase-tip-margin-left); */
-}
+  margin-left: var(--room-phase-tip-margin-left);
+} */
 
 /* 카테고리 style */
 ul {
@@ -178,11 +198,26 @@ ul {
 }
 .left ul {padding: 0px}
 .left ul li { font-size:25px;  height:75px; list-style: none;}
+.cate-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #4b669b;
+  font-weight: bolder;
+  height:75px;
+  margin-top: 20px;
+  font-size:35px;
+}
 .left ul li#logo {font-family: 'Cafe24', cursive; font-size:30px; height: 130px;}
 .left ul li#logo div {line-height: 0.8}
 .cate-li-div-container:hover {
-  color: #667799;
+  color: #88a4dbb9;
   cursor: pointer;
+}
+.cldc-highlight {
+  font-weight: bolder;
+  color: #5c86da;
+  text-shadow: #8a9dc291 1px 0 5px;
 }
 /* 카테고리 style */
 
@@ -205,6 +240,11 @@ ul {
 
 .main-inner-container {
   max-width: inherit;
+}
+
+/* 수정함 */
+h1{
+  text-align: left;
 }
 
 /* 메인 뷰 - carousel */
@@ -235,7 +275,7 @@ ul {
   margin: 10px;
 }
 .room-info-carosel {
-  background-image: url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+
   height: var(--carosel-item-height);
   background-size:100% 100%;
   width: var(--carosel-item-width);
@@ -243,7 +283,7 @@ ul {
   border-radius: 10px;
 }
 .room-info-carosel:hover {
-  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg');
+  /* background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://img.animalplanet.co.kr/news/2019/06/28/700/50l8l41c2s798dtceu0m.jpg'); */
   cursor: pointer;
   /* filter: brightness(80%);
   transition: filter .3s; */
@@ -328,14 +368,32 @@ ul {
 .card-container-ul, .room-ul {
   padding: 0px;
 }
+/* 수정함 */
+.main-all-container{
+  display : flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+   width: 100%;
+}
+.main-all-ul{
+  width:100%;
+  flex-wrap: wrap;
+  flex-direction: row;
+  list-style:none;
+  padding: 0px;
+}
+.main-all-ul > li {
+  margin: 10px;
+}
 /* room-list */
 
 </style>
 <script >
 import Search from '@/views/common/search'
 import Conference from './components/conference'
+import RoomCard from './components/room-card'
 import 'vue3-carousel/dist/carousel.css';
-// import { mapState , mapMutations} from "vuex";
+import { mapState , mapMutations} from "vuex";
 
 
 export default {
@@ -343,12 +401,13 @@ export default {
 
   components: {
     Conference,
+     RoomCard,
     Search,
   },
   data () {
     return {
-      phase : {0:"모집중", 1:"진행중", 3:"투표중", 4:"종료"},
       menus : '',
+      menusIndex: 0, // < ===== 이거추가
       checkbox : 'false',
       data : '',
       c_index : 0,
@@ -359,20 +418,24 @@ export default {
       dropdownSortTF: false,
       homeCheckInModal : false,
       ppSet: true,
-      //  - - - - - - 여기고침 - - - - - -  ⬇//
-      // 0815 곧 지울
-      roomList : [
-        {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
-        {phase: 'hi01', title: 'yes01', subtitle: 'no0101'}, 
-        {phase: 'hi01', title: '느엥', subtitle: 'no0101'},  
-        ],
-      // // 0815 곧 지울
-      viewCaroselLenghth : 4
-      //  - - - - - - 여기고침 - - - - - -  ⬆//
+      b_nnm : '',
+      roomId : '',
+      allcheck:true,
+      pwd:'',
+
+      // roomList : [
+      //   {phase: 0, title: 'yes01', subtitle: 'GMO식품과연안전한가?'},
+      //   {phase: 1, title: 'yes01', subtitle: '가나다라마바사아자차카타퍼ㅏ하'},
+      //   {phase: 1, title: '느엥', subtitle: '1대1하실분 들어오셈'},
+      //   {phase: 1, title: '느엥', subtitle: '배고프다'},
+      //   {phase: 1, title: '느엥', subtitle: '느dfgdfgdfgdfgdfg엥'},
+      //   {phase: 1, title: '느엥', subtitle: '느엥'},
+      //   ],
+      viewCaroselLenghth : null
     }
   },
   computed : {
-    // ...mapState(["roomList"]),
+    ...mapState(["roomList","isLogin"]),
     customCaroselStyle() {
       return {
         "--carosel-item-width": this.caroselWidth,
@@ -383,24 +446,21 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      console.log(to)
     }
   },
- //  - - - - - - 여기고침 - - - - - -  ⬇//
   mounted() {
-    if (this.roomList.length < 8) {
-      const ceroselLet = this.roomList.length
-      for(let i = 1; i < 9-ceroselLet; i++) {
-        this.roomList.push({phase: '', title: '', subtitle: ''})
-      }
+    if (this.roomList.length < 4 || this.roomList.length === 4) {
+      this.viewCaroselLenghth = 0
     }
-    this.clickCaroselNext = setInterval(this.next, 3000)
+    else {
+      this.viewCaroselLenghth = this.roomList.length - 4
+    }
+    this.clickCaroselNext = setInterval(this.next, 4000)
     const value = document.body.clientWidth*0.8*0.25
     this.caroselWidth = `${value-20}px` // margin buffer 10px 고려한 계산
     this.caroselHeight = `${(value-20)*0.62}px`
     window.addEventListener('resize', this.handleResizeHome);
   },
-//  - - - - - - 여기고침 - - - - - -  ⬆//
   beforeRouteLeave() {
     clearInterval(this.clickCaroselNext)
   },
@@ -410,7 +470,7 @@ export default {
     this.menus = menuData;
   },
    methods: {
-    // ...mapMutations(["GET_ROOM_LIST"]),
+    ...mapMutations(["GET_ROOM_LIST"]),
     changePpSet() {
       this.ppSet = false
     },
@@ -418,10 +478,18 @@ export default {
       this.homeCheckInModal = false
       this.ppSet = true
     },
-    gotoRoom() {
-      this.homeCheckInModal = true
+    gotoRoom(hostID) {
+      this.roomId = hostID;
+      this.homeCheckInModal = true;
     },
     goCate(index)  {
+      if(index!='/list/all'){
+        this.allcheck ='true'
+        this.menusIndex = index.charAt(index.length - 1)  // < ===== 이거추가
+      }else{
+        this.allcheck='false'
+        this.menusIndex = 0  // < ===== 이거추가
+      }
       this.checkbox = false;
       this.$store.dispatch("getRoomInfoCate", index);
     },
@@ -465,19 +533,19 @@ export default {
       const data = [];
       if (this.checkbox) {
         this.data = sortdata;
-      for (let i=0 ; i < sortdata.length; i++) {
+        for (let i=0 ; i < sortdata.length; i++) {
           if (sortdata[i].phase == 0 ) {
             data.push(JSON.parse(JSON.stringify(sortdata[i])));
           }
         }
 
-    this.GET_ROOM_LIST(JSON.stringify(data));
+      this.GET_ROOM_LIST(JSON.stringify(data));
 
-    } else {
+      } else {
       this.data = JSON.stringify(this.data)
       this.GET_ROOM_LIST(this.data);
 
-    }
+      }
     },
 
     prev() {
@@ -487,7 +555,6 @@ export default {
       const value = document.body.clientWidth*0.8*0.25
       carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
     },
-    //  - - - - - - 여기고침 - - - - - -  ⬇//
     next() {
         const carousel = document.querySelector('.carousel-ul');
         if (this.c_index === this.viewCaroselLenghth) {
@@ -498,8 +565,30 @@ export default {
           const value = document.body.clientWidth*0.8*0.25
           carousel.style.transform = `translate3d(-${(value) * this.c_index}px, 0, 0)`;
         }
+    },
+    async b_join () {
+      let b_data = {
+        nnm : this.b_nnm,
+        data : {
+          pwd : '',
+          sessionId : this.roomId,
+        }
+      }
+      await this.$store.commit("SET_POSITION",'audience');
+
+      await this.$store.dispatch("bJoin", b_data);
+      //await this.$store.dispatch("enterRoom", data)
+    },
+
+    //방 입장
+    roomEnter() {
+      let data = {
+        pwd : this.pwd,
+        sessionId : this.roomId,
+      }
+      console.log(data)
+      this.$store.dispatch("enterRoom", data)
     }
-    //  - - - - - - 여기고침 - - - - - -  ⬆//
   }
   // setup () {
   //   const router = useRouter()

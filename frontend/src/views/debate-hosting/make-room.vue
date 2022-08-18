@@ -90,7 +90,7 @@ export default {
   },
   data () {
     return {
-      menuData : require('@/views/main/menu.json'),
+      menuData : require('@/views/main/category.json'),
       dropdownSortTF : false,
       host: '',
       mySessionId: 'SessionA',
@@ -107,11 +107,13 @@ export default {
       isSys : '0',
       selectedMenu: null,
       file : '',
-      preview : ''
+      preview : '',
+      cate: ''
+
     }
   },
    computed : {
-    ...mapState(["user"])
+    ...mapState(["user", "roomCode"])
   },
   created() {
     this.menus = this.menuData;
@@ -124,7 +126,7 @@ export default {
     },
     getNum(event) {
         this.maxNum = event.target.value;
-        console.log(this.maxNum)
+
     },
     async makeRoom() {
       var room = {
@@ -132,16 +134,15 @@ export default {
         hashtags : '#' + this.hashTag1 + '#' + this.hashTag2 + '#' + this.hashTag3,
         max_num : this.maxNum,
         pwd : this.roomPwd,
-        subtitle : this.roomName,
-        title : this.roomTitle,
-        thumbnail: this.file,
+        title : this.roomName,
+        cate: this.selectedMenu.idx,
+        file: this.file,
       }
-      console.log(room.hashtags)
+      await this.$store.dispatch("makeRoom",room);
         let data = {
           pwd : room["pwd"],
-          sessionId : this.user.id,
+          sessionId : this.roomCode,
         }
-      await this.$store.dispatch("makeRoom",room);
       this.$store.dispatch("enterRoom", data);
 
     },
@@ -152,33 +153,43 @@ export default {
       this.isSys = '1'
     },
      fileChange(e) {
-      console.log(e.target.files);
-      const file = e.target.files;
-      if(file.length!=0){
+      const files = e.target.files;
+      if(files.length>0){
 
-        console.log(file[0].size);
+
         let validation = true;
         let message = '';
 
-        if(file.length > 1){
+        if(files.length > 1){
           validation = false;
           message = `하나의 이미지 파일만 업로드 가능합니다.`;
         }
 
-        if(file[0].size > 1024 * 1024 * 3){
+        if(files[0].size > 1024 * 1024 * 3){
           validation = false;
           message = `3MB이하의 파일만 업로드 가능합니다.`;
         }
 
-        if(file[0].type.indexOf('image') < 0) {
+        if(files[0].type.indexOf('image') < 0) {
           validation = false;
           message = `이미지 파일만 업로드 가능합니다.`;
         }
 
         if(validation) {
-          this.file = file;
-          console.log("타입"+typeof(file));
-          this.preview = URL.createObjectURL(this.file[0])
+          const reader = new FileReader();
+          //reader가 이미지 로드할 시 이벤트
+          reader.addEventListener("load", ()=>{
+            const dataIndex = reader.result.indexOf(',')+1
+            const base64 = reader.result.substring(
+              dataIndex,
+              reader.result.length
+            )
+
+            this.file = base64
+          })
+          reader.readAsDataURL(files[0])
+          this.file = this.encodedFile;
+          this.preview = URL.createObjectURL(files[0])
         }else{
           this.file = '';
           alert(message);
@@ -284,17 +295,9 @@ export default {
     transform: none;
   }
 }
-.make-room-outer-sys {
-  height: 100vh;
-  /* background-image: url(https://user-images.githubusercontent.com/87743473/182767796-d6da026b-e704-4870-828e-acfaa287a18d.png); */
-  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(https://user-images.githubusercontent.com/87743473/182761383-205f241e-0fad-4d7e-bf74-544966eb2570.png);
-  animation: outer-bg 1s ease-in-out;
-  background-size : cover;
-}
 .make-room-outer-mod {
   height: 100vh;
-  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(https://user-images.githubusercontent.com/87743473/182767796-d6da026b-e704-4870-828e-acfaa287a18d.png);
-  /* background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(https://user-images.githubusercontent.com/87743473/182761383-205f241e-0fad-4d7e-bf74-544966eb2570.png); */
+  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(../../assets/images/makeroombg.jpg);
   animation: outer-bg 1s ease-in-out;
   background-size : cover;
 
