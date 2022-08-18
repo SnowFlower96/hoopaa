@@ -619,7 +619,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    @Scheduled(cron = "0/60 * * * * *")
+//    @Scheduled(cron = "0/60 * * * * *")
     public void syncServer() throws OpenViduJavaClientException, OpenViduHttpException {
         // openVidu 서버 최신화
         this.openVidu.fetch();
