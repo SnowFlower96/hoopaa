@@ -717,12 +717,13 @@ export default {
 
       // 세부세션 signal
      this.session.on('signal:Go-SebuSession', (event) => {
-      var connectionId = event.data.split('/')[0]
-      var token = event.data.split('/')[1]
-      var time = event.data.split('/')[2]
-      console.log(this.session.connection)
-      console.log(this.session.connectionId)
-      if (this.session.connectionId == connectionId) {
+      var connectionId = event.data.split('%')[0]
+      var token = event.data.split('%')[1]
+      var time = event.data.split('%')[2]
+    
+      var connection = this.session.connection
+
+      if (connection.connectionId == connectionId) {
         this.$store.commit("CREATE_TEMP_SUB_TOKEN", token);
         if (this.position == 'agree') {
           this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'agree' + '?time=' + time)
@@ -1543,7 +1544,7 @@ export default {
     // 세부세션 보내기 시그널 함수
      sendSessionFunc(connectionId, token, time) {
        this.session.signal({
-          data: connectionId + '/' + token + '/' + time ,
+          data: connectionId + '%' + token + '%' + time ,
           to: [],
           type: 'Go-SebuSession'
         });

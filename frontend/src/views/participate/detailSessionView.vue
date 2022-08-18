@@ -211,8 +211,12 @@ export default {
             document.getElementById("detailTimerDemo").innerHTML = "회의가 종료되었습니다";
         }
         }, 1000);
+        setTimeout(this.goback ,this.detailTime*1000 + 3000);
     },
     async created() {
+      let query = window.location.search;
+      this.detailTime = query.split('time=')[1]
+      console.log(this.detailTime)
       await this.joinSession();
   },
     methods: {
@@ -264,6 +268,10 @@ export default {
         },
         EmitcallModal(option) {
             this.chattTF = !this.chattTF
+        },
+
+        goback() {
+          this.$router.push('/debateRoom')
         },
          // 세션 연결
       async joinSession() {
