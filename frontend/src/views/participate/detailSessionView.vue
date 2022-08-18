@@ -7,15 +7,28 @@
 
             <!-- 화면공유 -->
                 <div class="detail-box-file" :style="customCaroselStyle">
+
                     <div v-for="(sub, index) in subscribersScreen" :key="index" >
-                                <user-video :stream-manager="sub.data" ></user-video>
-                            </div>
+                        <user-video :stream-manager="sub.data" ></user-video>
+                    </div>
                 </div>
             <!-- 화면공유 -->
 
             <!-- 사용자 비디오  -->
                 <div class="detail-box-video" :style="customCaroselStyle">
-                    <debate-room-video class="detail-session-vido" v-for="(item, index) in subscribers" :key="index" :stream="item.data"></debate-room-video>
+                    <div style="height:10%; color:white;" class="displayFlex"><p id="detailTimerDemo">0분0초</p></div>
+                    <div class="detail-box-video-inner">
+                      <debate-room-video class="detail-session-vido" v-for="(item, index) in subscribers" :key="index" :stream="item.data"></debate-room-video>
+                      <debate-room-video></debate-room-video>
+                      <debate-room-video></debate-room-video>
+                      <debate-room-video></debate-room-video>
+                      <debate-room-video></debate-room-video>
+                      <debate-room-video></debate-room-video>
+                      <debate-room-video></debate-room-video>
+                      <debate-room-video></debate-room-video>
+                      <debate-room-video></debate-room-video>
+                      <debate-room-video></debate-room-video>
+                    </div>
                 </div>
             <!-- 사용자 비디오  -->
         </div>
@@ -167,6 +180,9 @@ export default {
             //채팅
             messagesAgree:[],
             messagesDisagree:[],
+
+            // 타이머
+            detailTime: 60,
         }
     },
     mounted() {
@@ -179,6 +195,22 @@ export default {
         this.viewShare = `${exceptChatting*0.7}px`
         this.videoBox = `${exceptChatting*0.3}px`
         window.addEventListener('resize', this.handleResizeSession);
+
+        let time = this.detailTime;
+        let min = "";
+        let sec = "";
+        let x = setInterval(function() {
+        min = parseInt(time/60);
+        sec = time%60;
+
+        document.getElementById("detailTimerDemo").innerHTML = min + "분" + sec + "초";
+        time--;
+
+        if (time < 0) {
+            clearInterval(x);
+            document.getElementById("detailTimerDemo").innerHTML = "회의가 종료되었습니다";
+        }
+        }, 1000);
     },
     async created() {
       await this.joinSession();
@@ -502,6 +534,11 @@ export default {
 
 
 <style>
+.detail-box-video-inner {
+  height:90%;
+  background-color: rgb(84, 156, 73);
+  overflow: auto;
+}
     .chatting-box {
         background-color: whitesmoke;
         width: var(--chatt-box);
@@ -538,12 +575,10 @@ export default {
     .detail-box-video {
         /* outline: 2px solid yellow; */
         width: var(--video-box);
-        background-color: rgb(84, 156, 73);
         height: 93vh;
-        overflow: auto;
     }
-    .detail-box-video::-webkit-scrollbar{width: 4px;}
-    .detail-box-video::-webkit-scrollbar-thumb {
+    .detail-box-video-inner::-webkit-scrollbar{width: 4px;}
+    .detail-box-video-inner::-webkit-scrollbar-thumb {
         background-color: rgba(102, 102, 102, 0.853);
         border-radius: 5px;
     }
