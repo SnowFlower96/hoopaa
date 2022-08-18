@@ -1267,8 +1267,8 @@ export default {
             }, 500);
             stripe.classList.add('animate');
             this.countingHeart += 1
-            if(this.countingHeart % 50 === 0) {
-                    this.propsHeart = this.countingHeart /50
+            if(this.countingHeart % 10 === 0) {
+                    this.propsHeart = this.countingHeart /10
                     this.animationBG = true
                     this.heartHund = true
                 const x = setTimeout(() => {
