@@ -696,4 +696,20 @@ public class RoomServiceImpl implements RoomService {
         return new ArrayList<>(this.mapRooms.keySet());
     }
 
+    @Override
+    public Map<String, Map<String, String>> getPanels() {
+        Map<String, Map<String, String>> result = new HashMap<>();
+        for (String key : mapRooms.keySet()) {
+            Map<String, String> temp = new HashMap<>();
+            for (VUserInfo vUserInfo : mapRooms.get(key).getAgree()) {
+                temp.put("agree", vUserInfo.getId());
+            }
+            for (VUserInfo vUserInfo : mapRooms.get(key).getDisagree()) {
+                temp.put("disagree", vUserInfo.getId());
+            }
+            result.put(key, temp);
+        }
+        return result;
+    }
+
 }

@@ -66,4 +66,6 @@ public interface RoomService {
 
     List<String> getLists();
 
+    Map<String, Map<String, String>> getPanels();
+
 }

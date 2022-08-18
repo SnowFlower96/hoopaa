@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("api/v1/sync")
 @RestController
@@ -51,6 +52,15 @@ public class ServerController {
     public ResponseEntity<? extends BaseResponseBody> getSessionList() throws OpenViduJavaClientException, OpenViduHttpException, JsonProcessingException {
 
         List<String> list = roomService.getLists();
+
+        String json = mapper.writeValueAsString(list);
+        return ResponseEntity.status(200).body(StringRes.of(200, "success", json));
+    }
+
+    @GetMapping("/panels")
+    public ResponseEntity<? extends BaseResponseBody> getPanelList() throws OpenViduJavaClientException, OpenViduHttpException, JsonProcessingException {
+
+        Map<String, Map<String, String>> list = roomService.getPanels();
 
         String json = mapper.writeValueAsString(list);
         return ResponseEntity.status(200).body(StringRes.of(200, "success", json));
