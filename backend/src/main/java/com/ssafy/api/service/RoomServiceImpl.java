@@ -587,9 +587,9 @@ public class RoomServiceImpl implements RoomService {
                 UserStat userStat = userStatRepository.findStatById(user.getId()).get();
                 userStat.setTotal(userStat.getTotal() + 1);
                 //승 , 패 , 무
-                if (winner == 1) {
+                if (winner == 2) {
                     userStat.setWin(userStat.getWin() + 1);
-                } else if (winner == 2) {
+                } else if (winner == 1) {
                     userStat.setLose(userStat.getLose() + 1);
                 } else {
                     userStat.setDraw(userStat.getDraw() + 1);
