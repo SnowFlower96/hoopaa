@@ -31,7 +31,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.io.IOException;
 import java.util.Map;
 
-@RequestMapping("/api/v1/room")
+@RequestMapping("/spring/api/v1/room")
 @RestController
 @Slf4j
 public class RoomController {

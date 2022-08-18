@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("api/v1/sync")
+@RequestMapping("/spring/api/v1/sync")
 @RestController
 @Slf4j
 public class ServerController {

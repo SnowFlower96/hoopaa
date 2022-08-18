@@ -19,7 +19,7 @@ import java.util.List;
 
 @Api(value = "토론방 조회 API", tags = {"Rooms"})
 @RestController
-@RequestMapping("/api/v1/list")
+@RequestMapping("/spring/api/v1/list")
 public class RoomInfoController {
 
     @Autowired
