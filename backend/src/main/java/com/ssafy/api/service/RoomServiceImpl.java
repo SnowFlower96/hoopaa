@@ -299,7 +299,7 @@ public class RoomServiceImpl implements RoomService {
         Map<String, Map<String, String>> mapTokens = new ConcurrentHashMap<>();
         // 찬성측
         for (VUserInfo vUserInfo : vRoom.getAgree()) {
-            if (vUserInfo.getConnectionDto().getConnectionId() == null || mapDisagree.get(vUserInfo.getId()).getToken() == null) continue;
+            if (vUserInfo.getConnectionDto().getConnectionId() == null || (mapDisagree.containsKey(vUserInfo.getId()) && mapDisagree.get(vUserInfo.getId()) == null)) continue;
             Map<String, String> map = new HashMap<>();
             map.put("connectionID", vUserInfo.getConnectionDto().getConnectionId());
             map.put("token", mapAgree.get(vUserInfo.getId()).getToken());
@@ -307,7 +307,7 @@ public class RoomServiceImpl implements RoomService {
         }
         // 반대측
         for (VUserInfo vUserInfo : vRoom.getDisagree()) {
-            if (vUserInfo.getConnectionDto().getConnectionId() == null || mapDisagree.get(vUserInfo.getId()).getToken() == null) continue;
+            if (vUserInfo.getConnectionDto().getConnectionId() == null || (mapDisagree.containsKey(vUserInfo.getId()) && mapDisagree.get(vUserInfo.getId()) == null)) continue;
             Map<String, String> map = new HashMap<>();
             map.put("connectionID", vUserInfo.getConnectionDto().getConnectionId());
             map.put("token", mapDisagree.get(vUserInfo.getId()).getToken());
@@ -501,9 +501,7 @@ public class RoomServiceImpl implements RoomService {
     public void finishRoom(String userID) {
         // 해당 유저가 만든 토론방의 VRoom 객체
         VRoom vRoom = this.mapRooms.get(userID);
-        System.out.println("----------");
-        System.out.println(vRoom);
-        System.out.println("----------");
+
         // DB에 저장
         try {
             RoomInfo roomInfo = roomInfoRepository.findById(vRoom.getRoomInfoDto().getId()).get();
@@ -603,6 +601,8 @@ public class RoomServiceImpl implements RoomService {
             // openVidu 세션 종료
             Session session = vRoom.getSession();
             session.close();
+
+            this.mapRooms.remove(userID);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -630,11 +630,9 @@ public class RoomServiceImpl implements RoomService {
         Map<String, Session> activeSessions = new ConcurrentHashMap<>();
         for (Session session : sessionList) {
             activeSessions.put(session.getSessionId(), session);
-            log.debug("[Sync...] SessionID : " + session.getSessionId());
         }
 
         for (String key : this.mapRooms.keySet()) {
-            log.debug("[Sync...] RoomKey : " + key);
 //            if (!activeSessions.containsKey(key)) {
 //                this.mapRooms.remove(key);
 //            } else {
