@@ -46,15 +46,6 @@
                     <div style="height:10%; color:white;" class="displayFlex"><p id="detailTimerDemo">0분0초</p></div>
                     <div class="detail-box-video-inner">
                       <debate-room-video class="detail-session-vido" v-for="(item, index) in subscribers" :key="index" :stream="item.data"></debate-room-video>
-                      <debate-room-video></debate-room-video>
-                      <debate-room-video></debate-room-video>
-                      <debate-room-video></debate-room-video>
-                      <debate-room-video></debate-room-video>
-                      <debate-room-video></debate-room-video>
-                      <debate-room-video></debate-room-video>
-                      <debate-room-video></debate-room-video>
-                      <debate-room-video></debate-room-video>
-                      <debate-room-video></debate-room-video>
                     </div>
                 </div>
             <!-- 사용자 비디오  -->
@@ -84,7 +75,6 @@
 </template>
 <script>
 import FooterTeam from "./debateRoomFooter/FooterTeam"
-import debateRoomSideComponent from './debateRoomSideComponent'
 import chattingTeam from './ChattingComponents/chatting-team.vue'
 // 토론방 위에 보여지는 효과 관련
 
@@ -113,8 +103,6 @@ const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 export default {
     components: {
         FooterTeam,
-        debateRoomSideComponent,
-
       // 토론방 관련
         debateRoomVideo,
 

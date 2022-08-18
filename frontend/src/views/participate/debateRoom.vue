@@ -304,8 +304,6 @@ import restTimeEvent from './animation-view/rest-time-event.vue'
 
 
 // 토론방 관련
-import debateRoomSideComponent from './debateRoomSideComponent'
-import debateRoomSideComponentAgree from './debateRoomSideComponentAgree'  // @@ 없앨거
 import debateRoomCenterComponent from './debateRoomCenterComponent'        // @@ 없앨거
 import detailSessionView from './detailSessionView'
 import debateRoomVideo from './debateRoomVideo'
@@ -353,10 +351,8 @@ export default {
         restTimeEvent,
 
       // 토론방 관련
-        debateRoomSideComponent,
         debateRoomCenterComponent,
         detailSessionView,
-        debateRoomSideComponentAgree,
         debateRoomVideo,
 
       //  채팅
