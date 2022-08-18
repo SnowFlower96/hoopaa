@@ -3,17 +3,31 @@
     <div class="search-head">
       <!-- <span class="search-item">검색조건</span> -->
       <div class="search-item-wrap">
-        <input placeholder="검색어를 입력하세요">
-        <div class="search-icon"><i class="fas fa-search "></i></div>
+        <input v-model="keyword"  placeholder="검색어를 입력하세요" @keyup.enter="search()">
+        <div class="search-icon"><i class="fas fa-search " @click="search()"></i></div>
+
       </div>
     </div>
-    
+
   </div>
 </template>
 
 <script>
 export default {
   name : 'search',
+  data(){
+    return{
+      keyword:'',
+    }
+  },
+  methods:{
+    search(){
+      if(this.keyword != null){
+        this.$emit("searchKeyword", this.keyword)
+      }
+    }
+  }
+
 }
 </script>
 

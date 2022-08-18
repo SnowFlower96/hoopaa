@@ -234,6 +234,15 @@ export default new Vuex.Store({
         router.push("/list?"+index);
       })
     },
+    getRoomInfokeyword({commit}, keyword){
+      console.log(keyword);
+      api({
+        url: "list/search/"+keyword,
+        method: "GET"
+      }).then((res)=>{
+        commit("GET_ROOM_LIST", res.data.json);
+      })
+    },
 
     // 유저 비밀번호 확인
     checkPwd({commit}, data) {
