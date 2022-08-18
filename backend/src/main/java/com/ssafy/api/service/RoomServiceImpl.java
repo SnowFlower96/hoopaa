@@ -297,6 +297,7 @@ public class RoomServiceImpl implements RoomService {
         Map<String, Map<String, String>> mapTokens = new ConcurrentHashMap<>();
         // 찬성측
         for (VUserInfo vUserInfo : vRoom.getAgree()) {
+            if (vUserInfo.getConnectionDto().getConnectionId() == null || mapDisagree.get(vUserInfo.getId()).getToken() == null) continue;
             Map<String, String> map = new HashMap<>();
             map.put("connectionID", vUserInfo.getConnectionDto().getConnectionId());
             map.put("token", mapAgree.get(vUserInfo.getId()).getToken());
@@ -304,6 +305,7 @@ public class RoomServiceImpl implements RoomService {
         }
         // 반대측
         for (VUserInfo vUserInfo : vRoom.getDisagree()) {
+            if (vUserInfo.getConnectionDto().getConnectionId() == null || mapDisagree.get(vUserInfo.getId()).getToken() == null) continue;
             Map<String, String> map = new HashMap<>();
             map.put("connectionID", vUserInfo.getConnectionDto().getConnectionId());
             map.put("token", mapDisagree.get(vUserInfo.getId()).getToken());

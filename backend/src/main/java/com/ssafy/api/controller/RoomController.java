@@ -126,8 +126,7 @@ public class RoomController {
         if (!roomService.isExistRoom(sessionID))
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Room not exists"));
 
-//        String token = roomService.enterRoom(roomEnterReq, user);
-        String token = roomService.reconnect(sessionID, user.getId());
+        String token = roomService.enterRoom(sessionID, user);
         if (token == null) return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
 
         return ResponseEntity.status(200).body(VTokenRes.of(200, "Success", token));
