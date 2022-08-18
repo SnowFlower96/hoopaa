@@ -61,6 +61,8 @@ services:
       - ${OPENVIDU_CDR_PATH}:/openvidu/cdr
     env_file:
       - .env
+    ports:
+      - "8443:8443"
     environment:
       - SERVER_SSL_ENABLED=false
       - SERVER_PORT=5443
