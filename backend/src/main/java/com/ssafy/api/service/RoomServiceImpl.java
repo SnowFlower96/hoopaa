@@ -11,6 +11,7 @@ import com.ssafy.db.dto.UserInfoDto;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import io.openvidu.java.client.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,6 +26,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
+@Slf4j
 public class RoomServiceImpl implements RoomService {
 
     private Map<String, VRoom> mapRooms;
@@ -619,7 +621,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-//    @Scheduled(cron = "0/60 * * * * *")
+    @Scheduled(cron = "0/60 * * * * *")
     public void syncServer() throws OpenViduJavaClientException, OpenViduHttpException {
         // openVidu 서버 최신화
         this.openVidu.fetch();
@@ -628,33 +630,35 @@ public class RoomServiceImpl implements RoomService {
         Map<String, Session> activeSessions = new ConcurrentHashMap<>();
         for (Session session : sessionList) {
             activeSessions.put(session.getSessionId(), session);
+            log.debug("[Sync...] SessionID : " + session.getSessionId());
         }
 
         for (String key : this.mapRooms.keySet()) {
-            if (!activeSessions.containsKey(key)) {
-                this.mapRooms.remove(key);
-            } else {
-                VRoom vRoom = mapRooms.get(key);
-
-                vRoom.setSession(activeSessions.get(key));  // 세션 정보 갱신
-                List<Connection> connectionList = activeSessions.get(key).getActiveConnections();
-                for (Connection conn : connectionList) {
-                    for (String id : vRoom.getMapParticipants().keySet()) {
-                        if (vRoom.getMapParticipants().get(id).getConnectionDto().getConnectionId().equals(conn.getConnectionId())) {
-                            // Connection 정보 갱신
-                            vRoom.getMapParticipants().get(id).setConnectionDto(new ConnectionDto(conn));
-                            break;
-                        }
-                    }
-                }
-                vRoom.getRoomInfoDto().setCurNum(connectionList.size());
-
-                // DB 저장
-                RoomInfo roomInfo = roomInfoRepository.findRoomInfoById(vRoom.getRoomInfoDto().getId()).get();
-                roomInfo.setCurNum(vRoom.getRoomInfoDto().getCurNum());
-                roomInfo.setPhase(vRoom.getRoomInfoDto().getPhase());
-                roomInfoRepository.save(roomInfo);
-            }
+            log.debug("[Sync...] RoomKey : " + key);
+//            if (!activeSessions.containsKey(key)) {
+//                this.mapRooms.remove(key);
+//            } else {
+//                VRoom vRoom = mapRooms.get(key);
+//
+//                vRoom.setSession(activeSessions.get(key));  // 세션 정보 갱신
+//                List<Connection> connectionList = activeSessions.get(key).getActiveConnections();
+//                for (Connection conn : connectionList) {
+//                    for (String id : vRoom.getMapParticipants().keySet()) {
+//                        if (vRoom.getMapParticipants().get(id).getConnectionDto().getConnectionId().equals(conn.getConnectionId())) {
+//                            // Connection 정보 갱신
+//                            vRoom.getMapParticipants().get(id).setConnectionDto(new ConnectionDto(conn));
+//                            break;
+//                        }
+//                    }
+//                }
+//                vRoom.getRoomInfoDto().setCurNum(connectionList.size());
+//
+//                // DB 저장
+//                RoomInfo roomInfo = roomInfoRepository.findRoomInfoById(vRoom.getRoomInfoDto().getId()).get();
+//                roomInfo.setCurNum(vRoom.getRoomInfoDto().getCurNum());
+//                roomInfo.setPhase(vRoom.getRoomInfoDto().getPhase());
+//                roomInfoRepository.save(roomInfo);
+//            }
         }
     }
 
