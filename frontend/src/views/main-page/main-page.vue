@@ -12,16 +12,16 @@
               <router-link class="el-menu-item" to="/list"><div class="img-container-mainbtn03"></div></router-link>
             </div>
             <div class="main-first-img"  v-if="!resizeWidthVisible">
-              <p>여기에 나중에 영상이나 gif 넣기</p>
-              <img :src="require(`@/assets/images/0727_mokup_01.png`)" alt="">
+              <!-- <p>여기에 나중에 영상이나 gif 넣기</p>
+              <img :src="require(`@/assets/images/0727_mokup_01.png`)" alt=""> -->
             </div>
           </div>
 
-          <div class="main-img-wrapp-child main-introduce" style="background-color: #fff8e0; color: #ffdb65"><img v-if="show1" class="fadein" :src="require(`@/assets/images/0727_mokup_01.png`)" alt=""><div><p>팀을 구성하세요</p></div></div>
-          <div class="main-img-wrapp-child main-introduce" style="background-color: #debcb5; color: #f24822"><div><p>친구들과 재밌게 의견을 나눠보세요</p></div><img v-if="show2" class="fadein" :src="require(`@/assets/images/0727_mokup_05.png`)" alt=""></div>
-          <div class="main-img-wrapp-child main-introduce" style="background-color: #e1b5d4; color: #ff24bd"><img v-if="show3" class="fadein" :src="require(`@/assets/images/0727_mokup_03.png`)" alt=""><div><p>배틀에서 승리하세요</p></div></div>
-          <div class="main-img-wrapp-child main-introduce" style="background-color: #e0c8ff; color: #9747ff"><div><p>재미있는 효과들과 함께 하세요</p></div><img v-if="show4" class="fadein" :src="require(`@/assets/images/mainPage04.png`)" alt=""></div>
-          <div class="main-img-wrapp-child main-introduce" style="background-color: #b3d1c1; color: #1bb061"><img v-if="show5" class="fadein" :src="require(`@/assets/images/0727_mokup_04.png`)" alt=""><div><p>방청객이 되어서 배틀을 관전할 수도 있습니다</p></div></div>
+          <div class="main-img-wrapp-child" style="background-color: #fff8e0; color: #ffdb65">
+            <div style="height: 15%;"></div>
+            <div><p>서비스 소개</p></div>
+            <iframe width="700" height="400" src="https://www.youtube.com/embed/h42tRhiiv48" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
         </div>
     </div>
 </template>
@@ -169,20 +169,11 @@ export default {
 .main-img-wrapp-child > img {
   width: 40%;
 }
-.main-introduce {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-}
-
 
 
 /* introduce 사진 + 설명 => 반응형 */
 .main-img-wrapp-child > div > p {
   font-size: 40px;
-}
-.main-introduce > div {
-  width: 30%;
 }
 
 .main-img-wrapp-child > p {
