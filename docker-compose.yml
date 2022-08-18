@@ -16,6 +16,8 @@ services:
     build: backend
     container_name: spring
     restart: always
+    volumes:
+      - ./backend/app:/app/app
     expose:
       - "8080"
     environment:
