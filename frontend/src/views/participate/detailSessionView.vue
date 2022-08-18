@@ -216,8 +216,10 @@ export default {
     async created() {
       let query = window.location.search;
       this.detailTime = query.split('time=')[1]
-      console.log(this.detailTime)
+      console.log(this.$store.state.tempToken)
       await this.joinSession();
+      await this.$store.dispatch("getReToken", this.session.sessionId.split('_')[0])
+      console.log(this.$store.state.tempToken)
   },
     methods: {
         handleResizeSession() {
@@ -271,6 +273,7 @@ export default {
         },
 
         goback() {
+          this.leaveSession()
           this.$router.push('/debateRoom')
         },
          // 세션 연결
@@ -433,7 +436,6 @@ export default {
 				this.screensharing=false;
 
 			window.removeEventListener('beforeunload', this.leaveSession);
-      router.push('/')
 		},
      getToken (mySessionId) {
 			return this.createSession(mySessionId).then(sessionId => this.createToken(sessionId));

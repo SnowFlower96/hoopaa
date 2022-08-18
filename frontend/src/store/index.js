@@ -441,5 +441,17 @@ export default new Vuex.Store({
     }))
   })
   },
+
+  // 토큰 재발급
+  getReToken({commit}, data) {
+      api({
+        headers : { Authorization : `Bearer ${sessionStorage.getItem("accessToken")}`},
+        url : '/room/enter/' + data,
+        method : "PUT",
+      }).then((res => {
+        commit("CREATE_TEMP_TOKEN",res.data.token);
+      }))
+
+  }
 }
 })

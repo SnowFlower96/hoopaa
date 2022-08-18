@@ -155,7 +155,7 @@
 
                 <div v-if="viewCodeMd" class="penalty-view displayFlex">
                   <div>
-                    <div style="color:white; font-size:20px; margin-bottom: 70px;">입장코드 : </div>
+                    <div style="color:white; font-size:20px; margin-bottom: 70px;">입장코드 : {{roomCode}}</div>
                     <div @click="offpenaltyView" class="penalty-btn displayFlex">확인</div>
                   </div>
                 </div>
@@ -389,7 +389,7 @@ export default {
       }
   },
     computed : {
-      ...mapState(["user", "position", "tempToken"]),
+      ...mapState(["user", "position", "tempToken", "roomCode"]),
         customCaroselStyle() {
             return {
 
@@ -741,18 +741,21 @@ export default {
 
       // 세부세션 signal
      this.session.on('signal:Go-SebuSession', (event) => {
-      var connectionId = event.data.split('%')[0]
-      var token = event.data.split('%')[1]
-      var time = event.data.split('%')[2]
+      if (this.position == 'agree' || this.position == 'disagree') {
+        var connectionId = event.data.split('%')[0]
+        var token = event.data.split('%')[1]
+        var time = event.data.split('%')[2]
 
-      var connection = this.session.connection
-
-      if (connection.connectionId == connectionId) {
-        this.$store.commit("CREATE_TEMP_SUB_TOKEN", token);
-        if (this.position == 'agree') {
-          this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'agree' + '?time=' + time)
-        } else if (this.position == 'disagree') {
-          this.$router.push('/detailSessionView?' + this.session.sessionId + '_' + 'disagree' + '?time=' + time)
+        var connection = this.session.connection
+        var sessionId = this.session.sessionId
+        if (connection.connectionId == connectionId) {
+          this.$store.commit("CREATE_TEMP_SUB_TOKEN", token);
+          this.leaveSession()
+          if (this.position == 'agree') {
+            this.$router.push('/detailSessionView?' + sessionId + '_' + 'agree' + '?time=' + time)
+          } else if (this.position == 'disagree') {
+            this.$router.push('/detailSessionView?' + sessionId + '_' + 'disagree' + '?time=' + time)
+          }
         }
       }
     });
@@ -974,7 +977,7 @@ export default {
 				this.screensharing=false;
 
 			window.removeEventListener('beforeunload', this.leaveSession);
-      router.push('/')
+
 		},
 
 
@@ -1661,8 +1664,7 @@ export default {
 
     // 세부세션 닫기
     closeSession(sessionId) {
-      this.$store.dispatch("closeSession", sessionId + '_' + 'agree');
-      this.$store.dispatch("closeSession", sessionId + '_' + 'disagree')
+      this.$store.dispatch("closeSession", sessionId );
     },
     // 팀 > 사회자 메시지
     toModerator(message) {
