@@ -722,12 +722,7 @@ export default {
         }
 
       });
-      // on session destroyed...
-      this.session.on("sessionDestroyed", () => {
-        router.push('/')
-      });
-
-
+ 
       // On every asynchronous exception...
       this.session.on("exception", ({ exception }) => {
 
