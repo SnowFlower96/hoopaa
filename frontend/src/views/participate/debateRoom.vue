@@ -204,11 +204,12 @@
                                   <div class="debateroom-center-timer" :style="customCaroselStyle"> <!-- 이부분 나중에 위로 가져오기-->
                                       <debate-room-center-component
                                       :time-list="timeList"
-                                      ref="debateRoomSideComponent"
+                                      :timer="onTimer"
                                       :moderator="moderator"
-                                      :all="all"
-                                      :team="team"
                                       :timer-min="timerMin"
+                                      @startTimer="startTimer"
+                                      @muteAll="muteAll"
+                                      ref="child"
                                       ></debate-room-center-component>
                                   </div>
 
@@ -338,7 +339,7 @@ import moment from 'moment';
 import router from '../../common/lib/vue-router'
 
 
-const OPENVIDU_SERVER_URL = "https://hoopaa.site:8443";
+const OPENVIDU_SERVER_URL = "https://hoopaa.site";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
 
@@ -559,6 +560,8 @@ export default {
           // 팀 > 사회자 메시지
             toModeratorMessage : '',
             from : '',
+          // 타이머
+            onTimer : false,
         }
     },
     mounted() {
@@ -767,13 +770,18 @@ export default {
         }
         }
     });
+    // 모두 음소거 signal
+      this.session.on('signal:Mute-All', (event) => {
+        if (this.session.sessionId != this.user.id) {
+          this.publisher.publishAudio(false)
+        }
+      })
     // 투표시작 signal
       this.session.on('signal:Start-Vote', (event) => {
         if (this.voteTeam || this.voteAll ) {
           this.voteView();
           this.pannelList = event.data.split('&')[0].split(',');
           this.roomId = event.data.split('&')[1];
-          console.log(this.roomId + '222222222')
         }
       })
     // 팀 > 사회자 메시지 signal
@@ -806,6 +814,18 @@ export default {
       this.session.on('signal:Send-Penalty', (event) => {
         if (this.user.id == event.data) {
           this.userPenalty();
+        }
+      })
+
+    // timer 시작 signal
+      this.session.on('signal:Start-Timer', (event) => {
+        if (this.user.id != this.session.sessionId) {
+          let arr = event.data.split('/')
+          this.timeList[0] = arr[0]
+          this.timeList[1] = arr[1]
+          this.timerMin = arr[2]
+          this.onTimer = true
+          this.$refs.child.startTimer();
         }
       })
 
@@ -1224,6 +1244,7 @@ export default {
 
             this.callToMdModal = false
             this.timerMin = Array[0]
+            this.onTimer = true
         },
         voteFunction(status) {
             this.voteStatus = status
@@ -1700,6 +1721,22 @@ export default {
     leaveSessionButton() {
       this.leaveSession();
       this.$router.push('/')
+    },
+    // 타이머 시작 시그널
+    startTimer() {
+      this.session.signal({
+        data : this.timeList[0] + '/' + this.timeList[1] + '/' + this.timerMin[1],
+        to : [],
+        type : 'Start-Timer'
+      })
+    },
+    // 전체 음소거 시그널
+    muteAll() {
+      this.session.signal({
+        data : 'all',
+        to : [],
+        type : 'Mute-All'
+      })
     }
     }
   }

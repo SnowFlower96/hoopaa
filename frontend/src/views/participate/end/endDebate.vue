@@ -47,12 +47,13 @@ export default {
             disagree: '',
             king : '',
             mvpView: false,
-            total : parseInt(this.agree) + parseInt(this.disagree)
+            total : parseInt(this.agree) + parseInt(this.disagree),
+            endSound : '',
         }
     },
     mounted() {
-        const endSound = new Audio("https://drive.google.com/uc?export=download&id=1CwL1BIeUH7ymCbHOFtO9J2BMHCw3Vsk0");
-        endSound.play();
+        this.endSound = new Audio("https://drive.google.com/uc?export=download&id=1CwL1BIeUH7ymCbHOFtO9J2BMHCw3Vsk0");
+        this.endSound.play();
     },
     methods: {
         async resultBtn() {
@@ -79,9 +80,10 @@ export default {
             }, 5000)
         }
     },
-    created () {
-
-    }
+    beforeRouteLeave(to, from, next) {
+          this.endSound.pause();
+          next()
+        }
 }
 </script>
 

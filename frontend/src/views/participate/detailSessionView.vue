@@ -108,7 +108,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 import moment from 'moment';
 import router from '../../common/lib/vue-router'
 
-const OPENVIDU_SERVER_URL = "https://hoopaa.site:8443";
+const OPENVIDU_SERVER_URL = "https://hoopaa.site";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 export default {
     components: {
@@ -251,7 +251,7 @@ export default {
       console.log(this.$store.state.tempToken)
   },
     methods: {
-  
+
         callModalFile() {
           this.callToMdModal = true
         },
