@@ -1574,6 +1574,17 @@ export default {
                 this.heartHund = false
                 this.restEvent = !this.restEvent
             }
+            else if (option == 'out') {
+              this.menu = false
+              this.out = true
+              this.message = false
+              this.file = false
+              this.rest = false
+              this.messageFrom = false
+              this.viewCodeMd = false
+              this.makeList()
+
+            }
         },
 
         // 세부세션 보내기 시그널
@@ -1632,7 +1643,7 @@ export default {
         this.penaltyList.push({id: key, nnm:data[key]})
       }
       })
-      console.log(this.penaltyList)
+
     },
     // 음소거 컨트롤 시그널
     async audioMute(status) {
@@ -1709,6 +1720,7 @@ export default {
         type : 'Send-Penalty'
       })
       this.out = false
+      this.callToMdModal = false
     },
 
     // screen 삭제
