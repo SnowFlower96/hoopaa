@@ -41,30 +41,4 @@ public class ServerController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
-    @PostMapping("/init/{pwd}")
-    @ApiOperation(value = "초기화")
-    public ResponseEntity<? extends BaseResponseBody> initServer(@PathVariable String pwd) throws OpenViduJavaClientException, OpenViduHttpException {
-        if (!pwd.equals("ssafy")) return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Wrong password"));
-        roomService.initServer();
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
-    }
-
-    @GetMapping("/sessions")
-    public ResponseEntity<? extends BaseResponseBody> getSessionList() throws OpenViduJavaClientException, OpenViduHttpException, JsonProcessingException {
-
-        List<String> list = roomService.getLists();
-
-        String json = mapper.writeValueAsString(list);
-        return ResponseEntity.status(200).body(StringRes.of(200, "success", json));
-    }
-
-    @GetMapping("/panels")
-    public ResponseEntity<? extends BaseResponseBody> getPanelList() throws OpenViduJavaClientException, OpenViduHttpException, JsonProcessingException {
-
-        Map<String, Map<String, List<VUserInfo>>> list = roomService.getPanels();
-
-        String json = mapper.writeValueAsString(list);
-        return ResponseEntity.status(200).body(StringRes.of(200, "success", json));
-    }
-
 }
